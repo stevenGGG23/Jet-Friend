@@ -616,6 +616,23 @@
         transform-style: preserve-3d;
       }
 
+      /* Add subtle blended background image */
+      .features::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F2b50c9fe9e2046e0a9f22f5105495318?format=webp&width=1920&quality=90&fit=cover");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.1) blur(2px);
+        z-index: -2;
+        animation: kenBurnsSmooth 60s ease-in-out infinite;
+        opacity: 0.3;
+      }
+
       /* Floating organic shapes */
       .features::after {
         content: "";
