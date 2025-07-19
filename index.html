@@ -756,8 +756,50 @@
       }
 
       .feature-card:hover {
-        transform: translateY(-20px) scale(1.02);
-        box-shadow: 0 40px 80px rgba(139, 92, 246, 0.25);
+        transform: translateY(-30px) translateZ(80px) scale(1.05) rotateX(5deg)
+          rotateY(10deg);
+        box-shadow:
+          0 50px 100px rgba(139, 92, 246, 0.3),
+          0 0 50px rgba(96, 165, 250, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      }
+
+      /* Specific hover transforms for each card */
+      .feature-card:nth-child(1):hover {
+        transform: translateY(-30px) translateZ(100px) scale(1.05)
+          rotateX(-5deg) rotateY(-15deg);
+      }
+      .feature-card:nth-child(2):hover {
+        transform: translateY(-35px) translateZ(120px) scale(1.06) rotateX(8deg)
+          rotateY(12deg);
+      }
+      .feature-card:nth-child(3):hover {
+        transform: translateY(-25px) translateZ(90px) scale(1.04) rotateX(-3deg)
+          rotateY(-10deg);
+      }
+      .feature-card:nth-child(4):hover {
+        transform: translateY(-40px) translateZ(110px) scale(1.07) rotateX(6deg)
+          rotateY(18deg);
+      }
+      .feature-card:nth-child(5):hover {
+        transform: translateY(-28px) translateZ(85px) scale(1.05) rotateX(-7deg)
+          rotateY(-12deg);
+      }
+      .feature-card:nth-child(6):hover {
+        transform: translateY(-32px) translateZ(95px) scale(1.04) rotateX(4deg)
+          rotateY(14deg);
+      }
+      .feature-card:nth-child(7):hover {
+        transform: translateY(-38px) translateZ(105px) scale(1.06)
+          rotateX(-6deg) rotateY(-16deg);
+      }
+      .feature-card:nth-child(8):hover {
+        transform: translateY(-45px) translateZ(130px) scale(1.08) rotateX(9deg)
+          rotateY(20deg);
+      }
+      .feature-card:nth-child(9):hover {
+        transform: translateY(-22px) translateZ(75px) scale(1.03) rotateX(-2deg)
+          rotateY(-8deg);
       }
 
       .feature-icon {
