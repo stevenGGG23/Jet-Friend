@@ -325,6 +325,24 @@
         max-width: 900px;
         position: relative;
         z-index: 1;
+        transform-style: preserve-3d;
+        animation: floatHero 8s ease-in-out infinite;
+      }
+
+      @keyframes floatHero {
+        0%,
+        100% {
+          transform: translateY(0) rotateX(0deg) rotateY(0deg);
+        }
+        25% {
+          transform: translateY(-10px) rotateX(1deg) rotateY(-1deg);
+        }
+        50% {
+          transform: translateY(5px) rotateX(-1deg) rotateY(1deg);
+        }
+        75% {
+          transform: translateY(-5px) rotateX(0.5deg) rotateY(-0.5deg);
+        }
       }
 
       .hero h1 {
