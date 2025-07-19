@@ -2671,14 +2671,59 @@
         });
       });
 
-      // Parallax effect for hero background
+      // Enhanced parallax effects for multiple elements
       window.addEventListener("scroll", function () {
         const scrolled = window.pageYOffset;
+
         const heroBackground = document.querySelector(".hero-bg img");
         if (heroBackground) {
-          heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
+          heroBackground.style.transform = `translateY(${scrolled * 0.3}px) scale(${1 + scrolled * 0.0002})`;
         }
+
+        // Parallax for feature cards
+        const featureCards = document.querySelectorAll(".feature-card");
+        featureCards.forEach((card, index) => {
+          const cardTop = card.offsetTop;
+          const cardSpeed = (scrolled - cardTop) * 0.05;
+          const currentTransform = card.style.transform || "";
+          // Preserve existing transforms and add parallax
+          if (!currentTransform.includes("translateY")) {
+            card.style.transform =
+              currentTransform + ` translateY(${cardSpeed}px)`;
+          }
+        });
       });
+
+      // Advanced mouse tracking for 3D effects
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+
+      document.addEventListener("mousemove", function (e) {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+      });
+
+      function animate3DEffects() {
+        targetX += (mouseX - targetX) * 0.1;
+        targetY += (mouseY - targetY) * 0.1;
+
+        // Apply subtle mouse tracking to hero content
+        const heroContent = document.querySelector(".hero-content");
+        if (heroContent) {
+          const rotateX = targetY * 3;
+          const rotateY = targetX * 3;
+          const baseTransform = heroContent.style.transform || "";
+          if (!baseTransform.includes("floatHero")) {
+            heroContent.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+          }
+        }
+
+        requestAnimationFrame(animate3DEffects);
+      }
+
+      animate3DEffects();
 
       // Add interactive hover effects to cards
       document
