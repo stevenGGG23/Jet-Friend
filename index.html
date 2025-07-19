@@ -8,21 +8,1545 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: #0a0a1a;
+        color: #ffffff;
+        overflow-x: hidden;
+        line-height: 1.6;
+      }
+
+      /* Updated Color Palette - Purple and Light Blue */
+      :root {
+        --primary-purple: #8b5cf6;
+        --secondary-purple: #a855f7;
+        --light-blue: #60a5fa;
+        --sky-blue: #38bdf8;
+        --dark-purple: #6d28d9;
+        --accent-cyan: #22d3ee;
+        --background-dark: #0a0a1a;
+        --card-bg: rgba(139, 92, 246, 0.08);
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --border-color: rgba(139, 92, 246, 0.3);
+      }
+
+      /* Modern Left-Side Drawer Navigation */
+      .nav-trigger {
+        position: fixed;
+        top: 30px;
+        left: 30px;
+        z-index: 1001;
+        width: 60px;
+        height: 60px;
+        background: rgba(139, 92, 246, 0.9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+      }
+
+      .nav-trigger:hover {
+        background: rgba(96, 165, 250, 0.9);
+        transform: scale(1.1);
+        box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
+      }
+
+      .nav-trigger i {
+        font-size: 24px;
+        color: white;
+        transition: transform 0.3s ease;
+      }
+
+      .nav-trigger.active i {
+        transform: rotate(90deg);
+      }
+
+      .nav-drawer {
+        position: fixed;
+        top: 0;
+        left: -350px;
+        width: 350px;
+        height: 100vh;
+        background: rgba(10, 10, 26, 0.95);
+        backdrop-filter: blur(30px);
+        z-index: 1000;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-right: 1px solid var(--border-color);
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.3);
+      }
+
+      .nav-drawer.active {
+        left: 0;
+      }
+
+      .nav-drawer::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          45deg,
+          rgba(139, 92, 246, 0.1) 0%,
+          rgba(96, 165, 250, 0.1) 50%,
+          rgba(56, 189, 248, 0.1) 100%
+        );
+        z-index: -1;
+      }
+
+      .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .nav-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .nav-header {
+        padding: 40px 30px;
+        border-bottom: 1px solid var(--border-color);
+        text-align: center;
+      }
+
+      .logo {
+        font-size: 32px;
+        font-weight: 900;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.5));
+      }
+
+      .nav-links {
+        list-style: none;
+        padding: 30px 0;
+      }
+
+      .nav-links li {
+        margin-bottom: 10px;
+      }
+
+      .nav-links a {
+        display: block;
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 18px;
+        padding: 15px 30px;
+        transition: all 0.3s ease;
+        position: relative;
+        border-radius: 0 25px 25px 0;
+        margin-right: 20px;
+      }
+
+      .nav-links a::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(
+          180deg,
+          var(--primary-purple),
+          var(--light-blue)
+        );
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: white;
+        background: rgba(139, 92, 246, 0.2);
+        transform: translateX(10px);
+      }
+
+      .nav-links a:hover::before {
+        transform: scaleY(1);
+      }
+
+      .nav-links a i {
+        margin-right: 15px;
+        font-size: 20px;
+        width: 25px;
+        text-align: center;
+      }
+
+      .nav-cta {
+        margin: 30px;
+        text-align: center;
+      }
+
+      .cta-nav {
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        color: white !important;
+        padding: 15px 30px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .cta-nav:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
+      }
+
+      .nav-footer {
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+        right: 30px;
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .nav-footer p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+      }
+
+      /* Hero Section with Background Images */
+      .hero {
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 120px 20px 60px;
+        overflow: hidden;
+        perspective: 2000px;
+        transform-style: preserve-3d;
+      }
+
+      .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+      }
+
+      .hero-bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.3) blur(0.5px);
+        animation: kenBurnsSmooth 90s ease-in-out infinite;
+      }
+
+      @keyframes kenBurns {
+        0% {
+          transform: scale(1) rotate(0deg) translateX(0) translateY(0);
+        }
+        20% {
+          transform: scale(1.03) rotate(0.3deg) translateX(-5px)
+            translateY(-3px);
+        }
+        40% {
+          transform: scale(1.06) rotate(0.6deg) translateX(3px) translateY(-5px);
+        }
+        60% {
+          transform: scale(1.08) rotate(0.8deg) translateX(-2px) translateY(2px);
+        }
+        80% {
+          transform: scale(1.05) rotate(0.4deg) translateX(4px) translateY(-2px);
+        }
+        100% {
+          transform: scale(1) rotate(0deg) translateX(0) translateY(0);
+        }
+      }
+
+      @keyframes kenBurnsSmooth {
+        0% {
+          transform: scale(1) rotate(0deg) translateX(0) translateY(0);
+        }
+        16.67% {
+          transform: scale(1.02) rotate(0.2deg) translateX(-3px)
+            translateY(-2px);
+        }
+        33.33% {
+          transform: scale(1.04) rotate(0.4deg) translateX(2px) translateY(-3px);
+        }
+        50% {
+          transform: scale(1.06) rotate(0.6deg) translateX(-1px) translateY(1px);
+        }
+        66.67% {
+          transform: scale(1.04) rotate(0.3deg) translateX(3px) translateY(-1px);
+        }
+        83.33% {
+          transform: scale(1.02) rotate(0.1deg) translateX(-2px) translateY(2px);
+        }
+        100% {
+          transform: scale(1) rotate(0deg) translateX(0) translateY(0);
+        }
+      }
+
+      .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(139, 92, 246, 0.4) 0%,
+          rgba(96, 165, 250, 0.3) 50%,
+          rgba(56, 189, 248, 0.4) 100%
+        );
+        z-index: -1;
+      }
+
+      .hero-content {
+        max-width: 900px;
+        position: relative;
+        z-index: 1;
+        transform-style: preserve-3d;
+        animation: floatHero 8s ease-in-out infinite;
+      }
+
+      @keyframes floatHero {
+        0%,
+        100% {
+          transform: translateY(0) rotateX(0deg) rotateY(0deg);
+        }
+        25% {
+          transform: translateY(-10px) rotateX(1deg) rotateY(-1deg);
+        }
+        50% {
+          transform: translateY(5px) rotateX(-1deg) rotateY(1deg);
+        }
+        75% {
+          transform: translateY(-5px) rotateX(0.5deg) rotateY(-0.5deg);
+        }
+      }
+
+      .hero h1 {
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        font-weight: 900;
+        margin-bottom: 30px;
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          var(--light-blue) 50%,
+          #ffffff 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.1;
+        animation: heroSlideUp 1s ease-out;
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+      }
+
+      @keyframes heroSlideUp {
+        from {
+          opacity: 0;
+          transform: translateY(80px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .hero-text-container {
+        margin-bottom: 50px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        min-height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: heroSlideUp 1s ease-out 0.3s both;
+      }
+
+      .hero-animated-text {
+        font-size: 1.4rem;
+        color: rgba(255, 255, 255, 0.95);
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        font-weight: 400;
+        text-align: center;
+        opacity: 1;
+        transform: translateY(0);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        line-height: 1.6;
+      }
+
+      .hero-animated-text.fade-out {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      .hero-animated-text.fade-in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 25px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 80px;
+        animation: heroSlideUp 1s ease-out 0.6s both;
+      }
+
+      .btn {
+        padding: 20px 45px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        color: white;
+        box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(139, 92, 246, 0.6);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.8);
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+      }
+
+      /* Interactive Chat Demo */
+      .chat-demo {
+        max-width: 500px;
+        margin: 0 auto;
+        border-radius: 25px;
+        overflow: hidden;
+        animation: heroSlideUp 1s ease-out 0.9s both;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .chat-demo:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 35px 70px rgba(139, 92, 246, 0.2);
+      }
+
+      .chat-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        padding: 20px;
+        text-align: center;
+        font-weight: 600;
+        position: relative;
+      }
+
+      .chat-header::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        width: 10px;
+        height: 10px;
+        background: #22c55e;
+        border-radius: 50%;
+        transform: translateY(-50%);
+        animation: pulse 2s infinite;
+        box-shadow: 0 0 10px #22c55e;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: translateY(-50%) scale(1);
+        }
+        50% {
+          opacity: 0.7;
+          transform: translateY(-50%) scale(1.2);
+        }
+      }
+
+      .chat-messages {
+        padding: 30px;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .message {
+        padding: 15px 20px;
+        border-radius: 20px;
+        max-width: 85%;
+        animation: messageSlideIn 0.6s ease-out;
+        position: relative;
+        word-wrap: break-word;
+      }
+
+      .message.user {
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        margin-left: auto;
+        color: white;
+      }
+
+      .message.ai {
+        background: rgba(255, 255, 255, 0.15);
+        margin-right: auto;
+        color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+      }
+
+      @keyframes messageSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px) scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      /* Enhanced Features Section */
+      .features {
+        padding: 120px 20px;
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(139, 92, 246, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(96, 165, 250, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 60%,
+            rgba(56, 189, 248, 0.1) 0%,
+            transparent 50%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(139, 92, 246, 0.05) 0%,
+            var(--card-bg) 50%,
+            rgba(96, 165, 250, 0.05) 100%
+          );
+        position: relative;
+        overflow: hidden;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+      }
+
+      /* Add subtle blended background image */
+      .features::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("pexels-apasaric-1285625.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.1) blur(2px);
+        z-index: -2;
+        animation: kenBurnsSmooth 60s ease-in-out infinite;
+        opacity: 0.3;
+        mask: linear-gradient(
+          180deg,
+          transparent 0%,
+          black 20%,
+          black 80%,
+          transparent 100%
+        );
+        -webkit-mask: linear-gradient(
+          180deg,
+          transparent 0%,
+          black 20%,
+          black 80%,
+          transparent 100%
+        );
+      }
+
+      /* Floating organic shapes */
+      .features::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background:
+          radial-gradient(
+            ellipse 300px 200px at 25% 25%,
+            rgba(139, 92, 246, 0.08) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse 400px 300px at 75% 75%,
+            rgba(96, 165, 250, 0.08) 0%,
+            transparent 50%
+          );
+        animation: floatOrganicShapesSmooth 80s ease-in-out infinite;
+        z-index: -1;
+      }
+
+      @keyframes floatOrganicShapesSmooth {
+        0% {
+          transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+        }
+        20% {
+          transform: translateX(80px) translateY(-40px) rotate(3deg) scale(1.05);
+        }
+        40% {
+          transform: translateX(-30px) translateY(60px) rotate(-2deg)
+            scale(0.95);
+        }
+        60% {
+          transform: translateX(50px) translateY(-20px) rotate(4deg) scale(1.03);
+        }
+        80% {
+          transform: translateX(-20px) translateY(30px) rotate(-1deg)
+            scale(0.98);
+        }
+        100% {
+          transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+        }
+      }
+
+      .features::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 2px,
+          rgba(139, 92, 246, 0.03) 2px,
+          rgba(139, 92, 246, 0.03) 4px
+        );
+        animation: slidePattern 30s linear infinite;
+        z-index: -1;
+      }
+
+      @keyframes slidePattern {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(20px);
+        }
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 70px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 35px;
+        perspective: 1500px;
+        transform-style: preserve-3d;
+      }
+
+      .feature-card {
+        padding: 45px;
+        border-radius: 25px;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        transform-style: preserve-3d;
+        transform: translateZ(0) rotateX(0deg) rotateY(0deg);
+      }
+
+      /* Static positioning for feature cards */
+      .feature-card {
+        transform: none;
+      }
+
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(139, 92, 246, 0.15) 0%,
+          rgba(96, 165, 250, 0.15) 100%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 25px;
+      }
+
+      .feature-card:hover::before {
+        opacity: 1;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow:
+          0 20px 40px rgba(139, 92, 246, 0.3),
+          0 0 30px rgba(96, 165, 250, 0.2);
+      }
+
+      .feature-icon {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 25px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.4s ease;
+        position: relative;
+        z-index: 1;
+      }
+
+      .feature-card:hover .feature-icon {
+        transform: rotate(10deg) scale(1.1);
+        box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
+      }
+
+      .feature-icon i {
+        font-size: 32px;
+        color: white;
+      }
+
+      .feature-card h3 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+        position: relative;
+        z-index: 1;
+        color: #ffffff;
+      }
+
+      .feature-card p {
+        color: rgba(255, 255, 255, 0.85);
+        position: relative;
+        z-index: 1;
+        line-height: 1.7;
+      }
+
+      /* Pricing Section */
+      .pricing {
+        padding: 120px 20px;
+        background: linear-gradient(
+          180deg,
+          rgba(96, 165, 250, 0.05) 0%,
+          var(--card-bg) 30%,
+          transparent 50%,
+          rgba(139, 92, 246, 0.08) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .pricing::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("pexels-haleyve-2087391.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.2) blur(0.5px);
+        z-index: -1;
+        animation: kenBurnsSmooth 120s ease-in-out infinite;
+      }
+
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 35px;
+        max-width: 1100px;
+        margin: 0 auto;
+        perspective: 1200px;
+        transform-style: preserve-3d;
+      }
+
+      .pricing-card {
+        padding: 45px 35px;
+        border-radius: 25px;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        text-align: center;
+        overflow: hidden;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        transform-style: preserve-3d;
+      }
+
+      /* Aligned positioning for pricing cards */
+      .pricing-card {
+        margin-top: 0;
+        align-self: start;
+      }
+
+      .pricing-card.featured {
+        transform: scale(1.05);
+        border: 2px solid var(--primary-purple);
+        background: linear-gradient(
+          135deg,
+          rgba(139, 92, 246, 0.15) 0%,
+          rgba(96, 165, 250, 0.15) 100%
+        );
+      }
+
+      .pricing-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow:
+          0 25px 50px rgba(139, 92, 246, 0.3),
+          0 0 30px rgba(96, 165, 250, 0.2);
+      }
+
+      .pricing-card.featured:hover {
+        transform: translateY(-15px) scale(1.03);
+        box-shadow:
+          0 30px 60px rgba(139, 92, 246, 0.4),
+          0 0 40px rgba(96, 165, 250, 0.3);
+      }
+
+      /* About Section */
+      .about {
+        padding: 120px 20px;
+        background: linear-gradient(
+          180deg,
+          rgba(139, 92, 246, 0.08) 0%,
+          rgba(96, 165, 250, 0.05) 50%,
+          rgba(56, 189, 248, 0.08) 100%
+        );
+        position: relative;
+      }
+
+      .about::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("pexels-pixabay-208701.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.25) blur(0.5px);
+        z-index: -1;
+        animation: kenBurnsSmooth 100s ease-in-out infinite;
+      }
+
+      .about-content {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      .about-text {
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        line-height: 1.8;
+        margin-bottom: 60px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .highlights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 35px;
+        margin-bottom: 70px;
+      }
+
+      .highlight-item {
+        padding: 40px 25px;
+        border-radius: 20px;
+        text-align: center;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .highlight-item:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 25px 50px rgba(139, 92, 246, 0.2);
+      }
+
+      .highlight-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .highlight-icon i {
+        font-size: 28px;
+        color: white;
+      }
+
+      /* Contact Section */
+      .contact {
+        padding: 120px 20px;
+        background: linear-gradient(
+          180deg,
+          rgba(56, 189, 248, 0.08) 0%,
+          rgba(139, 92, 246, 0.06) 50%,
+          rgba(0, 0, 0, 0.5) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .contact::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("pexels-te-lensfix-380994-1371360.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.3) blur(0.5px);
+        z-index: -1;
+        animation: kenBurnsSmooth 130s ease-in-out infinite;
+      }
+
+      .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+      }
+
+      .contact-card {
+        padding: 50px 40px;
+        border-radius: 25px;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        text-align: center;
+      }
+
+      .contact-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 30px 60px rgba(139, 92, 246, 0.2);
+      }
+
+      .section-subtitle {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 30px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .founder-item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        text-align: left;
+      }
+
+      .founder-item:hover {
+        background: rgba(139, 92, 246, 0.1);
+        transform: translateX(10px);
+      }
+
+      .founder-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 3px solid;
+        border-image: linear-gradient(
+            135deg,
+            var(--primary-purple) 0%,
+            var(--light-blue) 100%
+          )
+          1;
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+      }
+
+      .founder-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        border-radius: 12px;
+      }
+
+      .founder-item:hover .founder-avatar img {
+        transform: scale(1.1);
+      }
+
+      .founder-avatar i {
+        font-size: 24px;
+        color: white;
+      }
+
+      .founder-info strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #ffffff;
+      }
+
+      .linkedin-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--light-blue);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .linkedin-link:hover {
+        color: var(--accent-cyan);
+        transform: translateX(5px);
+      }
+
+      .linkedin-link i {
+        font-size: 18px;
+      }
+
+      .contact-item {
+        margin-bottom: 25px;
+        padding: 20px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        text-align: left;
+      }
+
+      .contact-item:hover {
+        background: rgba(139, 92, 246, 0.1);
+        transform: translateX(10px);
+      }
+
+      .contact-label {
+        font-weight: 600;
+        color: var(--light-blue);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .contact-value {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .contact-value a {
+        color: var(--light-blue);
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .contact-value a:hover {
+        color: var(--accent-cyan);
+      }
+
+      .social-links {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 30px;
+      }
+
+      .social-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 18px;
+        transition: all 0.4s ease;
+        font-size: 24px;
+      }
+
+      .social-link:hover {
+        transform: translateY(-5px) scale(1.1);
+        box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
+      }
+
+      /* Stats Section */
+      .stats {
+        padding: 100px 20px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(139, 92, 246, 0.03) 100%
+        );
+      }
+
+      .stats::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("pexels-wanderer-731217.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.15) blur(1px);
+        z-index: -1;
+        animation: kenBurnsSmooth 110s ease-in-out infinite;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 40px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .stat-item {
+        padding: 40px 30px;
+        border-radius: 20px;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+      }
+
+      .stat-item:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 25px 50px rgba(139, 92, 246, 0.2);
+      }
+
+      .stat-number {
+        font-size: 3.5rem;
+        font-weight: 900;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 15px;
+      }
+
+      .stat-label {
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+        font-size: 1.1rem;
+      }
+
+      /* Footer */
+      footer {
+        padding: 80px 20px 50px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.7);
+        border-top: 1px solid var(--border-color);
+        backdrop-filter: blur(20px);
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+      }
+
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        font-weight: 500;
+      }
+
+      .footer-links a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 50%;
+        background: var(--light-blue);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .footer-links a:hover {
+        color: var(--light-blue);
+      }
+
+      .footer-links a:hover::after {
+        width: 100%;
+      }
+
+      /* Scroll Animations */
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .animate-on-scroll.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Mobile Optimizations */
+      @media (max-width: 768px) {
+        .nav-trigger {
+          width: 50px;
+          height: 50px;
+          top: 20px;
+          left: 20px;
+        }
+
+        .nav-trigger i {
+          font-size: 20px;
+        }
+
+        .nav-drawer {
+          width: 280px;
+          left: -280px;
+        }
+
+        .nav-links a {
+          font-size: 16px;
+          padding: 12px 25px;
+        }
+
+        .nav-header {
+          padding: 30px 20px;
+        }
+
+        .logo {
+          font-size: 28px;
+        }
+
+        .hero h1 {
+          font-size: clamp(2.5rem, 10vw, 4rem);
+        }
+
+        .hero p {
+          font-size: 1.2rem;
+          margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+          margin-bottom: 60px;
+        }
+
+        .btn {
+          width: 100%;
+          max-width: 320px;
+          padding: 18px 35px;
+        }
+
+        .features-grid,
+        .pricing-grid,
+        .highlights-grid,
+        .contact-grid {
+          grid-template-columns: 1fr;
+          gap: 25px;
+        }
+
+        .feature-card,
+        .pricing-card,
+        .contact-card {
+          padding: 35px 25px;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 25px;
+        }
+
+        .footer-links {
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .section-title {
+          font-size: 2.8rem;
+        }
+
+        .pricing-card.featured {
+          transform: none;
+          margin: 0;
+        }
+      }
+
+      /* Extra small screens */
+      @media (max-width: 480px) {
+        .feature-card,
+        .pricing-card,
+        .contact-card {
+          padding: 30px 20px;
+        }
+
+        .plan-price {
+          font-size: 2.5rem;
+        }
+
+        .stat-number {
+          font-size: 2.8rem;
+        }
+
+        .social-links {
+          gap: 15px;
+        }
+
+        .social-link {
+          width: 50px;
+          height: 50px;
+          font-size: 20px;
+        }
+      }
+
+      /* Performance optimizations */
+      .hero-bg img {
+        will-change: transform;
+      }
+
+      .feature-card,
+      .pricing-card,
+      .contact-card {
+        will-change: transform;
+      }
+
+      /* Loading animation */
+      .page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--background-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+
+      .loader-hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loader-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(139, 92, 246, 0.2);
+        border-radius: 50%;
+        border-top-color: var(--primary-purple);
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
   <body>
-    <!-- Floating Logos -->
-    <div class="floating-logo"></div>
-    <div class="floating-logo"></div>
-    <div class="floating-logo"></div>
-    <div class="floating-logo"></div>
-
-    <!-- Theme Toggle Button -->
-    <div class="theme-toggle" id="themeToggle">
-      <i class="fas fa-moon"></i>
-    </div>
-
-    <!-- Page Loader -->
     <div class="page-loader" id="pageLoader">
       <div class="loader-spinner"></div>
     </div>
@@ -66,679 +1590,1119 @@
       </div>
     </nav>
 
-    <!-- Main Grid Layout -->
-    <div class="main-grid scroll-snap-container">
-      <!-- Hero Section -->
-      <section class="hero scroll-snap-item">
-        <div class="hero-bg">
-          <img
-            src="wp9801253-italy-4k-wallpapers.jpg"
-            alt="Travel Background"
-          />
-        </div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-          <h1>Your AI Travel<br />Companion</h1>
-          <div class="hero-text-container">
-            <p id="heroText" class="hero-animated-text">
-              Personalized to your exact needs and budget. Discover hidden gems,
-              save money on every booking, and create unforgettable memories
-              with AI-powered travel planning that adapts to your unique style.
-            </p>
-          </div>
-
-          <div class="cta-buttons">
-            <a href="#" class="btn btn-primary">
-              <i class="fas fa-rocket"></i>
-              Start Planning Free
-            </a>
-          </div>
-
-          <div class="chat-demo glass-effect">
-            <div class="chat-header">
-              <div>🤖 JetFriend AI</div>
-            </div>
-            <div class="chat-messages" id="chatMessages">
-              <div class="message user">
-                Plan a 5-day trip to Tokyo for $2000
-              </div>
-              <div class="message ai">
-                Perfect! I found flights from NYC to Tokyo for $680, a great
-                hotel in Shibuya for $120/night, and curated a foodie itinerary
-                with the best ramen spots. Plus I found a 15% discount code!
-                🍜✨
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Features Section -->
-      <section class="features scroll-snap-item" id="features">
-        <div class="container">
-          <h2 class="section-title fade-in-up">Everything You Need</h2>
-          <div class="features-grid">
-            <div class="feature-card glass-card fade-in-up">
-              <div class="feature-icon">
-                <i class="fas fa-brain"></i>
-              </div>
-              <h3>AI-Powered Planning</h3>
-              <p>
-                Chat naturally with our AI to plan trips. It learns your
-                preferences and suggests personalized experiences you'll
-                actually love.
-              </p>
-            </div>
-
-            <div class="feature-card glass-card fade-in-up">
-              <div class="feature-icon">
-                <i class="fas fa-tags"></i>
-              </div>
-              <h3>Smart Deal Hunting</h3>
-              <p>
-                Automatically finds and applies the best discount codes,
-                cashback offers, and hidden deals across flights, hotels, and
-                activities.
-              </p>
-            </div>
-
-            <div class="feature-card glass-card fade-in-up">
-              <div class="feature-icon">
-                <i class="fas fa-route"></i>
-              </div>
-              <h3>Dynamic Itineraries</h3>
-              <p>
-                Visual timelines with walking distances, activity durations, and
-                real-time updates based on weather and local events.
-              </p>
-            </div>
-
-            <div class="feature-card glass-card fade-in-up">
-              <div class="feature-icon">
-                <i class="fas fa-mobile-alt"></i>
-              </div>
-              <h3>Mobile & Web Sync</h3>
-              <p>
-                Access your trips anywhere. Auto-syncs with your calendar, email
-                confirmations, and provides offline access to your itinerary.
-              </p>
-            </div>
-
-            <div class="feature-card glass-card fade-in-up">
-              <div class="feature-icon">
-                <i class="fas fa-map-marked-alt"></i>
-              </div>
-              <h3>Local Intelligence</h3>
-              <p>
-                Get insider recommendations from locals, real-time crowd levels,
-                and hidden gems that other tourists miss.
-              </p>
-            </div>
-
-            <div class="feature-card glass-card fade-in-up">
-              <div class="feature-icon">
-                <i class="fas fa-clipboard-check"></i>
-              </div>
-              <h3>Smart Logistics</h3>
-              <p>
-                Packing lists, visa requirements, vaccination reminders, and
-                currency tips - all automatically generated for your
-                destination.
-              </p>
-            </div>
-
-            <div class="feature-card glass-card fade-in-up">
-              <div class="feature-icon">
-                <i class="fas fa-plane"></i>
-              </div>
-              <h3>Flight Price Tracking</h3>
-              <p>
-                Monitor flight prices 24/7 and get alerts when prices drop. Our
-                AI predicts the best time to book for maximum savings.
-              </p>
-            </div>
-
-            <div class="feature-card glass-card fade-in-up">
-              <div class="feature-icon">
-                <i class="fas fa-users"></i>
-              </div>
-              <h3>Group Travel</h3>
-              <p>
-                Coordinate group trips with shared itineraries, split costs
-                automatically, and manage preferences for multiple travelers.
-              </p>
-            </div>
-
-            <div class="feature-card glass-card fade-in-up">
-              <div class="feature-icon">
-                <i class="fas fa-shield-alt"></i>
-              </div>
-              <h3>Travel Insurance</h3>
-              <p>
-                Get personalized travel insurance recommendations and instant
-                coverage for unexpected changes or cancellations.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Stats Section -->
-      <section class="stats scroll-snap-item">
-        <div class="container">
-          <div class="stats-grid">
-            <div class="stat-item glass-card scale-in">
-              <div class="stat-number">10K</div>
-              <div class="stat-label">Target Users Year 1</div>
-            </div>
-            <div class="stat-item glass-card scale-in">
-              <div class="stat-number">30%</div>
-              <div class="stat-label">Average Savings</div>
-            </div>
-            <div class="stat-item glass-card scale-in">
-              <div class="stat-number">5min</div>
-              <div class="stat-label">Trip Planning Time</div>
-            </div>
-            <div class="stat-item glass-card scale-in">
-              <div class="stat-number">24/7</div>
-              <div class="stat-label">AI Assistant</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Pricing Section -->
-      <section class="pricing scroll-snap-item" id="pricing">
-        <div class="container">
-          <h2 class="section-title fade-in-up">
-            Flexible Pricing for Every Traveler
-          </h2>
-          <p
-            class="fade-in-up"
-            style="
-              text-align: center;
-              color: rgba(255, 255, 255, 0.8);
-              margin-bottom: 60px;
-              max-width: 600px;
-              margin-left: auto;
-              margin-right: auto;
-              font-size: 1.2rem;
-            "
-          >
-            JetFriend offers simple, transparent pricing designed to help you
-            save time and money without the hassle.
+    <!-- Hero Section with Background Image -->
+    <section class="hero">
+      <div class="hero-bg">
+        <img src="wp9801253-italy-4k-wallpapers.jpg" alt="Travel Background" />
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>Your AI Travel<br />Companion</h1>
+        <div class="hero-text-container">
+          <p id="heroText" class="hero-animated-text">
+            Personalized to your exact needs and budget. Discover hidden gems,
+            save money on every booking, and create unforgettable memories with
+            AI-powered travel planning that adapts to your unique style.
           </p>
+        </div>
 
-          <div class="pricing-grid">
-            <div class="pricing-card glass-card fade-in-left">
-              <div class="plan-name">Free</div>
-              <div class="plan-price">
-                <span class="currency">$</span>0<span
-                  style="font-size: 1rem; color: rgba(255, 255, 255, 0.6)"
-                >
-                  / month</span
-                >
-              </div>
-              <div class="plan-description">Perfect for getting started</div>
-              <ul class="plan-features">
-                <li>Basic AI trip planning</li>
-                <li>Limited flight + hotel searches</li>
-                <li>Chat support</li>
-                <li>Basic itinerary creation</li>
-              </ul>
-              <a href="#" class="btn btn-secondary" style="width: 100%"
-                >Start Free</a
-              >
-            </div>
+        <div class="cta-buttons">
+          <a href="#" class="btn btn-primary">
+            <i class="fas fa-rocket"></i>
+            Start Planning Free
+          </a>
+        </div>
 
-            <div class="pricing-card glass-card featured fade-in-up">
-              <div class="plan-name">Pro</div>
-              <div class="plan-price">
-                <span class="currency">$</span>9.99<span
-                  style="font-size: 1rem; color: rgba(255, 255, 255, 0.6)"
-                >
-                  / month</span
-                >
-              </div>
-              <div class="plan-description">
-                Most popular for serious travelers
-              </div>
-              <ul class="plan-features">
-                <li>Unlimited AI trip planning</li>
-                <li>Advanced flight + hotel searches</li>
-                <li>Real-time price tracking</li>
-                <li>Smart deal hunting</li>
-                <li>Priority customer support</li>
-                <li>Group travel coordination</li>
-                <li>Custom integrations</li>
-                <li>Travel insurance recommendations</li>
-              </ul>
-              <a href="#" class="btn btn-primary" style="width: 100%"
-                >Start Pro Trial</a
-              >
-            </div>
-
-            <div class="pricing-card glass-card fade-in-right">
-              <div class="plan-name">Enterprise</div>
-              <div class="plan-price" style="font-size: 2.5rem">Contact us</div>
-              <div class="plan-description">Custom solutions for teams</div>
-              <ul class="plan-features">
-                <li>Custom integrations</li>
-                <li>Dedicated account manager</li>
-                <li>White-label solutions</li>
-                <li>Advanced analytics</li>
-                <li>24/7 priority support</li>
-                <li>Custom reporting</li>
-                <li>API access</li>
-                <li>On-premise deployment</li>
-              </ul>
-              <a href="#contact" class="btn btn-primary" style="width: 100%"
-                >Contact Sales</a
-              >
+        <div class="chat-demo">
+          <div class="chat-header">
+            <div>🤖 JetFriend AI</div>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="message user">Plan a 5-day trip to Tokyo for $2000</div>
+            <div class="message ai">
+              Perfect! I found flights from NYC to Tokyo for $680, a great hotel
+              in Shibuya for $120/night, and curated a foodie itinerary with the
+              best ramen spots. Plus I found a 15% discount code! 🍜✨
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- About Section -->
-      <section class="about scroll-snap-item" id="about">
-        <div class="container">
-          <h2 class="section-title fade-in-up">About JetFriend</h2>
-          <div class="about-content">
-            <p class="about-text fade-in-up">
-              We're revolutionizing travel planning with AI that understands
-              your unique preferences, budget, and travel style. Our mission is
-              to make extraordinary trips accessible to everyone through
-              intelligent automation and personalized recommendations.
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <div class="container">
+        <h2 class="section-title animate-on-scroll">Everything You Need</h2>
+        <div class="features-grid">
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>AI-Powered Planning</h3>
+            <p>
+              Chat naturally with our AI to plan trips. It learns your
+              preferences and suggests personalized experiences you'll actually
+              love.
             </p>
+          </div>
 
-            <div class="highlights-grid">
-              <div class="highlight-item glass-card fade-in-left">
-                <div class="highlight-icon">
-                  <i class="fas fa-lightbulb"></i>
-                </div>
-                <h3>Innovation First</h3>
-                <p>
-                  Cutting-edge AI technology that learns and adapts to your
-                  preferences
-                </p>
-              </div>
-
-              <div class="highlight-item glass-card fade-in-up">
-                <div class="highlight-icon">
-                  <i class="fas fa-heart"></i>
-                </div>
-                <h3>Customer Obsessed</h3>
-                <p>
-                  Your satisfaction and amazing travel experiences drive
-                  everything we do
-                </p>
-              </div>
-
-              <div class="highlight-item glass-card fade-in-right">
-                <div class="highlight-icon">
-                  <i class="fas fa-globe"></i>
-                </div>
-                <h3>Global Reach</h3>
-                <p>
-                  Comprehensive coverage of destinations, deals, and local
-                  insights worldwide
-                </p>
-              </div>
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-tags"></i>
             </div>
+            <h3>Smart Deal Hunting</h3>
+            <p>
+              Automatically finds and applies the best discount codes, cashback
+              offers, and hidden deals across flights, hotels, and activities.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-route"></i>
+            </div>
+            <h3>Dynamic Itineraries</h3>
+            <p>
+              Visual timelines with walking distances, activity durations, and
+              real-time updates based on weather and local events.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3>Mobile & Web Sync</h3>
+            <p>
+              Access your trips anywhere. Auto-syncs with your calendar, email
+              confirmations, and provides offline access to your itinerary.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <h3>Local Intelligence</h3>
+            <p>
+              Get insider recommendations from locals, real-time crowd levels,
+              and hidden gems that other tourists miss.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-clipboard-check"></i>
+            </div>
+            <h3>Smart Logistics</h3>
+            <p>
+              Packing lists, visa requirements, vaccination reminders, and
+              currency tips - all automatically generated for your destination.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-plane"></i>
+            </div>
+            <h3>Flight Price Tracking</h3>
+            <p>
+              Monitor flight prices 24/7 and get alerts when prices drop. Our AI
+              predicts the best time to book for maximum savings.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>Group Travel</h3>
+            <p>
+              Coordinate group trips with shared itineraries, split costs
+              automatically, and manage preferences for multiple travelers.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Travel Insurance</h3>
+            <p>
+              Get personalized travel insurance recommendations and instant
+              coverage for unexpected changes or cancellations.
+            </p>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Contact Section -->
-      <section class="contact scroll-snap-item" id="contact">
-        <div class="container">
-          <h2 class="section-title fade-in-up">Get in Touch</h2>
-          <div class="contact-grid">
-            <div class="contact-card glass-card fade-in-left">
-              <h3 class="section-subtitle">
-                <i class="fas fa-users" style="margin-right: 10px"></i>
-                Meet the Team
-              </h3>
-              <div class="founder-item">
-                <div class="founder-avatar">
-                  <i class="fas fa-user-tie"></i>
-                </div>
-                <div class="founder-info">
-                  <strong>Alex Johnson</strong>
-                  <a href="#" class="linkedin-link">
-                    <i class="fab fa-linkedin"></i>
-                    Connect on LinkedIn
-                  </a>
-                </div>
-              </div>
+    <!-- Stats Section -->
+    <section class="stats">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item animate-on-scroll">
+            <div class="stat-number">10K</div>
+            <div class="stat-label">Target Users Year 1</div>
+          </div>
+          <div class="stat-item animate-on-scroll">
+            <div class="stat-number">30%</div>
+            <div class="stat-label">Average Savings</div>
+          </div>
+          <div class="stat-item animate-on-scroll">
+            <div class="stat-number">5min</div>
+            <div class="stat-label">Trip Planning Time</div>
+          </div>
+          <div class="stat-item animate-on-scroll">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">AI Assistant</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-              <div class="founder-item">
-                <div class="founder-avatar">
-                  <i class="fas fa-user-cog"></i>
-                </div>
-                <div class="founder-info">
-                  <strong>Sarah Chen</strong>
-                  <a href="#" class="linkedin-link">
-                    <i class="fab fa-linkedin"></i>
-                    Connect on LinkedIn
-                  </a>
-                </div>
-              </div>
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+      <div class="container">
+        <h2 class="section-title animate-on-scroll">
+          Flexible Pricing for Every Traveler
+        </h2>
+        <p
+          class="animate-on-scroll"
+          style="
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.2rem;
+          "
+        >
+          JetFriend offers simple, transparent pricing designed to help you save
+          time and money without the hassle.
+        </p>
+
+        <div class="pricing-grid">
+          <div class="pricing-card animate-on-scroll">
+            <div class="plan-name">Free</div>
+            <div class="plan-price">
+              <span class="currency">$</span>0<span
+                style="font-size: 1rem; color: rgba(255, 255, 255, 0.6)"
+              >
+                / month</span
+              >
             </div>
-
-            <div class="contact-card glass-card fade-in-right">
-              <h3 class="section-subtitle">
-                <i class="fas fa-envelope" style="margin-right: 10px"></i>
-                Contact Information
-              </h3>
-              <div class="contact-item">
-                <div class="contact-label">
-                  <i class="fas fa-envelope"></i>
-                  Email
-                </div>
-                <div class="contact-value">
-                  <a href="mailto:hello@jetfriend.ai">hello@jetfriend.ai</a>
-                </div>
-              </div>
-
-              <div class="contact-item">
-                <div class="contact-label">
-                  <i class="fas fa-phone"></i>
-                  Phone
-                </div>
-                <div class="contact-value">
-                  <a href="tel:+1-555-0123">+1 (555) 012-3456</a>
-                </div>
-              </div>
-
-              <div class="contact-item">
-                <div class="contact-label">
-                  <i class="fas fa-map-marker-alt"></i>
-                  Location
-                </div>
-                <div class="contact-value">San Francisco, CA</div>
-              </div>
-            </div>
-
-            <div class="contact-card glass-card fade-in-up">
-              <h3 class="section-subtitle">
-                <i class="fas fa-share-alt" style="margin-right: 10px"></i>
-                Stay Connected
-              </h3>
-              <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px">
-                Follow JetFriend for updates, travel tips, and exclusive deals:
-              </p>
-              <div class="social-links">
-                <a href="#" class="social-link" title="Instagram">
-                  <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" class="social-link" title="LinkedIn">
-                  <i class="fab fa-linkedin"></i>
-                </a>
-              </div>
-              <p
+            <div class="plan-description">Perfect for getting started</div>
+            <ul
+              class="plan-features"
+              style="list-style: none; margin-bottom: 40px; text-align: left"
+            >
+              <li
                 style="
-                  color: rgba(255, 255, 255, 0.7);
-                  margin-top: 30px;
-                  font-size: 0.9rem;
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
                 "
               >
-                Join thousands of smart travelers who save time and money with
-                JetFriend
-              </p>
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Basic AI trip planning
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Limited flight + hotel searches
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Chat support
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Basic itinerary creation
+              </li>
+            </ul>
+            <a href="#" class="btn btn-secondary" style="width: 100%"
+              >Start Free</a
+            >
+          </div>
+
+          <div class="pricing-card featured animate-on-scroll">
+            <div class="plan-name">Pro</div>
+            <div class="plan-price">
+              <span class="currency">$</span>9.99<span
+                style="font-size: 1rem; color: rgba(255, 255, 255, 0.6)"
+              >
+                / month</span
+              >
             </div>
+            <div class="plan-description">
+              Most popular for serious travelers
+            </div>
+            <ul
+              class="plan-features"
+              style="list-style: none; margin-bottom: 40px; text-align: left"
+            >
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Full flight & hotel API access
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Personalized itineraries
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Smart deal hunting with Honey & coupons
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Live chat agent
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Multi-platform sync
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Real-time deal alerts
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Dynamic trip maps
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Packing & visa reminders
+              </li>
+            </ul>
+            <a href="#" class="btn btn-primary" style="width: 100%"
+              >Start Pro Trial</a
+            >
+          </div>
+
+          <div class="pricing-card animate-on-scroll">
+            <div class="plan-name">Enterprise</div>
+            <div class="plan-price" style="font-size: 2rem">Contact us</div>
+            <div class="plan-description">Custom solutions for teams</div>
+            <ul
+              class="plan-features"
+              style="list-style: none; margin-bottom: 40px; text-align: left"
+            >
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Custom integrations
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                API access
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Team collaboration
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Priority support
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Custom training
+              </li>
+              <li
+                style="
+                  padding: 10px 0;
+                  color: rgba(255, 255, 255, 0.9);
+                  position: relative;
+                  padding-left: 25px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    color: var(--light-blue);
+                    font-weight: bold;
+                  "
+                  >✓</span
+                >
+                Dedicated account manager
+              </li>
+            </ul>
+            <a href="#contact" class="btn btn-secondary" style="width: 100%"
+              >Contact Sales</a
+            >
           </div>
         </div>
-      </section>
-    </div>
+
+        <div
+          class="animate-on-scroll"
+          style="text-align: center; margin-top: 60px"
+        >
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.9);
+              font-size: 1.2rem;
+              margin-bottom: 30px;
+            "
+          >
+            <strong>Why upgrade?</strong> The Pro plan unlocks real-time deal
+            alerts, dynamic trip maps, and packing & visa reminders — saving you
+            an average of 30% on travel costs and hours of planning.
+          </p>
+          <a href="#" class="btn btn-primary">Start your free plan today</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+      <div class="container">
+        <h2 class="section-title animate-on-scroll">
+          Meet JetFriend — Your AI Travel Buddy
+        </h2>
+
+        <div class="about-content">
+          <div class="about-text animate-on-scroll">
+            JetFriend was born out of frustration with clunky, fragmented travel
+            planning — switching between endless tabs, blogs, and apps. Our
+            mission is simple: to combine the power of AI agents with seamless
+            integrations, so your trips get planned, booked, and optimized
+            automatically.
+          </div>
+
+          <div class="highlights-grid">
+            <div class="highlight-item animate-on-scroll">
+              <div class="highlight-icon">
+                <i class="fas fa-robot"></i>
+              </div>
+              <div class="highlight-title">All-in-One Assistant</div>
+              <div class="highlight-desc">
+                Flights, hotels, attractions, discounts, packing lists — all in
+                one place.
+              </div>
+            </div>
+
+            <div class="highlight-item animate-on-scroll">
+              <div class="highlight-icon">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <div class="highlight-title">Powered by AI Agents</div>
+              <div class="highlight-desc">
+                Smart assistant reasons across multiple travel APIs and discount
+                tools like Honey and Rakuten.
+              </div>
+            </div>
+
+            <div class="highlight-item animate-on-scroll">
+              <div class="highlight-icon">
+                <i class="fas fa-sync-alt"></i>
+              </div>
+              <div class="highlight-title">Real-Time & Dynamic</div>
+              <div class="highlight-desc">
+                Weather updates, local event alerts, live chat for instant help,
+                and multi-device sync.
+              </div>
+            </div>
+
+            <div class="highlight-item animate-on-scroll">
+              <div class="highlight-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <div class="highlight-title">Built for You</div>
+              <div class="highlight-desc">
+                Designed for travelers who want less stress and more adventure.
+              </div>
+            </div>
+          </div>
+
+          <div class="about-text animate-on-scroll">
+            <strong>Our goal:</strong> Reach 10,000 happy travelers in the first
+            year by delivering a product that truly simplifies travel.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <h2 class="section-title animate-on-scroll">Connect with JetFriend</h2>
+        <div
+          class="animate-on-scroll"
+          style="
+            text-align: center;
+            margin-bottom: 0;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+          "
+        >
+          Need help or want to collaborate? We love hearing from you! Whether
+          you have questions, feedback, or partnership ideas, our team is ready
+          to assist.
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-card animate-on-scroll">
+            <h3 class="section-subtitle">
+              <i class="fas fa-users" style="margin-right: 10px"></i>
+              Meet the Founders
+            </h3>
+            <div class="founder-item">
+              <div class="founder-avatar">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F4df91664b0ab40fbbf16afa8da159185?format=webp&width=400&quality=95&fit=cover"
+                  alt="Steven Gobran"
+                />
+              </div>
+              <div class="founder-info">
+                <strong>Steven Gobran</strong>
+                <a
+                  href="https://www.linkedin.com/in/steven-gobran-17a1a4291/?trk=opento_sprofile_details"
+                  target="_blank"
+                  class="linkedin-link"
+                >
+                  <i class="fab fa-linkedin"></i>
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+            <div class="founder-item">
+              <div class="founder-avatar">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2Fec63ad590f054360abc14d24c692d814?format=webp&width=400&quality=95&fit=cover"
+                  alt="Steven Alfy"
+                />
+              </div>
+              <div class="founder-info">
+                <strong>Steven Alfy</strong>
+                <a
+                  href="https://www.linkedin.com/in/steven-alfy-392262204/"
+                  target="_blank"
+                  class="linkedin-link"
+                >
+                  <i class="fab fa-linkedin"></i>
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+            <div class="founder-item">
+              <div class="founder-avatar">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F266567473d894e95b05d77d4b9c5be48?format=webp&width=400&quality=95&fit=cover"
+                  alt="Anton Salib"
+                />
+              </div>
+              <div class="founder-info">
+                <strong>Anton Salib</strong>
+                <a
+                  href="https://www.linkedin.com/in/anton-salib-88436432a/"
+                  target="_blank"
+                  class="linkedin-link"
+                >
+                  <i class="fab fa-linkedin"></i>
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-card animate-on-scroll">
+            <h3 class="section-subtitle">
+              <i class="fas fa-address-card" style="margin-right: 10px"></i>
+              Contact Details
+            </h3>
+            <div class="contact-item">
+              <div class="contact-label">
+                <i class="fas fa-phone"></i>
+                Support Phone
+              </div>
+              <div class="contact-value">
+                <a href="tel:+16153367310">(615) 336-7310</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">
+                <i class="fas fa-envelope"></i>
+                Email for More Info
+              </div>
+              <div class="contact-value">
+                <a href="mailto:jet-friend@outlook.com"
+                  >jet-friend@outlook.com</a
+                >
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">
+                <i class="fas fa-clock"></i>
+                Response Time
+              </div>
+              <div class="contact-value">Within 24 hours</div>
+            </div>
+          </div>
+
+          <div class="contact-card animate-on-scroll">
+            <h3 class="section-subtitle">
+              <i class="fas fa-share-alt" style="margin-right: 10px"></i>
+              Stay Connected
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px">
+              Follow JetFriend for updates, travel tips, and exclusive deals:
+            </p>
+            <div class="social-links">
+              <a href="#" class="social-link" title="Instagram">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="social-link" title="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+              </a>
+            </div>
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.7);
+                margin-top: 30px;
+                font-size: 0.95rem;
+              "
+            >
+              Questions? Use our live chat anytime or fill out the contact form
+              — we'll get back to you within 24 hours.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Footer -->
     <footer>
       <div class="footer-content">
         <div class="footer-links">
-          <a href="#features">Features</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
+          <a href="#">Support</a>
+          <a href="#">API</a>
+          <a href="#">Careers</a>
         </div>
-        <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px">
-          © 2025 JetFriend. All rights reserved. Revolutionizing travel with
-          AI.
+        <p style="color: rgba(255, 255, 255, 0.6); margin-top: 20px">
+          © 2025 JetFriend. Revolutionizing travel with AI.
         </p>
       </div>
     </footer>
 
     <script>
-      // Enhanced JavaScript with all advanced features
-      document.addEventListener("DOMContentLoaded", function () {
-        // Theme Toggle Functionality
-        const themeToggle = document.getElementById("themeToggle");
-        const body = document.body;
-        const icon = themeToggle.querySelector("i");
-
-        // Load saved theme or default to dark
-        const savedTheme = localStorage.getItem("theme") || "dark";
-        if (savedTheme === "light") {
-          body.setAttribute("data-theme", "light");
-          icon.className = "fas fa-sun";
-        }
-
-        themeToggle.addEventListener("click", () => {
-          const currentTheme = body.getAttribute("data-theme");
-          const newTheme = currentTheme === "light" ? "dark" : "light";
-
-          body.setAttribute("data-theme", newTheme);
-          localStorage.setItem("theme", newTheme);
-
-          if (newTheme === "light") {
-            icon.className = "fas fa-sun";
-          } else {
-            icon.className = "fas fa-moon";
-          }
-        });
-
-        // Navigation functionality
-        const navTrigger = document.getElementById("navTrigger");
-        const navDrawer = document.getElementById("navDrawer");
-        const navOverlay = document.getElementById("navOverlay");
-
-        function toggleNav() {
-          navTrigger.classList.toggle("active");
-          navDrawer.classList.toggle("active");
-          navOverlay.classList.toggle("active");
-        }
-
-        navTrigger.addEventListener("click", toggleNav);
-        navOverlay.addEventListener("click", toggleNav);
-
-        // Close nav when clicking on nav links
-        document.querySelectorAll(".nav-links a").forEach((link) => {
-          link.addEventListener("click", () => {
-            navTrigger.classList.remove("active");
-            navDrawer.classList.remove("active");
-            navOverlay.classList.remove("active");
-          });
-        });
-
-        // Page loader
-        const pageLoader = document.getElementById("pageLoader");
+      // Page loader
+      window.addEventListener("load", function () {
         setTimeout(() => {
-          pageLoader.classList.add("loader-hidden");
-        }, 1000);
+          document.getElementById("pageLoader").classList.add("loader-hidden");
+        }, 1500);
+      });
 
-        // Intersection Observer for scroll-triggered animations
-        const observerOptions = {
-          threshold: 0.1,
-          rootMargin: "0px 0px -50px 0px",
-        };
+      // Left-side drawer navigation
+      const navTrigger = document.getElementById("navTrigger");
+      const navDrawer = document.getElementById("navDrawer");
+      const navOverlay = document.getElementById("navOverlay");
+      const navLinks = document.querySelector(".nav-links");
 
-        const observer = new IntersectionObserver((entries) => {
+      // Toggle drawer
+      navTrigger.addEventListener("click", function () {
+        this.classList.toggle("active");
+        navDrawer.classList.toggle("active");
+        navOverlay.classList.toggle("active");
+        document.body.style.overflow = navDrawer.classList.contains("active")
+          ? "hidden"
+          : "auto";
+      });
+
+      // Close drawer when clicking overlay
+      navOverlay.addEventListener("click", function () {
+        navTrigger.classList.remove("active");
+        navDrawer.classList.remove("active");
+        navOverlay.classList.remove("active");
+        document.body.style.overflow = "auto";
+      });
+
+      // Close drawer when clicking on a navigation link
+      navLinks.addEventListener("click", function (e) {
+        if (e.target.tagName === "A") {
+          navTrigger.classList.remove("active");
+          navDrawer.classList.remove("active");
+          navOverlay.classList.remove("active");
+          document.body.style.overflow = "auto";
+        }
+      });
+
+      // Close drawer with Escape key
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && navDrawer.classList.contains("active")) {
+          navTrigger.classList.remove("active");
+          navDrawer.classList.remove("active");
+          navOverlay.classList.remove("active");
+          document.body.style.overflow = "auto";
+        }
+      });
+
+      // Animate elements on scroll
+      const observer = new IntersectionObserver(
+        (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               entry.target.classList.add("visible");
             }
           });
-        }, observerOptions);
+        },
+        {
+          threshold: 0.1,
+          rootMargin: "0px 0px -50px 0px",
+        },
+      );
 
-        // Observe all animation elements
-        document
-          .querySelectorAll(
-            ".fade-in-up, .fade-in-left, .fade-in-right, .scale-in, .animate-on-scroll",
-          )
-          .forEach((el) => {
-            observer.observe(el);
-          });
+      document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+        observer.observe(el);
+      });
 
-        // Enhanced Chat Demo Animation
-        const chatMessages = document.getElementById("chatMessages");
-        const messages = [
-          { type: "user", text: "Plan a 5-day trip to Tokyo for $2000" },
-          {
-            type: "ai",
-            text: "Perfect! I found flights from NYC to Tokyo for $680, a great hotel in Shibuya for $120/night, and curated a foodie itinerary with the best ramen spots. Plus I found a 15% discount code! 🍜✨",
-          },
-          { type: "user", text: "What about activities for the evening?" },
-          {
-            type: "ai",
-            text: "I recommend the Tokyo Skytree at sunset, followed by dinner in Golden Gai. For nightlife, Shibuya Crossing and Robot Restaurant show are must-sees! 🌃🤖",
-          },
-          { type: "user", text: "Book everything please!" },
-          {
-            type: "ai",
-            text: "Done! Your complete Tokyo adventure is booked. Check your email for confirmations and your personalized day-by-day itinerary. Have an amazing trip! ✈️🎌",
-          },
-        ];
+      // Dynamic chat messages
+      const chatMessages = [
+        { type: "user", text: "Find me flights to Paris under $500" },
+        {
+          type: "ai",
+          text: "Found 3 options! Air France for $480 with a 10% cashback offer. Booking now? 🇫🇷",
+        },
+        { type: "user", text: "What should I eat in Tokyo?" },
+        {
+          type: "ai",
+          text: "Must-try: Ichiran Ramen in Shinjuku, sushi at Tsukiji, and matcha everything! I've mapped the best food tour route 🍣",
+        },
+        { type: "user", text: "Pack my bags for a beach trip" },
+        {
+          type: "ai",
+          text: "Done! SPF 50, swimwear, flip-flops, and that book you've been meaning to read. Weather looks perfect! ☀️",
+        },
+      ];
 
-        let messageIndex = 0;
+      let currentMessageSet = 0;
 
-        function addMessage() {
-          if (messageIndex < messages.length) {
-            const message = messages[messageIndex];
+      function updateChatDemo() {
+        const messageContainer = document.getElementById("chatMessages");
+        const messages = chatMessages.slice(
+          currentMessageSet * 2,
+          currentMessageSet * 2 + 2,
+        );
+
+        messageContainer.innerHTML = "";
+
+        messages.forEach((msg, index) => {
+          setTimeout(() => {
             const messageEl = document.createElement("div");
-            messageEl.className = `message ${message.type}`;
-            messageEl.textContent = message.text;
-            messageEl.style.opacity = "0";
-            messageEl.style.transform = "translateY(20px)";
-
-            chatMessages.appendChild(messageEl);
-
-            // Animate in
-            setTimeout(() => {
-              messageEl.style.opacity = "1";
-              messageEl.style.transform = "translateY(0)";
-            }, 100);
-
-            messageIndex++;
-
-            // Remove old messages if more than 4
-            if (chatMessages.children.length > 4) {
-              const firstMessage = chatMessages.firstChild;
-              firstMessage.style.opacity = "0";
-              firstMessage.style.transform = "translateY(-20px)";
-              setTimeout(() => {
-                if (firstMessage.parentNode) {
-                  firstMessage.remove();
-                }
-              }, 300);
-            }
-
-            // Schedule next message
-            setTimeout(addMessage, 3000);
-          } else {
-            // Reset after showing all messages
-            setTimeout(() => {
-              chatMessages.innerHTML = "";
-              messageIndex = 0;
-              setTimeout(addMessage, 1000);
-            }, 5000);
-          }
-        }
-
-        // Start chat demo animation
-        setTimeout(addMessage, 2000);
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-          anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute("href"));
-            if (target) {
-              target.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }
-          });
+            messageEl.className = `message ${msg.type}`;
+            messageEl.textContent = msg.text;
+            messageContainer.appendChild(messageEl);
+          }, index * 1500);
         });
 
-        // Dynamic hero text animation
-        const heroTexts = [
-          "Personalized to your exact needs and budget. Discover hidden gems, save money on every booking, and create unforgettable memories with AI-powered travel planning that adapts to your unique style.",
-          "Smart AI finds the best deals automatically. Compare millions of options instantly and book with confidence knowing you're getting the best price.",
-          "Never miss a deal again. Our 24/7 price monitoring alerts you when prices drop for your dream destinations.",
-          "Plan complex multi-city trips in minutes. Our AI handles all the logistics while you focus on the excitement of your upcoming adventure.",
-        ];
+        currentMessageSet =
+          (currentMessageSet + 1) % Math.floor(chatMessages.length / 2);
+      }
 
-        const heroTextElement = document.getElementById("heroText");
-        let textIndex = 0;
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
 
-        function rotateHeroText() {
+      // Enhanced button interactions
+      document.querySelectorAll(".btn").forEach((btn) => {
+        btn.addEventListener("mouseenter", function () {
+          this.style.transform = "translateY(-5px) scale(1.02)";
+        });
+
+        btn.addEventListener("mouseleave", function () {
+          this.style.transform = "translateY(0) scale(1)";
+        });
+      });
+
+      // Initialize chat demo
+      updateChatDemo();
+      setInterval(updateChatDemo, 7000);
+
+      // Animated cycling hero text
+      const heroTexts = [
+        "Travel without the stress.",
+        "JetFriend plots your perfect trip automatically.",
+        "Personalized to your exact needs and budget.",
+        "Unlike other AI tools, we actually book everything.",
+        "Your true travel agent that takes action.",
+      ];
+
+      let currentTextIndex = 0;
+      const heroTextElement = document.getElementById("heroText");
+
+      function cycleHeroText() {
+        if (heroTextElement) {
           heroTextElement.classList.add("fade-out");
 
           setTimeout(() => {
-            textIndex = (textIndex + 1) % heroTexts.length;
-            heroTextElement.textContent = heroTexts[textIndex];
+            currentTextIndex = (currentTextIndex + 1) % heroTexts.length;
+            heroTextElement.textContent = heroTexts[currentTextIndex];
             heroTextElement.classList.remove("fade-out");
             heroTextElement.classList.add("fade-in");
 
             setTimeout(() => {
               heroTextElement.classList.remove("fade-in");
-            }, 800);
-          }, 800);
+            }, 100);
+          }, 400);
         }
+      }
 
-        // Rotate hero text every 6 seconds
-        setInterval(rotateHeroText, 6000);
+      // Start cycling after page load
+      setTimeout(() => {
+        setInterval(cycleHeroText, 4000);
+      }, 2000);
 
-        // Add subtle parallax effect to hero background
-        window.addEventListener("scroll", () => {
-          const scrolled = window.pageYOffset;
-          const heroBackground = document.querySelector(".hero-bg img");
-          if (heroBackground) {
-            heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
+      // Add loading states for better UX
+      document.querySelectorAll(".btn-primary").forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+          if (this.getAttribute("href") === "#") {
+            e.preventDefault();
+            const originalHTML = this.innerHTML;
+            this.innerHTML =
+              '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            this.style.pointerEvents = "none";
+
+            setTimeout(() => {
+              this.innerHTML = originalHTML;
+              this.style.pointerEvents = "auto";
+              alert("Coming soon! JetFriend is launching Q2 2025.");
+            }, 2000);
           }
         });
-
-        // Floating logos random movement
-        const floatingLogos = document.querySelectorAll(".floating-logo");
-        floatingLogos.forEach((logo) => {
-          const randomDelay = Math.random() * 5000;
-          const randomDuration = 8000 + Math.random() * 4000;
-
-          logo.style.animationDelay = `${randomDelay}ms`;
-          logo.style.animationDuration = `${randomDuration}ms`;
-        });
-
-        // Keyboard navigation
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape") {
-            navTrigger.classList.remove("active");
-            navDrawer.classList.remove("active");
-            navOverlay.classList.remove("active");
-          }
-        });
-
-        // Performance: Reduce animations on low-powered devices
-        const reduceMotionQuery = window.matchMedia(
-          "(prefers-reduced-motion: reduce)",
-        );
-        if (reduceMotionQuery.matches) {
-          document.body.classList.add("reduce-motion");
-        }
       });
+
+      // Enhanced parallax effects for multiple elements
+      window.addEventListener("scroll", function () {
+        const scrolled = window.pageYOffset;
+
+        const heroBackground = document.querySelector(".hero-bg img");
+        if (heroBackground) {
+          heroBackground.style.transform = `translateY(${scrolled * 0.3}px) scale(${1 + scrolled * 0.0002})`;
+        }
+
+        // Parallax for feature cards
+        const featureCards = document.querySelectorAll(".feature-card");
+        featureCards.forEach((card, index) => {
+          const cardTop = card.offsetTop;
+          const cardSpeed = (scrolled - cardTop) * 0.05;
+          const currentTransform = card.style.transform || "";
+          // Preserve existing transforms and add parallax
+          if (!currentTransform.includes("translateY")) {
+            card.style.transform =
+              currentTransform + ` translateY(${cardSpeed}px)`;
+          }
+        });
+      });
+
+      // Advanced mouse tracking for 3D effects
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+
+      document.addEventListener("mousemove", function (e) {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+      });
+
+      function animate3DEffects() {
+        targetX += (mouseX - targetX) * 0.1;
+        targetY += (mouseY - targetY) * 0.1;
+
+        // Apply subtle mouse tracking to hero content
+        const heroContent = document.querySelector(".hero-content");
+        if (heroContent) {
+          const rotateX = targetY * 3;
+          const rotateY = targetX * 3;
+          const baseTransform = heroContent.style.transform || "";
+          if (!baseTransform.includes("floatHero")) {
+            heroContent.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+          }
+        }
+
+        requestAnimationFrame(animate3DEffects);
+      }
+
+      animate3DEffects();
+
+      // Add interactive hover effects to cards
+      document
+        .querySelectorAll(
+          ".feature-card, .pricing-card, .contact-card, .stat-item",
+        )
+        .forEach((card) => {
+          card.addEventListener("mouseenter", function () {
+            this.style.transform = "translateY(-15px) scale(1.02)";
+          });
+
+          card.addEventListener("mouseleave", function () {
+            this.style.transform = "translateY(0) scale(1)";
+          });
+        });
     </script>
   </body>
 </html>
