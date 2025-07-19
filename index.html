@@ -1102,6 +1102,28 @@
       .stats {
         padding: 100px 20px;
         text-align: center;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(139, 92, 246, 0.03) 100%
+        );
+      }
+
+      .stats::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F0889005282d94843b5d57708d68ee894?format=webp&width=1920&quality=90&fit=cover");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.15) blur(1px);
+        z-index: -1;
+        animation: kenBurns 50s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       }
 
       .stats-grid {
