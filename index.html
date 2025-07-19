@@ -2438,6 +2438,40 @@
       updateChatDemo();
       setInterval(updateChatDemo, 7000);
 
+      // Animated cycling hero text
+      const heroTexts = [
+        "Travel without the stress.",
+        "JetFriend plots your perfect trip automatically.",
+        "Personalized to your exact needs and budget.",
+        "Unlike other AI tools, we actually book everything.",
+        "Your true travel agent that takes action.",
+      ];
+
+      let currentTextIndex = 0;
+      const heroTextElement = document.getElementById("heroText");
+
+      function cycleHeroText() {
+        if (heroTextElement) {
+          heroTextElement.classList.add("fade-out");
+
+          setTimeout(() => {
+            currentTextIndex = (currentTextIndex + 1) % heroTexts.length;
+            heroTextElement.textContent = heroTexts[currentTextIndex];
+            heroTextElement.classList.remove("fade-out");
+            heroTextElement.classList.add("fade-in");
+
+            setTimeout(() => {
+              heroTextElement.classList.remove("fade-in");
+            }, 100);
+          }, 400);
+        }
+      }
+
+      // Start cycling after page load
+      setTimeout(() => {
+        setInterval(cycleHeroText, 4000);
+      }, 2000);
+
       // Add loading states for better UX
       document.querySelectorAll(".btn-primary").forEach((btn) => {
         btn.addEventListener("click", function (e) {
