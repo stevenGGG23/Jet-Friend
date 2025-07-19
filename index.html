@@ -592,6 +592,48 @@
           );
         position: relative;
         overflow: hidden;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+      }
+
+      /* Floating organic shapes */
+      .features::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background:
+          radial-gradient(
+            ellipse 300px 200px at 25% 25%,
+            rgba(139, 92, 246, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse 400px 300px at 75% 75%,
+            rgba(96, 165, 250, 0.1) 0%,
+            transparent 50%
+          );
+        animation: floatOrganicShapes 30s ease-in-out infinite;
+        z-index: -1;
+      }
+
+      @keyframes floatOrganicShapes {
+        0%,
+        100% {
+          transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+        }
+        25% {
+          transform: translateX(100px) translateY(-50px) rotate(5deg) scale(1.1);
+        }
+        50% {
+          transform: translateX(-50px) translateY(100px) rotate(-3deg)
+            scale(0.9);
+        }
+        75% {
+          transform: translateX(75px) translateY(-25px) rotate(7deg) scale(1.05);
+        }
       }
 
       .features::before {
