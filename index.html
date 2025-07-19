@@ -1315,22 +1315,42 @@
       <div class="loader-spinner"></div>
     </div>
 
-    <!-- Modern Navigation -->
-    <nav class="navbar" id="navbar">
-      <div class="nav-container">
+    <!-- Modern Left-Side Drawer Navigation -->
+    <div class="nav-trigger" id="navTrigger">
+      <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <nav class="nav-drawer" id="navDrawer">
+      <div class="nav-header">
         <div class="logo">JetFriend</div>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="#features">Features</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="#" class="cta-nav">Get Started</a></li>
-        </ul>
-        <div class="mobile-toggle" id="mobileToggle">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li>
+          <a href="#features"><i class="fas fa-star"></i>Features</a>
+        </li>
+        <li>
+          <a href="#pricing"><i class="fas fa-tag"></i>Pricing</a>
+        </li>
+        <li>
+          <a href="#about"><i class="fas fa-users"></i>About</a>
+        </li>
+        <li>
+          <a href="#contact"><i class="fas fa-envelope"></i>Contact</a>
+        </li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="#" class="cta-nav">
+          <i class="fas fa-rocket" style="margin-right: 8px"></i>
+          Get Started
+        </a>
+      </div>
+
+      <div class="nav-footer">
+        <p>© 2025 JetFriend<br />Revolutionizing travel with AI</p>
       </div>
     </nav>
 
