@@ -320,42 +320,13 @@
         box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
       }
 
-      /* Enhanced Chat Demo */
+      /* Simplified Chat Demo */
       .chat-demo {
         max-width: 500px;
         margin: 0 auto;
         border-radius: 20px;
         overflow: hidden;
         animation: fadeInUp 1s ease-out 0.9s both;
-        position: relative;
-      }
-
-      .chat-demo::before {
-        content: "";
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        right: -2px;
-        bottom: -2px;
-        background: linear-gradient(
-          45deg,
-          var(--primary-purple),
-          var(--light-blue),
-          var(--accent-cyan),
-          var(--primary-purple)
-        );
-        border-radius: 22px;
-        z-index: -1;
-        animation: borderRotate 3s linear infinite;
-      }
-
-      @keyframes borderRotate {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
       }
 
       .chat-header {
@@ -1952,7 +1923,7 @@
         { type: "user", text: "Plan a weekend in Barcelona" },
         {
           type: "ai",
-          text: "Perfect! Found a boutique hotel in Gothic Quarter for €85/night, Gaudí tour tickets, and a tapas crawl. Total savings: €120!",
+          text: "Perfect! Found a boutique hotel in Gothic Quarter for €85/night, Gaudí tour tickets, and a tapas crawl. Total savings: ���120!",
         },
       ];
 
