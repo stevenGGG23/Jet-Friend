@@ -943,12 +943,35 @@
       }
 
       .pricing-card:hover {
-        transform: translateY(-15px);
-        box-shadow: 0 35px 70px rgba(139, 92, 246, 0.25);
+        transform: translateY(-25px) translateZ(100px) scale(1.05) rotateX(5deg)
+          rotateY(8deg);
+        box-shadow:
+          0 50px 100px rgba(139, 92, 246, 0.3),
+          0 0 60px rgba(96, 165, 250, 0.2);
+      }
+
+      .pricing-card:nth-child(1):hover {
+        transform: translateY(-30px) translateZ(120px) scale(1.06)
+          rotateX(-5deg) rotateY(-12deg);
+      }
+
+      .pricing-card:nth-child(2):hover {
+        transform: translateY(-35px) translateZ(140px) scale(1.08) rotateX(3deg)
+          rotateY(0deg);
+      }
+
+      .pricing-card:nth-child(3):hover {
+        transform: translateY(-25px) translateZ(110px) scale(1.05)
+          rotateX(-3deg) rotateY(10deg);
       }
 
       .pricing-card.featured:hover {
-        transform: scale(1.05) translateY(-15px);
+        transform: translateY(-40px) translateZ(160px) scale(1.1) rotateX(8deg)
+          rotateY(0deg);
+        box-shadow:
+          0 60px 120px rgba(139, 92, 246, 0.4),
+          0 0 80px rgba(96, 165, 250, 0.3),
+          inset 0 2px 0 rgba(255, 255, 255, 0.3);
       }
 
       /* About Section */
