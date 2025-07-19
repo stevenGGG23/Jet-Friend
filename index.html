@@ -306,6 +306,31 @@
         }
       }
 
+      @keyframes kenBurnsSmooth {
+        0% {
+          transform: scale(1) rotate(0deg) translateX(0) translateY(0);
+        }
+        16.67% {
+          transform: scale(1.02) rotate(0.2deg) translateX(-3px)
+            translateY(-2px);
+        }
+        33.33% {
+          transform: scale(1.04) rotate(0.4deg) translateX(2px) translateY(-3px);
+        }
+        50% {
+          transform: scale(1.06) rotate(0.6deg) translateX(-1px) translateY(1px);
+        }
+        66.67% {
+          transform: scale(1.04) rotate(0.3deg) translateX(3px) translateY(-1px);
+        }
+        83.33% {
+          transform: scale(1.02) rotate(0.1deg) translateX(-2px) translateY(2px);
+        }
+        100% {
+          transform: scale(1) rotate(0deg) translateX(0) translateY(0);
+        }
+      }
+
       .hero-overlay {
         position: absolute;
         top: 0;
@@ -1926,7 +1951,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >��</span
+                  >����</span
                 >
                 Basic itinerary creation
               </li>
