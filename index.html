@@ -738,6 +738,23 @@
           transparent 50%,
           rgba(96, 165, 250, 0.08) 100%
         );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .pricing::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F34379c51fde34f01b8e6668b6bd2d2ed?format=webp&width=1920&quality=90&fit=cover");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.2) blur(0.5px);
+        z-index: -1;
+        animation: kenBurns 40s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       }
 
       .pricing-grid {
