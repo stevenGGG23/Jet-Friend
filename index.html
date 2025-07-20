@@ -3593,20 +3593,8 @@
             addMessage(text, true);
             messageInput.value = '';
 
-            showTyping();
-            setTimeout(() => {
-                hideTyping();
-
-                const smartResponses = [
-                    "I'll research that and get back to you with detailed options and pricing.",
-                    "Great question! Let me check current availability and book the best option for you.",
-                    "I understand your needs. I'm analyzing your preferences to provide personalized recommendations.",
-                    "Processing your request... I'll integrate this with your existing itinerary and send updates to your calendar."
-                ];
-
-                const randomResponse = smartResponses[Math.floor(Math.random() * smartResponses.length)];
-                addMessage(randomResponse);
-            }, 1200);
+                        // No automatic responses - waiting for n8n API integration
+            hideTyping();
         }
 
         if (messageInput) {
