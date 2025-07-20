@@ -3996,11 +3996,12 @@
           }
         }
 
-        if (uploadButton) {
+                if (uploadButton) {
           console.log('Upload button found, adding event listener');
           uploadButton.addEventListener('click', async function(e) {
             e.preventDefault();
             console.log('Upload button clicked');
+            alert('Upload button clicked - check console');
 
             const inputText = chatInput ? (chatInput.textContent || chatInput.innerText || '').trim() : '';
             console.log('Input text:', inputText);
