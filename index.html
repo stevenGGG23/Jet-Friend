@@ -4096,28 +4096,63 @@
               hideTypingIndicator();
               addMessageToChat('Sorry, I encountered a connection error: ' + error.message, 'ai');
 
-              // Try alternative method with XMLHttpRequest
+                            // Try alternative method with XMLHttpRequest
               console.log('Trying XMLHttpRequest as fallback...');
               try {
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
+
+                // Add CORS headers if needed
+                xhr.withCredentials = false;
+
                 xhr.onreadystatechange = function() {
+                  console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
                   if (xhr.readyState === 4) {
                     console.log('XHR Response status:', xhr.status);
                     console.log('XHR Response text:', xhr.responseText);
-                    alert('XHR completed with status: ' + xhr.status);
+
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                      hideTypingIndicator();
+                      let aiMessage = xhr.responseText || 'Message sent successfully!';
+                      try {
+                        const parsedResponse = JSON.parse(xhr.responseText);
+                        aiMessage = parsedResponse.message || parsedResponse.response || parsedResponse.text || aiMessage;
+                      } catch (parseError) {
+                        // Use raw response if not JSON
+                      }
+                      addMessageToChat(aiMessage, 'ai');
+                      alert('Success! Message sent via XHR');
+                    } else {
+                      alert('XHR failed with status: ' + xhr.status);
+                    }
                   }
                 };
+
                 xhr.onerror = function() {
                   console.error('XHR error occurred');
-                  alert('XHR error occurred');
+                  console.error('XHR error details:', {
+                    readyState: xhr.readyState,
+                    status: xhr.status,
+                    statusText: xhr.statusText
+                  });
+                  alert('XHR error - CORS issue or network problem');
                 };
+
+                xhr.ontimeout = function() {
+                  console.error('XHR timeout');
+                  alert('XHR timeout');
+                };
+
+                xhr.timeout = 30000; // 30 second timeout
+
+                console.log('Sending XHR with data:', JSON.stringify(dataToSend));
                 xhr.send(JSON.stringify(dataToSend));
-                alert('XHR request sent');
+                alert('XHR request sent - waiting for response...');
+
               } catch (xhrError) {
                 console.error('XHR also failed:', xhrError);
-                alert('XHR also failed: ' + xhrError.message);
+                alert('XHR setup failed: ' + xhrError.message);
               }
             }
           });
