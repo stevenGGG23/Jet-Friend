@@ -3537,12 +3537,7 @@
         const messageInput = document.getElementById('messageInput');
         const typingIndicator = document.getElementById('typingIndicator');
 
-        const responses = {
-            'price-drop': "Your tracked flight from Nashville to Tokyo dropped by $110. New price: $1,123 round-trip on Delta. The deal expires in 24 hours. Would you like to book it now?",
-            'translate': "The phrase is: \"Niku wa tabemasen\" (肉は食べません)\\n\\nWould you like a quick sheet of useful phrases for your trip?",
-            'local-tips': "Here are some insider tips for Japan:\\n\\n• Download Google Translate with camera function\\n• Get a JR Pass before you arrive\\n• Cash is still king - many places don't accept cards\\n• Bowing is appreciated but not required for tourists\\n• Remove shoes when entering homes and some restaurants",
-            'emergency': "Emergency contacts for Japan:\\n\\n• Police: 110\\n• Fire/Ambulance: 119\\n• Tourist Hotline: 050-3816-2787\\n• Your embassy has been added to your contacts\\n\\nI've also saved offline maps and key phrases to your phone."
-        };
+                const responses = {};
 
         function addMessage(content, isUser = false) {
             const message = document.createElement('div');
