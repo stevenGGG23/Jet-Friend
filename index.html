@@ -765,48 +765,58 @@
       }
 
       .chat-messages {
-        padding: 20px 15px;
+        padding: 20px 16px;
         flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 12px;
-        background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        gap: 8px;
+        background: #fff;
         overflow-y: auto;
-        max-height: 400px;
+        max-height: 450px;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       }
 
       .chat-input-area {
-        padding: 15px;
-        background: rgba(0, 0, 0, 0.3);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 8px 16px 34px;
+        background: #fff;
+        border-top: 0.5px solid rgba(60, 60, 67, 0.36);
+        display: flex;
+        align-items: end;
+        gap: 8px;
+      }
+
+      .chat-input-container {
+        flex: 1;
+        background: #f2f2f7;
+        border-radius: 20px;
+        padding: 8px 16px;
         display: flex;
         align-items: center;
-        gap: 10px;
+        min-height: 36px;
+        border: 1px solid rgba(60, 60, 67, 0.12);
       }
 
       .chat-input {
         flex: 1;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 20px;
-        padding: 8px 15px;
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 14px;
+        background: transparent;
+        border: none;
+        color: #000;
+        font-size: 17px;
         outline: none;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        resize: none;
+        min-height: 20px;
+        max-height: 100px;
       }
 
       .chat-input::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+        color: #8e8e93;
       }
 
       .chat-send-btn {
-        width: 35px;
-        height: 35px;
-        background: linear-gradient(
-          135deg,
-          var(--primary-purple) 0%,
-          var(--light-blue) 100%
-        );
+        width: 36px;
+        height: 36px;
+        background: #007aff;
         border: none;
         border-radius: 50%;
         color: white;
@@ -814,12 +824,16 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.1s ease;
+        margin-bottom: 0;
       }
 
       .chat-send-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        background: #0056cc;
+      }
+
+      .chat-send-btn:active {
+        transform: scale(0.95);
       }
 
       .message {
