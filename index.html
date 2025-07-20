@@ -925,6 +925,508 @@
           }
       }
 
+                        /* Hero Chatbot Integration */
+      .hero-chatbot-container {
+        max-width: 900px;
+        margin: 60px auto 0;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+        animation: heroSlideUp 1s ease-out 0.9s both;
+      }
+
+      .chat-messages {
+        min-height: 400px;
+        max-height: 500px;
+        overflow-y: auto;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background: linear-gradient(
+          180deg,
+          rgba(15, 23, 42, 0.8) 0%,
+          rgba(30, 41, 59, 0.8) 100%
+        );
+      }
+
+      .welcome-message,
+      .message-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        animation: fadeInUp 0.5s ease-out;
+      }
+
+      .user-message-group {
+        flex-direction: row-reverse;
+      }
+
+      .ai-avatar,
+      .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      }
+
+      .ai-avatar img {
+        width: 24px;
+        height: 24px;
+        filter: brightness(0) invert(1);
+      }
+
+      .user-avatar {
+        background: linear-gradient(
+          135deg,
+          var(--light-blue) 0%,
+          var(--accent-cyan) 100%
+        );
+      }
+
+      .user-avatar i {
+        font-size: 20px;
+        color: white;
+      }
+
+      .message {
+        max-width: 80%;
+        padding: 18px 24px;
+        border-radius: 16px;
+        font-size: 15px;
+        line-height: 1.5;
+        position: relative;
+      }
+
+      .ai-message {
+        background: linear-gradient(
+          135deg,
+          rgba(30, 41, 59, 0.9) 0%,
+          rgba(51, 65, 85, 0.7) 100%
+        );
+        color: #e2e8f0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .user-message {
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        color: white;
+        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+      }
+
+      .chat-input-container {
+        padding: 25px 30px;
+        background: linear-gradient(
+          135deg,
+          rgba(15, 23, 42, 0.95) 0%,
+          rgba(30, 41, 59, 0.95) 100%
+        );
+        border-top: 1px solid var(--border-color);
+      }
+
+      .input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 8px;
+        backdrop-filter: blur(20px);
+        transition: all 0.3s ease;
+      }
+
+      .input-wrapper:focus-within {
+        border-color: var(--primary-purple);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+      }
+
+      .input-tools {
+        display: flex;
+        gap: 4px;
+      }
+
+      .tool-btn {
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        font-size: 14px;
+      }
+
+      .tool-btn:hover {
+        background: rgba(139, 92, 246, 0.2);
+        border-color: var(--primary-purple);
+        color: white;
+      }
+
+      .input-field-wrapper {
+        flex: 1;
+        min-height: 50px;
+        position: relative;
+      }
+
+      .chat-input {
+        width: 100%;
+        min-height: 48px;
+        max-height: 200px;
+        padding: 12px 16px;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: white;
+        font-size: 15px;
+        line-height: 1.5;
+        resize: none;
+        overflow-y: auto;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+      }
+
+      .chat-input:empty::before {
+        content: attr(data-placeholder);
+        color: rgba(255, 255, 255, 0.5);
+        pointer-events: none;
+      }
+
+      .model-selector {
+        flex-shrink: 0;
+      }
+
+      .model-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.9);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 13px;
+      }
+
+      .model-btn:hover {
+        background: rgba(139, 92, 246, 0.2);
+        border-color: var(--primary-purple);
+      }
+
+      .model-info {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .model-icon {
+        font-size: 14px;
+        color: var(--light-blue);
+      }
+
+      .model-name {
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .send-button {
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        font-size: 16px;
+      }
+
+      .send-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: rgba(139, 92, 246, 0.3);
+      }
+
+      .send-button:not(:disabled):hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+      }
+
+      .typing-indicator {
+        display: none;
+        align-items: center;
+        gap: 15px;
+        padding: 20px 0;
+      }
+
+      .typing-indicator.active {
+        display: flex;
+      }
+
+      .typing-dots {
+        display: flex;
+        gap: 4px;
+      }
+
+      .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--light-blue);
+        border-radius: 50%;
+        animation: typingPulse 1.4s infinite;
+      }
+
+      .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+      .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+      @keyframes typingPulse {
+        0%, 60%, 100% {
+          transform: translateY(0);
+          opacity: 0.4;
+        }
+        30% {
+          transform: translateY(-10px);
+          opacity: 1;
+        }
+      }
+
+      /* Scrollbar styling for chat messages */
+      .chat-messages::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .chat-messages::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+      }
+
+      .chat-messages::-webkit-scrollbar-thumb {
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        border-radius: 3px;
+      }
+
+            /* Mobile responsiveness for hero chatbot */
+      @media (max-width: 768px) {
+        .hero-chatbot-container {
+          margin: 40px 10px 0;
+          border-radius: 16px;
+        }
+
+        .chat-messages {
+          padding: 20px;
+          min-height: 350px;
+        }
+
+        .chat-input-container {
+          padding: 20px;
+        }
+
+        .input-wrapper {
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .model-selector {
+          order: -1;
+          width: 100%;
+        }
+
+        .model-btn {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .message {
+          max-width: 90%;
+          padding: 15px 18px;
+          font-size: 14px;
+        }
+
+        .ai-avatar,
+        .user-avatar {
+          width: 36px;
+          height: 36px;
+        }
+
+        .ai-avatar img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      /* Mobile App Coming Soon Section */
+      .mobile-app-section {
+        padding: 120px 20px;
+        background: linear-gradient(
+          180deg,
+          rgba(139, 92, 246, 0.08) 0%,
+          rgba(96, 165, 250, 0.05) 50%,
+          rgba(56, 189, 248, 0.08) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .mobile-app-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("pexels-pixabay-208701.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.2) blur(1px);
+        z-index: -1;
+        animation: kenBurnsSmooth 100s ease-in-out infinite;
+      }
+
+      .mobile-app-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .app-info {
+        padding: 40px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        border-radius: 25px;
+      }
+
+      .app-info h3 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .app-info p {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      .coming-soon-features {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .feature-point {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: rgba(139, 92, 246, 0.1);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .feature-point:hover {
+        background: rgba(139, 92, 246, 0.2);
+        transform: translateX(10px);
+      }
+
+      .feature-point i {
+        font-size: 20px;
+        color: var(--light-blue);
+        width: 25px;
+        text-align: center;
+      }
+
+      .feature-point span {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+      }
+
+      .phone-preview {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .phone-preview .iphone {
+        transform: scale(0.9);
+        animation: floatPhone 6s ease-in-out infinite;
+      }
+
+      @keyframes floatPhone {
+        0%, 100% {
+          transform: scale(0.9) translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: scale(0.9) translateY(-20px) rotate(2deg);
+        }
+      }
+
+      /* Mobile responsiveness for mobile app section */
+      @media (max-width: 768px) {
+        .mobile-app-content {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+
+        .app-info {
+          padding: 30px 20px;
+        }
+
+        .app-info h3 {
+          font-size: 1.8rem;
+        }
+
+        .phone-preview .iphone {
+          transform: scale(0.7);
+        }
+      }
+
       /* Enhanced Features Section */
       .features {
         padding: 120px 20px;
@@ -1934,7 +2436,7 @@
             filter: brightness(0) invert(1);
           "
         />
-        <h1>Your AI Travel<br />Companion</h1>
+                <h1>Your AI Travel<br />Companion</h1>
         <div class="hero-text-container">
           <p id="heroText" class="hero-animated-text">
             Personalized to your exact needs and budget. Discover hidden gems,
@@ -1943,147 +2445,237 @@
           </p>
         </div>
 
-        <div class="cta-buttons">
-          <a href="#" class="btn btn-primary">
-            <i class="fas fa-rocket"></i>
-            Start Planning Free
-          </a>
+        <div class="hero-chatbot-container">
+          <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message">
+              <div class="ai-avatar">
+                <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />
+              </div>
+              <div class="message ai-message">
+                <p>Hello! I'm your JetFriend AI assistant. I can help you with travel planning, destination recommendations, budget estimates, and much more. What would you like to explore today?</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-container">
+            <div class="input-wrapper">
+              <div class="input-tools">
+                <button type="button" class="tool-btn" aria-label="Attach file">
+                  <i class="fas fa-plus"></i>
+                </button>
+                <button type="button" class="tool-btn" aria-label="Advanced options">
+                  <i class="fas fa-cog"></i>
+                </button>
+              </div>
+
+              <div class="input-field-wrapper">
+                <div contenteditable="true"
+                     class="chat-input"
+                     id="chatInput"
+                     role="textbox"
+                     aria-label="Ask JetFriend AI anything about travel"
+                     data-placeholder="Ask me anything about travel planning...">
+                </div>
+              </div>
+
+              <div class="model-selector">
+                <button type="button" class="model-btn">
+                  <div class="model-info">
+                    <i class="fas fa-plane model-icon"></i>
+                    <span class="model-name">JetFriend AI</span>
+                  </div>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+              </div>
+
+              <button type="button" class="send-button" id="sendButton" disabled aria-label="Send message">
+                <i class="fas fa-arrow-up"></i>
+              </button>
+            </div>
+          </div>
         </div>
 
-                <div class="iphone">
-            <div class="iphone-14">
+
+
+        
+      
+      </div>
+    </section>
+
+    
+
+    <!-- Mobile App Coming Soon Section -->
+    <section class="mobile-app-section">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 40px">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800"
+            alt="JetFriend Logo"
+            style="
+              width: 80px;
+              height: auto;
+              opacity: 1;
+              filter: brightness(0) invert(1);
+            "
+          />
+        </div>
+        <h2 class="section-title animate-on-scroll">Mobile App Coming Soon</h2>
+        <div class="mobile-app-content">
+          <div class="app-info">
+            <h3>Experience JetFriend on the go</h3>
+            <p>Get instant travel assistance wherever you are. Our mobile app will bring all the power of AI-driven travel planning right to your fingertips.</p>
+            <div class="coming-soon-features">
+              <div class="feature-point">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Real-time travel updates</span>
+              </div>
+              <div class="feature-point">
+                <i class="fas fa-bell"></i>
+                <span>Smart notifications</span>
+              </div>
+              <div class="feature-point">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>Offline maps & guides</span>
+              </div>
+            </div>
+          </div>
+          <div class="phone-preview">
+            <div class="iphone">
+              <div class="iphone-14">
                 <div class="operator-name">9:41</div>
                 <div class="dynamic-island"></div>
                 <div class="dynamic-island-camera"></div>
                 <div class="operator-icons">
-                    <i class="bi bi-reception-4"></i>
-                    5G
-                    <div class="battery">87</div>
+                  <i class="bi bi-reception-4"></i>
+                  5G
+                  <div class="battery">87</div>
                 </div>
 
                 <div class="app-container">
-                                        <div class="app-header">
-                        <div class="app-title">
-                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" class="app-logo" />
-                            <span class="plane-icon">✈</span>
-                            Jet Friend
-                        </div>
-                        <div class="app-subtitle">Your AI Travel Companion</div>
+                  <div class="app-header">
+                    <div class="app-title">
+                      <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" class="app-logo" />
+                      <span class="plane-icon">✈</span>
+                      Jet Friend
+                    </div>
+                    <div class="app-subtitle">Your AI Travel Companion</div>
+                  </div>
+
+                  <div class="chat-container" id="chatContainer">
+                    <div class="message user-message">
+                      I'm thinking about going to Japan in November. I want a chill trip — ramen, anime, nature. Budget is around $2500. Can you help?
                     </div>
 
-                    <div class="chat-container" id="chatContainer">
-                        <div class="message user-message">
-                            I'm thinking about going to Japan in November. I want a chill trip — ramen, anime, nature. Budget is around $2500. Can you help?
-                        </div>
-
-                                                <div class="bot-avatar">
-                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
-                        </div>
-                        <div class="message bot-message">
-                            Absolutely. Based on your preferences, here's a suggestion:
-                            <br><br>
-                            • Best time to fly: November 6–15 (cheapest dates)<br>
-                            • Ideal location to stay: Kichijoji (peaceful area, near Ghibli Museum and nature spots)<br>
-                            • Estimated trip cost: around $2,180
-                            <br><br>
-                            Would you like me to:<br>
-                            1. Set up flight and hotel price trackers?<br>
-                            2. Create a personalized itinerary?<br>
-                            3. Book any tickets in advance (e.g., Ghibli Museum)?
-                        </div>
-
-                        <div class="message user-message">
-                            Yeah, set up the price tracking and make a rough itinerary.
-                        </div>
-
-                                                <div class="bot-avatar">
-                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
-                        </div>
-                        <div class="message bot-message">
-                            Tracking flights and hotels now using Skyscanner and Booking.com. Creating your 7-day itinerary...
-                            <br><br>
-                            <strong>Draft itinerary:</strong>
-                            <div class="itinerary-item">
-                                <div class="day-header">Day 1:</div>
-                                <div class="activity">Arrival, check-in, explore Kichijoji</div>
-                            </div>
-                            <div class="itinerary-item">
-                                <div class="day-header">Day 2:</div>
-                                <div class="activity">Ghibli Museum, visit local sushi spot</div>
-                            </div>
-                            <div class="itinerary-item">
-                                <div class="day-header">Day 3:</div>
-                                <div class="activity">Akihabara for anime shopping and culture</div>
-                            </div>
-                            <div class="itinerary-item">
-                                <div class="day-header">Day 4:</div>
-                                <div class="activity">Day trip to Hakone (hot springs)</div>
-                            </div>
-                            <div class="itinerary-item">
-                                <div class="day-header">Day 5:</div>
-                                <div class="activity">Hike Mount Takao, dinner at a ramen shop</div>
-                            </div>
-                            <div class="itinerary-item">
-                                <div class="day-header">Day 6–7:</div>
-                                <div class="activity">Flexible days for exploring or resting</div>
-                            </div>
-                            <br>
-                            The full version has been sent to your email and synced to your Google Calendar. Would you like to adjust anything?
-                        </div>
-
-                        <div class="message user-message">
-                            Can you check if there's a ramen-making class on Day 3?
-                        </div>
-
-                                                <div class="bot-avatar">
-                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
-                        </div>
-                        <div class="message bot-message">
-                            I found one: "Tokyo Ramen Workshop" in Shinjuku at 3:00 PM on November 8. Vegetarian-friendly, cost is around $45 USD.
-                            <br><br>
-                            Would you like me to reserve your spot and update your itinerary?
-                        </div>
-
-                        <div class="message user-message">
-                            Yes, book it.
-                        </div>
-
-                                                <div class="bot-avatar">
-                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
-                        </div>
-                        <div class="message bot-message">
-                            Booking confirmed. Receipt and calendar invite have been sent. I've also added the address with directions to your itinerary.
-                        </div>
-
-                        <div class="typing-indicator" id="typingIndicator">
-                            <div class="typing-dots">
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </div>
+                    <div class="bot-avatar">
+                      <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                    </div>
+                    <div class="message bot-message">
+                      Absolutely. Based on your preferences, here's a suggestion:
+                      <br><br>
+                      • Best time to fly: November 6–15 (cheapest dates)<br>
+                      • Ideal location to stay: Kichijoji (peaceful area, near Ghibli Museum and nature spots)<br>
+                      • Estimated trip cost: around $2,180
+                      <br><br>
+                      Would you like me to:<br>
+                      1. Set up flight and hotel price trackers?<br>
+                      2. Create a personalized itinerary?<br>
+                      3. Book any tickets in advance (e.g., Ghibli Museum)?
                     </div>
 
-                    <div class="quick-actions">
-                        <div class="quick-actions-title">Quick Actions</div>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="quickAction('price-drop')">Price Alerts</button>
-                            <button class="action-btn" onclick="quickAction('translate')">Translation</button>
-                            <button class="action-btn" onclick="quickAction('local-tips')">Local Tips</button>
-                            <button class="action-btn" onclick="quickAction('emergency')">Emergency Info</button>
-                        </div>
+                    <div class="message user-message">
+                      Yeah, set up the price tracking and make a rough itinerary.
                     </div>
 
-                    <div class="input-container">
-                        <input type="text" class="message-input" placeholder="Ask me anything about travel..." id="messageInput">
-                        <button class="send-btn" onclick="sendMessage()">
-                            <span>➤</span>
-                        </button>
+                    <div class="bot-avatar">
+                      <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
                     </div>
+                    <div class="message bot-message">
+                      Tracking flights and hotels now using Skyscanner and Booking.com. Creating your 7-day itinerary...
+                      <br><br>
+                      <strong>Draft itinerary:</strong>
+                      <div class="itinerary-item">
+                        <div class="day-header">Day 1:</div>
+                        <div class="activity">Arrival, check-in, explore Kichijoji</div>
+                      </div>
+                      <div class="itinerary-item">
+                        <div class="day-header">Day 2:</div>
+                        <div class="activity">Ghibli Museum, visit local sushi spot</div>
+                      </div>
+                      <div class="itinerary-item">
+                        <div class="day-header">Day 3:</div>
+                        <div class="activity">Akihabara for anime shopping and culture</div>
+                      </div>
+                      <div class="itinerary-item">
+                        <div class="day-header">Day 4:</div>
+                        <div class="activity">Day trip to Hakone (hot springs)</div>
+                      </div>
+                      <div class="itinerary-item">
+                        <div class="day-header">Day 5:</div>
+                        <div class="activity">Hike Mount Takao, dinner at a ramen shop</div>
+                      </div>
+                      <div class="itinerary-item">
+                        <div class="day-header">Day 6–7:</div>
+                        <div class="activity">Flexible days for exploring or resting</div>
+                      </div>
+                      <br>
+                      The full version has been sent to your email and synced to your Google Calendar. Would you like to adjust anything?
+                    </div>
+
+                    <div class="message user-message">
+                      Can you check if there's a ramen-making class on Day 3?
+                    </div>
+
+                    <div class="bot-avatar">
+                      <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                    </div>
+                    <div class="message bot-message">
+                      I found one: "Tokyo Ramen Workshop" in Shinjuku at 3:00 PM on November 8. Vegetarian-friendly, cost is around $45 USD.
+                      <br><br>
+                      Would you like me to reserve your spot and update your itinerary?
+                    </div>
+
+                    <div class="message user-message">
+                      Yes, book it.
+                    </div>
+
+                    <div class="bot-avatar">
+                      <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                    </div>
+                    <div class="message bot-message">
+                      Booking confirmed. Receipt and calendar invite have been sent. I've also added the address with directions to your itinerary.
+                    </div>
+
+                    <div class="typing-indicator" id="typingIndicator">
+                      <div class="typing-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="quick-actions">
+                    <div class="quick-actions-title">Quick Actions</div>
+                    <div class="action-buttons">
+                      <button class="action-btn" onclick="quickAction('price-drop')">Price Alerts</button>
+                      <button class="action-btn" onclick="quickAction('translate')">Translation</button>
+                      <button class="action-btn" onclick="quickAction('local-tips')">Local Tips</button>
+                      <button class="action-btn" onclick="quickAction('emergency')">Emergency Info</button>
+                    </div>
+                  </div>
+
+                  <div class="input-container">
+                    <input type="text" class="message-input" placeholder="Ask me anything about travel..." id="messageInput">
+                    <button class="send-btn" onclick="sendMessage()">
+                      <span>➤</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div class="line"></div>
+              </div>
             </div>
+          </div>
         </div>
       </div>
     </section>
@@ -3272,7 +3864,7 @@
 
       animate3DEffects();
 
-      // Add interactive hover effects to cards
+            // Add interactive hover effects to cards
       document
         .querySelectorAll(
           ".feature-card, .pricing-card, .contact-card, .stat-item",
@@ -3286,6 +3878,177 @@
             this.style.transform = "translateY(0) scale(1)";
           });
         });
+
+      // AI Chatbot Functionality
+      class JetFriendChatbot {
+        constructor() {
+          this.chatInput = document.getElementById('chatInput');
+          this.sendButton = document.getElementById('sendButton');
+          this.chatMessages = document.getElementById('chatMessages');
+          this.isTyping = false;
+
+          // Replace with your actual API endpoint
+          this.apiEndpoint = 'YOUR_API_ENDPOINT_HERE';
+
+          this.initializeEventListeners();
+        }
+
+        initializeEventListeners() {
+          // Send button click
+          this.sendButton.addEventListener('click', () => {
+            this.sendMessage();
+          });
+
+          // Enter key press
+          this.chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              this.sendMessage();
+            }
+          });
+
+          // Input change to enable/disable send button
+          this.chatInput.addEventListener('input', () => {
+            const hasText = this.chatInput.textContent.trim().length > 0;
+            this.sendButton.disabled = !hasText || this.isTyping;
+          });
+
+          // Paste event handling
+          this.chatInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            document.execCommand('insertText', false, text);
+          });
+        }
+
+        async sendMessage() {
+          const messageText = this.chatInput.textContent.trim();
+          if (!messageText || this.isTyping) return;
+
+          // Add user message to chat
+          this.addMessage(messageText, 'user');
+
+          // Clear input
+          this.chatInput.textContent = '';
+          this.sendButton.disabled = true;
+
+          // Show typing indicator
+          this.showTypingIndicator();
+
+          try {
+            // Get AI response
+            const response = await this.getAIResponse(messageText);
+            this.hideTypingIndicator();
+            this.addMessage(response, 'ai');
+          } catch (error) {
+            this.hideTypingIndicator();
+            this.addMessage('Sorry, I encountered an error. Please try again later.', 'ai');
+            console.error('Chat error:', error);
+          }
+        }
+
+        async getAIResponse(message) {
+          // Demo responses for testing (replace with actual API call)
+          const demoResponses = [
+            "That's a great travel question! I'd love to help you plan your perfect trip. What destination are you considering?",
+            "I can help you find the best deals and create a customized itinerary. Tell me more about your travel preferences!",
+            "Based on your interests, I'd recommend checking out some hidden gems in that area. What's your budget range?",
+            "Perfect! I can suggest some amazing local experiences and help you save money on accommodations. When are you planning to travel?",
+            "Excellent choice! Let me help you create an unforgettable itinerary with the best local insights and deals."
+          ];
+
+          // Simulate API delay
+          await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+
+          // For demo purposes, return a random response
+          // In production, replace this with your actual API call:
+          /*
+          const response = await fetch(this.apiEndpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer YOUR_API_KEY'
+            },
+            body: JSON.stringify({
+              message: message,
+              context: 'travel_planning'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('API request failed');
+          }
+
+          const data = await response.json();
+          return data.message || data.response;
+          */
+
+          return demoResponses[Math.floor(Math.random() * demoResponses.length)];
+        }
+
+        addMessage(text, type) {
+          const messageGroup = document.createElement('div');
+          messageGroup.className = type === 'user' ? 'message-group user-message-group' : 'message-group';
+
+          const avatar = document.createElement('div');
+          avatar.className = type === 'user' ? 'user-avatar' : 'ai-avatar';
+
+          if (type === 'user') {
+            avatar.innerHTML = '<i class="fas fa-user"></i>';
+          } else {
+            avatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
+          }
+
+          const messageDiv = document.createElement('div');
+          messageDiv.className = `message ${type === 'user' ? 'user-message' : 'ai-message'}`;
+          messageDiv.innerHTML = `<p>${text}</p>`;
+
+          messageGroup.appendChild(avatar);
+          messageGroup.appendChild(messageDiv);
+
+          this.chatMessages.appendChild(messageGroup);
+          this.scrollToBottom();
+        }
+
+        showTypingIndicator() {
+          this.isTyping = true;
+
+          const typingDiv = document.createElement('div');
+          typingDiv.className = 'typing-indicator active';
+          typingDiv.id = 'typingIndicator';
+
+          const avatar = document.createElement('div');
+          avatar.className = 'ai-avatar';
+          avatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
+
+          const dotsDiv = document.createElement('div');
+          dotsDiv.className = 'typing-dots';
+          dotsDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+          typingDiv.appendChild(avatar);
+          typingDiv.appendChild(dotsDiv);
+
+          this.chatMessages.appendChild(typingDiv);
+          this.scrollToBottom();
+        }
+
+        hideTypingIndicator() {
+          this.isTyping = false;
+          const typingIndicator = document.getElementById('typingIndicator');
+          if (typingIndicator) {
+            typingIndicator.remove();
+          }
+        }
+
+        scrollToBottom() {
+          this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+        }
+      }
+
+      // Initialize chatbot when DOM is loaded
+      document.addEventListener('DOMContentLoaded', () => {
+        const chatbot = new JetFriendChatbot();
+      });
     </script>
   </body>
 </html>
