@@ -1931,7 +1931,7 @@
                   <div class="signal-bar"></div>
                   <div class="signal-bar"></div>
                 </div>
-                <span style="font-size: 10px; margin-left: 4px">📶</span>
+                <span class="wifi-icon">📶</span>
                 <div class="battery">
                   <div class="battery-level"></div>
                 </div>
@@ -1939,42 +1939,66 @@
             </div>
 
             <div class="chat-header">
-              <div>JetFriend AI</div>
+              <div class="chat-header-left">
+                <a href="#" class="chat-back-btn">‹</a>
+              </div>
+              <div class="chat-header-center">
+                <div class="chat-avatar">🤖</div>
+                <div>
+                  <p class="chat-title">JetFriend AI</p>
+                  <p class="chat-subtitle">Active now</p>
+                </div>
+              </div>
+              <div class="chat-header-right">
+                <a href="#" class="chat-info-btn">ⓘ</a>
+              </div>
             </div>
 
             <div class="chat-messages" id="chatMessages">
+              <div class="message-time">Today 9:41 AM</div>
+
               <div class="message ai">
-                👋 Hi! I'm your AI travel companion. Ready to plan your perfect
-                trip?
+                Hi! I'm your AI travel companion. Ready to plan your perfect
+                trip? 👋
               </div>
+
               <div class="message user">
                 Plan a 5-day trip to Tokyo for $2000
               </div>
+
               <div class="message ai">
                 Perfect! I found flights from NYC to Tokyo for $680, a great
                 hotel in Shibuya for $120/night, and curated a foodie itinerary
-                with the best ramen spots. Plus I found a 15% discount code!
-                🍜🗾
+                with the best ramen spots. Plus I found a 15% discount code! 🍜
               </div>
+
               <div class="message user">
                 That sounds amazing! Show me the itinerary
               </div>
+
               <div class="message ai">
-                Here's your personalized Tokyo adventure: 📍 Day 1: Shibuya &
-                Harajuku 🍜 Day 2: Ramen tour + Senso-ji Temple 🗾 Day 3: Mt.
-                Fuji day trip 🛍️ Day 4: Ginza shopping + sushi experience ✈️ Day
-                5: Last-minute souvenirs + departure Total saved: $347! 🎉
+                Here's your personalized Tokyo adventure:
               </div>
+
+              <div class="message ai">
+                📍 Day 1: Shibuya & Harajuku<br />
+                🍜 Day 2: Ramen tour + Senso-ji Temple<br />
+                🗾 Day 3: Mt. Fuji day trip<br />
+                🛍️ Day 4: Ginza shopping + sushi experience<br />
+                ✈️ Day 5: Last-minute souvenirs + departure
+              </div>
+
+              <div class="message ai">Total saved: $347! 🎉</div>
             </div>
 
             <div class="chat-input-area">
-              <input
-                type="text"
-                class="chat-input"
-                placeholder="Ask me anything about travel..."
-              />
+              <div class="chat-input-container">
+                <input type="text" class="chat-input" placeholder="Message" />
+              </div>
               <button class="chat-send-btn">
-                <i class="fas fa-paper-plane" style="font-size: 12px"></i>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M15 8L1 1L4 8L1 15L15 8Z" fill="white" />
+                </svg>
               </button>
             </div>
           </div>
