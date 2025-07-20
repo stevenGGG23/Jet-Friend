@@ -3998,41 +3998,65 @@
         const chatbot = new JetFriendChatbot();
             });
 
-      // Upload button webhook functionality
-      document.getElementById('uploadButton').addEventListener('click', async function() {
+            // Upload button webhook functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const uploadButton = document.getElementById('uploadButton');
         const chatInput = document.getElementById('chatInput');
-        const inputText = chatInput.textContent || chatInput.innerText || '';
 
-        // Prepare data to send
-        const dataToSend = {
-          message: inputText,
-          timestamp: new Date().toISOString(),
-          source: 'jetfriend_chat_upload'
-        };
+        if (uploadButton) {
+          console.log('Upload button found, adding event listener');
+          uploadButton.addEventListener('click', async function(e) {
+            e.preventDefault();
+            console.log('Upload button clicked');
 
-        try {
-          const response = await fetch('https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataToSend)
+            const inputText = chatInput ? (chatInput.textContent || chatInput.innerText || '').trim() : '';
+            console.log('Input text:', inputText);
+
+            if (!inputText) {
+              alert('Please enter a message first');
+              return;
+            }
+
+            // Prepare data to send
+            const dataToSend = {
+              message: inputText,
+              timestamp: new Date().toISOString(),
+              source: 'jetfriend_chat_upload'
+            };
+
+            console.log('Sending data:', dataToSend);
+
+            try {
+              const response = await fetch('https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToSend)
+              });
+
+              console.log('Response status:', response.status);
+              console.log('Response:', response);
+
+              if (response.ok) {
+                console.log('Data sent successfully to webhook');
+                chatInput.textContent = '';
+                // Visual feedback
+                this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                setTimeout(() => {
+                  this.style.background = '';
+                }, 1000);
+              } else {
+                console.error('Failed to send data to webhook:', response.status);
+                alert('Failed to send message');
+              }
+            } catch (error) {
+              console.error('Error sending data to webhook:', error);
+              alert('Error sending message: ' + error.message);
+            }
           });
-
-          if (response.ok) {
-            console.log('Data sent successfully to webhook');
-            // Optional: Clear the input after successful send
-            chatInput.textContent = '';
-            // Optional: Show visual feedback
-            this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-            setTimeout(() => {
-              this.style.background = '';
-            }, 1000);
-          } else {
-            console.error('Failed to send data to webhook:', response.status);
-          }
-        } catch (error) {
-          console.error('Error sending data to webhook:', error);
+        } else {
+          console.error('Upload button not found');
         }
       });
     </script>
