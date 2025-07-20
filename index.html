@@ -925,6 +925,145 @@
           }
       }
 
+            /* Mobile App Coming Soon Section */
+      .mobile-app-section {
+        padding: 120px 20px;
+        background: linear-gradient(
+          180deg,
+          rgba(139, 92, 246, 0.08) 0%,
+          rgba(96, 165, 250, 0.05) 50%,
+          rgba(56, 189, 248, 0.08) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .mobile-app-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("pexels-pixabay-208701.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.2) blur(1px);
+        z-index: -1;
+        animation: kenBurnsSmooth 100s ease-in-out infinite;
+      }
+
+      .mobile-app-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .app-info {
+        padding: 40px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        border-radius: 25px;
+      }
+
+      .app-info h3 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .app-info p {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      .coming-soon-features {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .feature-point {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: rgba(139, 92, 246, 0.1);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .feature-point:hover {
+        background: rgba(139, 92, 246, 0.2);
+        transform: translateX(10px);
+      }
+
+      .feature-point i {
+        font-size: 20px;
+        color: var(--light-blue);
+        width: 25px;
+        text-align: center;
+      }
+
+      .feature-point span {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+      }
+
+      .phone-preview {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .phone-preview .iphone {
+        transform: scale(0.9);
+        animation: floatPhone 6s ease-in-out infinite;
+      }
+
+      @keyframes floatPhone {
+        0%, 100% {
+          transform: scale(0.9) translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: scale(0.9) translateY(-20px) rotate(2deg);
+        }
+      }
+
+      /* Mobile responsiveness for mobile app section */
+      @media (max-width: 768px) {
+        .mobile-app-content {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+
+        .app-info {
+          padding: 30px 20px;
+        }
+
+        .app-info h3 {
+          font-size: 1.8rem;
+        }
+
+        .phone-preview .iphone {
+          transform: scale(0.7);
+        }
+      }
+
       /* Enhanced Features Section */
       .features {
         padding: 120px 20px;
@@ -2486,7 +2625,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >��</span
+                  >✓</span
                 >
                 Live chat agent
               </li>
