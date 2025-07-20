@@ -417,20 +417,10 @@
         text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         font-weight: 400;
         text-align: center;
-        opacity: 1;
-        transform: translateY(0);
-        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        line-height: 1.6;
-      }
-
-      .hero-animated-text.fade-out {
         opacity: 0;
-        transform: translateY(-20px);
-      }
-
-      .hero-animated-text.fade-in {
-        opacity: 1;
-        transform: translateY(0);
+        transform: translateY(20px);
+        transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        line-height: 1.6;
       }
 
       /* Typewriter Effect */
@@ -541,49 +531,225 @@
         box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
       }
 
-      /* Interactive Chat Demo */
+      /* Interactive Chat Demo - Real iPhone Style */
       .chat-demo {
-        max-width: 500px;
+        max-width: 375px;
         margin: 0 auto;
-        border-radius: 25px;
+        border-radius: 40px;
         overflow: hidden;
         animation: heroSlideUp 1s ease-out 0.9s both;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        background: #000;
+        border: 8px solid #1d1d1f;
+        box-shadow:
+          0 0 0 2px #333,
+          0 25px 50px rgba(0, 0, 0, 0.8),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
+        position: relative;
+        aspect-ratio: 375/812;
+        height: 700px;
+      }
+
+      .chat-demo::before {
+        content: "";
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 134px;
+        height: 30px;
+        background: #000;
+        border-radius: 20px;
+        z-index: 10;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      .chat-demo::after {
+        content: "";
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 140px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 3px;
+        z-index: 10;
       }
 
       .chat-demo:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 35px 70px rgba(139, 92, 246, 0.2);
+        transform: translateY(-5px) scale(1.01);
+        box-shadow:
+          0 0 0 2px #333,
+          0 30px 60px rgba(0, 0, 0, 0.9),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .chat-phone-screen {
+        position: absolute;
+        top: 50px;
+        left: 8px;
+        right: 8px;
+        bottom: 20px;
+        background: #000;
+        border-radius: 35px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-status-bar {
+        background: transparent;
+        padding: 12px 24px 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      .chat-time {
+        font-weight: 700;
+        letter-spacing: -0.3px;
+      }
+
+      .chat-indicators {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .signal-bars {
+        display: flex;
+        gap: 3px;
+        align-items: end;
+      }
+
+      .signal-bar {
+        width: 4px;
+        background: #fff;
+        border-radius: 1px;
+      }
+
+      .signal-bar:nth-child(1) {
+        height: 4px;
+      }
+      .signal-bar:nth-child(2) {
+        height: 6px;
+      }
+      .signal-bar:nth-child(3) {
+        height: 8px;
+      }
+      .signal-bar:nth-child(4) {
+        height: 10px;
+      }
+
+      .wifi-icon {
+        font-size: 15px;
+        color: #fff;
+        margin-left: 2px;
+      }
+
+      .battery {
+        width: 25px;
+        height: 12px;
+        border: 1px solid #fff;
+        border-radius: 3px;
+        position: relative;
+        margin-left: 6px;
+        opacity: 0.9;
+      }
+
+      .battery::after {
+        content: "";
+        position: absolute;
+        right: -4px;
+        top: 4px;
+        width: 2px;
+        height: 4px;
+        background: #fff;
+        border-radius: 0 1px 1px 0;
+      }
+
+      .battery-level {
+        position: absolute;
+        left: 1px;
+        top: 1px;
+        bottom: 1px;
+        width: 80%;
+        background: #30d158;
+        border-radius: 2px;
       }
 
       .chat-header {
-        background: linear-gradient(
-          135deg,
-          var(--primary-purple) 0%,
-          var(--light-blue) 100%
-        );
-        padding: 20px;
+        background: rgba(242, 242, 247, 0.8);
+        backdrop-filter: blur(20px);
+        padding: 12px 20px;
         text-align: center;
         font-weight: 600;
         position: relative;
+        border-bottom: 0.5px solid rgba(60, 60, 67, 0.36);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #000;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       }
 
-      .chat-header::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 20px;
-        width: 10px;
-        height: 10px;
-        background: #22c55e;
+      .chat-header-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .chat-back-btn {
+        color: #007aff;
+        font-size: 17px;
+        font-weight: 400;
+        text-decoration: none;
+      }
+
+      .chat-avatar {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #007aff, #5ac8fa);
         border-radius: 50%;
-        transform: translateY(-50%);
-        animation: pulse 2s infinite;
-        box-shadow: 0 0 10px #22c55e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
+
+      .chat-header-center {
+        flex: 1;
+        text-align: center;
+      }
+
+      .chat-title {
+        font-size: 17px;
+        font-weight: 600;
+        color: #000;
+        margin: 0;
+      }
+
+      .chat-subtitle {
+        font-size: 12px;
+        color: #8e8e93;
+        margin: 0;
+      }
+
+      .chat-header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .chat-info-btn {
+        color: #007aff;
+        font-size: 17px;
+        text-decoration: none;
       }
 
       @keyframes pulse {
@@ -599,38 +765,123 @@
       }
 
       .chat-messages {
-        padding: 30px;
-        min-height: 200px;
+        padding: 20px 16px;
+        flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        background: rgba(0, 0, 0, 0.2);
+        gap: 8px;
+        background: #fff;
+        overflow-y: auto;
+        max-height: 450px;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      .chat-input-area {
+        padding: 8px 16px 34px;
+        background: #fff;
+        border-top: 0.5px solid rgba(60, 60, 67, 0.36);
+        display: flex;
+        align-items: end;
+        gap: 8px;
+      }
+
+      .chat-input-container {
+        flex: 1;
+        background: #f2f2f7;
+        border-radius: 20px;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        min-height: 36px;
+        border: 1px solid rgba(60, 60, 67, 0.12);
+      }
+
+      .chat-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #000;
+        font-size: 17px;
+        outline: none;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        resize: none;
+        min-height: 20px;
+        max-height: 100px;
+      }
+
+      .chat-input::placeholder {
+        color: #8e8e93;
+      }
+
+      .chat-send-btn {
+        width: 36px;
+        height: 36px;
+        background: #007aff;
+        border: none;
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.1s ease;
+        margin-bottom: 0;
+      }
+
+      .chat-send-btn:hover {
+        background: #0056cc;
+      }
+
+      .chat-send-btn:active {
+        transform: scale(0.95);
       }
 
       .message {
-        padding: 15px 20px;
-        border-radius: 20px;
-        max-width: 85%;
-        animation: messageSlideIn 0.6s ease-out;
+        padding: 8px 12px;
+        border-radius: 18px;
+        max-width: 75%;
+        animation: messageSlideIn 0.3s ease-out;
         position: relative;
         word-wrap: break-word;
+        font-size: 17px;
+        line-height: 1.3;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        margin-bottom: 2px;
       }
 
       .message.user {
-        background: linear-gradient(
-          135deg,
-          var(--primary-purple) 0%,
-          var(--light-blue) 100%
-        );
+        background: #007aff;
         margin-left: auto;
         color: white;
+        border-bottom-right-radius: 4px;
       }
 
       .message.ai {
-        background: rgba(255, 255, 255, 0.15);
+        background: #e9e9eb;
         margin-right: auto;
-        color: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
+        color: #000;
+        border-bottom-left-radius: 4px;
+        margin-left: 0;
+      }
+
+      .message + .message.user {
+        margin-top: 2px;
+      }
+
+      .message + .message.ai {
+        margin-top: 2px;
+      }
+
+      .message-group {
+        margin-bottom: 16px;
+      }
+
+      .message-time {
+        font-size: 12px;
+        color: #8e8e93;
+        text-align: center;
+        margin: 8px 0;
+        font-weight: 400;
       }
 
       @keyframes messageSlideIn {
@@ -1670,15 +1921,85 @@
         </div>
 
         <div class="chat-demo">
-          <div class="chat-header">
-            <div>🤖 JetFriend AI</div>
-          </div>
-          <div class="chat-messages" id="chatMessages">
-            <div class="message user">Plan a 5-day trip to Tokyo for $2000</div>
-            <div class="message ai">
-              Perfect! I found flights from NYC to Tokyo for $680, a great hotel
-              in Shibuya for $120/night, and curated a foodie itinerary with the
-              best ramen spots. Plus I found a 15% discount code! 🍜���
+          <div class="chat-phone-screen">
+            <div class="chat-status-bar">
+              <div class="chat-time">9:41</div>
+              <div class="chat-indicators">
+                <div class="signal-bars">
+                  <div class="signal-bar"></div>
+                  <div class="signal-bar"></div>
+                  <div class="signal-bar"></div>
+                  <div class="signal-bar"></div>
+                </div>
+                <span class="wifi-icon">📶</span>
+                <div class="battery">
+                  <div class="battery-level"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-header">
+              <div class="chat-header-left">
+                <a href="#" class="chat-back-btn">‹</a>
+              </div>
+              <div class="chat-header-center">
+                <div class="chat-avatar">🤖</div>
+                <div>
+                  <p class="chat-title">JetFriend AI</p>
+                  <p class="chat-subtitle">Active now</p>
+                </div>
+              </div>
+              <div class="chat-header-right">
+                <a href="#" class="chat-info-btn">ⓘ</a>
+              </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+              <div class="message-time">Today 9:41 AM</div>
+
+              <div class="message ai">
+                Hi! I'm your AI travel companion. Ready to plan your perfect
+                trip? 👋
+              </div>
+
+              <div class="message user">
+                Plan a 5-day trip to Tokyo for $2000
+              </div>
+
+              <div class="message ai">
+                Perfect! I found flights from NYC to Tokyo for $680, a great
+                hotel in Shibuya for $120/night, and curated a foodie itinerary
+                with the best ramen spots. Plus I found a 15% discount code! 🍜
+              </div>
+
+              <div class="message user">
+                That sounds amazing! Show me the itinerary
+              </div>
+
+              <div class="message ai">
+                Here's your personalized Tokyo adventure:
+              </div>
+
+              <div class="message ai">
+                📍 Day 1: Shibuya & Harajuku<br />
+                🍜 Day 2: Ramen tour + Senso-ji Temple<br />
+                🗾 Day 3: Mt. Fuji day trip<br />
+                🛍️ Day 4: Ginza shopping + sushi experience<br />
+                ✈️ Day 5: Last-minute souvenirs + departure
+              </div>
+
+              <div class="message ai">Total saved: $347! 🎉</div>
+            </div>
+
+            <div class="chat-input-area">
+              <div class="chat-input-container">
+                <input type="text" class="chat-input" placeholder="Message" />
+              </div>
+              <button class="chat-send-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M15 8L1 1L4 8L1 15L15 8Z" fill="white" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -2489,7 +2810,13 @@
               <a href="#" class="social-link" title="Instagram">
                 <i class="fab fa-instagram"></i>
               </a>
-              <a href="#" class="social-link" title="LinkedIn">
+              <a
+                href="https://www.linkedin.com/company/jet-friend/about/"
+                class="social-link"
+                title="LinkedIn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <i class="fab fa-linkedin"></i>
               </a>
             </div>
@@ -2679,66 +3006,16 @@
       updateChatDemo();
       setInterval(updateChatDemo, 7000);
 
-      // Animated cycling hero text
-      const heroTexts = [
-        "Travel without the stress.",
-        "JetFriend plots your perfect trip automatically.",
-        "Personalized to your exact needs and budget.",
-        "Unlike other AI tools, we actually book everything.",
-        "Your true travel agent that takes action.",
-      ];
-
-      let currentTextIndex = 0;
+      // Simple fade-in animation for hero text (no cycling to prevent gibberish)
       const heroTextElement = document.getElementById("heroText");
 
-      function typeText(text, element, callback) {
-        element.textContent = "";
-        element.classList.add("typewriter");
-
-        let i = 0;
-        const typeInterval = setInterval(() => {
-          element.textContent += text.charAt(i);
-          i++;
-
-          if (i > text.length) {
-            clearInterval(typeInterval);
-            setTimeout(() => {
-              element.classList.remove("typewriter");
-              if (callback) callback();
-            }, 1000);
-          }
-        }, 50);
-      }
-
-      function cycleHeroText() {
-        if (heroTextElement) {
-          heroTextElement.classList.add("fade-out");
-
-          setTimeout(() => {
-            currentTextIndex = (currentTextIndex + 1) % heroTexts.length;
-            heroTextElement.classList.remove("fade-out");
-
-            typeText(heroTexts[currentTextIndex], heroTextElement, () => {
-              heroTextElement.classList.add("fade-in");
-              setTimeout(() => {
-                heroTextElement.classList.remove("fade-in");
-              }, 100);
-            });
-          }, 400);
-        }
-      }
-
-      // Start with typewriter effect for first text
+      // Simple fade-in effect on load
       setTimeout(() => {
         if (heroTextElement) {
-          typeText(heroTexts[0], heroTextElement);
+          heroTextElement.style.opacity = "1";
+          heroTextElement.style.transform = "translateY(0)";
         }
-      }, 1000);
-
-      // Start cycling after initial typewriter effect
-      setTimeout(() => {
-        setInterval(cycleHeroText, 4000);
-      }, 4000);
+      }, 500);
 
       // Add loading states for better UX
       document.querySelectorAll(".btn-primary").forEach((btn) => {
