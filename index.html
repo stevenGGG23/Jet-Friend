@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JetFriend - Your AI Travel Companion</title>
-    <link
+        <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <style>
       * {
         margin: 0;
@@ -531,368 +532,397 @@
         box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
       }
 
-      /* Interactive Chat Demo - Real iPhone Style */
-      .chat-demo {
-        max-width: 375px;
-        margin: 0 auto;
-        border-radius: 40px;
-        overflow: hidden;
-        animation: heroSlideUp 1s ease-out 0.9s both;
-        background: #000;
-        border: 8px solid #1d1d1f;
-        box-shadow:
-          0 0 0 2px #333,
-          0 25px 50px rgba(0, 0, 0, 0.8),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        transition: all 0.3s ease;
-        position: relative;
-        aspect-ratio: 375/812;
-        height: 700px;
+                  /* Modern iPhone Demo Styles */
+                  .iphone{
+          width: 286px;
+          height: 586px;
+          border: 2px solid #3b444b;
+          border-radius: 50px;
+          animation: heroSlideUp 1s ease-out 0s both;
+          margin: 0 auto;
+          display: block;
+          position: relative;
       }
 
-      .chat-demo::before {
-        content: "";
-        position: absolute;
-        top: 12px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 134px;
-        height: 30px;
-        background: #000;
-        border-radius: 20px;
-        z-index: 10;
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+                  .iphone-14{
+          width: 280px;
+          height: 580px;
+          border: 3px solid black;
+          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+          border-radius: 47px;
+          position: relative;
+          overflow: hidden;
       }
 
-      .chat-demo::after {
-        content: "";
-        position: absolute;
-        bottom: 8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 140px;
-        height: 5px;
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 3px;
-        z-index: 10;
+            .operator-name{
+          position: absolute;
+          top: 16px;
+          left: 25px;
+          font-size: 14px;
+          color: white;
+          font-weight: 600;
       }
 
-      .chat-demo:hover {
-        transform: translateY(-5px) scale(1.01);
-        box-shadow:
-          0 0 0 2px #333,
-          0 30px 60px rgba(0, 0, 0, 0.9),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            .dynamic-island{
+          width: 90px;
+          height: 24px;
+          background: black;
+          border-radius: 50px;
+          margin: 0 auto;
+          margin-top: 10px;
+          position: absolute;
+          left: 95px;
+          z-index: 99999;
+          transition: all .5s;
       }
 
-      .chat-phone-screen {
-        position: absolute;
-        top: 50px;
-        left: 8px;
-        right: 8px;
-        bottom: 20px;
-        background: #000;
-        border-radius: 35px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
+            .dynamic-island-camera{
+          color: white;
+          position: absolute;
+          top: 18px;
+          right: 105px;
+          background: #121212;
+          box-shadow: 0 0 1px grey;
+          width: 10px;
+          height: 10px;
+          border-radius: 50px;
+          z-index: 99999;
+          transition: all .5s;
       }
 
-      .chat-status-bar {
-        background: transparent;
-        padding: 12px 24px 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 14px;
-        font-weight: 600;
-        color: #fff;
-        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            .operator-icons{
+          position: absolute;
+          top: 16px;
+          right: 20px;
+          font-size: 11px;
+          transition: all .2s;
+          color: white;
+          display: flex;
+          align-items: center;
+          gap: 3px;
       }
 
-      .chat-time {
-        font-weight: 700;
-        letter-spacing: -0.3px;
+            .battery{
+          width: 18px;
+          height: 9px;
+          border: 1px solid #fff;
+          border-radius: 2px;
+          font-size: 8px;
+          text-align: center;
+          color: #000;
+          background: #Fefefe;
+          font-weight: bold;
+          position: relative;
+          margin-left: 3px;
       }
 
-      .chat-indicators {
-        display: flex;
-        gap: 6px;
-        align-items: center;
+            .battery::after {
+          content: '';
+          position: absolute;
+          top: 2px;
+          right: -2px;
+          width: 1.5px;
+          height: 3px;
+          background: #fff;
+          border-radius: 0 1px 1px 0;
       }
 
-      .signal-bars {
-        display: flex;
-        gap: 3px;
-        align-items: end;
+      /* Jet Friend App Styles */
+            .app-container {
+          position: absolute;
+          top: 50px;
+          left: 8px;
+          right: 8px;
+          bottom: 18px;
+          background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+          border-radius: 20px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
-      .signal-bar {
-        width: 4px;
-        background: #fff;
-        border-radius: 1px;
+      .app-header {
+          background: linear-gradient(135deg, #1e293b, #334155);
+          color: #f1f5f9;
+          padding: 20px 15px;
+          text-align: center;
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(255,255,255,0.1);
       }
 
-      .signal-bar:nth-child(1) {
-        height: 4px;
-      }
-      .signal-bar:nth-child(2) {
-        height: 6px;
-      }
-      .signal-bar:nth-child(3) {
-        height: 8px;
-      }
-      .signal-bar:nth-child(4) {
-        height: 10px;
-      }
-
-      .wifi-icon {
-        font-size: 15px;
-        color: #fff;
-        margin-left: 2px;
+                  .app-title {
+          font-size: 20px;
+          font-weight: 700;
+          margin-bottom: 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          background: linear-gradient(135deg, #06b6d4, #3b82f6);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
       }
 
-      .battery {
-        width: 25px;
-        height: 12px;
-        border: 1px solid #fff;
-        border-radius: 3px;
-        position: relative;
-        margin-left: 6px;
-        opacity: 0.9;
+      .app-logo {
+          width: 22px;
+          height: 22px;
+          filter: brightness(0) invert(1);
       }
 
-      .battery::after {
-        content: "";
-        position: absolute;
-        right: -4px;
-        top: 4px;
-        width: 2px;
-        height: 4px;
-        background: #fff;
-        border-radius: 0 1px 1px 0;
+      .plane-icon {
+          font-size: 24px;
+          transform: rotate(-45deg);
+          filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
       }
 
-      .battery-level {
-        position: absolute;
-        left: 1px;
-        top: 1px;
-        bottom: 1px;
-        width: 80%;
-        background: #30d158;
-        border-radius: 2px;
+      .app-subtitle {
+          font-size: 12px;
+          opacity: 0.8;
+          color: #94a3b8;
       }
 
-      .chat-header {
-        background: rgba(242, 242, 247, 0.8);
-        backdrop-filter: blur(20px);
-        padding: 12px 20px;
-        text-align: center;
-        font-weight: 600;
-        position: relative;
-        border-bottom: 0.5px solid rgba(60, 60, 67, 0.36);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        color: #000;
-        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      }
-
-      .chat-header-left {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .chat-back-btn {
-        color: #007aff;
-        font-size: 17px;
-        font-weight: 400;
-        text-decoration: none;
-      }
-
-      .chat-avatar {
-        width: 32px;
-        height: 32px;
-        background: linear-gradient(135deg, #007aff, #5ac8fa);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-      }
-
-      .chat-header-center {
-        flex: 1;
-        text-align: center;
-      }
-
-      .chat-title {
-        font-size: 17px;
-        font-weight: 600;
-        color: #000;
-        margin: 0;
-      }
-
-      .chat-subtitle {
-        font-size: 12px;
-        color: #8e8e93;
-        margin: 0;
-      }
-
-      .chat-header-right {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .chat-info-btn {
-        color: #007aff;
-        font-size: 17px;
-        text-decoration: none;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-          transform: translateY(-50%) scale(1);
-        }
-        50% {
-          opacity: 0.7;
-          transform: translateY(-50%) scale(1.2);
-        }
-      }
-
-      .chat-messages {
-        padding: 20px 16px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        background: #fff;
-        overflow-y: auto;
-        max-height: 450px;
-        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      }
-
-      .chat-input-area {
-        padding: 8px 16px 34px;
-        background: #fff;
-        border-top: 0.5px solid rgba(60, 60, 67, 0.36);
-        display: flex;
-        align-items: end;
-        gap: 8px;
-      }
-
-      .chat-input-container {
-        flex: 1;
-        background: #f2f2f7;
-        border-radius: 20px;
-        padding: 8px 16px;
-        display: flex;
-        align-items: center;
-        min-height: 36px;
-        border: 1px solid rgba(60, 60, 67, 0.12);
-      }
-
-      .chat-input {
-        flex: 1;
-        background: transparent;
-        border: none;
-        color: #000;
-        font-size: 17px;
-        outline: none;
-        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-        resize: none;
-        min-height: 20px;
-        max-height: 100px;
-      }
-
-      .chat-input::placeholder {
-        color: #8e8e93;
-      }
-
-      .chat-send-btn {
-        width: 36px;
-        height: 36px;
-        background: #007aff;
-        border: none;
-        border-radius: 50%;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.1s ease;
-        margin-bottom: 0;
-      }
-
-      .chat-send-btn:hover {
-        background: #0056cc;
-      }
-
-      .chat-send-btn:active {
-        transform: scale(0.95);
+      .chat-container {
+          flex: 1;
+          padding: 15px;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          background: linear-gradient(180deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8));
       }
 
       .message {
-        padding: 8px 12px;
-        border-radius: 18px;
-        max-width: 75%;
-        animation: messageSlideIn 0.3s ease-out;
-        position: relative;
-        word-wrap: break-word;
-        font-size: 17px;
-        line-height: 1.3;
-        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-        margin-bottom: 2px;
+          max-width: 85%;
+          padding: 12px 15px;
+          border-radius: 16px;
+          font-size: 13px;
+          line-height: 1.4;
+          animation: fadeInUp 0.3s ease;
+          backdrop-filter: blur(10px);
       }
 
-      .message.user {
-        background: #007aff;
-        margin-left: auto;
-        color: white;
-        border-bottom-right-radius: 4px;
+      .bot-message {
+          align-self: flex-start;
+          background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(51, 65, 85, 0.6));
+          color: #e2e8f0;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
       }
 
-      .message.ai {
-        background: #e9e9eb;
-        margin-right: auto;
-        color: #000;
-        border-bottom-left-radius: 4px;
-        margin-left: 0;
+      .user-message {
+          align-self: flex-end;
+          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          color: #f1f5f9;
+          box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
       }
 
-      .message + .message.user {
-        margin-top: 2px;
+            .bot-avatar {
+          width: 28px;
+          height: 28px;
+          background: linear-gradient(135deg, #06b6d4, #0891b2);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-weight: bold;
+          margin-bottom: 6px;
+          font-size: 12px;
+          box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+          padding: 4px;
       }
 
-      .message + .message.ai {
-        margin-top: 2px;
+      .bot-avatar img {
+          width: 16px;
+          height: 16px;
+          filter: brightness(0) invert(1);
       }
 
-      .message-group {
-        margin-bottom: 16px;
+      .itinerary-item {
+          background: linear-gradient(135deg, rgba(51, 65, 85, 0.4), rgba(71, 85, 105, 0.2));
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          padding: 8px;
+          margin: 4px 0;
+          backdrop-filter: blur(10px);
       }
 
-      .message-time {
-        font-size: 12px;
-        color: #8e8e93;
-        text-align: center;
-        margin: 8px 0;
-        font-weight: 400;
+      .day-header {
+          color: #06b6d4;
+          font-weight: 600;
+          font-size: 12px;
+          margin-bottom: 2px;
       }
 
-      @keyframes messageSlideIn {
-        from {
-          opacity: 0;
-          transform: translateY(30px) scale(0.8);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
+      .activity {
+          color: #e2e8f0;
+          font-size: 11px;
+          line-height: 1.3;
+      }
+
+      .quick-actions {
+          padding: 12px 15px;
+          background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(20px);
+      }
+
+      .quick-actions-title {
+          font-size: 11px;
+          font-weight: 600;
+          color: #94a3b8;
+          margin-bottom: 8px;
+      }
+
+      .action-buttons {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+      }
+
+      .action-btn {
+          padding: 8px 6px;
+          background: linear-gradient(135deg, rgba(51, 65, 85, 0.6), rgba(71, 85, 105, 0.4));
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+          font-size: 10px;
+          font-weight: 500;
+          color: #e2e8f0;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-align: center;
+          backdrop-filter: blur(10px);
+      }
+
+      .action-btn:hover {
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(29, 78, 216, 0.2));
+          border-color: rgba(59, 130, 246, 0.5);
+          transform: translateY(-1px);
+      }
+
+      .input-container {
+          padding: 12px 15px;
+          background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          backdrop-filter: blur(20px);
+      }
+
+      .message-input {
+          flex: 1;
+          padding: 8px 12px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          font-size: 12px;
+          outline: none;
+          background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(51, 65, 85, 0.4));
+          color: #e2e8f0;
+          backdrop-filter: blur(10px);
+      }
+
+      .message-input::placeholder {
+          color: #64748b;
+      }
+
+      .message-input:focus {
+          border-color: rgba(59, 130, 246, 0.5);
+          background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(51, 65, 85, 0.6));
+      }
+
+      .send-btn {
+          width: 32px;
+          height: 32px;
+          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          border: none;
+          border-radius: 50%;
+          color: white;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          transition: all 0.3s ease;
+      }
+
+      .send-btn:hover {
+          transform: scale(1.05);
+      }
+
+      .typing-indicator {
+          display: none;
+          align-self: flex-start;
+          background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(51, 65, 85, 0.6));
+          padding: 12px 15px;
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+      }
+
+      .typing-dots {
+          display: flex;
+          gap: 4px;
+      }
+
+      .dot {
+          width: 6px;
+          height: 6px;
+          background: linear-gradient(135deg, #06b6d4, #0891b2);
+          border-radius: 50%;
+          animation: typing 1.4s infinite;
+      }
+
+      .dot:nth-child(2) { animation-delay: 0.2s; }
+      .dot:nth-child(3) { animation-delay: 0.4s; }
+
+            .line{
+          position: absolute;
+          bottom: 8px;
+          width: 90px;
+          height: 4px;
+          border-radius: 50px;
+          background: #fff;
+          left: 95px;
+      }
+
+      /* Scrollbar styling */
+      .chat-container::-webkit-scrollbar {
+          width: 3px;
+      }
+
+      .chat-container::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+      }
+
+      .chat-container::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #06b6d4, #0891b2);
+          border-radius: 3px;
+      }
+
+      @keyframes fadeInUp {
+          from {
+              opacity: 0;
+              transform: translateY(10px);
+          }
+          to {
+              opacity: 1;
+              transform: translateY(0);
+          }
+      }
+
+      @keyframes typing {
+          0%, 60%, 100% {
+              transform: translateY(0);
+              opacity: 0.4;
+          }
+          30% {
+              transform: translateY(-8px);
+              opacity: 1;
+          }
       }
 
       /* Enhanced Features Section */
@@ -1920,88 +1950,140 @@
           </a>
         </div>
 
-        <div class="chat-demo">
-          <div class="chat-phone-screen">
-            <div class="chat-status-bar">
-              <div class="chat-time">9:41</div>
-              <div class="chat-indicators">
-                <div class="signal-bars">
-                  <div class="signal-bar"></div>
-                  <div class="signal-bar"></div>
-                  <div class="signal-bar"></div>
-                  <div class="signal-bar"></div>
+                <div class="iphone">
+            <div class="iphone-14">
+                <div class="operator-name">9:41</div>
+                <div class="dynamic-island"></div>
+                <div class="dynamic-island-camera"></div>
+                <div class="operator-icons">
+                    <i class="bi bi-reception-4"></i>
+                    5G
+                    <div class="battery">87</div>
                 </div>
-                <span class="wifi-icon">📶</span>
-                <div class="battery">
-                  <div class="battery-level"></div>
+
+                <div class="app-container">
+                                        <div class="app-header">
+                        <div class="app-title">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" class="app-logo" />
+                            <span class="plane-icon">✈</span>
+                            Jet Friend
+                        </div>
+                        <div class="app-subtitle">Your AI Travel Companion</div>
+                    </div>
+
+                    <div class="chat-container" id="chatContainer">
+                        <div class="message user-message">
+                            I'm thinking about going to Japan in November. I want a chill trip — ramen, anime, nature. Budget is around $2500. Can you help?
+                        </div>
+
+                                                <div class="bot-avatar">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                        </div>
+                        <div class="message bot-message">
+                            Absolutely. Based on your preferences, here's a suggestion:
+                            <br><br>
+                            • Best time to fly: November 6–15 (cheapest dates)<br>
+                            • Ideal location to stay: Kichijoji (peaceful area, near Ghibli Museum and nature spots)<br>
+                            • Estimated trip cost: around $2,180
+                            <br><br>
+                            Would you like me to:<br>
+                            1. Set up flight and hotel price trackers?<br>
+                            2. Create a personalized itinerary?<br>
+                            3. Book any tickets in advance (e.g., Ghibli Museum)?
+                        </div>
+
+                        <div class="message user-message">
+                            Yeah, set up the price tracking and make a rough itinerary.
+                        </div>
+
+                                                <div class="bot-avatar">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                        </div>
+                        <div class="message bot-message">
+                            Tracking flights and hotels now using Skyscanner and Booking.com. Creating your 7-day itinerary...
+                            <br><br>
+                            <strong>Draft itinerary:</strong>
+                            <div class="itinerary-item">
+                                <div class="day-header">Day 1:</div>
+                                <div class="activity">Arrival, check-in, explore Kichijoji</div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="day-header">Day 2:</div>
+                                <div class="activity">Ghibli Museum, visit local sushi spot</div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="day-header">Day 3:</div>
+                                <div class="activity">Akihabara for anime shopping and culture</div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="day-header">Day 4:</div>
+                                <div class="activity">Day trip to Hakone (hot springs)</div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="day-header">Day 5:</div>
+                                <div class="activity">Hike Mount Takao, dinner at a ramen shop</div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="day-header">Day 6–7:</div>
+                                <div class="activity">Flexible days for exploring or resting</div>
+                            </div>
+                            <br>
+                            The full version has been sent to your email and synced to your Google Calendar. Would you like to adjust anything?
+                        </div>
+
+                        <div class="message user-message">
+                            Can you check if there's a ramen-making class on Day 3?
+                        </div>
+
+                                                <div class="bot-avatar">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                        </div>
+                        <div class="message bot-message">
+                            I found one: "Tokyo Ramen Workshop" in Shinjuku at 3:00 PM on November 8. Vegetarian-friendly, cost is around $45 USD.
+                            <br><br>
+                            Would you like me to reserve your spot and update your itinerary?
+                        </div>
+
+                        <div class="message user-message">
+                            Yes, book it.
+                        </div>
+
+                                                <div class="bot-avatar">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                        </div>
+                        <div class="message bot-message">
+                            Booking confirmed. Receipt and calendar invite have been sent. I've also added the address with directions to your itinerary.
+                        </div>
+
+                        <div class="typing-indicator" id="typingIndicator">
+                            <div class="typing-dots">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <div class="quick-actions-title">Quick Actions</div>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="quickAction('price-drop')">Price Alerts</button>
+                            <button class="action-btn" onclick="quickAction('translate')">Translation</button>
+                            <button class="action-btn" onclick="quickAction('local-tips')">Local Tips</button>
+                            <button class="action-btn" onclick="quickAction('emergency')">Emergency Info</button>
+                        </div>
+                    </div>
+
+                    <div class="input-container">
+                        <input type="text" class="message-input" placeholder="Ask me anything about travel..." id="messageInput">
+                        <button class="send-btn" onclick="sendMessage()">
+                            <span>➤</span>
+                        </button>
+                    </div>
                 </div>
-              </div>
+
+                <div class="line"></div>
             </div>
-
-            <div class="chat-header">
-              <div class="chat-header-left">
-                <a href="#" class="chat-back-btn">‹</a>
-              </div>
-              <div class="chat-header-center">
-                <div class="chat-avatar">🤖</div>
-                <div>
-                  <p class="chat-title">JetFriend AI</p>
-                  <p class="chat-subtitle">Active now</p>
-                </div>
-              </div>
-              <div class="chat-header-right">
-                <a href="#" class="chat-info-btn">ⓘ</a>
-              </div>
-            </div>
-
-            <div class="chat-messages" id="chatMessages">
-              <div class="message-time">Today 9:41 AM</div>
-
-              <div class="message ai">
-                Hi! I'm your AI travel companion. Ready to plan your perfect
-                trip? 👋
-              </div>
-
-              <div class="message user">
-                Plan a 5-day trip to Tokyo for $2000
-              </div>
-
-              <div class="message ai">
-                Perfect! I found flights from NYC to Tokyo for $680, a great
-                hotel in Shibuya for $120/night, and curated a foodie itinerary
-                with the best ramen spots. Plus I found a 15% discount code! 🍜
-              </div>
-
-              <div class="message user">
-                That sounds amazing! Show me the itinerary
-              </div>
-
-              <div class="message ai">
-                Here's your personalized Tokyo adventure:
-              </div>
-
-              <div class="message ai">
-                📍 Day 1: Shibuya & Harajuku<br />
-                🍜 Day 2: Ramen tour + Senso-ji Temple<br />
-                🗾 Day 3: Mt. Fuji day trip<br />
-                🛍️ Day 4: Ginza shopping + sushi experience<br />
-                ✈️ Day 5: Last-minute souvenirs + departure
-              </div>
-
-              <div class="message ai">Total saved: $347! 🎉</div>
-            </div>
-
-            <div class="chat-input-area">
-              <div class="chat-input-container">
-                <input type="text" class="chat-input" placeholder="Message" />
-              </div>
-              <button class="chat-send-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M15 8L1 1L4 8L1 15L15 8Z" fill="white" />
-                </svg>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -2540,7 +2622,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >✓</span
+                  >��</span
                 >
                 Priority support
               </li>
@@ -2850,12 +2932,15 @@
             "
           />
         </div>
-        <div class="footer-links">
+                <div class="footer-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
           <a href="#">Support</a>
           <a href="#">API</a>
           <a href="#">Careers</a>
+          <a href="https://www.instagram.com/jet.friend/" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-instagram" style="margin-right: 5px;"></i>Follow Us
+          </a>
         </div>
         <p style="color: rgba(255, 255, 255, 0.6); margin-top: 20px">
           © 2025 JetFriend. Revolutionizing travel with AI.
@@ -2863,7 +2948,104 @@
       </div>
     </footer>
 
-    <script>
+        <script>
+        // Phone Demo JavaScript
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        const responses = {
+            'price-drop': "Your tracked flight from Nashville to Tokyo dropped by $110. New price: $1,123 round-trip on Delta. The deal expires in 24 hours. Would you like to book it now?",
+            'translate': "The phrase is: \"Niku wa tabemasen\" (肉は食べません)\\n\\nWould you like a quick sheet of useful phrases for your trip?",
+            'local-tips': "Here are some insider tips for Japan:\\n\\n• Download Google Translate with camera function\\n• Get a JR Pass before you arrive\\n• Cash is still king - many places don't accept cards\\n• Bowing is appreciated but not required for tourists\\n• Remove shoes when entering homes and some restaurants",
+            'emergency': "Emergency contacts for Japan:\\n\\n• Police: 110\\n• Fire/Ambulance: 119\\n• Tourist Hotline: 050-3816-2787\\n• Your embassy has been added to your contacts\\n\\nI've also saved offline maps and key phrases to your phone."
+        };
+
+        function addMessage(content, isUser = false) {
+            const message = document.createElement('div');
+            message.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+
+            if (!isUser) {
+                const avatar = document.createElement('div');
+                avatar.className = 'bot-avatar';
+                                avatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />';
+                chatContainer.appendChild(avatar);
+            }
+
+            message.innerHTML = content;
+            chatContainer.appendChild(message);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showTyping() {
+            if (typingIndicator) {
+                typingIndicator.style.display = 'flex';
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        function hideTyping() {
+            if (typingIndicator) {
+                typingIndicator.style.display = 'none';
+            }
+        }
+
+        function quickAction(action) {
+            const actionTexts = {
+                'price-drop': "Any price drops on the flights?",
+                'translate': "How do I say \"I don't eat meat\" in Japanese?",
+                'local-tips': "Give me some local tips for Japan",
+                'emergency': "What emergency info should I know?"
+            };
+
+            addMessage(actionTexts[action], true);
+
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addMessage(responses[action]);
+            }, 1500);
+        }
+
+        function sendMessage() {
+            if (!messageInput) return;
+            const text = messageInput.value.trim();
+            if (!text) return;
+
+            addMessage(text, true);
+            messageInput.value = '';
+
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+
+                const smartResponses = [
+                    "I'll research that and get back to you with detailed options and pricing.",
+                    "Great question! Let me check current availability and book the best option for you.",
+                    "I understand your needs. I'm analyzing your preferences to provide personalized recommendations.",
+                    "Processing your request... I'll integrate this with your existing itinerary and send updates to your calendar."
+                ];
+
+                const randomResponse = smartResponses[Math.floor(Math.random() * smartResponses.length)];
+                addMessage(randomResponse);
+            }, 1200);
+        }
+
+        if (messageInput) {
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+
+        // Auto-scroll to bottom on load
+        setTimeout(() => {
+            if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }, 100);
+
       // Page loader
       window.addEventListener("load", function () {
         setTimeout(() => {
