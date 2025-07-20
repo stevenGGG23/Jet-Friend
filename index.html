@@ -684,30 +684,72 @@
       }
 
       .chat-header {
-        background: linear-gradient(
-          135deg,
-          var(--primary-purple) 0%,
-          var(--light-blue) 100%
-        );
-        padding: 15px 20px;
+        background: rgba(242, 242, 247, 0.8);
+        backdrop-filter: blur(20px);
+        padding: 12px 20px;
         text-align: center;
         font-weight: 600;
         position: relative;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 0.5px solid rgba(60, 60, 67, 0.36);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #000;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      .chat-header-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .chat-back-btn {
+        color: #007aff;
+        font-size: 17px;
+        font-weight: 400;
+        text-decoration: none;
+      }
+
+      .chat-avatar {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #007aff, #5ac8fa);
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        font-size: 16px;
       }
 
-      .chat-header::before {
-        content: "";
-        width: 8px;
-        height: 8px;
-        background: #22c55e;
-        border-radius: 50%;
-        animation: pulse 2s infinite;
-        box-shadow: 0 0 8px #22c55e;
+      .chat-header-center {
+        flex: 1;
+        text-align: center;
+      }
+
+      .chat-title {
+        font-size: 17px;
+        font-weight: 600;
+        color: #000;
+        margin: 0;
+      }
+
+      .chat-subtitle {
+        font-size: 12px;
+        color: #8e8e93;
+        margin: 0;
+      }
+
+      .chat-header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .chat-info-btn {
+        color: #007aff;
+        font-size: 17px;
+        text-decoration: none;
       }
 
       @keyframes pulse {
