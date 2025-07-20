@@ -533,16 +533,18 @@
       }
 
                   /* Modern iPhone Demo Styles */
-      .iphone{
-          border: 4px solid #3b444b;
+            .iphone{
+          border: 2px solid #3b444b;
           border-radius: 50px;
           animation: heroSlideUp 1s ease-out 0s both;
+          margin: 0 auto;
+          display: block;
       }
 
-      .iphone-14{
+            .iphone-14{
           width: 300px;
           height: 600px;
-          border: 5px solid black;
+          border: 3px solid black;
           background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
           border-radius: 47px;
           position: relative;
@@ -647,8 +649,8 @@
           border-bottom: 1px solid rgba(255,255,255,0.1);
       }
 
-      .app-title {
-          font-size: 22px;
+            .app-title {
+          font-size: 20px;
           font-weight: 700;
           margin-bottom: 6px;
           display: flex;
@@ -659,6 +661,13 @@
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+      }
+
+      .app-logo {
+          width: 24px;
+          height: 24px;
+          filter: brightness(0) invert(1);
+          margin-right: 4px;
       }
 
       .plane-icon {
@@ -1944,8 +1953,9 @@
                 </div>
 
                 <div class="app-container">
-                    <div class="app-header">
+                                        <div class="app-header">
                         <div class="app-title">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" class="app-logo" />
                             <span class="plane-icon">✈</span>
                             Jet Friend
                         </div>
