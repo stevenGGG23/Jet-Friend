@@ -3878,43 +3878,9 @@
           }
         }
 
-        async getAIResponse(message) {
-          // Demo responses for testing (replace with actual API call)
-          const demoResponses = [
-            "That's a great travel question! I'd love to help you plan your perfect trip. What destination are you considering?",
-            "I can help you find the best deals and create a customized itinerary. Tell me more about your travel preferences!",
-            "Based on your interests, I'd recommend checking out some hidden gems in that area. What's your budget range?",
-            "Perfect! I can suggest some amazing local experiences and help you save money on accommodations. When are you planning to travel?",
-            "Excellent choice! Let me help you create an unforgettable itinerary with the best local insights and deals."
-          ];
-
-          // Simulate API delay
-          await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-
-          // For demo purposes, return a random response
-          // In production, replace this with your actual API call:
-          /*
-          const response = await fetch(this.apiEndpoint, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer YOUR_API_KEY'
-            },
-            body: JSON.stringify({
-              message: message,
-              context: 'travel_planning'
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error('API request failed');
-          }
-
-          const data = await response.json();
-          return data.message || data.response;
-          */
-
-          return demoResponses[Math.floor(Math.random() * demoResponses.length)];
+                async getAIResponse(message) {
+          // No automatic responses - waiting for n8n API integration
+          throw new Error('AI responses disabled - awaiting n8n integration');
         }
 
         addMessage(text, type) {
