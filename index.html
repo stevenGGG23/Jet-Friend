@@ -3936,10 +3936,65 @@
         const chatbot = new JetFriendChatbot();
             });
 
-            // Upload button webhook functionality
+                  // Upload button webhook functionality
       document.addEventListener('DOMContentLoaded', function() {
         const uploadButton = document.getElementById('uploadButton');
         const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        // Function to add message to chat
+        function addMessageToChat(message, type = 'user') {
+          const messageGroup = document.createElement('div');
+          messageGroup.className = `message-group ${type === 'user' ? 'user-message-group' : ''}`;
+
+          const avatar = document.createElement('div');
+          avatar.className = type === 'user' ? 'user-avatar' : 'ai-avatar';
+
+          if (type === 'user') {
+            avatar.innerHTML = '<i class="fas fa-user"></i>';
+          } else {
+            avatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
+          }
+
+          const messageElement = document.createElement('div');
+          messageElement.className = `message ${type === 'user' ? 'user-message' : 'ai-message'}`;
+          messageElement.innerHTML = `<p>${message}</p>`;
+
+          messageGroup.appendChild(avatar);
+          messageGroup.appendChild(messageElement);
+
+          chatMessages.appendChild(messageGroup);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Function to show typing indicator
+        function showTypingIndicator() {
+          const typingIndicator = document.createElement('div');
+          typingIndicator.className = 'typing-indicator active';
+          typingIndicator.id = 'currentTypingIndicator';
+
+          const aiAvatar = document.createElement('div');
+          aiAvatar.className = 'ai-avatar';
+          aiAvatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
+
+          const typingDots = document.createElement('div');
+          typingDots.className = 'typing-dots';
+          typingDots.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+          typingIndicator.appendChild(aiAvatar);
+          typingIndicator.appendChild(typingDots);
+
+          chatMessages.appendChild(typingIndicator);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Function to hide typing indicator
+        function hideTypingIndicator() {
+          const typingIndicator = document.getElementById('currentTypingIndicator');
+          if (typingIndicator) {
+            typingIndicator.remove();
+          }
+        }
 
         if (uploadButton) {
           console.log('Upload button found, adding event listener');
@@ -3954,6 +4009,15 @@
               alert('Please enter a message first');
               return;
             }
+
+            // Add user message to chat
+            addMessageToChat(inputText, 'user');
+
+            // Clear input
+            chatInput.textContent = '';
+
+            // Show typing indicator
+            showTypingIndicator();
 
             // Prepare data to send
             const dataToSend = {
@@ -3974,23 +4038,44 @@
               });
 
               console.log('Response status:', response.status);
-              console.log('Response:', response);
 
               if (response.ok) {
                 console.log('Data sent successfully to webhook');
-                chatInput.textContent = '';
-                // Visual feedback
+
+                // Parse the response from webhook
+                const responseData = await response.text();
+                console.log('Webhook response:', responseData);
+
+                // Hide typing indicator
+                hideTypingIndicator();
+
+                // Add AI response to chat
+                let aiMessage = '';
+                try {
+                  const parsedResponse = JSON.parse(responseData);
+                  aiMessage = parsedResponse.message || parsedResponse.response || parsedResponse.text || responseData;
+                } catch (parseError) {
+                  // If not JSON, use the raw response
+                  aiMessage = responseData || 'I received your message and I\'m processing it.';
+                }
+
+                addMessageToChat(aiMessage, 'ai');
+
+                // Visual feedback for button
                 this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
                 setTimeout(() => {
                   this.style.background = '';
                 }, 1000);
+
               } else {
                 console.error('Failed to send data to webhook:', response.status);
-                alert('Failed to send message');
+                hideTypingIndicator();
+                addMessageToChat('Sorry, I encountered an error. Please try again later.', 'ai');
               }
             } catch (error) {
               console.error('Error sending data to webhook:', error);
-              alert('Error sending message: ' + error.message);
+              hideTypingIndicator();
+              addMessageToChat('Sorry, I encountered a connection error. Please try again later.', 'ai');
             }
           });
         } else {
