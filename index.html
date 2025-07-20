@@ -4081,10 +4081,40 @@
                 hideTypingIndicator();
                 addMessageToChat('Sorry, I encountered an error. Please try again later.', 'ai');
               }
-            } catch (error) {
+                        } catch (error) {
               console.error('Error sending data to webhook:', error);
+              console.error('Error details:', {
+                message: error.message,
+                stack: error.stack,
+                name: error.name
+              });
+              alert('Error caught: ' + error.message);
               hideTypingIndicator();
-              addMessageToChat('Sorry, I encountered a connection error. Please try again later.', 'ai');
+              addMessageToChat('Sorry, I encountered a connection error: ' + error.message, 'ai');
+
+              // Try alternative method with XMLHttpRequest
+              console.log('Trying XMLHttpRequest as fallback...');
+              try {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function() {
+                  if (xhr.readyState === 4) {
+                    console.log('XHR Response status:', xhr.status);
+                    console.log('XHR Response text:', xhr.responseText);
+                    alert('XHR completed with status: ' + xhr.status);
+                  }
+                };
+                xhr.onerror = function() {
+                  console.error('XHR error occurred');
+                  alert('XHR error occurred');
+                };
+                xhr.send(JSON.stringify(dataToSend));
+                alert('XHR request sent');
+              } catch (xhrError) {
+                console.error('XHR also failed:', xhrError);
+                alert('XHR also failed: ' + xhrError.message);
+              }
             }
           });
         } else {
