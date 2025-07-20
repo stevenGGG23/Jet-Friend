@@ -3916,7 +3916,7 @@
 
       animate3DEffects();
 
-      // Add interactive hover effects to cards
+            // Add interactive hover effects to cards
       document
         .querySelectorAll(
           ".feature-card, .pricing-card, .contact-card, .stat-item",
@@ -3930,6 +3930,177 @@
             this.style.transform = "translateY(0) scale(1)";
           });
         });
+
+      // AI Chatbot Functionality
+      class JetFriendChatbot {
+        constructor() {
+          this.chatInput = document.getElementById('chatInput');
+          this.sendButton = document.getElementById('sendButton');
+          this.chatMessages = document.getElementById('chatMessages');
+          this.isTyping = false;
+
+          // Replace with your actual API endpoint
+          this.apiEndpoint = 'YOUR_API_ENDPOINT_HERE';
+
+          this.initializeEventListeners();
+        }
+
+        initializeEventListeners() {
+          // Send button click
+          this.sendButton.addEventListener('click', () => {
+            this.sendMessage();
+          });
+
+          // Enter key press
+          this.chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              this.sendMessage();
+            }
+          });
+
+          // Input change to enable/disable send button
+          this.chatInput.addEventListener('input', () => {
+            const hasText = this.chatInput.textContent.trim().length > 0;
+            this.sendButton.disabled = !hasText || this.isTyping;
+          });
+
+          // Paste event handling
+          this.chatInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            document.execCommand('insertText', false, text);
+          });
+        }
+
+        async sendMessage() {
+          const messageText = this.chatInput.textContent.trim();
+          if (!messageText || this.isTyping) return;
+
+          // Add user message to chat
+          this.addMessage(messageText, 'user');
+
+          // Clear input
+          this.chatInput.textContent = '';
+          this.sendButton.disabled = true;
+
+          // Show typing indicator
+          this.showTypingIndicator();
+
+          try {
+            // Get AI response
+            const response = await this.getAIResponse(messageText);
+            this.hideTypingIndicator();
+            this.addMessage(response, 'ai');
+          } catch (error) {
+            this.hideTypingIndicator();
+            this.addMessage('Sorry, I encountered an error. Please try again later.', 'ai');
+            console.error('Chat error:', error);
+          }
+        }
+
+        async getAIResponse(message) {
+          // Demo responses for testing (replace with actual API call)
+          const demoResponses = [
+            "That's a great travel question! I'd love to help you plan your perfect trip. What destination are you considering?",
+            "I can help you find the best deals and create a customized itinerary. Tell me more about your travel preferences!",
+            "Based on your interests, I'd recommend checking out some hidden gems in that area. What's your budget range?",
+            "Perfect! I can suggest some amazing local experiences and help you save money on accommodations. When are you planning to travel?",
+            "Excellent choice! Let me help you create an unforgettable itinerary with the best local insights and deals."
+          ];
+
+          // Simulate API delay
+          await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+
+          // For demo purposes, return a random response
+          // In production, replace this with your actual API call:
+          /*
+          const response = await fetch(this.apiEndpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer YOUR_API_KEY'
+            },
+            body: JSON.stringify({
+              message: message,
+              context: 'travel_planning'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('API request failed');
+          }
+
+          const data = await response.json();
+          return data.message || data.response;
+          */
+
+          return demoResponses[Math.floor(Math.random() * demoResponses.length)];
+        }
+
+        addMessage(text, type) {
+          const messageGroup = document.createElement('div');
+          messageGroup.className = type === 'user' ? 'message-group user-message-group' : 'message-group';
+
+          const avatar = document.createElement('div');
+          avatar.className = type === 'user' ? 'user-avatar' : 'ai-avatar';
+
+          if (type === 'user') {
+            avatar.innerHTML = '<i class="fas fa-user"></i>';
+          } else {
+            avatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
+          }
+
+          const messageDiv = document.createElement('div');
+          messageDiv.className = `message ${type === 'user' ? 'user-message' : 'ai-message'}`;
+          messageDiv.innerHTML = `<p>${text}</p>`;
+
+          messageGroup.appendChild(avatar);
+          messageGroup.appendChild(messageDiv);
+
+          this.chatMessages.appendChild(messageGroup);
+          this.scrollToBottom();
+        }
+
+        showTypingIndicator() {
+          this.isTyping = true;
+
+          const typingDiv = document.createElement('div');
+          typingDiv.className = 'typing-indicator active';
+          typingDiv.id = 'typingIndicator';
+
+          const avatar = document.createElement('div');
+          avatar.className = 'ai-avatar';
+          avatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
+
+          const dotsDiv = document.createElement('div');
+          dotsDiv.className = 'typing-dots';
+          dotsDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+          typingDiv.appendChild(avatar);
+          typingDiv.appendChild(dotsDiv);
+
+          this.chatMessages.appendChild(typingDiv);
+          this.scrollToBottom();
+        }
+
+        hideTypingIndicator() {
+          this.isTyping = false;
+          const typingIndicator = document.getElementById('typingIndicator');
+          if (typingIndicator) {
+            typingIndicator.remove();
+          }
+        }
+
+        scrollToBottom() {
+          this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+        }
+      }
+
+      // Initialize chatbot when DOM is loaded
+      document.addEventListener('DOMContentLoaded', () => {
+        const chatbot = new JetFriendChatbot();
+      });
     </script>
   </body>
 </html>
