@@ -652,14 +652,14 @@
           border-bottom: 1px solid rgba(255,255,255,0.1);
       }
 
-            .app-title {
+                  .app-title {
           font-size: 20px;
           font-weight: 700;
           margin-bottom: 6px;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 8px;
+          gap: 4px;
           background: linear-gradient(135deg, #06b6d4, #3b82f6);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -667,10 +667,9 @@
       }
 
       .app-logo {
-          width: 24px;
-          height: 24px;
+          width: 22px;
+          height: 22px;
           filter: brightness(0) invert(1);
-          margin-right: 4px;
       }
 
       .plane-icon {
@@ -720,7 +719,7 @@
           box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
       }
 
-      .bot-avatar {
+            .bot-avatar {
           width: 28px;
           height: 28px;
           background: linear-gradient(135deg, #06b6d4, #0891b2);
@@ -733,6 +732,13 @@
           margin-bottom: 6px;
           font-size: 12px;
           box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+          padding: 4px;
+      }
+
+      .bot-avatar img {
+          width: 16px;
+          height: 16px;
+          filter: brightness(0) invert(1);
       }
 
       .itinerary-item {
@@ -1970,7 +1976,9 @@
                             I'm thinking about going to Japan in November. I want a chill trip — ramen, anime, nature. Budget is around $2500. Can you help?
                         </div>
 
-                        <div class="bot-avatar">JF</div>
+                                                <div class="bot-avatar">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                        </div>
                         <div class="message bot-message">
                             Absolutely. Based on your preferences, here's a suggestion:
                             <br><br>
@@ -1988,7 +1996,9 @@
                             Yeah, set up the price tracking and make a rough itinerary.
                         </div>
 
-                        <div class="bot-avatar">JF</div>
+                                                <div class="bot-avatar">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                        </div>
                         <div class="message bot-message">
                             Tracking flights and hotels now using Skyscanner and Booking.com. Creating your 7-day itinerary...
                             <br><br>
@@ -2025,7 +2035,9 @@
                             Can you check if there's a ramen-making class on Day 3?
                         </div>
 
-                        <div class="bot-avatar">JF</div>
+                                                <div class="bot-avatar">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                        </div>
                         <div class="message bot-message">
                             I found one: "Tokyo Ramen Workshop" in Shinjuku at 3:00 PM on November 8. Vegetarian-friendly, cost is around $45 USD.
                             <br><br>
@@ -2036,7 +2048,9 @@
                             Yes, book it.
                         </div>
 
-                        <div class="bot-avatar">JF</div>
+                                                <div class="bot-avatar">
+                            <img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />
+                        </div>
                         <div class="message bot-message">
                             Booking confirmed. Receipt and calendar invite have been sent. I've also added the address with directions to your itinerary.
                         </div>
@@ -2954,7 +2968,7 @@
             if (!isUser) {
                 const avatar = document.createElement('div');
                 avatar.className = 'bot-avatar';
-                avatar.textContent = 'JF';
+                                avatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend Logo" />';
                 chatContainer.appendChild(avatar);
             }
 
