@@ -2685,66 +2685,16 @@
       updateChatDemo();
       setInterval(updateChatDemo, 7000);
 
-      // Animated cycling hero text
-      const heroTexts = [
-        "Travel without the stress.",
-        "JetFriend plots your perfect trip automatically.",
-        "Personalized to your exact needs and budget.",
-        "Unlike other AI tools, we actually book everything.",
-        "Your true travel agent that takes action.",
-      ];
-
-      let currentTextIndex = 0;
+      // Simple fade-in animation for hero text (no cycling to prevent gibberish)
       const heroTextElement = document.getElementById("heroText");
 
-      function typeText(text, element, callback) {
-        element.textContent = "";
-        element.classList.add("typewriter");
-
-        let i = 0;
-        const typeInterval = setInterval(() => {
-          element.textContent += text.charAt(i);
-          i++;
-
-          if (i > text.length) {
-            clearInterval(typeInterval);
-            setTimeout(() => {
-              element.classList.remove("typewriter");
-              if (callback) callback();
-            }, 1000);
-          }
-        }, 50);
-      }
-
-      function cycleHeroText() {
-        if (heroTextElement) {
-          heroTextElement.classList.add("fade-out");
-
-          setTimeout(() => {
-            currentTextIndex = (currentTextIndex + 1) % heroTexts.length;
-            heroTextElement.classList.remove("fade-out");
-
-            typeText(heroTexts[currentTextIndex], heroTextElement, () => {
-              heroTextElement.classList.add("fade-in");
-              setTimeout(() => {
-                heroTextElement.classList.remove("fade-in");
-              }, 100);
-            });
-          }, 400);
-        }
-      }
-
-      // Start with typewriter effect for first text
+      // Simple fade-in effect on load
       setTimeout(() => {
         if (heroTextElement) {
-          typeText(heroTexts[0], heroTextElement);
+          heroTextElement.style.opacity = "1";
+          heroTextElement.style.transform = "translateY(0)";
         }
-      }, 1000);
-
-      // Start cycling after initial typewriter effect
-      setTimeout(() => {
-        setInterval(cycleHeroText, 4000);
-      }, 4000);
+      }, 500);
 
       // Add loading states for better UX
       document.querySelectorAll(".btn-primary").forEach((btn) => {
