@@ -531,83 +531,93 @@
         box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
       }
 
-      /* Interactive Chat Demo - Real iPhone Style */
+            /* Interactive Chat Demo - Modern iPhone 15 Pro Max Style */
       .chat-demo {
-        max-width: 375px;
+        max-width: 395px;
         margin: 0 auto;
-        border-radius: 40px;
+        border-radius: 55px;
         overflow: hidden;
         animation: heroSlideUp 1s ease-out 0.9s both;
-        background: #000;
-        border: 8px solid #1d1d1f;
+        background: linear-gradient(145deg, #1c1c1e 0%, #2c2c2e 100%);
+        border: 2px solid #3a3a3c;
         box-shadow:
-          0 0 0 2px #333,
-          0 25px 50px rgba(0, 0, 0, 0.8),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        transition: all 0.3s ease;
+          0 0 0 1px rgba(255, 255, 255, 0.05),
+          0 35px 80px rgba(0, 0, 0, 0.7),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 0 30px rgba(139, 92, 246, 0.3);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
-        aspect-ratio: 375/812;
-        height: 700px;
+        aspect-ratio: 395/852;
+        height: 750px;
+        backdrop-filter: blur(20px);
       }
 
       .chat-demo::before {
         content: "";
         position: absolute;
-        top: 12px;
+        top: 10px;
         left: 50%;
         transform: translateX(-50%);
-        width: 134px;
-        height: 30px;
-        background: #000;
+        width: 126px;
+        height: 32px;
+        background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
         border-radius: 20px;
         z-index: 10;
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 2px 10px rgba(0, 0, 0, 0.8);
+        border: 0.5px solid rgba(255, 255, 255, 0.2);
       }
 
       .chat-demo::after {
         content: "";
         position: absolute;
-        bottom: 8px;
+        bottom: 12px;
         left: 50%;
         transform: translateX(-50%);
-        width: 140px;
+        width: 135px;
         height: 5px;
-        background: rgba(255, 255, 255, 0.8);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.6) 100%);
         border-radius: 3px;
         z-index: 10;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
       }
 
-      .chat-demo:hover {
-        transform: translateY(-5px) scale(1.01);
+            .chat-demo:hover {
+        transform: translateY(-8px) scale(1.02) rotateX(5deg) rotateY(-2deg);
         box-shadow:
-          0 0 0 2px #333,
-          0 30px 60px rgba(0, 0, 0, 0.9),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          0 0 0 1px rgba(255, 255, 255, 0.08),
+          0 45px 100px rgba(0, 0, 0, 0.8),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15),
+          0 0 40px rgba(139, 92, 246, 0.5),
+          0 0 80px rgba(96, 165, 250, 0.3);
       }
 
-      .chat-phone-screen {
+            .chat-phone-screen {
         position: absolute;
-        top: 50px;
-        left: 8px;
-        right: 8px;
-        bottom: 20px;
-        background: #000;
-        border-radius: 35px;
+        top: 52px;
+        left: 6px;
+        right: 6px;
+        bottom: 22px;
+        background: linear-gradient(180deg, #000 0%, #111 100%);
+        border-radius: 45px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        border: 0.5px solid rgba(255, 255, 255, 0.1);
       }
 
-      .chat-status-bar {
+            .chat-status-bar {
         background: transparent;
-        padding: 12px 24px 8px;
+        padding: 14px 28px 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 15px;
+        font-weight: 700;
         color: #fff;
         font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        letter-spacing: -0.2px;
       }
 
       .chat-time {
@@ -683,19 +693,20 @@
         border-radius: 2px;
       }
 
-      .chat-header {
-        background: rgba(242, 242, 247, 0.8);
-        backdrop-filter: blur(20px);
-        padding: 12px 20px;
+            .chat-header {
+        background: rgba(245, 245, 247, 0.95);
+        backdrop-filter: blur(30px);
+        padding: 16px 24px;
         text-align: center;
         font-weight: 600;
         position: relative;
-        border-bottom: 0.5px solid rgba(60, 60, 67, 0.36);
+        border-bottom: 0.33px solid rgba(60, 60, 67, 0.2);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        color: #000;
+        color: #1d1d1f;
         font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
 
       .chat-header-left {
@@ -711,15 +722,17 @@
         text-decoration: none;
       }
 
-      .chat-avatar {
-        width: 32px;
-        height: 32px;
-        background: linear-gradient(135deg, #007aff, #5ac8fa);
+            .chat-avatar {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #8b5cf6, #60a5fa);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: 18px;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.9);
       }
 
       .chat-header-center {
@@ -764,36 +777,43 @@
         }
       }
 
-      .chat-messages {
-        padding: 20px 16px;
+            .chat-messages {
+        padding: 24px 20px;
         flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        background: #fff;
+        gap: 10px;
+        background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
         overflow-y: auto;
-        max-height: 450px;
+        max-height: 480px;
         font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       }
 
-      .chat-input-area {
-        padding: 8px 16px 34px;
-        background: #fff;
-        border-top: 0.5px solid rgba(60, 60, 67, 0.36);
+            .chat-input-area {
+        padding: 12px 20px 38px;
+        background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+        border-top: 0.33px solid rgba(60, 60, 67, 0.2);
         display: flex;
         align-items: end;
-        gap: 8px;
+        gap: 12px;
+        box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
       }
 
-      .chat-input-container {
+            .chat-input-container {
         flex: 1;
         background: #f2f2f7;
-        border-radius: 20px;
-        padding: 8px 16px;
+        border-radius: 24px;
+        padding: 12px 18px;
         display: flex;
         align-items: center;
-        min-height: 36px;
-        border: 1px solid rgba(60, 60, 67, 0.12);
+        min-height: 40px;
+        border: 1px solid rgba(60, 60, 67, 0.15);
+        transition: all 0.2s ease;
+      }
+
+      .chat-input-container:focus-within {
+        border-color: #007aff;
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
       }
 
       .chat-input {
@@ -813,10 +833,10 @@
         color: #8e8e93;
       }
 
-      .chat-send-btn {
-        width: 36px;
-        height: 36px;
-        background: #007aff;
+            .chat-send-btn {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #007aff 0%, #0056cc 100%);
         border: none;
         border-radius: 50%;
         color: white;
@@ -824,44 +844,50 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.1s ease;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 0;
+        box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
       }
 
-      .chat-send-btn:hover {
-        background: #0056cc;
+            .chat-send-btn:hover {
+        background: linear-gradient(135deg, #0056cc 0%, #003d99 100%);
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
       }
 
       .chat-send-btn:active {
         transform: scale(0.95);
       }
 
-      .message {
-        padding: 8px 12px;
-        border-radius: 18px;
-        max-width: 75%;
-        animation: messageSlideIn 0.3s ease-out;
+            .message {
+        padding: 12px 16px;
+        border-radius: 22px;
+        max-width: 80%;
+        animation: messageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         word-wrap: break-word;
-        font-size: 17px;
-        line-height: 1.3;
+        font-size: 16px;
+        line-height: 1.4;
         font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-        margin-bottom: 2px;
+        margin-bottom: 3px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
 
-      .message.user {
-        background: #007aff;
+            .message.user {
+        background: linear-gradient(135deg, #007aff 0%, #0056cc 100%);
         margin-left: auto;
         color: white;
-        border-bottom-right-radius: 4px;
+        border-bottom-right-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 122, 255, 0.3);
       }
 
-      .message.ai {
-        background: #e9e9eb;
+            .message.ai {
+        background: linear-gradient(135deg, #f1f1f3 0%, #e9e9eb 100%);
         margin-right: auto;
-        color: #000;
-        border-bottom-left-radius: 4px;
+        color: #1d1d1f;
+        border-bottom-left-radius: 6px;
         margin-left: 0;
+        border: 0.5px solid rgba(0, 0, 0, 0.08);
       }
 
       .message + .message.user {
@@ -1943,7 +1969,7 @@
                 <a href="#" class="chat-back-btn">‹</a>
               </div>
               <div class="chat-header-center">
-                <div class="chat-avatar">🤖</div>
+                                <div class="chat-avatar">✈️</div>
                 <div>
                   <p class="chat-title">JetFriend AI</p>
                   <p class="chat-subtitle">Active now</p>
@@ -1954,46 +1980,53 @@
               </div>
             </div>
 
-            <div class="chat-messages" id="chatMessages">
+                        <div class="chat-messages" id="chatMessages">
               <div class="message-time">Today 9:41 AM</div>
 
               <div class="message ai">
-                Hi! I'm your AI travel companion. Ready to plan your perfect
-                trip? 👋
+                ✈️ Welcome to JetFriend! I'm your AI travel companion powered by advanced machine learning. Ready to plan your dream trip? I can analyze millions of options in seconds!
               </div>
 
               <div class="message user">
-                Plan a 5-day trip to Tokyo for $2000
+                Plan a week in Japan with cultural experiences, budget $3500
               </div>
 
               <div class="message ai">
-                Perfect! I found flights from NYC to Tokyo for $680, a great
-                hotel in Shibuya for $120/night, and curated a foodie itinerary
-                with the best ramen spots. Plus I found a 15% discount code! 🍜
+                🎌 Analyzing 50,000+ options across Japan...<br/>✅ Found perfect matches! I've optimized your trip using real-time pricing, weather patterns, and cultural event data.
+              </div>
+
+              <div class="message ai">
+                💰 **Smart Savings Detected:**<br/>
+                • Flights: $720 (saved $280 vs average)<br/>
+                • Hotels: AI-selected boutique ryokans<br/>
+                • JR Pass: 7-day unlimited travel<br/>
+                • Cultural experiences: Tea ceremony, sumo, temples
               </div>
 
               <div class="message user">
-                That sounds amazing! Show me the itinerary
+                Show me the AI-optimized itinerary
               </div>
 
               <div class="message ai">
-                Here's your personalized Tokyo adventure:
+                🤖 **AI-Curated Journey:**<br/>
+                📅 Day 1-2: Tokyo (Shibuya, Harajuku, digital art museums)<br/>
+                🏯 Day 3-4: Kyoto (Fushimi Inari, bamboo forest, geisha district)<br/>
+                🗻 Day 5: Mt. Fuji & Hakone hot springs<br/>
+                🍣 Day 6-7: Osaka (street food, Osaka Castle, day trip to Nara)
               </div>
 
               <div class="message ai">
-                📍 Day 1: Shibuya & Harajuku<br />
-                🍜 Day 2: Ramen tour + Senso-ji Temple<br />
-                🗾 Day 3: Mt. Fuji day trip<br />
-                🛍️ Day 4: Ginza shopping + sushi experience<br />
-                ✈️ Day 5: Last-minute souvenirs + departure
+                🎯 **Smart Features Activated:**<br/>
+                • Real-time price monitoring 📊<br/>
+                • Weather-optimized scheduling 🌤️<br/>
+                • Local event recommendations 🎪<br/>
+                • Total saved: $847! 💎
               </div>
-
-              <div class="message ai">Total saved: $347! 🎉</div>
             </div>
 
             <div class="chat-input-area">
               <div class="chat-input-container">
-                <input type="text" class="chat-input" placeholder="Message" />
+                                <input type="text" class="chat-input" placeholder="Ask JetFriend AI..." />
               </div>
               <button class="chat-send-btn">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -2850,12 +2883,15 @@
             "
           />
         </div>
-        <div class="footer-links">
+                <div class="footer-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
           <a href="#">Support</a>
           <a href="#">API</a>
           <a href="#">Careers</a>
+          <a href="https://www.instagram.com/jet.friend/" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-instagram" style="margin-right: 5px;"></i>Follow Us
+          </a>
         </div>
         <p style="color: rgba(255, 255, 255, 0.6); margin-top: 20px">
           © 2025 JetFriend. Revolutionizing travel with AI.
