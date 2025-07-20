@@ -583,30 +583,119 @@
           inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
 
+      .chat-phone-screen {
+        position: absolute;
+        top: 45px;
+        left: 15px;
+        right: 15px;
+        bottom: 25px;
+        background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        border-radius: 25px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-status-bar {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 8px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .chat-time {
+        font-weight: 600;
+      }
+
+      .chat-indicators {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+
+      .signal-bars {
+        display: flex;
+        gap: 2px;
+      }
+
+      .signal-bar {
+        width: 3px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 1px;
+      }
+
+      .signal-bar:nth-child(1) {
+        height: 4px;
+      }
+      .signal-bar:nth-child(2) {
+        height: 6px;
+      }
+      .signal-bar:nth-child(3) {
+        height: 8px;
+      }
+      .signal-bar:nth-child(4) {
+        height: 10px;
+      }
+
+      .battery {
+        width: 20px;
+        height: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 2px;
+        position: relative;
+        margin-left: 8px;
+      }
+
+      .battery::after {
+        content: "";
+        position: absolute;
+        right: -3px;
+        top: 3px;
+        width: 2px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 0 1px 1px 0;
+      }
+
+      .battery-level {
+        position: absolute;
+        left: 1px;
+        top: 1px;
+        bottom: 1px;
+        width: 70%;
+        background: #22c55e;
+        border-radius: 1px;
+      }
+
       .chat-header {
         background: linear-gradient(
           135deg,
           var(--primary-purple) 0%,
           var(--light-blue) 100%
         );
-        padding: 20px;
+        padding: 15px 20px;
         text-align: center;
         font-weight: 600;
         position: relative;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
       }
 
       .chat-header::before {
         content: "";
-        position: absolute;
-        top: 50%;
-        left: 20px;
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         background: #22c55e;
         border-radius: 50%;
-        transform: translateY(-50%);
         animation: pulse 2s infinite;
-        box-shadow: 0 0 10px #22c55e;
+        box-shadow: 0 0 8px #22c55e;
       }
 
       @keyframes pulse {
