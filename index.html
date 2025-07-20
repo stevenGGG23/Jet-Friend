@@ -2691,19 +2691,39 @@
       let currentTextIndex = 0;
       const heroTextElement = document.getElementById("heroText");
 
+      function typeText(text, element, callback) {
+        element.textContent = "";
+        element.classList.add("typewriter");
+
+        let i = 0;
+        const typeInterval = setInterval(() => {
+          element.textContent += text.charAt(i);
+          i++;
+
+          if (i > text.length) {
+            clearInterval(typeInterval);
+            setTimeout(() => {
+              element.classList.remove("typewriter");
+              if (callback) callback();
+            }, 1000);
+          }
+        }, 50);
+      }
+
       function cycleHeroText() {
         if (heroTextElement) {
           heroTextElement.classList.add("fade-out");
 
           setTimeout(() => {
             currentTextIndex = (currentTextIndex + 1) % heroTexts.length;
-            heroTextElement.textContent = heroTexts[currentTextIndex];
             heroTextElement.classList.remove("fade-out");
-            heroTextElement.classList.add("fade-in");
 
-            setTimeout(() => {
-              heroTextElement.classList.remove("fade-in");
-            }, 100);
+            typeText(heroTexts[currentTextIndex], heroTextElement, () => {
+              heroTextElement.classList.add("fade-in");
+              setTimeout(() => {
+                heroTextElement.classList.remove("fade-in");
+              }, 100);
+            });
           }, 400);
         }
       }
