@@ -2728,10 +2728,17 @@
         }
       }
 
-      // Start cycling after page load
+      // Start with typewriter effect for first text
+      setTimeout(() => {
+        if (heroTextElement) {
+          typeText(heroTexts[0], heroTextElement);
+        }
+      }, 1000);
+
+      // Start cycling after initial typewriter effect
       setTimeout(() => {
         setInterval(cycleHeroText, 4000);
-      }, 2000);
+      }, 4000);
 
       // Add loading states for better UX
       document.querySelectorAll(".btn-primary").forEach((btn) => {
