@@ -433,6 +433,40 @@
         transform: translateY(0);
       }
 
+      /* Typewriter Effect */
+      .typewriter {
+        overflow: hidden;
+        border-right: 3px solid var(--light-blue);
+        white-space: nowrap;
+        animation: blink-caret 1s step-end infinite;
+      }
+
+      @keyframes blink-caret {
+        from,
+        to {
+          border-color: transparent;
+        }
+        50% {
+          border-color: var(--light-blue);
+        }
+      }
+
+      .typing {
+        width: 0;
+        animation:
+          typing 2s steps(40, end) forwards,
+          blink-caret 1s step-end infinite;
+      }
+
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
       .cta-buttons {
         display: flex;
         gap: 25px;
@@ -649,7 +683,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F2b50c9fe9e2046e0a9f22f5105495318?format=webp&width=1920&quality=90&fit=cover");
+        background-image: url("pexels-apasaric-1285625.jpg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.1) blur(2px);
@@ -787,33 +821,9 @@
         transform: translateZ(0) rotateX(0deg) rotateY(0deg);
       }
 
-      /* Creative positioning for each card */
-      .feature-card:nth-child(1) {
-        transform: translateZ(20px) rotateY(-2deg) rotateX(1deg);
-      }
-      .feature-card:nth-child(2) {
-        transform: translateZ(40px) rotateY(3deg) rotateX(-1deg);
-      }
-      .feature-card:nth-child(3) {
-        transform: translateZ(30px) rotateY(-1deg) rotateX(2deg);
-      }
-      .feature-card:nth-child(4) {
-        transform: translateZ(50px) rotateY(2deg) rotateX(-2deg);
-      }
-      .feature-card:nth-child(5) {
-        transform: translateZ(35px) rotateY(-3deg) rotateX(1deg);
-      }
-      .feature-card:nth-child(6) {
-        transform: translateZ(25px) rotateY(1deg) rotateX(-1deg);
-      }
-      .feature-card:nth-child(7) {
-        transform: translateZ(45px) rotateY(-2deg) rotateX(2deg);
-      }
-      .feature-card:nth-child(8) {
-        transform: translateZ(60px) rotateY(4deg) rotateX(-1deg);
-      }
-      .feature-card:nth-child(9) {
-        transform: translateZ(15px) rotateY(-1deg) rotateX(3deg);
+      /* Static positioning for feature cards */
+      .feature-card {
+        transform: none;
       }
 
       .feature-card::before {
@@ -838,50 +848,10 @@
       }
 
       .feature-card:hover {
-        transform: translateY(-30px) translateZ(80px) scale(1.05) rotateX(5deg)
-          rotateY(10deg);
+        transform: translateY(-10px) scale(1.02);
         box-shadow:
-          0 50px 100px rgba(139, 92, 246, 0.3),
-          0 0 50px rgba(96, 165, 250, 0.2),
-          inset 0 1px 0 rgba(255, 255, 255, 0.2);
-      }
-
-      /* Specific hover transforms for each card */
-      .feature-card:nth-child(1):hover {
-        transform: translateY(-30px) translateZ(100px) scale(1.05)
-          rotateX(-5deg) rotateY(-15deg);
-      }
-      .feature-card:nth-child(2):hover {
-        transform: translateY(-35px) translateZ(120px) scale(1.06) rotateX(8deg)
-          rotateY(12deg);
-      }
-      .feature-card:nth-child(3):hover {
-        transform: translateY(-25px) translateZ(90px) scale(1.04) rotateX(-3deg)
-          rotateY(-10deg);
-      }
-      .feature-card:nth-child(4):hover {
-        transform: translateY(-40px) translateZ(110px) scale(1.07) rotateX(6deg)
-          rotateY(18deg);
-      }
-      .feature-card:nth-child(5):hover {
-        transform: translateY(-28px) translateZ(85px) scale(1.05) rotateX(-7deg)
-          rotateY(-12deg);
-      }
-      .feature-card:nth-child(6):hover {
-        transform: translateY(-32px) translateZ(95px) scale(1.04) rotateX(4deg)
-          rotateY(14deg);
-      }
-      .feature-card:nth-child(7):hover {
-        transform: translateY(-38px) translateZ(105px) scale(1.06)
-          rotateX(-6deg) rotateY(-16deg);
-      }
-      .feature-card:nth-child(8):hover {
-        transform: translateY(-45px) translateZ(130px) scale(1.08) rotateX(9deg)
-          rotateY(20deg);
-      }
-      .feature-card:nth-child(9):hover {
-        transform: translateY(-22px) translateZ(75px) scale(1.03) rotateX(-2deg)
-          rotateY(-8deg);
+          0 20px 40px rgba(139, 92, 246, 0.3),
+          0 0 30px rgba(96, 165, 250, 0.2);
       }
 
       .feature-icon {
@@ -949,7 +919,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F34379c51fde34f01b8e6668b6bd2d2ed?format=webp&width=1920&quality=90&fit=cover");
+        background-image: url("pexels-haleyve-2087391.jpg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.2) blur(0.5px);
@@ -960,7 +930,7 @@
       .pricing-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 35px;
+        gap: 20px;
         max-width: 1100px;
         margin: 0 auto;
         perspective: 1200px;
@@ -980,18 +950,10 @@
         transform-style: preserve-3d;
       }
 
-      /* Creative asymmetrical positioning for pricing cards */
-      .pricing-card:nth-child(1) {
-        transform: translateZ(20px) rotateY(-3deg) rotateX(2deg);
-        margin-top: 40px;
-      }
-      .pricing-card:nth-child(2) {
-        transform: translateZ(60px) rotateY(0deg) rotateX(0deg);
-        margin-top: -20px;
-      }
-      .pricing-card:nth-child(3) {
-        transform: translateZ(30px) rotateY(3deg) rotateX(-2deg);
-        margin-top: 30px;
+      /* Aligned positioning for pricing cards */
+      .pricing-card {
+        margin-top: 0;
+        align-self: start;
       }
 
       .pricing-card.featured {
@@ -1005,35 +967,17 @@
       }
 
       .pricing-card:hover {
-        transform: translateY(-25px) translateZ(100px) scale(1.05) rotateX(5deg)
-          rotateY(8deg);
+        transform: translateY(-10px) scale(1.02);
         box-shadow:
-          0 50px 100px rgba(139, 92, 246, 0.3),
-          0 0 60px rgba(96, 165, 250, 0.2);
-      }
-
-      .pricing-card:nth-child(1):hover {
-        transform: translateY(-30px) translateZ(120px) scale(1.06)
-          rotateX(-5deg) rotateY(-12deg);
-      }
-
-      .pricing-card:nth-child(2):hover {
-        transform: translateY(-35px) translateZ(140px) scale(1.08) rotateX(3deg)
-          rotateY(0deg);
-      }
-
-      .pricing-card:nth-child(3):hover {
-        transform: translateY(-25px) translateZ(110px) scale(1.05)
-          rotateX(-3deg) rotateY(10deg);
+          0 25px 50px rgba(139, 92, 246, 0.3),
+          0 0 30px rgba(96, 165, 250, 0.2);
       }
 
       .pricing-card.featured:hover {
-        transform: translateY(-40px) translateZ(160px) scale(1.1) rotateX(8deg)
-          rotateY(0deg);
+        transform: translateY(-15px) scale(1.03);
         box-shadow:
-          0 60px 120px rgba(139, 92, 246, 0.4),
-          0 0 80px rgba(96, 165, 250, 0.3),
-          inset 0 2px 0 rgba(255, 255, 255, 0.3);
+          0 30px 60px rgba(139, 92, 246, 0.4),
+          0 0 40px rgba(96, 165, 250, 0.3);
       }
 
       /* About Section */
@@ -1055,7 +999,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F418c2123660b4f9085f52fff0b4a0793?format=webp&width=1920&quality=90&fit=cover");
+        background-image: url("pexels-pixabay-208701.jpg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.25) blur(0.5px);
@@ -1146,7 +1090,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F0889005282d94843b5d57708d68ee894?format=webp&width=1920&quality=90&fit=cover");
+        background-image: url("pexels-te-lensfix-380994-1371360.jpg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.3) blur(0.5px);
@@ -1360,7 +1304,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F742f051b42a5456a824161d75334eae8?format=webp&width=1920&quality=90&fit=cover");
+        background-image: url("pexels-wanderer-731217.jpg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.15) blur(1px);
@@ -1650,6 +1594,17 @@
 
     <nav class="nav-drawer" id="navDrawer">
       <div class="nav-header">
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800"
+          alt="JetFriend Logo"
+          style="
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+            opacity: 1;
+            filter: brightness(0) invert(1);
+          "
+        />
         <div class="logo">JetFriend</div>
       </div>
 
@@ -1683,17 +1638,27 @@
     <!-- Hero Section with Background Image -->
     <section class="hero">
       <div class="hero-bg">
-        <img
-          src="https://cdn.builder.io/api/v1/image/assets%2Fd0c75ca1de324bb8b124b04d5eb3f23c%2F2b50c9fe9e2046e0a9f22f5105495318?format=webp&width=1920&quality=95&fit=cover"
-          alt="Travel Background"
-        />
+        <img src="wp9801253-italy-4k-wallpapers.jpg" alt="Travel Background" />
       </div>
       <div class="hero-overlay"></div>
       <div class="hero-content">
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800"
+          alt="JetFriend Logo"
+          style="
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+            opacity: 1;
+            filter: brightness(0) invert(1);
+          "
+        />
         <h1>Your AI Travel<br />Companion</h1>
         <div class="hero-text-container">
           <p id="heroText" class="hero-animated-text">
-            Travel without the stress.
+            Personalized to your exact needs and budget. Discover hidden gems,
+            save money on every booking, and create unforgettable memories with
+            AI-powered travel planning that adapts to your unique style.
           </p>
         </div>
 
@@ -1701,10 +1666,6 @@
           <a href="#" class="btn btn-primary">
             <i class="fas fa-rocket"></i>
             Start Planning Free
-          </a>
-          <a href="#" class="btn btn-secondary">
-            <i class="fas fa-play"></i>
-            Watch Demo
           </a>
         </div>
 
@@ -1717,7 +1678,7 @@
             <div class="message ai">
               Perfect! I found flights from NYC to Tokyo for $680, a great hotel
               in Shibuya for $120/night, and curated a foodie itinerary with the
-              best ramen spots. Plus I found a 15% discount code! 🍜✨
+              best ramen spots. Plus I found a 15% discount code! 🍜���
             </div>
           </div>
         </div>
@@ -1727,6 +1688,18 @@
     <!-- Features Section -->
     <section class="features" id="features">
       <div class="container">
+        <div style="text-align: center; margin-bottom: 20px">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800"
+            alt="JetFriend Logo"
+            style="
+              width: 80px;
+              height: auto;
+              opacity: 1;
+              filter: brightness(0) invert(1);
+            "
+          />
+        </div>
         <h2 class="section-title animate-on-scroll">Everything You Need</h2>
         <div class="features-grid">
           <div class="feature-card animate-on-scroll">
@@ -1859,6 +1832,18 @@
     <!-- Pricing Section -->
     <section class="pricing" id="pricing">
       <div class="container">
+        <div style="text-align: center; margin-bottom: 20px">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800"
+            alt="JetFriend Logo"
+            style="
+              width: 80px;
+              height: auto;
+              opacity: 1;
+              filter: brightness(0) invert(1);
+            "
+          />
+        </div>
         <h2 class="section-title animate-on-scroll">
           Flexible Pricing for Every Traveler
         </h2>
@@ -2151,7 +2136,12 @@
 
           <div class="pricing-card animate-on-scroll">
             <div class="plan-name">Enterprise</div>
-            <div class="plan-price" style="font-size: 2rem">Contact us</div>
+            <div
+              class="plan-price"
+              style="font-size: 2.5rem; margin-bottom: 15px"
+            >
+              Contact us
+            </div>
             <div class="plan-description">Custom solutions for teams</div>
             <ul
               class="plan-features"
@@ -2496,14 +2486,11 @@
               Follow JetFriend for updates, travel tips, and exclusive deals:
             </p>
             <div class="social-links">
-              <a href="#" class="social-link" title="Twitter">
-                <i class="fab fa-twitter"></i>
+              <a href="#" class="social-link" title="Instagram">
+                <i class="fab fa-instagram"></i>
               </a>
               <a href="#" class="social-link" title="LinkedIn">
                 <i class="fab fa-linkedin"></i>
-              </a>
-              <a href="#" class="social-link" title="Facebook">
-                <i class="fab fa-facebook"></i>
               </a>
             </div>
             <p
@@ -2524,6 +2511,18 @@
     <!-- Footer -->
     <footer>
       <div class="footer-content">
+        <div style="text-align: center; margin-bottom: 30px">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800"
+            alt="JetFriend Logo"
+            style="
+              width: 90px;
+              height: auto;
+              opacity: 1;
+              filter: brightness(0) invert(1);
+            "
+          />
+        </div>
         <div class="footer-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
@@ -2692,27 +2691,54 @@
       let currentTextIndex = 0;
       const heroTextElement = document.getElementById("heroText");
 
+      function typeText(text, element, callback) {
+        element.textContent = "";
+        element.classList.add("typewriter");
+
+        let i = 0;
+        const typeInterval = setInterval(() => {
+          element.textContent += text.charAt(i);
+          i++;
+
+          if (i > text.length) {
+            clearInterval(typeInterval);
+            setTimeout(() => {
+              element.classList.remove("typewriter");
+              if (callback) callback();
+            }, 1000);
+          }
+        }, 50);
+      }
+
       function cycleHeroText() {
         if (heroTextElement) {
           heroTextElement.classList.add("fade-out");
 
           setTimeout(() => {
             currentTextIndex = (currentTextIndex + 1) % heroTexts.length;
-            heroTextElement.textContent = heroTexts[currentTextIndex];
             heroTextElement.classList.remove("fade-out");
-            heroTextElement.classList.add("fade-in");
 
-            setTimeout(() => {
-              heroTextElement.classList.remove("fade-in");
-            }, 100);
+            typeText(heroTexts[currentTextIndex], heroTextElement, () => {
+              heroTextElement.classList.add("fade-in");
+              setTimeout(() => {
+                heroTextElement.classList.remove("fade-in");
+              }, 100);
+            });
           }, 400);
         }
       }
 
-      // Start cycling after page load
+      // Start with typewriter effect for first text
+      setTimeout(() => {
+        if (heroTextElement) {
+          typeText(heroTexts[0], heroTextElement);
+        }
+      }, 1000);
+
+      // Start cycling after initial typewriter effect
       setTimeout(() => {
         setInterval(cycleHeroText, 4000);
-      }, 2000);
+      }, 4000);
 
       // Add loading states for better UX
       document.querySelectorAll(".btn-primary").forEach((btn) => {
