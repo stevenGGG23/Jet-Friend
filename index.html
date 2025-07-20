@@ -531,23 +531,56 @@
         box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
       }
 
-      /* Interactive Chat Demo */
+      /* Interactive Chat Demo - Phone Style */
       .chat-demo {
-        max-width: 500px;
+        max-width: 350px;
         margin: 0 auto;
-        border-radius: 25px;
+        border-radius: 35px;
         overflow: hidden;
         animation: heroSlideUp 1s ease-out 0.9s both;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.9);
         backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        border: 3px solid #1a1a1a;
+        box-shadow:
+          0 25px 50px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
+        position: relative;
+        aspect-ratio: 9/19.5;
+        min-height: 650px;
+      }
+
+      .chat-demo::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 25px;
+        background: #000;
+        border-radius: 15px;
+        z-index: 10;
+      }
+
+      .chat-demo::after {
+        content: "";
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+        z-index: 10;
       }
 
       .chat-demo:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 35px 70px rgba(139, 92, 246, 0.2);
+        transform: translateY(-10px) scale(1.02);
+        box-shadow:
+          0 35px 70px rgba(139, 92, 246, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
 
       .chat-header {
