@@ -925,53 +925,17 @@
           }
       }
 
-                  /* AI Chatbot Section */
-      .chatbot-section {
-        padding: 120px 20px;
-        background: linear-gradient(
-          180deg,
-          rgba(139, 92, 246, 0.05) 0%,
-          rgba(96, 165, 250, 0.03) 50%,
-          rgba(56, 189, 248, 0.05) 100%
-        );
-        position: relative;
-        overflow: hidden;
-      }
-
-      .chatbot-section::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url("pexels-wanderer-731217.jpg");
-        background-size: cover;
-        background-position: center;
-        filter: brightness(0.15) blur(1px);
-        z-index: -1;
-        animation: kenBurnsSmooth 90s ease-in-out infinite;
-      }
-
-      .chatbot-subtitle {
-        text-align: center;
-        font-size: 1.3rem;
-        color: rgba(255, 255, 255, 0.8);
-        margin-bottom: 60px;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .chatbot-container {
-        max-width: 800px;
-        margin: 0 auto;
+                        /* Hero Chatbot Integration */
+      .hero-chatbot-container {
+        max-width: 900px;
+        margin: 60px auto 0;
         background: var(--glass-bg);
         backdrop-filter: blur(20px);
         border: 1px solid var(--border-color);
         border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+        animation: heroSlideUp 1s ease-out 0.9s both;
       }
 
       .chat-messages {
