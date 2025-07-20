@@ -3852,7 +3852,7 @@
           });
         }
 
-        async sendMessage() {
+                async sendMessage() {
           const messageText = this.chatInput.textContent.trim();
           if (!messageText || this.isTyping) return;
 
@@ -3863,19 +3863,8 @@
           this.chatInput.textContent = '';
           this.sendButton.disabled = true;
 
-          // Show typing indicator
-          this.showTypingIndicator();
-
-          try {
-            // Get AI response
-            const response = await this.getAIResponse(messageText);
-            this.hideTypingIndicator();
-            this.addMessage(response, 'ai');
-          } catch (error) {
-            this.hideTypingIndicator();
-            this.addMessage('Sorry, I encountered an error. Please try again later.', 'ai');
-            console.error('Chat error:', error);
-          }
+          // No AI responses until n8n integration is complete
+          // The upload button should be used to send data to n8n webhook
         }
 
                 async getAIResponse(message) {
