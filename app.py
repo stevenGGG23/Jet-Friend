@@ -142,10 +142,10 @@ def test_ai():
         }), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 3000))
+    port = int(os.environ.get('PORT', 5000))
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
-    
+
     print(f"🚀 JetFriend API starting on port {port}")
     print(f"🌐 Visit: http://localhost:{port}")
-    
+
     app.run(host='0.0.0.0', port=port, debug=debug_mode)
