@@ -3903,6 +3903,7 @@
             console.log('❌ CORS Response not ok:', response.status, response.statusText);
             const errorText = await response.text();
             console.log('❌ CORS Error response body:', errorText);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
 
         } catch (error) {
@@ -3915,6 +3916,8 @@
           } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
             console.log('❌ Network error: Check if the webhook URL is accessible and CORS is enabled');
           }
+
+          console.log('🔄 CORS failed, trying fallback methods...');
         }
 
         // Test 2: No-CORS mode
@@ -3935,6 +3938,7 @@
 
         } catch (error) {
           console.log('❌ No-CORS Error:', error.message);
+          console.log('🔄 No-CORS failed, trying XHR method...');
         }
 
         // Test 3: XMLHttpRequest
