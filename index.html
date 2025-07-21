@@ -3562,7 +3562,12 @@
         const messageInput = document.getElementById('messageInput');
         const typingIndicator = document.getElementById('typingIndicator');
 
-                const responses = {};
+                const responses = {
+            'price-drop': "I'll monitor flight prices for you! Setting up alerts now...",
+            'translate': "\"I don't eat meat\" in Japanese is \"私は肉を食べません\" (Watashi wa niku wo tabemasen).",
+            'local-tips': "Great choice! Japan tips: Bow when greeting, remove shoes indoors, don't tip at restaurants, and always carry cash!",
+            'emergency': "Emergency numbers: Police 110, Fire/Ambulance 119. Download Google Translate offline for Japanese. Keep hotel card with you!"
+        };
 
         function addMessage(content, isUser = false) {
             const message = document.createElement('div');
