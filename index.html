@@ -3501,7 +3501,7 @@
               "
             >
               Questions? Use our live chat anytime or fill out the contact form
-              — we'll get back to you within 24 hours.
+              �� we'll get back to you within 24 hours.
             </p>
           </div>
         </div>
@@ -4073,7 +4073,7 @@
             e.preventDefault();
             console.log('📤 Send button clicked');
 
-            const inputText = chatInput ? (chatInput.textContent || chatInput.innerText || '').trim() : '';
+            const inputText = chatInput ? chatInput.value.trim() : '';
             console.log('📝 Input text:', inputText);
 
             if (!inputText) {
@@ -4086,7 +4086,7 @@
 
             // Clear input
             if (chatInput) {
-              chatInput.textContent = '';
+              chatInput.value = '';
             }
 
             // Show typing indicator
@@ -4189,8 +4189,12 @@
 
           // Enable/disable send button based on input content
           chatInput.addEventListener('input', () => {
-            const hasText = chatInput.textContent.trim().length > 0;
+            const hasText = chatInput.value.trim().length > 0;
             sendButton.disabled = !hasText;
+
+            // Auto-resize textarea
+            chatInput.style.height = 'auto';
+            chatInput.style.height = Math.min(chatInput.scrollHeight, 200) + 'px';
           });
 
           // Handle Enter key press
