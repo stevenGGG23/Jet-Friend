@@ -1032,6 +1032,8 @@
       }
 
       .chat-input-container {
+        display: flex;
+        align-items: flex-end;
         padding: 25px 30px;
         background: linear-gradient(
           135deg,
@@ -1039,118 +1041,60 @@
           rgba(30, 41, 59, 0.95) 100%
         );
         border-top: 1px solid var(--border-color);
+        gap: 12px;
+        box-sizing: border-box;
       }
 
-      .input-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 12px;
+
+
+      .chat-input {
+        flex: 1;
+        min-height: 40px;
+        max-height: 200px;
+        padding: 12px 16px;
         background: rgba(30, 41, 59, 0.8);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 16px;
-        padding: 8px;
-        backdrop-filter: blur(20px);
-        transition: all 0.3s ease;
-      }
-
-      .input-wrapper:focus-within {
-        border-color: var(--primary-purple);
-        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-      }
-
-      .input-tools {
-        display: flex;
-        gap: 4px;
-      }
-
-      .tool-btn {
-        width: 36px;
-        height: 36px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 8px;
-        background: transparent;
-        color: rgba(255, 255, 255, 0.7);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        font-size: 14px;
-      }
-
-      .tool-btn:hover {
-        background: rgba(139, 92, 246, 0.2);
-        border-color: var(--primary-purple);
-        color: white;
-      }
-
-      .input-field-wrapper {
-        flex: 1;
-        min-height: 50px;
-        position: relative;
-      }
-
-      .chat-input {
-        width: 100%;
-        min-height: 48px;
-        max-height: 200px;
-        padding: 12px 16px;
-        background: transparent;
-        border: none;
         outline: none;
         color: white;
         font-size: 15px;
         line-height: 1.5;
-        resize: none;
+        resize: vertical;
         overflow-y: auto;
         word-wrap: break-word;
-        white-space: pre-wrap;
-      }
-
-      .chat-input:empty::before {
-        content: attr(data-placeholder);
-        color: rgba(255, 255, 255, 0.5);
-        pointer-events: none;
-      }
-
-      .model-selector {
-        flex-shrink: 0;
-      }
-
-      .model-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 8px;
-        color: rgba(255, 255, 255, 0.9);
-        cursor: pointer;
+        backdrop-filter: blur(20px);
         transition: all 0.3s ease;
-        font-size: 13px;
+        font-family: inherit;
+        box-sizing: border-box;
       }
 
-      .model-btn:hover {
-        background: rgba(139, 92, 246, 0.2);
+      .chat-input:focus {
         border-color: var(--primary-purple);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
       }
 
-      .model-info {
-        display: flex;
-        align-items: center;
-        gap: 6px;
+      .chat-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
       }
 
-      .model-icon {
-        font-size: 14px;
-        color: var(--light-blue);
+      .chat-input::-webkit-scrollbar {
+        width: 6px;
       }
 
-      .model-name {
-        font-weight: 500;
-        white-space: nowrap;
+      .chat-input::-webkit-scrollbar-track {
+        background: transparent;
       }
+
+      .chat-input::-webkit-scrollbar-thumb {
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        border-radius: 3px;
+      }
+
+
 
       .send-button {
         width: 40px;
@@ -1169,6 +1113,8 @@
         justify-content: center;
         transition: all 0.3s ease;
         font-size: 16px;
+        flex-shrink: 0;
+        margin-left: 8px;
       }
 
       .send-button:disabled {
@@ -2484,43 +2430,13 @@
           </div>
 
           <div class="chat-input-container">
-            <div class="input-wrapper">
-                            <div class="input-tools">
-                                                                <button type="button" class="tool-btn" aria-label="Attach file">
-                  <i class="fas fa-plus"></i>
-                </button>
-                <button type="button" class="tool-btn" id="testWebhookButton" aria-label="Test webhook" title="Test n8n webhook connection">
-                  <i class="fas fa-bug"></i>
-                </button>
-                <button type="button" class="tool-btn" aria-label="Advanced options">
-                  <i class="fas fa-cog"></i>
-                </button>
-              </div>
-
-              <div class="input-field-wrapper">
-                <div contenteditable="true"
-                     class="chat-input"
+            <textarea class="chat-input"
                      id="chatInput"
-                     role="textbox"
-                     aria-label="Ask JetFriend AI anything about travel"
-                     data-placeholder="Ask me anything about travel planning...">
-                </div>
-              </div>
-
-              <div class="model-selector">
-                <button type="button" class="model-btn">
-                  <div class="model-info">
-                    <i class="fas fa-plane model-icon"></i>
-                    <span class="model-name">JetFriend AI</span>
-                  </div>
-                  <i class="fas fa-chevron-down"></i>
-                </button>
-              </div>
-
-              <button type="button" class="send-button" id="sendButton" disabled aria-label="Send message">
-                <i class="fas fa-arrow-up"></i>
-              </button>
-            </div>
+                     placeholder="Ask me anything about travel planning..."
+                     rows="1"></textarea>
+            <button type="button" class="send-button" id="sendButton" disabled aria-label="Send message">
+              <i class="fas fa-arrow-up"></i>
+            </button>
           </div>
         </div>
 
@@ -2547,7 +2463,7 @@
         <h2 class="section-title animate-on-scroll">Mobile App Coming Soon</h2>
         <div class="mobile-app-content">
           <div class="app-info">
-            <h3>Experience JetFriend on the go</h3>
+            <h3><h1>Experience JetFriend on the go</h1></h3>
             <p>Get instant travel assistance wherever you are. Our mobile app will bring all the power of AI-driven travel planning right to your fingertips.</p>
             <div class="coming-soon-features">
               <div class="feature-point">
@@ -2679,15 +2595,6 @@
                     </div>
                   </div>
 
-                  <div class="quick-actions">
-                    <div class="quick-actions-title">Quick Actions</div>
-                    <div class="action-buttons">
-                      <button class="action-btn" onclick="quickAction('price-drop')">Price Alerts</button>
-                      <button class="action-btn" onclick="quickAction('translate')">Translation</button>
-                      <button class="action-btn" onclick="quickAction('local-tips')">Local Tips</button>
-                      <button class="action-btn" onclick="quickAction('emergency')">Emergency Info</button>
-                    </div>
-                  </div>
 
                   <div class="input-container">
                     <input type="text" class="message-input" placeholder="Ask me anything about travel..." id="messageInput">
@@ -3527,7 +3434,7 @@
               "
             >
               Questions? Use our live chat anytime or fill out the contact form
-              — we'll get back to you within 24 hours.
+              �� we'll get back to you within 24 hours.
             </p>
           </div>
         </div>
@@ -3571,7 +3478,12 @@
         const messageInput = document.getElementById('messageInput');
         const typingIndicator = document.getElementById('typingIndicator');
 
-                const responses = {};
+                const responses = {
+            'price-drop': "I'll monitor flight prices for you! Setting up alerts now...",
+            'translate': "\"I don't eat meat\" in Japanese is \"私は肉を食べません\" (Watashi wa niku wo tabemasen).",
+            'local-tips': "Great choice! Japan tips: Bow when greeting, remove shoes indoors, don't tip at restaurants, and always carry cash!",
+            'emergency': "Emergency numbers: Police 110, Fire/Ambulance 119. Download Google Translate offline for Japanese. Keep hotel card with you!"
+        };
 
         function addMessage(content, isUser = false) {
             const message = document.createElement('div');
@@ -3840,134 +3752,28 @@
           });
         });
 
-      // AI Chatbot Functionality
-      class JetFriendChatbot {
-        constructor() {
-          this.chatInput = document.getElementById('chatInput');
-          this.sendButton = document.getElementById('sendButton');
-          this.chatMessages = document.getElementById('chatMessages');
-          this.isTyping = false;
 
-          // Replace with your actual API endpoint
-          this.apiEndpoint = 'YOUR_API_ENDPOINT_HERE';
 
-          this.initializeEventListeners();
-        }
 
-        initializeEventListeners() {
-          // Send button click
-          this.sendButton.addEventListener('click', () => {
-            this.sendMessage();
-          });
-
-          // Enter key press
-          this.chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              this.sendMessage();
-            }
-          });
-
-          // Input change to enable/disable send button
-          this.chatInput.addEventListener('input', () => {
-            const hasText = this.chatInput.textContent.trim().length > 0;
-            this.sendButton.disabled = !hasText || this.isTyping;
-          });
-
-          // Paste event handling
-          this.chatInput.addEventListener('paste', (e) => {
-            e.preventDefault();
-            const text = (e.clipboardData || window.clipboardData).getData('text');
-            document.execCommand('insertText', false, text);
-          });
-        }
-
-                async sendMessage() {
-          const messageText = this.chatInput.textContent.trim();
-          if (!messageText || this.isTyping) return;
-
-          // Add user message to chat
-          this.addMessage(messageText, 'user');
-
-          // Clear input
-          this.chatInput.textContent = '';
-          this.sendButton.disabled = true;
-
-          // No AI responses until n8n integration is complete
-          // The upload button should be used to send data to n8n webhook
-        }
-
-                async getAIResponse(message) {
-          // No automatic responses - waiting for n8n API integration
-          throw new Error('AI responses disabled - awaiting n8n integration');
-        }
-
-        addMessage(text, type) {
-          const messageGroup = document.createElement('div');
-          messageGroup.className = type === 'user' ? 'message-group user-message-group' : 'message-group';
-
-          const avatar = document.createElement('div');
-          avatar.className = type === 'user' ? 'user-avatar' : 'ai-avatar';
-
-          if (type === 'user') {
-            avatar.innerHTML = '<i class="fas fa-user"></i>';
-          } else {
-            avatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
-          }
-
-          const messageDiv = document.createElement('div');
-          messageDiv.className = `message ${type === 'user' ? 'user-message' : 'ai-message'}`;
-          messageDiv.innerHTML = `<p>${text}</p>`;
-
-          messageGroup.appendChild(avatar);
-          messageGroup.appendChild(messageDiv);
-
-          this.chatMessages.appendChild(messageGroup);
-          this.scrollToBottom();
-        }
-
-        showTypingIndicator() {
-          this.isTyping = true;
-
-          const typingDiv = document.createElement('div');
-          typingDiv.className = 'typing-indicator active';
-          typingDiv.id = 'typingIndicator';
-
-          const avatar = document.createElement('div');
-          avatar.className = 'ai-avatar';
-          avatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
-
-          const dotsDiv = document.createElement('div');
-          dotsDiv.className = 'typing-dots';
-          dotsDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-
-          typingDiv.appendChild(avatar);
-          typingDiv.appendChild(dotsDiv);
-
-          this.chatMessages.appendChild(typingDiv);
-          this.scrollToBottom();
-        }
-
-        hideTypingIndicator() {
-          this.isTyping = false;
-          const typingIndicator = document.getElementById('typingIndicator');
-          if (typingIndicator) {
-            typingIndicator.remove();
-          }
-        }
-
-        scrollToBottom() {
-          this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
-        }
-      }
-
-                        // Chatbot will be initialized in consolidated DOMContentLoaded listener below
 
                         // Comprehensive webhook testing functionality
       window.testWebhook = async function() {
         console.log('🔧 STARTING WEBHOOK CONNECTIVITY TEST');
         const webhookUrl = 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c';
         console.log('Target URL:', webhookUrl);
+        console.log('🌍 User Agent:', navigator.userAgent);
+        console.log('🌍 Origin:', window.location.origin);
+        console.log('🌍 Online status:', navigator.onLine);
+
+        // Check if user is offline
+        if (!navigator.onLine) {
+          console.log('❌ User appears to be offline');
+          return {
+            success: false,
+            method: 'offline-check',
+            error: 'You appear to be offline. Please check your internet connection.'
+          };
+        }
 
         // First, check if we can reach the domain
         console.log('🌐 Checking domain connectivity...');
@@ -3980,6 +3786,14 @@
           console.log('✅ Domain reachable');
         } catch (domainError) {
           console.log('❌ Domain unreachable:', domainError.message);
+          // If domain is unreachable, return early with error
+          if (domainError.name === 'TypeError' && domainError.message.includes('Failed to fetch')) {
+            return {
+              success: false,
+              method: 'domain-check',
+              error: 'Cannot reach n8n.cloud domain. Check internet connection or try again later.'
+            };
+          }
         }
 
         const testData = {
@@ -4026,6 +3840,7 @@
             console.log('❌ CORS Response not ok:', response.status, response.statusText);
             const errorText = await response.text();
             console.log('❌ CORS Error response body:', errorText);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
 
         } catch (error) {
@@ -4038,6 +3853,8 @@
           } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
             console.log('❌ Network error: Check if the webhook URL is accessible and CORS is enabled');
           }
+
+          console.log('🔄 CORS failed, trying fallback methods...');
         }
 
         // Test 2: No-CORS mode
@@ -4058,12 +3875,13 @@
 
         } catch (error) {
           console.log('❌ No-CORS Error:', error.message);
+          console.log('🔄 No-CORS failed, trying XHR method...');
         }
 
-        // Test 3: XMLHttpRequest
-        console.log('\n🧪 TEST 3: XMLHttpRequest');
-        return new Promise((resolve) => {
-          try {
+        // Test 3: XMLHttpRequest (final fallback)
+        console.log('\n🧪 TEST 3: XMLHttpRequest (final fallback)');
+        try {
+          return new Promise((resolve) => {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -4076,31 +3894,30 @@
             };
 
             xhr.onerror = function() {
-              console.log('❌ XHR Error');
-              resolve({ success: false, method: 'xhr', error: 'Network error' });
+              console.log('❌ XHR Error - All methods failed');
+              resolve({ success: false, method: 'xhr', error: 'All webhook connection methods failed. Check webhook URL and CORS settings.' });
             };
 
             xhr.ontimeout = function() {
-              console.log('❌ XHR Timeout');
-              resolve({ success: false, method: 'xhr', error: 'Timeout' });
+              console.log('❌ XHR Timeout - All methods failed');
+              resolve({ success: false, method: 'xhr', error: 'Request timeout. Webhook may be unreachable.' });
             };
 
             console.log('📤 Sending XHR request...');
             xhr.send(JSON.stringify(testData));
+          });
 
-          } catch (error) {
-            console.log('❌ XHR Setup Error:', error.message);
-            resolve({ success: false, method: 'xhr', error: error.message });
-          }
-        });
+        } catch (error) {
+          console.log('❌ XHR Setup Error:', error.message);
+          return { success: false, method: 'xhr', error: `XHR setup failed: ${error.message}` };
+        }
       };
 
             // Consolidated DOMContentLoaded listener for all functionality
       document.addEventListener('DOMContentLoaded', function() {
         console.log('🚀 Initializing JetFriend interface...');
 
-        // Initialize chatbot
-        const chatbot = new JetFriendChatbot();
+
 
                 // Get all required elements
         const sendButton = document.getElementById('sendButton');
@@ -4142,34 +3959,7 @@
           chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function showTypingIndicator() {
-          if (!chatMessages) return;
 
-          const typingIndicator = document.createElement('div');
-          typingIndicator.className = 'typing-indicator active';
-          typingIndicator.id = 'currentTypingIndicator';
-
-          const aiAvatar = document.createElement('div');
-          aiAvatar.className = 'ai-avatar';
-          aiAvatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
-
-          const typingDots = document.createElement('div');
-          typingDots.className = 'typing-dots';
-          typingDots.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-
-          typingIndicator.appendChild(aiAvatar);
-          typingIndicator.appendChild(typingDots);
-
-          chatMessages.appendChild(typingIndicator);
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-          const typingIndicator = document.getElementById('currentTypingIndicator');
-          if (typingIndicator) {
-            typingIndicator.remove();
-          }
-        }
 
                 // Test webhook button functionality
         if (testWebhookButton) {
@@ -4216,7 +4006,7 @@
             e.preventDefault();
             console.log('📤 Send button clicked');
 
-            const inputText = chatInput ? (chatInput.textContent || chatInput.innerText || '').trim() : '';
+            const inputText = chatInput ? chatInput.value.trim() : '';
             console.log('📝 Input text:', inputText);
 
             if (!inputText) {
@@ -4229,11 +4019,11 @@
 
             // Clear input
             if (chatInput) {
-              chatInput.textContent = '';
+              chatInput.value = '';
             }
 
             // Show typing indicator
-            addMessageToChat('🚀 Sending your message to JetFriend AI...', 'ai');
+            addMessageToChat('�� Sending your message to JetFriend AI...', 'ai');
 
                         // SAME DATA FORMAT AS TEST BUTTON - but with user input message
             const userMessageData = {
@@ -4299,7 +4089,7 @@
               }
 
             } catch (error) {
-              console.log('❌ Send Error type:', error.name);
+              console.log('�� Send Error type:', error.name);
               console.log('❌ Send Error message:', error.message);
               console.log('❌ Send Error details:', error);
 
@@ -4324,6 +4114,44 @@
                     });
         } else {
           console.error('❌ Send button not found');
+        }
+
+        // Add input event handlers for chat functionality
+        if (chatInput && sendButton) {
+          console.log('✅ Adding input event handlers');
+
+          // Enable/disable send button based on input content
+          chatInput.addEventListener('input', () => {
+            const hasText = chatInput.value.trim().length > 0;
+            sendButton.disabled = !hasText;
+
+            // Auto-resize textarea
+            chatInput.style.height = 'auto';
+            chatInput.style.height = Math.min(chatInput.scrollHeight, 200) + 'px';
+          });
+
+          // Handle Enter key press
+          chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              if (!sendButton.disabled) {
+                sendButton.click();
+              }
+            }
+          });
+
+          // Handle paste events properly
+          chatInput.addEventListener('paste', (e) => {
+            // Let the default paste behavior work for textarea
+            setTimeout(() => {
+              const hasText = chatInput.value.trim().length > 0;
+              sendButton.disabled = !hasText;
+
+              // Auto-resize after paste
+              chatInput.style.height = 'auto';
+              chatInput.style.height = Math.min(chatInput.scrollHeight, 200) + 'px';
+            }, 0);
+          });
         }
 
                         // Close the consolidated DOMContentLoaded listener
