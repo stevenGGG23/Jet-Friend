@@ -4018,34 +4018,7 @@
           chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function showTypingIndicator() {
-          if (!chatMessages) return;
 
-          const typingIndicator = document.createElement('div');
-          typingIndicator.className = 'typing-indicator active';
-          typingIndicator.id = 'currentTypingIndicator';
-
-          const aiAvatar = document.createElement('div');
-          aiAvatar.className = 'ai-avatar';
-          aiAvatar.innerHTML = '<img src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800" alt="JetFriend AI" />';
-
-          const typingDots = document.createElement('div');
-          typingDots.className = 'typing-dots';
-          typingDots.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-
-          typingIndicator.appendChild(aiAvatar);
-          typingIndicator.appendChild(typingDots);
-
-          chatMessages.appendChild(typingIndicator);
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-          const typingIndicator = document.getElementById('currentTypingIndicator');
-          if (typingIndicator) {
-            typingIndicator.remove();
-          }
-        }
 
                 // Test webhook button functionality
         if (testWebhookButton) {
@@ -4109,7 +4082,7 @@
             }
 
             // Show typing indicator
-            addMessageToChat('🚀 Sending your message to JetFriend AI...', 'ai');
+            addMessageToChat('�� Sending your message to JetFriend AI...', 'ai');
 
                         // SAME DATA FORMAT AS TEST BUTTON - but with user input message
             const userMessageData = {
