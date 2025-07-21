@@ -3893,31 +3893,30 @@
 
 
 
-                // Test webhook button functionality
+                // Test API button functionality
         if (testWebhookButton) {
-          console.log('✅ Test webhook button found, adding event listener');
+          console.log('✅ Test API button found, adding event listener');
           testWebhookButton.addEventListener('click', async function(e) {
             e.preventDefault();
-            console.log('🧪 Test webhook button clicked');
+            console.log('🧪 Test API button clicked');
 
             // Add a test message to chat
-            addMessageToChat('🔧 Testing webhook connection... Check browser console for detailed logs.', 'ai');
+            addMessageToChat('🔧 Testing JetFriend API connection...', 'ai');
 
             // Run the test
-            const result = await window.testWebhook();
+            const result = await window.jetfriendAPI.testConnection();
 
             // Add result message to chat
             const statusIcon = result.success ? '✅' : '❌';
-            const statusText = result.success ? 'completed' : 'failed';
-            let resultText = `${statusIcon} Webhook test ${statusText} using ${result.method}.`;
+            const statusText = result.success ? 'successful' : 'failed';
+            let resultText = `${statusIcon} API connectivity test ${statusText}.`;
 
-            if (result.response) {
-              resultText += ` Response: ${result.response}`;
+            if (result.data && result.data.test_response) {
+              resultText += ` AI Response: "${result.data.test_response}"`;
             }
             if (result.error) {
               resultText += ` Error: ${result.error}`;
             }
-            resultText += ' Check console for full details.';
 
             addMessageToChat(resultText, 'ai');
 
@@ -3928,7 +3927,7 @@
             }, 2000);
           });
         } else {
-          console.error('❌ Test webhook button not found');
+          console.error('❌ Test API button not found');
         }
 
                                                 // Main send button functionality (copied from working bug button logic)
