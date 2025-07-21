@@ -115,6 +115,14 @@ def health_check():
 @app.route('/api/test', methods=['GET'])
 def test_ai():
     """Test AI connectivity"""
+    if not client:
+        return jsonify({
+            'success': False,
+            'error': 'OPENROUTER_API_KEY not configured',
+            'ai_status': 'disconnected',
+            'message': 'Please set the OPENROUTER_API_KEY environment variable to enable AI functionality.'
+        }), 503
+
     try:
         test_response = get_ai_response("Hello! Can you tell me you're working correctly?")
         return jsonify({
