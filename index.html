@@ -1308,7 +1308,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("pexels-pixabay-208701.jpg");
+                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.2) blur(1px);
@@ -1465,7 +1465,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("pexels-apasaric-1285625.jpg");
+                background-image: url("https://images.pexels.com/photos/33057683/pexels-photo-33057683.jpeg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.1) blur(2px);
@@ -1701,7 +1701,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("pexels-haleyve-2087391.jpg");
+                background-image: url("https://images.pexels.com/photos/33067204/pexels-photo-33067204.jpeg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.2) blur(0.5px);
@@ -1781,7 +1781,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("pexels-pixabay-208701.jpg");
+                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.25) blur(0.5px);
@@ -1872,7 +1872,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("pexels-te-lensfix-380994-1371360.jpg");
+                background-image: url("https://images.pexels.com/photos/33048475/pexels-photo-33048475.jpeg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.3) blur(0.5px);
@@ -2086,7 +2086,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("pexels-wanderer-731217.jpg");
+                background-image: url("https://images.pexels.com/photos/8430515/pexels-photo-8430515.jpeg");
         background-size: cover;
         background-position: center;
         filter: brightness(0.15) blur(1px);
@@ -2360,6 +2360,44 @@
           transform: rotate(360deg);
         }
       }
+
+      .plan-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: var(--light-blue);
+      }
+
+      .plan-price {
+        font-size: 3rem;
+        font-weight: 900;
+        margin-bottom: 15px;
+        color: #ffffff;
+      }
+
+      .currency {
+        font-size: 1.5rem;
+        vertical-align: top;
+      }
+
+      .plan-description {
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 30px;
+        font-size: 1rem;
+      }
+
+      .highlight-title {
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+
+      .highlight-desc {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
     </style>
   </head>
   <body>
@@ -2420,7 +2458,7 @@
     <!-- Hero Section with Background Image -->
     <section class="hero">
       <div class="hero-bg">
-        <img src="wp9801253-italy-4k-wallpapers.jpg" alt="Travel Background" />
+                <img src="https://images.pexels.com/photos/8430515/pexels-photo-8430515.jpeg" alt="Travel Background" />
       </div>
       <div class="hero-overlay"></div>
       <div class="hero-content">
@@ -2450,9 +2488,12 @@
 
           <div class="chat-input-container">
             <div class="input-wrapper">
-              <div class="input-tools">
-                                <button type="button" class="tool-btn" id="uploadButton" aria-label="Attach file">
+                            <div class="input-tools">
+                                                                <button type="button" class="tool-btn" aria-label="Attach file">
                   <i class="fas fa-plus"></i>
+                </button>
+                <button type="button" class="tool-btn" id="testWebhookButton" aria-label="Test webhook" title="Test n8n webhook connection">
+                  <i class="fas fa-bug"></i>
                 </button>
                 <button type="button" class="tool-btn" aria-label="Advanced options">
                   <i class="fas fa-cog"></i>
@@ -2486,14 +2527,10 @@
           </div>
         </div>
 
-
-
         
       
       </div>
     </section>
-
-    
 
     <!-- Mobile App Coming Soon Section -->
     <section class="mobile-app-section">
@@ -3205,7 +3242,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >��</span
+                  >✓</span
                 >
                 Priority support
               </li>
@@ -3278,7 +3315,7 @@
     <section class="about" id="about">
       <div class="container">
         <h2 class="section-title animate-on-scroll">
-          Meet JetFriend — Your AI Travel Buddy
+          Meet JetFriend 🚀 Your AI Travel Buddy
         </h2>
 
         <div class="about-content">
@@ -3682,8 +3719,6 @@
         observer.observe(el);
       });
 
-      
-
       // Smooth scrolling for navigation links
       document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         anchor.addEventListener("click", function (e) {
@@ -3708,8 +3743,6 @@
           this.style.transform = "translateY(0) scale(1)";
         });
       });
-
-      
 
       // Simple fade-in animation for hero text (no cycling to prevent gibberish)
       const heroTextElement = document.getElementById("heroText");
@@ -3931,19 +3964,164 @@
         }
       }
 
-      // Initialize chatbot when DOM is loaded
-      document.addEventListener('DOMContentLoaded', () => {
-        const chatbot = new JetFriendChatbot();
-            });
+                        // Chatbot will be initialized in consolidated DOMContentLoaded listener below
 
-                  // Upload button webhook functionality
+                        // Comprehensive webhook testing functionality
+      window.testWebhook = async function() {
+        console.log('🔧 STARTING WEBHOOK CONNECTIVITY TEST');
+        const webhookUrl = 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c';
+        console.log('Target URL:', webhookUrl);
+
+        // First, check if we can reach the domain
+        console.log('🌐 Checking domain connectivity...');
+        try {
+          const domainResponse = await fetch('https://stevengobran.app.n8n.cloud', {
+            method: 'HEAD',
+            mode: 'no-cors',
+            signal: AbortSignal.timeout(5000)
+          });
+          console.log('✅ Domain reachable');
+        } catch (domainError) {
+          console.log('❌ Domain unreachable:', domainError.message);
+        }
+
+        const testData = {
+          test: true,
+          message: 'Webhook connectivity test from browser',
+          timestamp: new Date().toISOString(),
+          source: 'manual_test',
+          user_agent: navigator.userAgent,
+          origin: window.location.origin,
+          test_id: Math.random().toString(36).substr(2, 9)
+        };
+
+        console.log('📦 Test data to send:', testData);
+
+                // Test 1: Basic fetch with CORS
+        console.log('\n🧪 TEST 1: Fetch with CORS mode');
+        try {
+          console.log('📡 Making CORS request to webhook...');
+
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+          const response = await fetch('https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(testData),
+            signal: controller.signal
+          });
+
+          clearTimeout(timeoutId);
+          console.log('✅ CORS Response status:', response.status);
+          console.log('✅ CORS Response ok:', response.ok);
+          console.log('✅ CORS Response headers:', Object.fromEntries(response.headers.entries()));
+
+          if (response.ok) {
+            const responseText = await response.text();
+            console.log('✅ CORS Response body:', responseText);
+            return { success: true, method: 'cors', response: responseText };
+          } else {
+            console.log('❌ CORS Response not ok:', response.status, response.statusText);
+            const errorText = await response.text();
+            console.log('❌ CORS Error response body:', errorText);
+          }
+
+        } catch (error) {
+          console.log('❌ CORS Error type:', error.name);
+          console.log('❌ CORS Error message:', error.message);
+          console.log('❌ CORS Error details:', error);
+
+          if (error.name === 'AbortError') {
+            console.log('❌ Request timed out after 10 seconds');
+          } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+            console.log('❌ Network error: Check if the webhook URL is accessible and CORS is enabled');
+          }
+        }
+
+        // Test 2: No-CORS mode
+        console.log('\n🧪 TEST 2: Fetch with no-cors mode');
+        try {
+          const response = await fetch('https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testData)
+          });
+
+          console.log('✅ No-CORS Response status:', response.status, '(opaque response)');
+          console.log('✅ No-CORS Response type:', response.type);
+          return { success: true, method: 'no-cors', note: 'Request sent but response is opaque' };
+
+        } catch (error) {
+          console.log('❌ No-CORS Error:', error.message);
+        }
+
+        // Test 3: XMLHttpRequest
+        console.log('\n🧪 TEST 3: XMLHttpRequest');
+        return new Promise((resolve) => {
+          try {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.timeout = 10000;
+
+            xhr.onload = function() {
+              console.log('✅ XHR Response status:', xhr.status);
+              console.log('✅ XHR Response text:', xhr.responseText);
+              resolve({ success: true, method: 'xhr', status: xhr.status, response: xhr.responseText });
+            };
+
+            xhr.onerror = function() {
+              console.log('❌ XHR Error');
+              resolve({ success: false, method: 'xhr', error: 'Network error' });
+            };
+
+            xhr.ontimeout = function() {
+              console.log('❌ XHR Timeout');
+              resolve({ success: false, method: 'xhr', error: 'Timeout' });
+            };
+
+            console.log('📤 Sending XHR request...');
+            xhr.send(JSON.stringify(testData));
+
+          } catch (error) {
+            console.log('❌ XHR Setup Error:', error.message);
+            resolve({ success: false, method: 'xhr', error: error.message });
+          }
+        });
+      };
+
+            // Consolidated DOMContentLoaded listener for all functionality
       document.addEventListener('DOMContentLoaded', function() {
-        const uploadButton = document.getElementById('uploadButton');
+        console.log('🚀 Initializing JetFriend interface...');
+
+        // Initialize chatbot
+        const chatbot = new JetFriendChatbot();
+
+                // Get all required elements
+        const sendButton = document.getElementById('sendButton');
+        const testWebhookButton = document.getElementById('testWebhookButton');
         const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chatMessages');
 
-        // Function to add message to chat
+                console.log('📍 Elements found:', {
+          sendButton: !!sendButton,
+          testWebhookButton: !!testWebhookButton,
+          chatInput: !!chatInput,
+          chatMessages: !!chatMessages
+        });
+
+        // Shared utility functions
         function addMessageToChat(message, type = 'user') {
+          if (!chatMessages) return;
+
           const messageGroup = document.createElement('div');
           messageGroup.className = `message-group ${type === 'user' ? 'user-message-group' : ''}`;
 
@@ -3967,8 +4145,9 @@
           chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Function to show typing indicator
         function showTypingIndicator() {
+          if (!chatMessages) return;
+
           const typingIndicator = document.createElement('div');
           typingIndicator.className = 'typing-indicator active';
           typingIndicator.id = 'currentTypingIndicator';
@@ -3988,7 +4167,6 @@
           chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Function to hide typing indicator
         function hideTypingIndicator() {
           const typingIndicator = document.getElementById('currentTypingIndicator');
           if (typingIndicator) {
@@ -3996,169 +4174,162 @@
           }
         }
 
-                        if (uploadButton) {
-          console.log('Upload button found, adding event listener');
-          uploadButton.addEventListener('click', async function(e) {
+                // Test webhook button functionality
+        if (testWebhookButton) {
+          console.log('✅ Test webhook button found, adding event listener');
+          testWebhookButton.addEventListener('click', async function(e) {
             e.preventDefault();
-            console.log('Upload button clicked');
+            console.log('🧪 Test webhook button clicked');
+
+            // Add a test message to chat
+            addMessageToChat('🔧 Testing webhook connection... Check browser console for detailed logs.', 'ai');
+
+            // Run the test
+            const result = await window.testWebhook();
+
+            // Add result message to chat
+            const statusIcon = result.success ? '✅' : '❌';
+            const statusText = result.success ? 'completed' : 'failed';
+            let resultText = `${statusIcon} Webhook test ${statusText} using ${result.method}.`;
+
+            if (result.response) {
+              resultText += ` Response: ${result.response}`;
+            }
+            if (result.error) {
+              resultText += ` Error: ${result.error}`;
+            }
+            resultText += ' Check console for full details.';
+
+            addMessageToChat(resultText, 'ai');
+
+            // Visual feedback
+            this.style.background = result.success ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #ef4444, #dc2626)';
+            setTimeout(() => {
+              this.style.background = '';
+            }, 2000);
+          });
+        } else {
+          console.error('❌ Test webhook button not found');
+        }
+
+                                                // Main send button functionality (copied from working bug button logic)
+        if (sendButton) {
+          console.log('✅ Send button found, adding event listener');
+          sendButton.addEventListener('click', async function(e) {
+            e.preventDefault();
+            console.log('📤 Send button clicked');
 
             const inputText = chatInput ? (chatInput.textContent || chatInput.innerText || '').trim() : '';
-            console.log('Input text:', inputText);
-            alert('Input text found: "' + inputText + '"');
+            console.log('📝 Input text:', inputText);
 
             if (!inputText) {
               alert('Please enter a message first');
               return;
             }
 
-            alert('About to add message to chat');
-
             // Add user message to chat
             addMessageToChat(inputText, 'user');
 
             // Clear input
-            chatInput.textContent = '';
+            if (chatInput) {
+              chatInput.textContent = '';
+            }
 
             // Show typing indicator
-            showTypingIndicator();
+            addMessageToChat('🚀 Sending your message to JetFriend AI...', 'ai');
 
-            // Prepare data to send
-            const dataToSend = {
+                        // SAME DATA FORMAT AS TEST BUTTON - but with user input message
+            const userMessageData = {
+              test: true,
               message: inputText,
               timestamp: new Date().toISOString(),
-              source: 'jetfriend_chat_upload'
+              source: 'jetfriend_user_test',
+              user_agent: navigator.userAgent,
+              origin: window.location.origin,
+              test_id: Math.random().toString(36).substr(2, 9)
             };
 
-                        console.log('Sending data:', dataToSend);
+            console.log('📦 Sending data to webhook:', userMessageData);
 
-            // Add alert to confirm we're making the request
-            alert('About to send request to webhook...');
-
+            // EXACT SAME CORS LOGIC AS WORKING TEST BUTTON
                         try {
-              console.log('Making fetch request to:', 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c');
+              console.log('✅ Sending test data with user input using same CORS method...');
+
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
 
               const response = await fetch('https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', {
                 method: 'POST',
                 mode: 'cors',
                 headers: {
                   'Content-Type': 'application/json',
-                  'Accept': 'application/json',
+                  'Accept': 'application/json'
                 },
-                body: JSON.stringify(dataToSend)
+                body: JSON.stringify(userMessageData),
+                signal: controller.signal
               });
 
-              console.log('Response received:', response);
-              console.log('Response status:', response.status);
-              console.log('Response headers:', response.headers);
-              alert('Response received with status: ' + response.status);
+              clearTimeout(timeoutId);
+              console.log('✅ CORS Response status:', response.status);
+              console.log('✅ CORS Response ok:', response.ok);
+              console.log('✅ CORS Response headers:', Object.fromEntries(response.headers.entries()));
 
               if (response.ok) {
-                console.log('Data sent successfully to webhook');
+                const responseText = await response.text();
+                console.log('✅ CORS Response body:', responseText);
 
-                // Parse the response from webhook
-                const responseData = await response.text();
-                console.log('Webhook response:', responseData);
-
-                // Hide typing indicator
-                hideTypingIndicator();
-
-                // Add AI response to chat
+                // Process response exactly like test button
                 let aiMessage = '';
                 try {
-                  const parsedResponse = JSON.parse(responseData);
-                  aiMessage = parsedResponse.message || parsedResponse.response || parsedResponse.text || responseData;
+                  const parsedResponse = JSON.parse(responseText);
+                  aiMessage = parsedResponse.message || parsedResponse.response || parsedResponse.text || 'Test data with your message sent successfully!';
                 } catch (parseError) {
-                  // If not JSON, use the raw response
-                  aiMessage = responseData || 'I received your message and I\'m processing it.';
+                  aiMessage = responseText || 'Test data with your message sent successfully!';
                 }
 
                 addMessageToChat(aiMessage, 'ai');
 
-                // Visual feedback for button
+                // Visual feedback exactly like test button
                 this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
                 setTimeout(() => {
                   this.style.background = '';
-                }, 1000);
+                }, 2000);
 
               } else {
-                console.error('Failed to send data to webhook:', response.status);
-                hideTypingIndicator();
-                addMessageToChat('Sorry, I encountered an error. Please try again later.', 'ai');
+                const errorText = await response.text();
+                console.log('❌ Response not ok:', response.status, response.statusText, errorText);
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
               }
-                        } catch (error) {
-              console.error('Error sending data to webhook:', error);
-              console.error('Error details:', {
-                message: error.message,
-                stack: error.stack,
-                name: error.name
-              });
-              alert('Error caught: ' + error.message);
-              hideTypingIndicator();
-              addMessageToChat('Sorry, I encountered a connection error: ' + error.message, 'ai');
 
-                            // Try alternative method with XMLHttpRequest
-              console.log('Trying XMLHttpRequest as fallback...');
-              try {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
+            } catch (error) {
+              console.log('❌ Send Error type:', error.name);
+              console.log('❌ Send Error message:', error.message);
+              console.log('❌ Send Error details:', error);
 
-                // Add CORS headers if needed
-                xhr.withCredentials = false;
+              let errorMessage = 'Sorry, I encountered a connection error. Please try again later.';
 
-                xhr.onreadystatechange = function() {
-                  console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
-                  if (xhr.readyState === 4) {
-                    console.log('XHR Response status:', xhr.status);
-                    console.log('XHR Response text:', xhr.responseText);
-
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                      hideTypingIndicator();
-                      let aiMessage = xhr.responseText || 'Message sent successfully!';
-                      try {
-                        const parsedResponse = JSON.parse(xhr.responseText);
-                        aiMessage = parsedResponse.message || parsedResponse.response || parsedResponse.text || aiMessage;
-                      } catch (parseError) {
-                        // Use raw response if not JSON
-                      }
-                      addMessageToChat(aiMessage, 'ai');
-                      alert('Success! Message sent via XHR');
-                    } else {
-                      alert('XHR failed with status: ' + xhr.status);
-                    }
-                  }
-                };
-
-                xhr.onerror = function() {
-                  console.error('XHR error occurred');
-                  console.error('XHR error details:', {
-                    readyState: xhr.readyState,
-                    status: xhr.status,
-                    statusText: xhr.statusText
-                  });
-                  alert('XHR error - CORS issue or network problem');
-                };
-
-                xhr.ontimeout = function() {
-                  console.error('XHR timeout');
-                  alert('XHR timeout');
-                };
-
-                xhr.timeout = 30000; // 30 second timeout
-
-                console.log('Sending XHR with data:', JSON.stringify(dataToSend));
-                xhr.send(JSON.stringify(dataToSend));
-                alert('XHR request sent - waiting for response...');
-
-              } catch (xhrError) {
-                console.error('XHR also failed:', xhrError);
-                alert('XHR setup failed: ' + xhrError.message);
+              if (error.name === 'AbortError') {
+                errorMessage = 'Request timed out. The webhook might be slow to respond.';
+                console.log('❌ Request timed out after 15 seconds');
+              } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                errorMessage = 'Network error: Cannot reach the webhook. Check your internet connection or webhook URL.';
+                console.log('❌ Network error: Check if the webhook URL is accessible and CORS is enabled');
               }
+
+              addMessageToChat(errorMessage, 'ai');
+
+              // Visual feedback for error
+              this.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+              setTimeout(() => {
+                this.style.background = '';
+              }, 2000);
             }
-          });
+                    });
         } else {
-          console.error('Upload button not found');
+          console.error('❌ Send button not found');
         }
+
+                        // Close the consolidated DOMContentLoaded listener
       });
     </script>
   </body>
