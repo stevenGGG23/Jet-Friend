@@ -1115,10 +1115,13 @@
         box-sizing: border-box;
       }
 
-      .chat-input:empty::before {
-        content: attr(data-placeholder);
+      .chat-input:focus {
+        border-color: var(--primary-purple);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+      }
+
+      .chat-input::placeholder {
         color: rgba(255, 255, 255, 0.5);
-        pointer-events: none;
       }
 
       .model-selector {
