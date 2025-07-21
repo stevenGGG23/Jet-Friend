@@ -3845,6 +3845,9 @@
         console.log('🔧 STARTING WEBHOOK CONNECTIVITY TEST');
         const webhookUrl = 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c';
         console.log('Target URL:', webhookUrl);
+        console.log('🌍 User Agent:', navigator.userAgent);
+        console.log('🌍 Origin:', window.location.origin);
+        console.log('🌍 Online status:', navigator.onLine);
 
         // First, check if we can reach the domain
         console.log('🌐 Checking domain connectivity...');
