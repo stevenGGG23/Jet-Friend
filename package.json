@@ -1,0 +1,17 @@
+{
+  "name": "jetfriend",
+  "version": "1.0.0",
+  "description": "JetFriend - Your intelligent travel companion",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 3000",
+    "start": "python3 -m http.server 3000",
+    "build": "echo 'Static site - no build needed'",
+    "serve": "python3 -m http.server 3000"
+  },
+  "keywords": ["travel", "ai", "companion", "jetfriend"],
+  "author": "Steven Gobran, Steven Alfy, Anton Salib",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
