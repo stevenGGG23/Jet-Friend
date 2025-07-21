@@ -3,6 +3,10 @@ from flask_cors import CORS
 import os
 from openai import OpenAI
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
