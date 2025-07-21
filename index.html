@@ -3127,7 +3127,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >��</span
+                  >✓</span
                 >
                 Team collaboration
               </li>
@@ -3866,7 +3866,7 @@
 
         // Shared utility functions
         function addMessageToChat(message, type = 'user') {
-          if (!chatMessages) return;
+          if (!chatMessages) return null;
 
           const messageGroup = document.createElement('div');
           messageGroup.className = `message-group ${type === 'user' ? 'user-message-group' : ''}`;
@@ -3889,6 +3889,8 @@
 
           chatMessages.appendChild(messageGroup);
           chatMessages.scrollTop = chatMessages.scrollHeight;
+
+          return messageGroup;
         }
 
 
