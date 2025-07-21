@@ -4,10 +4,12 @@
   "description": "JetFriend - Your intelligent travel companion",
   "main": "index.html",
   "scripts": {
-    "dev": "python3 -m http.server 3000",
-    "start": "python3 -m http.server 3000",
-    "build": "echo 'Static site - no build needed'",
-    "serve": "python3 -m http.server 3000"
+    "install-deps": "pip install -r requirements.txt",
+    "dev": "python3 app.py",
+    "start": "python3 app.py",
+    "build": "echo 'Flask app - no build needed'",
+    "serve": "python3 app.py",
+    "test": "curl http://localhost:3000/api/health"
   },
   "keywords": ["travel", "ai", "companion", "jetfriend"],
   "author": "Steven Gobran, Steven Alfy, Anton Salib",
