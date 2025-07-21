@@ -26,26 +26,29 @@ def get_ai_response(user_message, conversation_history=None):
     """
     Send a message to Microsoft MAI DS R1 and get a response
     """
+    if not client:
+        return "I'm sorry, but AI functionality is currently unavailable. Please set the OPENROUTER_API_KEY environment variable to enable AI responses."
+
     try:
         # Prepare messages with conversation history
         messages = []
-        
+
         # Add system message for travel assistant context
         messages.append({
             "role": "system",
             "content": "You are JetFriend, an intelligent AI travel companion. You help users plan trips, find destinations, book flights, discover local attractions, and provide travel advice. Be helpful, friendly, and knowledgeable about travel. Provide practical and actionable travel recommendations."
         })
-        
+
         # Add conversation history if provided
         if conversation_history:
             messages.extend(conversation_history)
-        
+
         # Add current user message
         messages.append({
             "role": "user",
             "content": user_message
         })
-        
+
         completion = client.chat.completions.create(
             extra_headers={
                 "HTTP-Referer": "https://stevenggg23.github.io/Jet-Friend/",
@@ -56,7 +59,7 @@ def get_ai_response(user_message, conversation_history=None):
             max_tokens=1000,
             temperature=0.7
         )
-        
+
         return completion.choices[0].message.content
     except Exception as e:
         logger.error(f"Error getting AI response: {str(e)}")
