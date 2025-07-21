@@ -3941,10 +3941,10 @@
           console.log('🔄 No-CORS failed, trying XHR method...');
         }
 
-        // Test 3: XMLHttpRequest
-        console.log('\n🧪 TEST 3: XMLHttpRequest');
-        return new Promise((resolve) => {
-          try {
+        // Test 3: XMLHttpRequest (final fallback)
+        console.log('\n🧪 TEST 3: XMLHttpRequest (final fallback)');
+        try {
+          return new Promise((resolve) => {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'https://stevengobran.app.n8n.cloud/webhook-test/4629752a-7f4a-4a20-81dc-d9f5447adb2c', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -3957,23 +3957,23 @@
             };
 
             xhr.onerror = function() {
-              console.log('❌ XHR Error');
-              resolve({ success: false, method: 'xhr', error: 'Network error' });
+              console.log('❌ XHR Error - All methods failed');
+              resolve({ success: false, method: 'xhr', error: 'All webhook connection methods failed. Check webhook URL and CORS settings.' });
             };
 
             xhr.ontimeout = function() {
-              console.log('❌ XHR Timeout');
-              resolve({ success: false, method: 'xhr', error: 'Timeout' });
+              console.log('❌ XHR Timeout - All methods failed');
+              resolve({ success: false, method: 'xhr', error: 'Request timeout. Webhook may be unreachable.' });
             };
 
             console.log('📤 Sending XHR request...');
             xhr.send(JSON.stringify(testData));
+          });
 
-          } catch (error) {
-            console.log('❌ XHR Setup Error:', error.message);
-            resolve({ success: false, method: 'xhr', error: error.message });
-          }
-        });
+        } catch (error) {
+          console.log('❌ XHR Setup Error:', error.message);
+          return { success: false, method: 'xhr', error: `XHR setup failed: ${error.message}` };
+        }
       };
 
             // Consolidated DOMContentLoaded listener for all functionality
