@@ -1,0 +1,21 @@
+{
+  "method": "POST",
+  "url": "https://openrouter.ai/api/v1/chat/completions",
+  "authentication": "genericCredentialType",
+  "genericAuthType": "httpHeaderAuth",
+  "headers": {
+    "HTTP-Referer": "https://stevenggg23.github.io/Jet-Friend/",
+    "X-Title": "Jet Friend",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "model": "microsoft/mai-ds-r1:free",
+    "messages": [
+      {
+        "role": "user",
+        "content": "={{$json.message}}"
+      }
+    ]
+  },
+  "options": {}
+}
