@@ -3857,6 +3857,14 @@
           console.log('✅ Domain reachable');
         } catch (domainError) {
           console.log('❌ Domain unreachable:', domainError.message);
+          // If domain is unreachable, return early with error
+          if (domainError.name === 'TypeError' && domainError.message.includes('Failed to fetch')) {
+            return {
+              success: false,
+              method: 'domain-check',
+              error: 'Cannot reach n8n.cloud domain. Check internet connection or try again later.'
+            };
+          }
         }
 
         const testData = {
