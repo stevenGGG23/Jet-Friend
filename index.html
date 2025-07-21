@@ -4209,9 +4209,15 @@
 
           // Handle paste events properly
           chatInput.addEventListener('paste', (e) => {
-            e.preventDefault();
-            const text = (e.clipboardData || window.clipboardData).getData('text');
-            document.execCommand('insertText', false, text);
+            // Let the default paste behavior work for textarea
+            setTimeout(() => {
+              const hasText = chatInput.value.trim().length > 0;
+              sendButton.disabled = !hasText;
+
+              // Auto-resize after paste
+              chatInput.style.height = 'auto';
+              chatInput.style.height = Math.min(chatInput.scrollHeight, 200) + 'px';
+            }, 0);
           });
         }
 
