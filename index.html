@@ -4175,6 +4175,34 @@
           console.error('❌ Send button not found');
         }
 
+        // Add input event handlers for chat functionality
+        if (chatInput && sendButton) {
+          console.log('✅ Adding input event handlers');
+
+          // Enable/disable send button based on input content
+          chatInput.addEventListener('input', () => {
+            const hasText = chatInput.textContent.trim().length > 0;
+            sendButton.disabled = !hasText;
+          });
+
+          // Handle Enter key press
+          chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              if (!sendButton.disabled) {
+                sendButton.click();
+              }
+            }
+          });
+
+          // Handle paste events properly
+          chatInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            document.execCommand('insertText', false, text);
+          });
+        }
+
                         // Close the consolidated DOMContentLoaded listener
       });
     </script>
