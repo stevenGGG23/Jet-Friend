@@ -12,10 +12,15 @@ app = Flask(__name__, static_folder='.')
 CORS(app)  # Enable CORS for all routes
 
 # Initialize the OpenAI client with OpenRouter
-client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENROUTER_API_KEY"),  # Securely stored API key
-)
+api_key = os.getenv("OPENROUTER_API_KEY")
+if not api_key:
+    logger.warning("OPENROUTER_API_KEY not set. AI functionality will be limited.")
+    client = None
+else:
+    client = OpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=api_key,  # Securely stored API key
+    )
 
 def get_ai_response(user_message, conversation_history=None):
     """
