@@ -7,4 +7,4 @@ Whether you're booking a last-minute flight, coordinating a group getaway, or tr
 
 We combine innovative technology with practical features: dynamic itineraries, real-time price tracking, deal discovery, and smart local insights. Every JetFriend update brings new features tailored to how people actually travel—because modern journeys deserve modern tools.
 
-JetFriend was founded by Steven Gobran, Steven Alfy, and Anton Salib. Our mission is simple: to make travel more affordable, more enjoyable, and less stressful—so you can focus on the adventure, not the admin.
+JetFriend was founded by Steven Gobran, Steven Alfy, and Anton Salib. Our mission is simple: to make travel more affordable, more enjoyable, and less stressful—so you can focus on the adventure!
