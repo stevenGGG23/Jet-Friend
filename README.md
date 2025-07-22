@@ -1,10 +1,175 @@
-# [Jet-Friend](https://stevenggg23.github.io/Jet-Friend/)
+# JetFriend - Your AI Travel Companion
 
+JetFriend is an intelligent travel companion powered by AI that helps users plan trips, find destinations, book flights, discover local attractions, and provide travel advice.
 
-JetFriend is your intelligent travel companion, designed to streamline every aspect of your journey—from planning to arrival. Built by a team of passionate technologists and travelers, JetFriend harnesses the power of automation and connected tools to eliminate the stress of trip planning while maximizing personalization.
+## 🚀 Features
 
-Whether you're booking a last-minute flight, coordinating a group getaway, or trying to make sense of international logistics, JetFriend works behind the scenes to organize, optimize, and enhance your travel experience. By integrating with your favorite tools like Google Calendar, Gmail, and messaging platforms, JetFriend can manage your itinerary, find deals, make reservations, and even send updates as your plans evolve.
+- **AI-Powered Chat**: Intelligent travel assistance using OpenRouter API
+- **Modern UI**: Beautiful, responsive interface with dark theme
+- **Real-time Chat**: Seamless conversation experience with typing indicators
+- **Travel-Focused**: Specialized AI assistant trained for travel-related queries
+- **Mobile-Ready**: Optimized for both desktop and mobile devices
 
-We combine innovative technology with practical features: dynamic itineraries, real-time price tracking, deal discovery, and smart local insights. Every JetFriend update brings new features tailored to how people actually travel—because modern journeys deserve modern tools.
+## 🛠️ Setup & Installation
 
-JetFriend was founded by Steven Gobran, Steven Alfy, and Anton Salib. Our mission is simple: to make travel more affordable, more enjoyable, and less stressful—so you can focus on the adventure!
+### Prerequisites
+
+- Python 3.11+
+- OpenRouter API key (for AI functionality)
+
+### Installation Steps
+
+1. **Clone the repository** (if using git):
+   ```bash
+   git clone <repository-url>
+   cd jetfriend
+   ```
+
+2. **Install Python dependencies**:
+   ```bash
+   python3 -m pip install --break-system-packages Flask Flask-CORS openai python-dotenv
+   ```
+   
+   Or use the npm script:
+   ```bash
+   npm run install-deps
+   ```
+
+3. **Configure environment variables**:
+   - Copy `.env.example` to `.env`
+   - Add your OpenRouter API key:
+   ```bash
+   OPENROUTER_API_KEY=your_openrouter_api_key_here
+   PORT=5000
+   DEBUG=True
+   ```
+
+4. **Start the development server**:
+   ```bash
+   npm run dev
+   # or
+   python3 app.py
+   ```
+
+5. **Open your browser** and visit `http://localhost:5000`
+
+## 🔧 API Endpoints
+
+The Flask backend provides the following REST API endpoints:
+
+- `GET /` - Serves the main application
+- `GET /api/health` - Health check endpoint
+- `GET /api/test` - Test AI connectivity
+- `POST /api/chat` - Send chat messages to AI
+
+### Chat API Example
+
+```javascript
+// Send a message to JetFriend
+fetch('/api/chat', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    message: "Plan a 3-day trip to Paris",
+    history: [] // Optional conversation history
+  })
+})
+.then(response => response.json())
+.then(data => console.log(data.response));
+```
+
+## 🔑 Getting an OpenRouter API Key
+
+1. Visit [OpenRouter.ai](https://openrouter.ai)
+2. Sign up for an account
+3. Navigate to your API keys section
+4. Create a new API key
+5. Copy the key to your `.env` file
+
+## 🏗️ Architecture
+
+- **Frontend**: Vanilla HTML/CSS/JavaScript with modern responsive design
+- **Backend**: Flask REST API with CORS support
+- **AI Integration**: OpenRouter API (Microsoft MAI DS R1 model)
+- **Styling**: Custom CSS with gradient themes and animations
+
+## 📝 Development
+
+### Running with Debug Mode
+
+The application runs in debug mode by default in development. To change this:
+
+```bash
+# In .env file
+DEBUG=False
+```
+
+### API Testing
+
+Test the API endpoints using curl:
+
+```bash
+# Health check
+curl http://localhost:5000/api/health
+
+# Test AI connectivity
+curl http://localhost:5000/api/test
+
+# Send a chat message
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"message": "Hello JetFriend!"}' \
+  http://localhost:5000/api/chat
+```
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+1. **"OPENROUTER_API_KEY not configured"**
+   - Make sure you've set the API key in your `.env` file
+   - Restart the server after adding the key
+
+2. **Port already in use**
+   - Change the PORT in your `.env` file
+   - Or stop any other services using port 5000
+
+3. **Import errors**
+   - Make sure all dependencies are installed
+   - Try reinstalling with the --break-system-packages flag
+
+### Without API Key
+
+The application will still work without an OpenRouter API key, but AI responses will be limited to a message indicating the key needs to be configured.
+
+## 📱 Features Showcase
+
+- **Intelligent Chat Interface**: Real-time conversation with travel-focused AI
+- **Beautiful UI**: Modern glassmorphism design with smooth animations
+- **Mobile Responsive**: Optimized for all screen sizes
+- **Error Handling**: Graceful error handling with user-friendly messages
+- **Loading States**: Visual feedback for better user experience
+
+## 🌟 Future Enhancements
+
+- User authentication and conversation history
+- Integration with travel booking APIs
+- Offline functionality
+- Push notifications
+- Multi-language support
+- Voice input/output capabilities
+
+## 📄 License
+
+MIT License - see LICENSE file for details.
+
+## 👥 Authors
+
+- Steven Gobran
+- Steven Alfy  
+- Anton Salib
+
+---
+
+Built with ❤️ for travelers everywhere.
