@@ -20,7 +20,7 @@ api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     logger.warning("GEMINI_API_KEY not set. AI functionality will be limited.")
 
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent"
 
 def get_ai_response(user_message, conversation_history=None):
     """
@@ -90,16 +90,21 @@ I can suggest the best neighborhoods to stay in and must-see spots based on your
                         }
                     ]
                 }
-            ]
+            ],
+            "generationConfig": {
+                "temperature": 0.7,
+                "topK": 40,
+                "topP": 0.95,
+                "maxOutputTokens": 2048
+            }
         }
 
         # Make the API request
         headers = {
-            'Content-Type': 'application/json',
-            'X-goog-api-key': api_key
+            'Content-Type': 'application/json'
         }
 
-        response = requests.post(GEMINI_API_URL, headers=headers, json=payload)
+        response = requests.post(f"{GEMINI_API_URL}?key={api_key}", headers=headers, json=payload)
 
         if response.status_code == 200:
             data = response.json()
