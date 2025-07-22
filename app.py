@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
-from openai import OpenAI
+import requests
 import logging
 from dotenv import load_dotenv
 
@@ -15,56 +15,103 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__, static_folder='.')
 CORS(app)  # Enable CORS for all routes
 
-# Initialize the OpenAI client with OpenRouter
-api_key = os.getenv("OPENROUTER_API_KEY")
+# Initialize Google Gemini API
+api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
-    logger.warning("OPENROUTER_API_KEY not set. AI functionality will be limited.")
-    client = None
-else:
-    client = OpenAI(
-        base_url="https://openrouter.ai/api/v1",
-        api_key=api_key,  # Securely stored API key
-    )
+    logger.warning("GEMINI_API_KEY not set. AI functionality will be limited.")
+
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
 def get_ai_response(user_message, conversation_history=None):
     """
-    Send a message to Microsoft MAI DS R1 and get a response
+    Send a message to Google Gemini and get a response
     """
-    if not client:
-        return "I'm sorry, but AI functionality is currently unavailable. Please set the OPENROUTER_API_KEY environment variable to enable AI responses."
+    if not api_key:
+        return "I'm sorry, but AI functionality is currently unavailable. Please set the GEMINI_API_KEY environment variable to enable AI responses."
 
     try:
-        # Prepare messages with conversation history
-        messages = []
+        # Create the prompt with system context and conversation history
+        full_prompt = """You are JetFriend, an intelligent AI travel companion. Follow these guidelines:
 
-        # Add system message for travel assistant context
-        messages.append({
-            "role": "system",
-            "content": "You are JetFriend, an intelligent AI travel companion. You help users plan trips, find destinations, book flights, discover local attractions, and provide travel advice. Be helpful, friendly, and knowledgeable about travel. Provide practical and actionable travel recommendations."
-        })
+PERSONALITY & TONE:
+- Be friendly, enthusiastic, and knowledgeable about travel
+- Use a conversational, helpful tone
+- Be concise but thorough
+- Show excitement about travel and destinations
+
+FORMATTING RULES:
+- Keep responses under 200 words when possible
+- Use simple formatting that works in chat
+- For lists, use "•" bullet points or numbered items (1., 2., 3.)
+- Use line breaks for better readability
+- Avoid complex markdown or special characters
+
+TRAVEL EXPERTISE:
+- Focus on practical, actionable travel advice
+- Ask clarifying questions about budget, dates, preferences
+- Suggest specific destinations, activities, and tips
+- Consider seasonality, weather, and local events
+- Mention approximate costs when relevant
+
+RESPONSE STRUCTURE:
+- Start with enthusiasm/acknowledgment
+- Ask 1-2 key questions if needed
+- Provide specific recommendations
+- End with an engaging follow-up question
+
+EXAMPLES OF GOOD RESPONSES:
+"Exciting! Paris in spring is magical!
+
+To help plan your perfect trip:
+• What's your budget range?
+• How many days will you stay?
+• Interested in museums, food, or nightlife?
+
+I can suggest the best neighborhoods to stay in and must-see spots based on your preferences!"
+
+"""
 
         # Add conversation history if provided
         if conversation_history:
-            messages.extend(conversation_history)
+            for msg in conversation_history:
+                role = "Human" if msg.get("role") == "user" else "Assistant"
+                full_prompt += f"{role}: {msg.get('content', '')}\n"
 
         # Add current user message
-        messages.append({
-            "role": "user",
-            "content": user_message
-        })
+        full_prompt += f"Human: {user_message}\nAssistant:"
 
-        completion = client.chat.completions.create(
-            extra_headers={
-                "HTTP-Referer": "https://stevenggg23.github.io/Jet-Friend/",
-                "X-Title": "Jet Friend",
-            },
-            model="microsoft/mai-ds-r1:free",
-            messages=messages,
-            max_tokens=1000,
-            temperature=0.7
-        )
+        # Prepare the request payload for Gemini
+        payload = {
+            "contents": [
+                {
+                    "parts": [
+                        {
+                            "text": full_prompt
+                        }
+                    ]
+                }
+            ]
+        }
 
-        return completion.choices[0].message.content
+        # Make the API request
+        headers = {
+            'Content-Type': 'application/json',
+            'X-goog-api-key': api_key
+        }
+
+        response = requests.post(GEMINI_API_URL, headers=headers, json=payload)
+
+        if response.status_code == 200:
+            data = response.json()
+            if 'candidates' in data and len(data['candidates']) > 0:
+                content = data['candidates'][0]['content']['parts'][0]['text']
+                return content.strip()
+            else:
+                return "I'm sorry, I didn't receive a proper response. Please try again."
+        else:
+            logger.error(f"Gemini API error: {response.status_code} - {response.text}")
+            return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {response.status_code}"
+
     except Exception as e:
         logger.error(f"Error getting AI response: {str(e)}")
         return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {str(e)}"
@@ -119,12 +166,12 @@ def health_check():
 @app.route('/api/test', methods=['GET'])
 def test_ai():
     """Test AI connectivity"""
-    if not client:
+    if not api_key:
         return jsonify({
             'success': False,
-            'error': 'OPENROUTER_API_KEY not configured',
+            'error': 'GEMINI_API_KEY not configured',
             'ai_status': 'disconnected',
-            'message': 'Please set the OPENROUTER_API_KEY environment variable to enable AI functionality.'
+            'message': 'Please set the GEMINI_API_KEY environment variable to enable AI functionality.'
         }), 503
 
     try:

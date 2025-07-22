@@ -37,12 +37,15 @@ JetFriend is an intelligent travel companion powered by AI that helps users plan
 
 3. **Configure environment variables**:
    - Copy `.env.example` to `.env`
-   - Add your OpenRouter API key:
+   - Get an API key from [OpenRouter.ai](https://openrouter.ai/)
+   - Add your OpenRouter API key to the `.env` file:
    ```bash
-   OPENROUTER_API_KEY=your_openrouter_api_key_here
+   OPENROUTER_API_KEY=your_actual_api_key_here
    PORT=5000
    DEBUG=True
    ```
+
+   **Note**: The app will still work without an API key, but AI responses will be limited to a configuration message.
 
 4. **Start the development server**:
    ```bash
