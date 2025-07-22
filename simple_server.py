@@ -4,7 +4,128 @@ import socketserver
 import json
 import urllib.parse
 import os
+import urllib.request
 from datetime import datetime
+
+# Load environment variables
+def load_env():
+    env_vars = {}
+    try:
+        with open('.env', 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    env_vars[key] = value
+                    os.environ[key] = value
+    except FileNotFoundError:
+        pass
+    return env_vars
+
+# Load .env file
+load_env()
+
+def get_ai_response(user_message, conversation_history=None):
+    """
+    Send a message to Google Gemini and get a response
+    """
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        return "I'm sorry, but AI functionality is currently unavailable. Please set the GEMINI_API_KEY environment variable to enable AI responses."
+
+    try:
+        # Create the prompt with system context
+        full_prompt = """You are JetFriend, an intelligent AI travel companion. Follow these guidelines:
+
+PERSONALITY & TONE:
+- Be friendly, enthusiastic, and knowledgeable about travel
+- Use a conversational, helpful tone
+- Be concise but thorough
+- Show excitement about travel and destinations
+
+FORMATTING RULES:
+- Keep responses under 200 words when possible
+- Use simple formatting that works in chat
+- For lists, use "•" bullet points or numbered items (1., 2., 3.)
+- Use line breaks for better readability
+- Avoid complex markdown or special characters
+
+TRAVEL EXPERTISE:
+- Focus on practical, actionable travel advice
+- Ask clarifying questions about budget, dates, preferences
+- Suggest specific destinations, activities, and tips
+- Consider seasonality, weather, and local events
+- Mention approximate costs when relevant
+
+RESPONSE STRUCTURE:
+- Start with enthusiasm/acknowledgment
+- Ask 1-2 key questions if needed
+- Provide specific recommendations
+- End with an engaging follow-up question
+
+EXAMPLES OF GOOD RESPONSES:
+"Exciting! Paris in spring is magical!
+
+To help plan your perfect trip:
+• What's your budget range?
+• How many days will you stay?
+• Interested in museums, food, or nightlife?
+
+I can suggest the best neighborhoods to stay in and must-see spots based on your preferences!"
+
+"""
+
+        # Add conversation history if provided
+        if conversation_history:
+            for msg in conversation_history:
+                role = "Human" if msg.get("role") == "user" else "Assistant"
+                full_prompt += f"{role}: {msg.get('content', '')}\n"
+
+        # Add current user message
+        full_prompt += f"Human: {user_message}\nAssistant:"
+
+        # Prepare the request payload for Gemini
+        payload = {
+            "contents": [
+                {
+                    "parts": [
+                        {
+                            "text": full_prompt
+                        }
+                    ]
+                }
+            ]
+        }
+
+        # Make the API request
+        url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+        headers = {
+            'Content-Type': 'application/json',
+            'X-goog-api-key': api_key
+        }
+
+        # Create request
+        req = urllib.request.Request(
+            url, 
+            data=json.dumps(payload).encode('utf-8'),
+            headers=headers,
+            method='POST'
+        )
+
+        # Send request
+        with urllib.request.urlopen(req) as response:
+            if response.status == 200:
+                data = json.loads(response.read().decode())
+                if 'candidates' in data and len(data['candidates']) > 0:
+                    content = data['candidates'][0]['content']['parts'][0]['text']
+                    return content.strip()
+                else:
+                    return "I'm sorry, I didn't receive a proper response. Please try again."
+            else:
+                return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {response.status}"
+
+    except Exception as e:
+        return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {str(e)}"
 
 class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -17,24 +138,52 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             response = {
                 'status': 'healthy',
-                'service': 'JetFriend API (Simple Server)',
+                'service': 'JetFriend API',
                 'version': '1.0.0'
             }
             self.wfile.write(json.dumps(response).encode())
             return
         elif self.path == "/api/test":
-            self.send_response(503)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            response = {
-                'success': False,
-                'error': 'GEMINI_API_KEY not configured',
-                'ai_status': 'disconnected',
-                'message': 'Please set the GEMINI_API_KEY environment variable to enable AI functionality.'
-            }
-            self.wfile.write(json.dumps(response).encode())
-            return
+            api_key = os.getenv("GEMINI_API_KEY")
+            if not api_key:
+                self.send_response(503)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                response = {
+                    'success': False,
+                    'error': 'GEMINI_API_KEY not configured',
+                    'ai_status': 'disconnected',
+                    'message': 'Please set the GEMINI_API_KEY environment variable to enable AI functionality.'
+                }
+                self.wfile.write(json.dumps(response).encode())
+                return
+            
+            try:
+                test_response = get_ai_response("Hello! Can you tell me you're working correctly?")
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                response = {
+                    'success': True,
+                    'test_response': test_response,
+                    'ai_status': 'connected'
+                }
+                self.wfile.write(json.dumps(response).encode())
+                return
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                response = {
+                    'success': False,
+                    'error': str(e),
+                    'ai_status': 'disconnected'
+                }
+                self.wfile.write(json.dumps(response).encode())
+                return
         
         return super().do_GET()
     
@@ -51,14 +200,15 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 data = json.loads(post_data.decode())
                 user_message = data.get('message', '').strip()
+                conversation_history = data.get('history', [])
                 
                 if not user_message:
                     response = {'error': 'Message is required'}
                     self.wfile.write(json.dumps(response).encode())
                     return
                 
-                # Mock AI response since Flask/requests aren't available
-                ai_response = f"Hello! I'm JetFriend, your AI travel companion! 🛫\n\nI'd love to help you with your travel plans. However, I'm currently running in a simplified mode without full AI capabilities.\n\nYou asked: \"{user_message}\"\n\nTo enable full AI functionality, please:\n• Set up the GEMINI_API_KEY environment variable\n• Install the required Flask dependencies\n\nIn the meantime, I can still help with basic travel advice and information!"
+                # Get AI response using Gemini API
+                ai_response = get_ai_response(user_message, conversation_history)
                 
                 response = {
                     'success': True,
@@ -88,9 +238,13 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
+    debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
     
     with socketserver.TCPServer(("", port), JetFriendHandler) as httpd:
-        print(f"🚀 JetFriend Simple Server starting on port {port}")
+        print(f"🚀 JetFriend API starting on port {port}")
         print(f"🌐 Visit: http://localhost:{port}")
-        print("💡 Note: Running in simplified mode. Install Flask dependencies for full functionality.")
+        if os.getenv("GEMINI_API_KEY"):
+            print("✅ Gemini AI integration enabled")
+        else:
+            print("⚠️  Gemini AI integration disabled - no API key found")
         httpd.serve_forever()
