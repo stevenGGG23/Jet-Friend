@@ -128,12 +128,12 @@ def health_check():
 @app.route('/api/test', methods=['GET'])
 def test_ai():
     """Test AI connectivity"""
-    if not client:
+    if not api_key:
         return jsonify({
             'success': False,
-            'error': 'OPENROUTER_API_KEY not configured',
+            'error': 'GEMINI_API_KEY not configured',
             'ai_status': 'disconnected',
-            'message': 'Please set the OPENROUTER_API_KEY environment variable to enable AI functionality.'
+            'message': 'Please set the GEMINI_API_KEY environment variable to enable AI functionality.'
         }), 503
 
     try:
