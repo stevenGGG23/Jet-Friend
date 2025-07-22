@@ -239,8 +239,11 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
-    
-    with socketserver.TCPServer(("", port), JetFriendHandler) as httpd:
+
+    class ReusableTCPServer(socketserver.TCPServer):
+        allow_reuse_address = True
+
+    with ReusableTCPServer(("", port), JetFriendHandler) as httpd:
         print(f"🚀 JetFriend API starting on port {port}")
         print(f"🌐 Visit: http://localhost:{port}")
         if os.getenv("GEMINI_API_KEY"):
