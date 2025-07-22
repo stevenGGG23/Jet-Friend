@@ -2858,7 +2858,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >��</span
+                  >✓</span
                 >
                 Chat support
               </li>
@@ -4102,6 +4102,15 @@
               chatInput.style.height = Math.min(chatInput.scrollHeight, 200) + 'px';
             }, 0);
           });
+        }
+
+        // Initialize chat with welcome message
+        console.log('🎉 Initializing chat interface...');
+        if (chatMessages) {
+          // Add a welcome message
+          setTimeout(() => {
+            addMessageToChat('Welcome to JetFriend! I\'m your AI travel companion. Ask me anything about travel planning!', 'ai');
+          }, 1000);
         }
 
                         // Close the consolidated DOMContentLoaded listener
