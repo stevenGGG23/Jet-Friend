@@ -15,101 +15,68 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__, static_folder='.')
 CORS(app)  # Enable CORS for all routes
 
-# Initialize Google Gemini API
-api_key = os.getenv("GEMINI_API_KEY")
+# Initialize OpenRouter API
+api_key = os.getenv("OPENROUTER_API_KEY")
 if not api_key:
-    logger.warning("GEMINI_API_KEY not set. AI functionality will be limited.")
+    logger.warning("OPENROUTER_API_KEY not set. AI functionality will be limited.")
 
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 def get_ai_response(user_message, conversation_history=None):
     """
-    Send a message to Google Gemini and get a response
+    Send a message to OpenRouter and get a response
     """
     if not api_key:
-        return "I'm sorry, but AI functionality is currently unavailable. Please set the GEMINI_API_KEY environment variable to enable AI responses."
+        return "I'm sorry, but AI functionality is currently unavailable. Please set the OPENROUTER_API_KEY environment variable to enable AI responses."
 
     try:
-        # Create the prompt with system context and conversation history
-        full_prompt = """You are JetFriend, an intelligent AI travel companion. Follow these guidelines:
-
-PERSONALITY & TONE:
-- Be friendly, enthusiastic, and knowledgeable about travel
-- Use a conversational, helpful tone
-- Be concise but thorough
-- Show excitement about travel and destinations
-
-FORMATTING RULES:
-- Keep responses under 200 words when possible
-- Use simple formatting that works in chat
-- For lists, use "•" bullet points or numbered items (1., 2., 3.)
-- Use line breaks for better readability
-- Avoid complex markdown or special characters
-
-TRAVEL EXPERTISE:
-- Focus on practical, actionable travel advice
-- Ask clarifying questions about budget, dates, preferences
-- Suggest specific destinations, activities, and tips
-- Consider seasonality, weather, and local events
-- Mention approximate costs when relevant
-
-RESPONSE STRUCTURE:
-- Start with enthusiasm/acknowledgment
-- Ask 1-2 key questions if needed
-- Provide specific recommendations
-- End with an engaging follow-up question
-
-EXAMPLES OF GOOD RESPONSES:
-"Exciting! Paris in spring is magical!
-
-To help plan your perfect trip:
-• What's your budget range?
-• How many days will you stay?
-• Interested in museums, food, or nightlife?
-
-I can suggest the best neighborhoods to stay in and must-see spots based on your preferences!"
-
-"""
+        # Build messages array for OpenRouter
+        messages = [
+            {
+                "role": "system",
+                "content": "You are JetFriend, an intelligent AI travel companion. Follow these guidelines:\n\nPERSONALITY & TONE:\n- Be friendly, enthusiastic, and knowledgeable about travel\n- Use a conversational, helpful tone\n- Be concise but thorough\n- Show excitement about travel and destinations\n\nFORMATTING RULES:\n- Keep responses under 200 words when possible\n- Use simple formatting that works in chat\n- For lists, use \"•\" bullet points or numbered items (1., 2., 3.)\n- Use line breaks for better readability\n- Avoid complex markdown or special characters\n\nTRAVEL EXPERTISE:\n- Focus on practical, actionable travel advice\n- Ask clarifying questions about budget, dates, preferences\n- Suggest specific destinations, activities, and tips\n- Consider seasonality, weather, and local events\n- Mention approximate costs when relevant\n\nRESPONSE STRUCTURE:\n- Start with enthusiasm/acknowledgment\n- Ask 1-2 key questions if needed\n- Provide specific recommendations\n- End with an engaging follow-up question"
+            }
+        ]
 
         # Add conversation history if provided
         if conversation_history:
             for msg in conversation_history:
-                role = "Human" if msg.get("role") == "user" else "Assistant"
-                full_prompt += f"{role}: {msg.get('content', '')}\n"
+                messages.append({
+                    "role": msg.get("role", "user"),
+                    "content": msg.get("content", "")
+                })
 
         # Add current user message
-        full_prompt += f"Human: {user_message}\nAssistant:"
+        messages.append({
+            "role": "user",
+            "content": user_message
+        })
 
-        # Prepare the request payload for Gemini
+        # Prepare the request payload for OpenRouter
         payload = {
-            "contents": [
-                {
-                    "parts": [
-                        {
-                            "text": full_prompt
-                        }
-                    ]
-                }
-            ]
+            "model": "microsoft/phi-3-medium-128k-instruct:free",
+            "messages": messages
         }
 
         # Make the API request
         headers = {
+            'Authorization': f'Bearer {api_key}',
             'Content-Type': 'application/json',
-            'X-goog-api-key': api_key
+            'X-Title': 'JetFriend',
+            'HTTP-Referer': 'https://jetfriend.com'
         }
 
-        response = requests.post(GEMINI_API_URL, headers=headers, json=payload)
+        response = requests.post(OPENROUTER_API_URL, headers=headers, json=payload)
 
         if response.status_code == 200:
             data = response.json()
-            if 'candidates' in data and len(data['candidates']) > 0:
-                content = data['candidates'][0]['content']['parts'][0]['text']
+            if 'choices' in data and len(data['choices']) > 0:
+                content = data['choices'][0]['message']['content']
                 return content.strip()
             else:
                 return "I'm sorry, I didn't receive a proper response. Please try again."
         else:
-            logger.error(f"Gemini API error: {response.status_code} - {response.text}")
+            logger.error(f"OpenRouter API error: {response.status_code} - {response.text}")
             return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {response.status_code}"
 
     except Exception as e:
@@ -169,9 +136,9 @@ def test_ai():
     if not api_key:
         return jsonify({
             'success': False,
-            'error': 'GEMINI_API_KEY not configured',
+            'error': 'OPENROUTER_API_KEY not configured',
             'ai_status': 'disconnected',
-            'message': 'Please set the GEMINI_API_KEY environment variable to enable AI functionality.'
+            'message': 'Please set the OPENROUTER_API_KEY environment variable to enable AI functionality.'
         }), 503
 
     try:
