@@ -3947,15 +3947,12 @@
               return;
             }
 
+            // Disable send button temporarily
+            sendButton.disabled = true;
+            sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
             // Add user message to chat
             addMessageToChat(inputText, 'user');
-
-            // Clear input and reset send button
-            if (chatInput) {
-              chatInput.value = '';
-              chatInput.style.height = 'auto';
-              sendButton.disabled = true;
-            }
 
             // Show typing indicator
             const typingMessageElement = addMessageToChat('JetFriend is thinking...', 'ai');
