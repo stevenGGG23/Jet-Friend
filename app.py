@@ -23,7 +23,7 @@ if not api_key:
 else:
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
-        api_key=api_key,  # Securely stored API key
+        api_key=api_key
     )
 
 def get_ai_response(user_message, conversation_history=None):
