@@ -58,7 +58,7 @@ def get_ai_response(user_message, conversation_history=None):
                 "HTTP-Referer": "https://stevenggg23.github.io/Jet-Friend/",
                 "X-Title": "Jet Friend",
             },
-            model="microsoft/mai-ds-r1:free",
+            model="openai/gpt-3.5-turbo",
             messages=messages,
             max_tokens=1000,
             temperature=0.7
