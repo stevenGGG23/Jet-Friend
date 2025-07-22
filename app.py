@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
-from openai import OpenAI
+import requests
 import logging
 from dotenv import load_dotenv
 
@@ -15,16 +15,12 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__, static_folder='.')
 CORS(app)  # Enable CORS for all routes
 
-# Initialize the OpenAI client with OpenRouter
-api_key = os.getenv("OPENROUTER_API_KEY")
+# Initialize Google Gemini API
+api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
-    logger.warning("OPENROUTER_API_KEY not set. AI functionality will be limited.")
-    client = None
-else:
-    client = OpenAI(
-        base_url="https://openrouter.ai/api/v1",
-        api_key=api_key
-    )
+    logger.warning("GEMINI_API_KEY not set. AI functionality will be limited.")
+
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
 def get_ai_response(user_message, conversation_history=None):
     """
