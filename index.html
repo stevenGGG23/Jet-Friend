@@ -3990,9 +3990,13 @@
               // Send message to JetFriend API
               const result = await window.jetfriendAPI.sendMessage(inputText, conversationHistory);
 
-              // Remove typing indicator
-              if (typingMessageElement && typingMessageElement.parentNode) {
-                typingMessageElement.parentNode.remove();
+              // Remove typing indicator safely
+              try {
+                if (typingMessageElement && typingMessageElement.parentNode) {
+                  typingMessageElement.remove();
+                }
+              } catch (error) {
+                console.error('❌ Error removing typing indicator:', error);
               }
 
               if (result.success && result.data && result.data.response) {
@@ -4026,9 +4030,13 @@
             } catch (error) {
               console.log('❌ Unexpected error:', error);
 
-              // Remove typing indicator
-              if (typingMessageElement && typingMessageElement.parentNode) {
-                typingMessageElement.parentNode.remove();
+              // Remove typing indicator safely
+              try {
+                if (typingMessageElement && typingMessageElement.parentNode) {
+                  typingMessageElement.remove();
+                }
+              } catch (error) {
+                console.error('❌ Error removing typing indicator:', error);
               }
 
               addMessageToChat('Sorry, I encountered an unexpected error. Please try again later.', 'ai');
