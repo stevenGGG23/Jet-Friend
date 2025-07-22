@@ -1,1 +1,3 @@
-# JetFriend - Your AI Travel Companion
+# JetFriend - Your AI Travel Companion 
+
+https://stevenggg23.github.io/Jet-Friend/
