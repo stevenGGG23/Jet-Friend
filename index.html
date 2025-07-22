@@ -3887,9 +3887,23 @@
             const messageElement = document.createElement('div');
             messageElement.className = `message ${type === 'user' ? 'user-message' : 'ai-message'}`;
 
-            // Create paragraph element and set text content safely
+            // Create paragraph element and format message properly
             const paragraph = document.createElement('p');
-            paragraph.textContent = message;
+
+            // Handle line breaks and bullet points for better formatting
+            if (type === 'ai') {
+              // For AI messages, preserve line breaks and format lists
+              const formattedMessage = message
+                .replace(/\n/g, '<br>')
+                .replace(/•\s/g, '<br>• ')
+                .replace(/(\d+\.\s)/g, '<br>$1')
+                .replace(/^<br>/, ''); // Remove leading break
+              paragraph.innerHTML = formattedMessage;
+            } else {
+              // For user messages, keep as text content for security
+              paragraph.textContent = message;
+            }
+
             messageElement.appendChild(paragraph);
 
             messageGroup.appendChild(avatar);
