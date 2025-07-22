@@ -2858,7 +2858,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >✓</span
+                  >��</span
                 >
                 Chat support
               </li>
@@ -4053,6 +4053,13 @@
               // Re-enable button if there's text in input
               const hasText = chatInput && chatInput.value.trim().length > 0;
               sendButton.disabled = !hasText;
+            }
+            } catch (outerError) {
+              console.error('❌ Critical error in send button handler:', outerError);
+              // Emergency button state restoration
+              sendButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+              sendButton.disabled = false;
+              alert('Sorry, something went wrong. Please refresh the page and try again.');
             }
           });
         } else {
