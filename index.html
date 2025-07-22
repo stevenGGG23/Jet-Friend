@@ -3949,16 +3949,17 @@
         if (sendButton) {
           console.log('✅ Send button found, adding event listener');
           sendButton.addEventListener('click', async function(e) {
-            e.preventDefault();
-            console.log('📤 Send button clicked');
+            try {
+              e.preventDefault();
+              console.log('📤 Send button clicked');
 
-            const inputText = chatInput ? chatInput.value.trim() : '';
-            console.log('📝 Input text:', inputText);
+              const inputText = chatInput ? chatInput.value.trim() : '';
+              console.log('📝 Input text:', inputText);
 
-            if (!inputText) {
-              alert('Please enter a message first');
-              return;
-            }
+              if (!inputText) {
+                alert('Please enter a message first');
+                return;
+              }
 
             // Disable send button temporarily
             sendButton.disabled = true;
