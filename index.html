@@ -4025,6 +4025,12 @@
               setTimeout(() => {
                 this.style.background = '';
               }, 2000);
+            } finally {
+              // Always restore button state
+              sendButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+              // Re-enable button if there's text in input
+              const hasText = chatInput && chatInput.value.trim().length > 0;
+              sendButton.disabled = !hasText;
             }
           });
         } else {
