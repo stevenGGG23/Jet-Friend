@@ -3986,6 +3986,12 @@
                 // Add AI response to chat
                 addMessageToChat(result.data.response, 'ai');
 
+                // Clear input after successful response
+                if (chatInput) {
+                  chatInput.value = '';
+                  chatInput.style.height = 'auto';
+                }
+
                 // Visual feedback - success
                 this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
                 setTimeout(() => {
@@ -3993,7 +3999,7 @@
                 }, 2000);
 
               } else {
-                // Handle API error
+                // Handle API error - don't clear input so user can retry
                 const errorMessage = result.error || 'Sorry, I encountered an error. Please try again.';
                 addMessageToChat(`Sorry, I encountered an error: ${errorMessage}`, 'ai');
 
