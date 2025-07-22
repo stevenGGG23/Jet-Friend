@@ -9,7 +9,7 @@
     "start": "python3 app.py",
     "build": "echo 'Flask app - no build needed'",
     "serve": "python3 app.py",
-    "test": "curl http://localhost:3000/api/health"
+    "test": "curl http://localhost:5000/api/health"
   },
   "keywords": ["travel", "ai", "companion", "jetfriend"],
   "author": "Steven Gobran, Steven Alfy, Anton Salib",
