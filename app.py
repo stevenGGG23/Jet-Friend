@@ -24,43 +24,56 @@ GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini
 
 def get_ai_response(user_message, conversation_history=None):
     """
-    Send a message to Microsoft MAI DS R1 and get a response
+    Send a message to Google Gemini and get a response
     """
-    if not client:
-        return "I'm sorry, but AI functionality is currently unavailable. Please set the OPENROUTER_API_KEY environment variable to enable AI responses."
+    if not api_key:
+        return "I'm sorry, but AI functionality is currently unavailable. Please set the GEMINI_API_KEY environment variable to enable AI responses."
 
     try:
-        # Prepare messages with conversation history
-        messages = []
-
-        # Add system message for travel assistant context
-        messages.append({
-            "role": "system",
-            "content": "You are JetFriend, an intelligent AI travel companion. You help users plan trips, find destinations, book flights, discover local attractions, and provide travel advice. Be helpful, friendly, and knowledgeable about travel. Provide practical and actionable travel recommendations."
-        })
+        # Create the prompt with system context and conversation history
+        full_prompt = "You are JetFriend, an intelligent AI travel companion. You help users plan trips, find destinations, book flights, discover local attractions, and provide travel advice. Be helpful, friendly, and knowledgeable about travel. Provide practical and actionable travel recommendations.\n\n"
 
         # Add conversation history if provided
         if conversation_history:
-            messages.extend(conversation_history)
+            for msg in conversation_history:
+                role = "Human" if msg.get("role") == "user" else "Assistant"
+                full_prompt += f"{role}: {msg.get('content', '')}\n"
 
         # Add current user message
-        messages.append({
-            "role": "user",
-            "content": user_message
-        })
+        full_prompt += f"Human: {user_message}\nAssistant:"
 
-        completion = client.chat.completions.create(
-            extra_headers={
-                "HTTP-Referer": "https://stevenggg23.github.io/Jet-Friend/",
-                "X-Title": "Jet Friend",
-            },
-            model="openai/gpt-3.5-turbo",
-            messages=messages,
-            max_tokens=1000,
-            temperature=0.7
-        )
+        # Prepare the request payload for Gemini
+        payload = {
+            "contents": [
+                {
+                    "parts": [
+                        {
+                            "text": full_prompt
+                        }
+                    ]
+                }
+            ]
+        }
 
-        return completion.choices[0].message.content
+        # Make the API request
+        headers = {
+            'Content-Type': 'application/json',
+            'X-goog-api-key': api_key
+        }
+
+        response = requests.post(GEMINI_API_URL, headers=headers, json=payload)
+
+        if response.status_code == 200:
+            data = response.json()
+            if 'candidates' in data and len(data['candidates']) > 0:
+                content = data['candidates'][0]['content']['parts'][0]['text']
+                return content.strip()
+            else:
+                return "I'm sorry, I didn't receive a proper response. Please try again."
+        else:
+            logger.error(f"Gemini API error: {response.status_code} - {response.text}")
+            return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {response.status_code}"
+
     except Exception as e:
         logger.error(f"Error getting AI response: {str(e)}")
         return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {str(e)}"
