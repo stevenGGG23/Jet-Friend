@@ -24,8 +24,11 @@ google_places_api_key = os.getenv("GOOGLE_PLACES_API_KEY")
 
 # Initialize OpenAI client
 openai_client = None
-if openai_api_key:
-    openai_client = OpenAI(api_key=openai_api_key)
+if openai_api_key and openai_api_key != "your-openai-api-key-here":
+    try:
+        openai_client = OpenAI(api_key=openai_api_key)
+    except Exception as e:
+        logger.warning(f"Failed to initialize OpenAI client: {str(e)}")
 else:
     logger.warning("OPENAI_API_KEY not set. AI functionality will be limited.")
 
@@ -352,7 +355,7 @@ if __name__ == '__main__':
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
 
     print(f"🚀 JetFriend API v2.0 starting on port {port}")
-    print(f"��� Visit: http://localhost:{port}")
+    print(f"🌐 Visit: http://localhost:{port}")
     print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
     print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
 
