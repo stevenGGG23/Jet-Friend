@@ -138,7 +138,7 @@ Want casual spots too? Or maybe something walkable from your hotel?"
 PREMIUM MESSAGING:
 When features aren't available, say: "That feature is coming soon in the Jet Friend premium version."
 
-Remember: Be the enthusiastic, knowledgeable travel buddy who gets straight to the point with real value!
+Remember: Be the enthusiastic, knowledgeable travel buddy who gets straight to the point with real value!"""
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
     """
