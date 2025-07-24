@@ -31,8 +31,11 @@ else:
 
 # Initialize Google Maps client
 gmaps_client = None
-if google_places_api_key:
-    gmaps_client = googlemaps.Client(key=google_places_api_key)
+if google_places_api_key and google_places_api_key != "your-google-places-api-key-here":
+    try:
+        gmaps_client = googlemaps.Client(key=google_places_api_key)
+    except Exception as e:
+        logger.warning(f"Failed to initialize Google Maps client: {str(e)}")
 else:
     logger.warning("GOOGLE_PLACES_API_KEY not set. Location features will be limited.")
 
@@ -349,7 +352,7 @@ if __name__ == '__main__':
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
 
     print(f"🚀 JetFriend API v2.0 starting on port {port}")
-    print(f"🌐 Visit: http://localhost:{port}")
+    print(f"��� Visit: http://localhost:{port}")
     print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
     print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
 
