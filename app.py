@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
-import requests
+import re
 import logging
 from dotenv import load_dotenv
+from openai import OpenAI
+import googlemaps
+from typing import Optional, Dict, List
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,111 +18,175 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__, static_folder='.')
 CORS(app)  # Enable CORS for all routes
 
-# Initialize Google Gemini API
-api_key = os.getenv("GEMINI_API_KEY")
-if not api_key:
-    logger.warning("GEMINI_API_KEY not set. AI functionality will be limited.")
+# Initialize APIs
+openai_api_key = os.getenv("OPENAI_API_KEY")
+google_places_api_key = os.getenv("GOOGLE_PLACES_API_KEY")
 
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent"
-
-def get_ai_response(user_message, conversation_history=None):
-    """
-    Send a message to Google Gemini and get a response
-    """
-    if not api_key:
-        return "I'm sorry, but AI functionality is currently unavailable. Please set the GEMINI_API_KEY environment variable to enable AI responses."
-
+# Initialize OpenAI client
+openai_client = None
+if openai_api_key and openai_api_key != "your-openai-api-key-here":
     try:
-        # Create the prompt with system context and conversation history
-        full_prompt = """You are JetFriend, an intelligent AI travel companion. Follow these guidelines:
+        openai_client = OpenAI(api_key=openai_api_key)
+    except Exception as e:
+        logger.warning(f"Failed to initialize OpenAI client: {str(e)}")
+else:
+    logger.warning("OPENAI_API_KEY not set. AI functionality will be limited.")
+
+# Initialize Google Maps client
+gmaps_client = None
+if google_places_api_key and google_places_api_key != "your-google-places-api-key-here":
+    try:
+        gmaps_client = googlemaps.Client(key=google_places_api_key)
+    except Exception as e:
+        logger.warning(f"Failed to initialize Google Maps client: {str(e)}")
+else:
+    logger.warning("GOOGLE_PLACES_API_KEY not set. Location features will be limited.")
+
+def detect_location_query(message: str) -> bool:
+    """
+    Detect if user query requires real-time location or restaurant data
+    """
+    location_keywords = [
+        'restaurant', 'hotel', 'attraction', 'museum', 'park', 'beach',
+        'airport', 'station', 'shopping', 'mall', 'cafe', 'bar', 'club',
+        'gym', 'hospital', 'pharmacy', 'bank', 'atm', 'gas station',
+        'near me', 'nearby', 'around', 'close to', 'in ', 'at ',
+        'best places', 'top rated', 'reviews', 'open now', 'hours',
+        'directions', 'how to get', 'distance', 'travel time'
+    ]
+    
+    message_lower = message.lower()
+    return any(keyword in message_lower for keyword in location_keywords)
+
+def search_places(query: str, location: str = None, radius: int = 5000) -> List[Dict]:
+    """
+    Search for places using Google Places API
+    """
+    if not gmaps_client:
+        return []
+    
+    try:
+        # If no specific location provided, use a general search
+        if location:
+            places_result = gmaps_client.places(
+                query=f"{query} near {location}",
+                radius=radius
+            )
+        else:
+            places_result = gmaps_client.places(query=query)
+        
+        places = []
+        for place in places_result.get('results', [])[:5]:  # Limit to top 5 results
+            place_details = {
+                'name': place.get('name', ''),
+                'address': place.get('formatted_address', ''),
+                'rating': place.get('rating', 0),
+                'price_level': place.get('price_level', 0),
+                'types': place.get('types', []),
+                'place_id': place.get('place_id', ''),
+                'url': f"https://maps.google.com/maps/place/?q=place_id:{place.get('place_id', '')}"
+            }
+            places.append(place_details)
+        
+        return places
+    except Exception as e:
+        logger.error(f"Error searching places: {str(e)}")
+        return []
+
+def get_jetfriend_system_prompt() -> str:
+    """
+    Return the detailed JetFriend personality and behavior prompt
+    """
+    return """You are JetFriend, a friendly, upbeat, and confident AI travel companion - like a well-traveled best friend who's quick to respond, helpful, and excited about planning trips of any size.
 
 PERSONALITY & TONE:
-- Be friendly, enthusiastic, and knowledgeable about travel
-- Use a conversational, helpful tone
-- Be concise but thorough
-- Show excitement about travel and destinations
+- Be friendly, upbeat, confident like a well-traveled best friend
+- Quick to respond, helpful, excited about planning trips
+- NEVER guess - if you don't know something or a feature isn't supported, clearly state: "That feature is coming soon in the Jet Friend premium version."
+- Use natural, human-like language
+- Sound like you're genuinely excited to help plan amazing trips
+
+RESPONSE STYLE:
+- Snappy, short, direct, and full of value
+- Keep answers under 150 words when possible
+- Start with energetic acknowledgments like "Let's do this!" or "Ready to explore?" or "Awesome!" or "Perfect!"
+- End with a follow-up question or next step like "Want to see hotel options too?" or "Should I focus on budget or luxury spots?"
+- Ask 1-2 clarifying questions only if truly needed
 
 FORMATTING RULES:
-- Keep responses under 200 words when possible
-- Use simple formatting that works in chat
-- For lists, use "•" bullet points or numbered items (1., 2., 3.)
-- Use line breaks for better readability
-- Avoid complex markdown or special characters
+- Use bullet points (•) or numbered lists for organization
+- Use line breaks for readability
+- NO fancy markdown but emojis are okay ✈️ 🌎
+- Make important names or links stand out clearly
+- Include clickable links whenever available (Google Maps, booking sites, Yelp, TripAdvisor)
 
-TRAVEL EXPERTISE:
-- Focus on practical, actionable travel advice
-- Ask clarifying questions about budget, dates, preferences
-- Suggest specific destinations, activities, and tips
-- Consider seasonality, weather, and local events
-- Mention approximate costs when relevant
+TRAVEL INTELLIGENCE:
+- Focus on real, actionable advice - where to eat, stay, go
+- Include approximate costs, seasonality, weather, local culture
+- Provide specific recommendations with links when possible
+- Avoid vague suggestions - be concrete and helpful
 
-RESPONSE STRUCTURE:
-- Start with enthusiasm/acknowledgment
-- Ask 1-2 key questions if needed
-- Provide specific recommendations
-- End with an engaging follow-up question
+EXAMPLE RESPONSE STYLE:
+"Let's do this! LA has amazing sushi spots. Here are 3 top picks:
 
-EXAMPLES OF GOOD RESPONSES:
-"Exciting! Paris in spring is magical!
+• Sugarfish DTLA – Minimalist omakase experience
+• Hamasaku – High-end fusion sushi
+• Sushi Gen – Crowd favorite in Little Tokyo
 
-To help plan your perfect trip:
-• What's your budget range?
-• How many days will you stay?
-• Interested in museums, food, or nightlife?
+Want casual spots too? Or maybe something walkable from your hotel?"
 
-I can suggest the best neighborhoods to stay in and must-see spots based on your preferences!"
+PREMIUM MESSAGING:
+When features aren't available, say: "That feature is coming soon in the Jet Friend premium version."
 
-"""
+Remember: Be the enthusiastic, knowledgeable travel buddy who gets straight to the point with real value!"""
 
-        # Add conversation history if provided
+def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
+    """
+    Get response from OpenAI GPT-4o with optional places data integration
+    """
+    if not openai_client:
+        return "I'm sorry, but AI functionality is currently unavailable. Please ensure the OPENAI_API_KEY is properly configured. Upgrade to JetFriend Premium for priority support!"
+
+    try:
+        # Create messages array for ChatGPT
+        messages = [{"role": "system", "content": get_jetfriend_system_prompt()}]
+        
+        # Add conversation history
         if conversation_history:
-            for msg in conversation_history:
-                role = "Human" if msg.get("role") == "user" else "Assistant"
-                full_prompt += f"{role}: {msg.get('content', '')}\n"
-
-        # Add current user message
-        full_prompt += f"Human: {user_message}\nAssistant:"
-
-        # Prepare the request payload for Gemini
-        payload = {
-            "contents": [
-                {
-                    "parts": [
-                        {
-                            "text": full_prompt
-                        }
-                    ]
-                }
-            ],
-            "generationConfig": {
-                "temperature": 0.7,
-                "topK": 40,
-                "topP": 0.95,
-                "maxOutputTokens": 2048
-            }
-        }
-
-        # Make the API request
-        headers = {
-            'Content-Type': 'application/json'
-        }
-
-        response = requests.post(f"{GEMINI_API_URL}?key={api_key}", headers=headers, json=payload)
-
-        if response.status_code == 200:
-            data = response.json()
-            if 'candidates' in data and len(data['candidates']) > 0:
-                content = data['candidates'][0]['content']['parts'][0]['text']
-                return content.strip()
-            else:
-                return "I'm sorry, I didn't receive a proper response. Please try again."
-        else:
-            logger.error(f"Gemini API error: {response.status_code} - {response.text}")
-            return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {response.status_code}"
-
+            for msg in conversation_history[-6:]:  # Keep last 6 messages for context
+                role = "user" if msg.get("role") == "user" else "assistant"
+                messages.append({"role": role, "content": msg.get("content", "")})
+        
+        # Enhance user message with places data if available
+        enhanced_message = user_message
+        if places_data and len(places_data) > 0:
+            places_text = "\n\nReal-time location data found:\n"
+            for i, place in enumerate(places_data[:3], 1):  # Top 3 places
+                places_text += f"{i}. {place['name']} - {place['address']}"
+                if place['rating']:
+                    places_text += f" (★{place['rating']})"
+                if place['url']:
+                    places_text += f" [View on Maps]({place['url']})"
+                places_text += "\n"
+            
+            enhanced_message = f"{user_message}\n{places_text}\nPlease incorporate these real places into your response with clickable links."
+        
+        messages.append({"role": "user", "content": enhanced_message})
+        
+        # Make API call to OpenAI
+        response = openai_client.chat.completions.create(
+            model="gpt-4o",
+            messages=messages,
+            max_tokens=400,
+            temperature=0.7,
+            top_p=0.9
+        )
+        
+        return response.choices[0].message.content.strip()
+        
     except Exception as e:
         logger.error(f"Error getting AI response: {str(e)}")
-        return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {str(e)}"
+        return f"I'm experiencing some technical difficulties right now. Please try again in a moment! For priority support and advanced features, upgrade to JetFriend Premium. Error details: {str(e)[:50]}..."
 
 @app.route('/')
 def serve_index():
@@ -133,7 +200,7 @@ def serve_static(filename):
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    """Handle chat messages"""
+    """Handle chat messages with optional location data integration"""
     try:
         data = request.json
         user_message = data.get('message', '').strip()
@@ -142,12 +209,24 @@ def chat():
         if not user_message:
             return jsonify({'error': 'Message is required'}), 400
         
-        # Get AI response
-        ai_response = get_ai_response(user_message, conversation_history)
+        # Check if query requires location data
+        places_data = []
+        if detect_location_query(user_message) and gmaps_client:
+            # Extract location from message or use general search
+            location_match = re.search(r'(?:in|at|near)\s+([A-Za-z\s]+?)(?:\s|$|[.,!?])', user_message, re.IGNORECASE)
+            location = location_match.group(1).strip() if location_match else None
+            
+            # Search for relevant places
+            places_data = search_places(user_message, location)
+        
+        # Get AI response with enhanced data
+        ai_response = get_ai_response(user_message, conversation_history, places_data)
         
         return jsonify({
             'success': True,
             'response': ai_response,
+            'places_found': len(places_data),
+            'enhanced_with_location': len(places_data) > 0,
             'timestamp': request.timestamp if hasattr(request, 'timestamp') else None
         })
         
@@ -156,35 +235,79 @@ def chat():
         return jsonify({
             'success': False,
             'error': 'Internal server error',
-            'message': 'Sorry, I encountered an error processing your request.'
+            'message': 'Sorry, I encountered an error. For priority support, upgrade to JetFriend Premium!'
+        }), 500
+
+@app.route('/api/places', methods=['POST'])
+def places_search():
+    """External places search endpoint"""
+    try:
+        data = request.json
+        query = data.get('query', '').strip()
+        location = data.get('location', '').strip()
+        radius = data.get('radius', 5000)
+        
+        if not query:
+            return jsonify({'error': 'Query is required'}), 400
+        
+        if not gmaps_client:
+            return jsonify({
+                'success': False,
+                'error': 'Google Places API not configured',
+                'message': 'Location search unavailable. Upgrade to JetFriend Premium for enhanced location services!'
+            }), 503
+        
+        places_data = search_places(query, location, radius)
+        
+        return jsonify({
+            'success': True,
+            'places': places_data,
+            'count': len(places_data),
+            'query': query,
+            'location': location if location else 'Global search'
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in places search: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'message': 'Places search error. For priority support, upgrade to JetFriend Premium!'
         }), 500
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Health check endpoint"""
+    """Health check endpoint with API status"""
     return jsonify({
         'status': 'healthy',
         'service': 'JetFriend API',
-        'version': '1.0.0'
+        'version': '2.0.0',
+        'features': {
+            'openai_gpt4o': openai_client is not None,
+            'google_places': gmaps_client is not None,
+            'location_detection': True,
+            'premium_features': False
+        }
     })
 
-@app.route('/api/test', methods=['GET'])
+@app.route('/api/test-ai', methods=['GET'])
 def test_ai():
-    """Test AI connectivity"""
-    if not api_key:
+    """Test OpenAI connectivity"""
+    if not openai_client:
         return jsonify({
             'success': False,
-            'error': 'GEMINI_API_KEY not configured',
+            'error': 'OPENAI_API_KEY not configured',
             'ai_status': 'disconnected',
-            'message': 'Please set the GEMINI_API_KEY environment variable to enable AI functionality.'
+            'message': 'Please set the OPENAI_API_KEY environment variable. Upgrade to JetFriend Premium for priority API access!'
         }), 503
 
     try:
-        test_response = get_ai_response("Hello! Can you tell me you're working correctly?")
+        test_response = get_ai_response("Hello! Can you tell me you're working correctly as JetFriend?")
         return jsonify({
             'success': True,
             'test_response': test_response,
-            'ai_status': 'connected'
+            'ai_status': 'connected',
+            'model': 'gpt-4o'
         })
     except Exception as e:
         return jsonify({
@@ -193,11 +316,40 @@ def test_ai():
             'ai_status': 'disconnected'
         }), 500
 
+@app.route('/api/test-places', methods=['GET'])
+def test_places():
+    """Test Google Places API connectivity"""
+    if not gmaps_client:
+        return jsonify({
+            'success': False,
+            'error': 'GOOGLE_PLACES_API_KEY not configured',
+            'places_status': 'disconnected',
+            'message': 'Please set the GOOGLE_PLACES_API_KEY environment variable. Upgrade to JetFriend Premium for enhanced location services!'
+        }), 503
+
+    try:
+        # Test with a simple search
+        test_places = search_places("coffee shop", "New York")
+        return jsonify({
+            'success': True,
+            'places_status': 'connected',
+            'test_results': len(test_places),
+            'sample_place': test_places[0] if test_places else None
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'places_status': 'disconnected'
+        }), 500
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-    print(f"🚀 JetFriend API starting on port {port}")
+    print(f"🚀 JetFriend API v2.0 starting on port {port}")
     print(f"🌐 Visit: http://localhost:{port}")
+    print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
+    print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
 
     app.run(host='0.0.0.0', port=port, debug=debug_mode)
