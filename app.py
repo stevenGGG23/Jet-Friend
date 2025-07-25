@@ -347,7 +347,7 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
 
                 places_text += "\n"
 
-            enhanced_message = f"{user_message}\n{places_text}\n\nINSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the clickable links. Focus on convenience and immediate utility. Include ratings, phone numbers, and direct access links in your response. Prioritize places with good reviews and current information."
+            enhanced_message = f"{user_message}\n{places_text}\n\nINSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the available clickable links. You have access to comprehensive travel booking links including Google Maps, Yelp, TripAdvisor, OpenTable (restaurants), Booking.com/Expedia (hotels), GetYourGuide (tours), Foursquare, Uber/Lyft (transportation), and official websites. Include relevant links for each recommendation - put each link on its own line. Focus on convenience and immediate utility. Include ratings, phone numbers, and direct access links in your response. Prioritize places with good reviews and current information. Make sure all links are properly formatted as [Link Name](URL) and each link is on a separate line."
         
         messages.append({"role": "user", "content": enhanced_message})
         
