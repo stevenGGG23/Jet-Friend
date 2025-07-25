@@ -4217,6 +4217,88 @@
 
                         // Close the consolidated DOMContentLoaded listener
       });
+
+      // Performance optimizations
+      document.addEventListener('DOMContentLoaded', function() {
+        // Hide loading screen once content is ready
+        const loadingScreen = document.getElementById('loadingScreen');
+        const hideLoadingScreen = () => {
+          if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+            setTimeout(() => {
+              loadingScreen.style.display = 'none';
+            }, 500);
+          }
+        };
+
+        // Wait for images and critical content to load
+        Promise.all([
+          document.fonts.ready,
+          new Promise(resolve => {
+            if (document.readyState === 'complete') {
+              resolve();
+            } else {
+              window.addEventListener('load', resolve);
+            }
+          })
+        ]).then(() => {
+          setTimeout(hideLoadingScreen, 300); // Small delay for smooth UX
+        });
+
+        // Fallback: hide loading screen after max 3 seconds regardless
+        setTimeout(hideLoadingScreen, 3000);
+      });
+
+      // Lazy load background images for better performance
+      const observerOptions = {
+        root: null,
+        threshold: 0.1,
+        rootMargin: '50px'
+      };
+
+      const lazyBackgroundObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const element = entry.target;
+            const bgImage = element.dataset.bgImage;
+            if (bgImage) {
+              element.style.backgroundImage = `url(${bgImage})`;
+              element.classList.add('bg-loaded');
+              lazyBackgroundObserver.unobserve(element);
+            }
+          }
+        });
+      }, observerOptions);
+
+      // Preload critical resources
+      window.addEventListener('DOMContentLoaded', () => {
+        // Preload hero section background
+        const heroImg = new Image();
+        heroImg.src = 'https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1';
+
+        // Cache other images for later sections
+        setTimeout(() => {
+          ['33057683', '33067204', '33048475'].forEach(id => {
+            const img = new Image();
+            img.src = `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1`;
+          });
+        }, 2000);
+      });
+
+      // Optimize animations for low-end devices
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (prefersReducedMotion.matches) {
+        document.documentElement.style.setProperty('--animation-duration', '0.1s');
+      }
+
+      // Performance monitoring
+      if ('performance' in window) {
+        window.addEventListener('load', () => {
+          const perfData = performance.getEntriesByType('navigation')[0];
+          console.log(`🚀 Page Load Time: ${Math.round(perfData.loadEventEnd - perfData.fetchStart)}ms`);
+          console.log(`⚡ Time to Interactive: ${Math.round(perfData.domInteractive - perfData.fetchStart)}ms`);
+        });
+      }
     </script>
   </body>
 </html>
