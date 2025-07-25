@@ -4296,17 +4296,27 @@
 
       // Preload critical resources
       window.addEventListener('DOMContentLoaded', () => {
-        // Preload hero section background
-        const heroImg = new Image();
-        heroImg.src = 'https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1';
+        try {
+          // Preload hero section background
+          if (window.Image) {
+            const heroImg = new Image();
+            heroImg.src = 'https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1';
 
-        // Cache other images for later sections
-        setTimeout(() => {
-          ['33057683', '33067204', '33048475'].forEach(id => {
-            const img = new Image();
-            img.src = `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1`;
-          });
-        }, 2000);
+            // Cache other images for later sections
+            setTimeout(() => {
+              try {
+                ['33057683', '33067204', '33048475'].forEach(id => {
+                  const img = new Image();
+                  img.src = `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1`;
+                });
+              } catch (error) {
+                console.warn('Image preloading error:', error);
+              }
+            }, 2000);
+          }
+        } catch (error) {
+          console.warn('Resource preloading error:', error);
+        }
       });
 
       // Optimize animations for low-end devices
