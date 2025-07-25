@@ -149,8 +149,6 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 detailed_place = place
 
             # Enhanced place data structure with proper URL encoding
-            import urllib.parse
-
             place_name = detailed_place.get('name', place.get('name', ''))
             place_address = detailed_place.get('formatted_address', place.get('formatted_address', ''))
             location_for_search = location or place_address or 'near me'
