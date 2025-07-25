@@ -3649,7 +3649,10 @@
       // Page loader
       window.addEventListener("load", function () {
         setTimeout(() => {
-          document.getElementById("pageLoader").classList.add("loader-hidden");
+          const loadingScreen = document.getElementById("loadingScreen");
+          if (loadingScreen && loadingScreen.classList) {
+            loadingScreen.classList.add("hidden");
+          }
         }, 1500);
       });
 
