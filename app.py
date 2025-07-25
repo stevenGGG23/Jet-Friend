@@ -409,7 +409,9 @@ def chat():
         
         # Check if query requires location data
         places_data = []
-        if detect_location_query(user_message) and gmaps_client:
+        is_location_query = detect_location_query(user_message)
+
+        if is_location_query and gmaps_client:
             # Extract location from message or use general search
             location_match = re.search(r'(?:in|at|near)\s+([A-Za-z\s]+?)(?:\s|$|[.,!?])', user_message, re.IGNORECASE)
             location = location_match.group(1).strip() if location_match else None
@@ -430,6 +432,9 @@ def chat():
                     all_places.append(place)
 
             places_data = all_places[:8]  # Return top 8 mixed results
+        elif is_location_query and not gmaps_client:
+            # Add note about API limitation but still provide helpful guidance
+            user_message += "\n\nNOTE: Google Places API is not configured, so I can't provide real-time links right now, but I can still give you excellent travel advice and ask follow-up questions to help plan your trip!"
         
         # Get AI response with enhanced data
         ai_response = get_ai_response(user_message, conversation_history, places_data)
