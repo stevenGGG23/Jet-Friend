@@ -14,8 +14,11 @@
         <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       rel="stylesheet"
+      media="print" onload="this.media='all'"
     />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" media="print" onload="this.media='all'">
+    <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet"></noscript>
     <style>
       * {
         margin: 0;
@@ -1279,12 +1282,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg");
+                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.2) blur(1px);
         z-index: -1;
         animation: kenBurnsSmooth 100s ease-in-out infinite;
+        will-change: transform;
       }
 
       .mobile-app-content {
@@ -1436,12 +1440,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33057683/pexels-photo-33057683.jpeg");
+                background-image: url("https://images.pexels.com/photos/33057683/pexels-photo-33057683.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.1) blur(2px);
         z-index: -2;
         animation: kenBurnsSmooth 60s ease-in-out infinite;
+        will-change: transform;
         opacity: 0.3;
         mask: linear-gradient(
           180deg,
@@ -1672,12 +1677,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33067204/pexels-photo-33067204.jpeg");
+                background-image: url("https://images.pexels.com/photos/33067204/pexels-photo-33067204.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.2) blur(0.5px);
         z-index: -1;
         animation: kenBurnsSmooth 120s ease-in-out infinite;
+        will-change: transform;
       }
 
       .pricing-grid {
@@ -1752,12 +1758,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg");
+                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.25) blur(0.5px);
         z-index: -1;
         animation: kenBurnsSmooth 100s ease-in-out infinite;
+        will-change: transform;
       }
 
       .about-content {
@@ -1843,12 +1850,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33048475/pexels-photo-33048475.jpeg");
+                background-image: url("https://images.pexels.com/photos/33048475/pexels-photo-33048475.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.3) blur(0.5px);
         z-index: -1;
         animation: kenBurnsSmooth 130s ease-in-out infinite;
+        will-change: transform;
       }
 
       .contact-grid {
