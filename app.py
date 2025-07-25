@@ -360,11 +360,19 @@ def chat():
         # Get AI response with enhanced data
         ai_response = get_ai_response(user_message, conversation_history, places_data)
         
+        # Log for debugging
+        logger.info(f"Chat request: '{user_message}' - Location detected: {detect_location_query(user_message)} - Places found: {len(places_data)}")
+        if places_data:
+            logger.info(f"Sample place data: {places_data[0] if places_data else 'None'}")
+
         return jsonify({
             'success': True,
             'response': ai_response,
             'places_found': len(places_data),
             'enhanced_with_location': len(places_data) > 0,
+            'location_detected': detect_location_query(user_message),
+            'gmaps_available': gmaps_client is not None,
+            'debug_location': location if 'location' in locals() else None,
             'timestamp': request.timestamp if hasattr(request, 'timestamp') else None
         })
         
