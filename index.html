@@ -4220,30 +4220,44 @@
 
       // Performance optimizations
       document.addEventListener('DOMContentLoaded', function() {
-        // Hide loading screen once content is ready
-        const loadingScreen = document.getElementById('loadingScreen');
+        // Hide loading screen once content is ready with better error handling
         const hideLoadingScreen = () => {
-          if (loadingScreen) {
-            loadingScreen.classList.add('hidden');
-            setTimeout(() => {
-              loadingScreen.style.display = 'none';
-            }, 500);
+          try {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen && loadingScreen.classList) {
+              loadingScreen.classList.add('hidden');
+              setTimeout(() => {
+                if (loadingScreen && loadingScreen.style) {
+                  loadingScreen.style.display = 'none';
+                }
+              }, 500);
+            }
+          } catch (error) {
+            console.warn('Loading screen hide error:', error);
           }
         };
 
         // Wait for images and critical content to load
-        Promise.all([
-          document.fonts.ready,
-          new Promise(resolve => {
-            if (document.readyState === 'complete') {
-              resolve();
-            } else {
-              window.addEventListener('load', resolve);
-            }
-          })
-        ]).then(() => {
-          setTimeout(hideLoadingScreen, 300); // Small delay for smooth UX
-        });
+        try {
+          Promise.all([
+            document.fonts ? document.fonts.ready : Promise.resolve(),
+            new Promise(resolve => {
+              if (document.readyState === 'complete') {
+                resolve();
+              } else {
+                window.addEventListener('load', resolve);
+              }
+            })
+          ]).then(() => {
+            setTimeout(hideLoadingScreen, 300); // Small delay for smooth UX
+          }).catch(error => {
+            console.warn('Performance loading error:', error);
+            hideLoadingScreen(); // Still hide the loading screen
+          });
+        } catch (error) {
+          console.warn('Performance initialization error:', error);
+          hideLoadingScreen();
+        }
 
         // Fallback: hide loading screen after max 3 seconds regardless
         setTimeout(hideLoadingScreen, 3000);
