@@ -4264,25 +4264,35 @@
       });
 
       // Lazy load background images for better performance
-      const observerOptions = {
-        root: null,
-        threshold: 0.1,
-        rootMargin: '50px'
-      };
+      if ('IntersectionObserver' in window) {
+        try {
+          const observerOptions = {
+            root: null,
+            threshold: 0.1,
+            rootMargin: '50px'
+          };
 
-      const lazyBackgroundObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const element = entry.target;
-            const bgImage = element.dataset.bgImage;
-            if (bgImage) {
-              element.style.backgroundImage = `url(${bgImage})`;
-              element.classList.add('bg-loaded');
-              lazyBackgroundObserver.unobserve(element);
-            }
-          }
-        });
-      }, observerOptions);
+          const lazyBackgroundObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              try {
+                if (entry.isIntersecting && entry.target) {
+                  const element = entry.target;
+                  const bgImage = element.dataset ? element.dataset.bgImage : null;
+                  if (bgImage && element.style && element.classList) {
+                    element.style.backgroundImage = `url(${bgImage})`;
+                    element.classList.add('bg-loaded');
+                    lazyBackgroundObserver.unobserve(element);
+                  }
+                }
+              } catch (error) {
+                console.warn('Lazy loading error for element:', error);
+              }
+            });
+          }, observerOptions);
+        } catch (error) {
+          console.warn('IntersectionObserver initialization error:', error);
+        }
+      }
 
       // Preload critical resources
       window.addEventListener('DOMContentLoaded', () => {
