@@ -339,9 +339,23 @@ def chat():
             # Extract location from message or use general search
             location_match = re.search(r'(?:in|at|near)\s+([A-Za-z\s]+?)(?:\s|$|[.,!?])', user_message, re.IGNORECASE)
             location = location_match.group(1).strip() if location_match else None
-            
-            # Search for relevant places
-            places_data = search_places(user_message, location)
+
+            # Search for both regular and underground places
+            regular_places = search_places(user_message, location)
+            underground_places = search_underground_places(user_message, location)
+
+            # Combine and deduplicate by place_id
+            all_places = []
+            seen_ids = set()
+
+            # Prioritize underground places for authentic experience
+            for place in underground_places + regular_places:
+                place_id = place.get('place_id', '')
+                if place_id and place_id not in seen_ids:
+                    seen_ids.add(place_id)
+                    all_places.append(place)
+
+            places_data = all_places[:8]  # Return top 8 mixed results
         
         # Get AI response with enhanced data
         ai_response = get_ai_response(user_message, conversation_history, places_data)
