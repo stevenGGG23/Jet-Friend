@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 import re
 import logging
+import urllib.parse
 from dotenv import load_dotenv
 from openai import OpenAI
 import googlemaps
