@@ -305,16 +305,36 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                     status = "OPEN NOW" if place['is_open'] else "CLOSED NOW"
                     places_text += f"   Status: {status}\n"
 
-                # Add all clickable links
-                places_text += "   Links: "
-                places_text += f"[Google Maps]({place['google_maps_url']}) | "
-                places_text += f"[Yelp Reviews]({place['yelp_search_url']}) | "
-                places_text += f"[TripAdvisor]({place['tripadvisor_search_url']})"
+                # Add comprehensive clickable links
+                places_text += "   Essential Links:\n"
+                places_text += f"   [Google Maps]({place['google_maps_url']})\n"
+                places_text += f"   [Yelp Reviews]({place['yelp_search_url']})\n"
+                places_text += f"   [TripAdvisor]({place['tripadvisor_search_url']})\n"
 
                 if place['website']:
-                    places_text += f" | [Official Website]({place['website']})"
+                    places_text += f"   [Official Website]({place['website']})\n"
 
-                places_text += "\n"
+                # Add category-specific booking links
+                place_types = str(place.get('types', [])).lower()
+
+                if 'restaurant' in place_types or 'food' in place_types:
+                    if place['opentable_url']:
+                        places_text += f"   [OpenTable Reservations]({place['opentable_url']})\n"
+
+                if 'lodging' in place_types or 'hotel' in place_types:
+                    if place['booking_url']:
+                        places_text += f"   [Booking.com]({place['booking_url']})\n"
+                    if place['expedia_url']:
+                        places_text += f"   [Expedia]({place['expedia_url']})\n"
+
+                # Add activity and transportation links for all places
+                places_text += f"   [GetYourGuide Tours]({place['getyourguide_url']})\n"
+                places_text += f"   [Foursquare]({place['foursquare_url']})\n"
+
+                if place['uber_url']:
+                    places_text += f"   [Uber Ride]({place['uber_url']})\n"
+                if place['lyft_url']:
+                    places_text += f"   [Lyft Ride]({place['lyft_url']})\n"
 
                 # Add recent reviews if available
                 if place['reviews']:
