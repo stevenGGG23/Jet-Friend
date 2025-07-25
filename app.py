@@ -147,10 +147,21 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
             except:
                 detailed_place = place
 
-            # Enhanced place data structure
+            # Enhanced place data structure with proper URL encoding
+            import urllib.parse
+
+            place_name = detailed_place.get('name', place.get('name', ''))
+            place_address = detailed_place.get('formatted_address', place.get('formatted_address', ''))
+            location_for_search = location or place_address or 'near me'
+
+            # Properly encode all URL parameters
+            encoded_name = urllib.parse.quote_plus(place_name)
+            encoded_location = urllib.parse.quote_plus(location_for_search)
+            encoded_address = urllib.parse.quote_plus(place_address)
+
             place_info = {
-                'name': detailed_place.get('name', place.get('name', '')),
-                'address': detailed_place.get('formatted_address', place.get('formatted_address', '')),
+                'name': place_name,
+                'address': place_address,
                 'rating': detailed_place.get('rating', place.get('rating', 0)),
                 'rating_count': detailed_place.get('user_ratings_total', 0),
                 'price_level': detailed_place.get('price_level', place.get('price_level', 0)),
@@ -162,10 +173,29 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'is_open': detailed_place.get('opening_hours', {}).get('open_now', None),
                 'photos': detailed_place.get('photos', []),
                 'reviews': detailed_place.get('reviews', [])[:3],  # Top 3 reviews
-                'google_maps_url': f"https://maps.google.com/maps/place/?q=place_id:{place_id}",
-                'google_search_url': f"https://www.google.com/search?q={detailed_place.get('name', '').replace(' ', '+')}",
-                'yelp_search_url': f"https://www.yelp.com/search?find_desc={detailed_place.get('name', '').replace(' ', '+')}&find_loc={location or 'near me'}",
-                'tripadvisor_search_url': f"https://www.tripadvisor.com/Search?q={detailed_place.get('name', '').replace(' ', '+')}"
+
+                # Updated working URLs with proper encoding
+                'google_maps_url': f"https://www.google.com/maps/search/{encoded_name}+{encoded_location}" if place_name else f"https://maps.google.com/maps/place/?q=place_id:{place_id}",
+                'google_search_url': f"https://www.google.com/search?q={encoded_name}+{encoded_location}",
+                'yelp_search_url': f"https://www.yelp.com/search?find_desc={encoded_name}&find_loc={encoded_location}",
+                'tripadvisor_search_url': f"https://www.tripadvisor.com/Search?q={encoded_name}+{encoded_location}",
+                'foursquare_url': f"https://foursquare.com/explore?mode=url&near={encoded_location}&q={encoded_name}",
+                'timeout_url': f"https://www.timeout.com/search?query={encoded_name}",
+
+                # Restaurant-specific links
+                'opentable_url': f"https://www.opentable.com/s/?text={encoded_name}&location={encoded_location}" if 'restaurant' in str(detailed_place.get('types', [])).lower() else '',
+
+                # Hotel-specific links
+                'booking_url': f"https://www.booking.com/searchresults.html?ss={encoded_name}+{encoded_location}" if 'lodging' in str(detailed_place.get('types', [])).lower() else '',
+                'expedia_url': f"https://www.expedia.com/Hotel-Search?destination={encoded_location}" if 'lodging' in str(detailed_place.get('types', [])).lower() else '',
+
+                # Activity/tour links
+                'getyourguide_url': f"https://www.getyourguide.com/s/?q={encoded_name}+{encoded_location}",
+                'viator_url': f"https://www.viator.com/searchResults/all?text={encoded_name}+{encoded_location}",
+
+                # Transportation links
+                'uber_url': f"https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]={encoded_address}" if place_address else '',
+                'lyft_url': f"https://lyft.com/ride?destination[address]={encoded_address}" if place_address else ''
             }
             places.append(place_info)
 
