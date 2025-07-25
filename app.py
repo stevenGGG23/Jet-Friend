@@ -261,15 +261,14 @@ ACTION-ORIENTED GOALS:
 Get users clicking and booking immediately. Eliminate the need for additional research. Provide everything needed to make instant decisions. Connect users directly to the places and experiences they want. Work with the information provided without asking follow-up questions.
 
 STYLING REQUIREMENTS:
-- Use sans-serif font at 16px base size for optimal readability
-- Create proper visual hierarchy with h2 (22px) and h3 (18px) sizing
-- White text color for dark background compatibility
-- Light blue (#90cdf4) for all clickable links
-- Maximum width of 700px for optimal reading experience
-- Clean spacing with specific margins for professional appearance
-- Transparent background to work with any container styling
+- ALWAYS use the predefined CSS classes: itinerary-container, day-header, day-icon, itinerary-item, activity-name, activity-rating, stars, rating-text, activity-links, activity-link
+- Structure content properly: each day gets day-header with day-icon, each activity gets itinerary-item with activity-name, activity-rating, and activity-links
+- Use star symbols (★) in spans with class="stars" for visual ratings
+- All links must use class="activity-link" and include relevant icons (📍🌐⭐🍽️🏨🎫🚗)
+- Never use inline styles - the CSS classes handle all styling automatically
+- Ensure proper nesting: itinerary-container > day-header + itinerary-item > activity-name + activity-rating + activity-links
 
-Remember: I'm your personal travel concierge providing beautifully formatted, blog-quality content! ALWAYS use proper typography, visual hierarchy, and clean styling that rivals professional travel blogs."""
+Remember: I'm your personal travel concierge providing beautifully formatted, blog-quality content! ALWAYS use the CSS class structure for perfect styling that integrates seamlessly with the app design."""
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
     """
