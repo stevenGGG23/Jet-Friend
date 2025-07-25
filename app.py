@@ -510,6 +510,43 @@ def test_places():
             'error_type': type(e).__name__
         }), 500
 
+# Performance optimizations for cold starts
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000  # 1 year cache for static files
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False  # Disable pretty printing for performance
+
+# Add caching headers for static files
+@app.after_request
+def add_header(response):
+    # Add cache headers for better performance
+    if request.endpoint and 'static' in request.endpoint:
+        response.cache_control.max_age = 31536000  # 1 year
+        response.cache_control.public = True
+
+    # Add compression hint
+    response.headers['Vary'] = 'Accept-Encoding'
+
+    # Security headers
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+
+    return response
+
+# Warm up the application
+def warm_up():
+    """Warm up the application by initializing connections"""
+    try:
+        # Test OpenAI connection if available
+        if openai_client:
+            logger.info("🔥 Warming up OpenAI connection...")
+
+        # Test Google Places if available
+        if gmaps_client:
+            logger.info("🔥 Warming up Google Places connection...")
+
+        logger.info("🔥 Application warmed up successfully")
+    except Exception as e:
+        logger.warning(f"⚠️ Warm up partially failed: {str(e)}")
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
@@ -519,4 +556,7 @@ if __name__ == '__main__':
     print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
     print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
 
-    app.run(host='0.0.0.0', port=port, debug=debug_mode)
+    # Warm up the application
+    warm_up()
+
+    app.run(host='0.0.0.0', port=port, debug=debug_mode, threaded=True)
