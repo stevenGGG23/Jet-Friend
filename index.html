@@ -3597,8 +3597,10 @@
             const text = messageInput.value.trim();
             if (!text) return;
 
-            addMessage(text, true);
+            // Clear input immediately upon sending
             messageInput.value = '';
+
+            addMessage(text, true);
 
                         // No automatic responses - waiting for n8n API integration
             hideTyping();
@@ -4039,6 +4041,12 @@
                 return;
               }
 
+            // Clear input immediately upon clicking send
+            if (chatInput) {
+              chatInput.value = '';
+              chatInput.style.height = 'auto';
+            }
+
             // Disable send button temporarily
             sendButton.disabled = true;
             sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -4082,12 +4090,6 @@
                 // Add AI response to chat
                 addMessageToChat(result.data.response, 'ai');
 
-                // Clear input after successful response
-                if (chatInput) {
-                  chatInput.value = '';
-                  chatInput.style.height = 'auto';
-                }
-
                 // Visual feedback - success
                 this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
                 setTimeout(() => {
@@ -4095,7 +4097,7 @@
                 }, 2000);
 
               } else {
-                // Handle API error - don't clear input so user can retry
+                // Handle API error
                 const errorMessage = result.error || 'Sorry, I encountered an error. Please try again.';
                 addMessageToChat(`Sorry, I encountered an error: ${errorMessage}`, 'ai');
 
