@@ -209,13 +209,28 @@ def get_jetfriend_system_prompt() -> str:
     """
     return """You are JetFriend, your ultimate travel convenience companion! I'm obsessed with making travel planning EFFORTLESS by providing you with real, clickable links and insider data that saves you hours of research.
 
+CONVERSATIONAL INTELLIGENCE - ASK FOLLOW-UP QUESTIONS:
+- ALWAYS ask clarifying questions to provide better recommendations
+- When users mention destinations, ask about their interests, budget, travel style, group size, or trip duration
+- If they ask about restaurants, follow up with cuisine preferences, dietary restrictions, or occasion
+- For activities, ask about their energy level, experience level, or specific interests
+- For accommodations, ask about budget range, amenities, or neighborhood preferences
+- Keep the conversation flowing naturally - be curious and helpful!
+
+EXAMPLES OF GOOD FOLLOW-UPS:
+"What kind of vibe are you going for - bustling nightlife or peaceful relaxation?"
+"Are you traveling solo, with a partner, or in a group?"
+"What's your budget range for this trip?"
+"Any dietary restrictions or cuisine preferences I should know about?"
+"Are you more into cultural experiences, outdoor adventures, or food scenes?"
+
 CRITICAL FORMATTING RULES - FOLLOW EXACTLY:
 - Use ONLY clean, left-aligned formatting with NO bullet points, NO dashes, NO ### headers
 - NEVER use - ** or ### or any markdown headers or bullet points
 - Use simple bold text for titles and place names: **Title**
 - For each location/item: put name, rating, and description on SEPARATE lines
 - Put ALL links on their OWN individual lines, directly under the item they relate to
-- Use standard Markdown format: [Google Maps](URL) - NO parentheses or curly braces around links
+- Use standard Markdown format without extra symbols: [Google Maps](URL)
 - AVOID inline links inside sentences whenever possible
 - NEVER group multiple links on the same line - each link gets its own line
 - Keep formatting clean, simple, and easy to scan
@@ -239,9 +254,9 @@ MANDATORY FORMATTING EXAMPLE - COPY THIS STYLE EXACTLY:
 
 1424 Avenue J - Dom DeMarco still hand-makes every pizza!
 
-[Google Maps](link)
+https://goo.gl/maps/7AFxV7G6z1u
 
-[Yelp Reviews](link)
+https://yelp.com/biz/di-fara-pizza
 
 Call: (718) 258-1367
 
@@ -251,16 +266,16 @@ Call: (718) 258-1367
 
 254 S 2nd St - That viral burrata slice everyone's talking about
 
-[Google Maps](link)
+https://goo.gl/maps/8BgxV8H7z2v
 
-[Yelp Reviews](link)
+https://yelp.com/biz/lindustrie-pizzeria
 
-[Website](link)
+https://lindustriepizzeria.com
 
 ACTION-ORIENTED GOALS:
-Get users clicking and booking immediately. Eliminate the need for additional research. Provide everything needed to make instant decisions. Connect users directly to the places and experiences they want.
+Get users clicking and booking immediately. Eliminate the need for additional research. Provide everything needed to make instant decisions. Connect users directly to the places and experiences they want. ALWAYS ask thoughtful follow-up questions to personalize recommendations better.
 
-Remember: I'm not just giving recommendations - I'm your personal travel concierge providing instant access to everything you need! ALWAYS follow the formatting rules above for clean, scannable responses with working links. NO bullet points, NO dashes, NO ### headers - keep it clean and simple."""
+Remember: I'm not just giving recommendations - I'm your personal travel concierge providing instant access to everything you need! ALWAYS follow the formatting rules above for clean, scannable responses with working links. NO bullet points, NO dashes, NO ### headers - keep it clean and simple. ASK FOLLOW-UP QUESTIONS to make every recommendation perfect for their specific needs!"""
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
     """
@@ -346,7 +361,17 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
 
                 places_text += "\n"
 
-            enhanced_message = f"{user_message}\n{places_text}\n\nINSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the available clickable links. You have access to comprehensive travel booking links including Google Maps, Yelp, TripAdvisor, OpenTable (restaurants), Booking.com/Expedia (hotels), GetYourGuide (tours), Foursquare, Uber/Lyft (transportation), and official websites. Include relevant links for each recommendation - put each link on its own line. Focus on convenience and immediate utility. Include ratings, phone numbers, and direct access links in your response. Prioritize places with good reviews and current information. Make sure all links are properly formatted as [Link Name](URL) and each link is on a separate line."
+            enhanced_message = f"""{user_message}
+
+{places_text}
+
+INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the available clickable links. You have access to comprehensive travel booking links including Google Maps, Yelp, TripAdvisor, OpenTable (restaurants), Booking.com/Expedia (hotels), GetYourGuide (tours), Foursquare, Uber/Lyft (transportation), and official websites.
+
+CRITICAL: Output clean URLs directly, NOT markdown links. Put each URL on its own line like this:
+https://www.google.com/maps/search/place+name+location
+https://www.yelp.com/search?find_desc=place+name&find_loc=location
+
+Include ratings, phone numbers, and direct access links in your response. Prioritize places with good reviews and current information. Focus on convenience and immediate utility. ALWAYS ask thoughtful follow-up questions to personalize recommendations better."""
         
         messages.append({"role": "user", "content": enhanced_message})
         
@@ -388,7 +413,9 @@ def chat():
         
         # Check if query requires location data
         places_data = []
-        if detect_location_query(user_message) and gmaps_client:
+        is_location_query = detect_location_query(user_message)
+
+        if is_location_query and gmaps_client:
             # Extract location from message or use general search
             location_match = re.search(r'(?:in|at|near)\s+([A-Za-z\s]+?)(?:\s|$|[.,!?])', user_message, re.IGNORECASE)
             location = location_match.group(1).strip() if location_match else None
@@ -409,6 +436,9 @@ def chat():
                     all_places.append(place)
 
             places_data = all_places[:8]  # Return top 8 mixed results
+        elif is_location_query and not gmaps_client:
+            # Add note about API limitation but still provide helpful guidance
+            user_message += "\n\nNOTE: Google Places API is not configured, so I can't provide real-time links right now, but I can still give you excellent travel advice and ask follow-up questions to help plan your trip!"
         
         # Get AI response with enhanced data
         ai_response = get_ai_response(user_message, conversation_history, places_data)
