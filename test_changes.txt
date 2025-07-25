@@ -1,0 +1,5 @@
+Test file to check if git commits are working
+Added HTML formatting functionality to JetFriend app:
+- Sample itinerary responses with proper formatting
+- Left-aligned text with professional styling
+- Clickable links for Google Maps and official websites
