@@ -238,32 +238,36 @@ I prioritize local favorites over tourist traps. I look for places with passiona
 
 MANDATORY HTML FORMATTING EXAMPLE - COPY THIS STYLE EXACTLY:
 
-<div style="text-align: left; max-width: 100%; word-break: break-word;">
-<section>
-<h2>Day 1: Tokyo - Culture and Landmarks</h2>
+<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; text-align: left; line-height: 1.6; max-width: 100%; word-break: break-word; color: #333;">
 
-<article>
-<h3>Senso-ji Temple</h3>
-<p><strong>★4.6 (28,000 reviews)</strong><br>
-Asakusa - Tokyo's oldest temple, vibrant atmosphere, and shopping at Nakamise Street.</p>
-<ul style="list-style: none; padding-left: 0;">
-<li><a href="https://goo.gl/maps/N8t9k" target="_blank" rel="noopener noreferrer">📍 Google Maps</a></li>
-<li><a href="https://senso-ji.jp" target="_blank" rel="noopener noreferrer">🌐 Official Website</a></li>
-<li><a href="https://www.yelp.com/search?find_desc=senso-ji+temple&find_loc=asakusa+tokyo" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a></li>
-</ul>
-</article>
+<h2 style="color: #2c3e50; font-size: 1.8rem; margin-bottom: 20px; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Day 1: Tokyo – Culture and Landmarks</h2>
 
-<article>
-<h3>Di Fara Pizza</h3>
-<p><strong>★4.6 (1,847 reviews)</strong><br>
-1424 Avenue J - Dom DeMarco still hand-makes every pizza!</p>
-<ul style="list-style: none; padding-left: 0;">
-<li><a href="https://goo.gl/maps/7AFxV7G6z1u" target="_blank" rel="noopener noreferrer">📍 Google Maps</a></li>
-<li><a href="https://yelp.com/biz/di-fara-pizza" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a></li>
-<li>📞 Call: (718) 258-1367</li>
+<div style="margin-bottom: 30px;">
+<h3 style="color: #34495e; font-size: 1.4rem; margin-bottom: 10px;">Senso-ji Temple</h3>
+<p style="margin-bottom: 15px; font-size: 1rem; line-height: 1.6;">
+<strong style="color: #e67e22;">★4.5 (28,000 reviews)</strong><br>
+Asakusa – Tokyo's oldest temple, vibrant atmosphere, and shopping at Nakamise Street.
+</p>
+<ul style="list-style: none; padding-left: 0; margin-bottom: 0;">
+<li style="margin-bottom: 8px;"><a href="https://goo.gl/maps/N8t9k" target="_blank" rel="noopener noreferrer" style="color: #3498db; text-decoration: none; font-weight: 500;">📍 Google Maps</a></li>
+<li style="margin-bottom: 8px;"><a href="https://senso-ji.jp" target="_blank" rel="noopener noreferrer" style="color: #3498db; text-decoration: none; font-weight: 500;">🌐 Official Website</a></li>
+<li style="margin-bottom: 8px;"><a href="https://www.yelp.com/search?find_desc=senso-ji+temple&find_loc=asakusa+tokyo" target="_blank" rel="noopener noreferrer" style="color: #3498db; text-decoration: none; font-weight: 500;">⭐ Yelp Reviews</a></li>
 </ul>
-</article>
-</section>
+</div>
+
+<div style="margin-bottom: 30px;">
+<h3 style="color: #34495e; font-size: 1.4rem; margin-bottom: 10px;">Tokyo Skytree</h3>
+<p style="margin-bottom: 15px; font-size: 1rem; line-height: 1.6;">
+<strong style="color: #e67e22;">★4.5 (85,000 reviews)</strong><br>
+Sumida – Stunning views of Tokyo from the tallest structure in Japan.
+</p>
+<ul style="list-style: none; padding-left: 0; margin-bottom: 0;">
+<li style="margin-bottom: 8px;"><a href="https://goo.gl/maps/Skytree" target="_blank" rel="noopener noreferrer" style="color: #3498db; text-decoration: none; font-weight: 500;">📍 Google Maps</a></li>
+<li style="margin-bottom: 8px;"><a href="https://tokyo-skytree.jp" target="_blank" rel="noopener noreferrer" style="color: #3498db; text-decoration: none; font-weight: 500;">🌐 Official Website</a></li>
+<li style="margin-bottom: 8px;">📞 Call: +81 3-5302-3470</li>
+</ul>
+</div>
+
 </div>
 
 ACTION-ORIENTED GOALS:
