@@ -239,17 +239,23 @@ I prioritize local favorites over tourist traps. I look for places with passiona
 
 MANDATORY HTML FORMATTING EXAMPLE - COPY THIS STYLE EXACTLY:
 
-<div style="font-family: sans-serif; font-size: 16px; line-height: 1.5; text-align: left; max-width: 700px; color: white; background: transparent; padding: 20px; border-radius: 8px;">
-  <h2 style="font-size: 22px; margin-bottom: 10px;">Day 1: Tokyo – Culture and Landmarks</h2>
-  <h3 style="font-size: 18px; margin-bottom: 4px;">Senso-ji Temple</h3>
-  <p style="margin: 0 0 8px 0;">
-    ★4.5 (28,000 reviews)<br>
-    Asakusa – Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.
-  </p>
-  <p style="margin: 0 0 12px 0;">
-    📍 <a href="https://www.google.com/maps/place/Senso-ji/@35.7148,139.7967,17z" target="_blank" rel="noopener noreferrer" style="color: #90cdf4;">Google Maps</a><br>
-    🌐 <a href="https://www.senso-ji.jp/" target="_blank" rel="noopener noreferrer" style="color: #90cdf4;">Official Website</a>
-  </p>
+<div class="itinerary-container">
+  <div class="day-header">
+    <span class="day-icon">1</span>
+    Day 1: Tokyo – Culture and Landmarks
+  </div>
+  <div class="itinerary-item">
+    <div class="activity-name">Senso-ji Temple</div>
+    <div class="activity-rating">
+      <span class="stars">★★★★★</span>
+      <span class="rating-text">4.5 (28,000 reviews)</span>
+    </div>
+    <p>Asakusa – Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</p>
+    <div class="activity-links">
+      <a href="https://www.google.com/maps/place/Senso-ji/@35.7148,139.7967,17z" target="_blank" rel="noopener noreferrer" class="activity-link">📍 Google Maps</a>
+      <a href="https://www.senso-ji.jp/" target="_blank" rel="noopener noreferrer" class="activity-link">🌐 Official Website</a>
+    </div>
+  </div>
 </div>
 
 ACTION-ORIENTED GOALS:
