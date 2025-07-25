@@ -2431,8 +2431,12 @@
     </style>
   </head>
   <body>
-    <div class="page-loader" id="pageLoader">
-      <div class="loader-spinner"></div>
+    <!-- Optimized Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+      <div>
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading JetFriend...</div>
+      </div>
     </div>
 
     <!-- Modern Left-Side Drawer Navigation -->
@@ -4052,7 +4056,7 @@
               console.log('📤 Send button clicked');
 
               const inputText = chatInput ? chatInput.value.trim() : '';
-              console.log('📝 Input text:', inputText);
+              console.log('���� Input text:', inputText);
 
               if (!inputText) {
                 alert('Please enter a message first');
