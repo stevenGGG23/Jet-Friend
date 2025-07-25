@@ -63,6 +63,43 @@ def detect_location_query(message: str) -> bool:
     message_lower = message.lower()
     return any(keyword in message_lower for keyword in location_keywords)
 
+def search_underground_places(query: str, location: str = None) -> List[Dict]:
+    """
+    Search for underground, authentic, and local favorite places
+    """
+    if not gmaps_client:
+        return []
+
+    try:
+        underground_queries = [
+            f"{query} hidden gem {location or ''}",
+            f"{query} local favorite {location or ''}",
+            f"{query} authentic {location or ''}",
+            f"{query} underground {location or ''}",
+            f"best {query} locals {location or ''}",
+            f"{query} hole in the wall {location or ''}"
+        ]
+
+        all_places = []
+        seen_place_ids = set()
+
+        for search_query in underground_queries:
+            try:
+                places_result = gmaps_client.places(query=search_query.strip())
+                for place in places_result.get('results', [])[:3]:  # Top 3 from each query
+                    place_id = place.get('place_id', '')
+                    if place_id and place_id not in seen_place_ids:
+                        seen_place_ids.add(place_id)
+                        all_places.append(place)
+            except Exception as e:
+                logger.warning(f"Underground search failed for '{search_query}': {str(e)}")
+                continue
+
+        return all_places[:6]  # Return top 6 unique underground places
+    except Exception as e:
+        logger.error(f"Error in underground search: {str(e)}")
+        return []
+
 def search_places(query: str, location: str = None, radius: int = 5000) -> List[Dict]:
     """
     Enhanced search for places using Google Places API with detailed information
