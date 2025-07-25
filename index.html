@@ -3597,8 +3597,10 @@
             const text = messageInput.value.trim();
             if (!text) return;
 
-            addMessage(text, true);
+            // Clear input immediately upon sending
             messageInput.value = '';
+
+            addMessage(text, true);
 
                         // No automatic responses - waiting for n8n API integration
             hideTyping();
