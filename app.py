@@ -464,7 +464,7 @@ def test_ai():
 
 @app.route('/api/test-places', methods=['GET'])
 def test_places():
-    """Test Google Places API connectivity"""
+    """Enhanced test for Google Places API connectivity with detailed debugging"""
     if not gmaps_client:
         return jsonify({
             'success': False,
@@ -474,19 +474,40 @@ def test_places():
         }), 503
 
     try:
-        # Test with a simple search
-        test_places = search_places("coffee shop", "New York")
+        # Test multiple search types
+        test_query = "pizza restaurant"
+        test_location = "San Francisco"
+
+        logger.info(f"Testing Google Places API with query: '{test_query}' in '{test_location}'")
+
+        # Test regular search
+        regular_places = search_places(test_query, test_location)
+
+        # Test underground search
+        underground_places = search_underground_places(test_query, test_location)
+
+        # Test basic API connectivity
+        basic_test = gmaps_client.places(query="Starbucks San Francisco")
+
         return jsonify({
             'success': True,
             'places_status': 'connected',
-            'test_results': len(test_places),
-            'sample_place': test_places[0] if test_places else None
+            'regular_search_results': len(regular_places),
+            'underground_search_results': len(underground_places),
+            'basic_api_results': len(basic_test.get('results', [])),
+            'sample_regular_place': regular_places[0] if regular_places else None,
+            'sample_underground_place': underground_places[0] if underground_places else None,
+            'api_response_sample': basic_test.get('results', [])[0] if basic_test.get('results') else None,
+            'test_query': test_query,
+            'test_location': test_location
         })
     except Exception as e:
+        logger.error(f"Places API test failed: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e),
-            'places_status': 'disconnected'
+            'places_status': 'disconnected',
+            'error_type': type(e).__name__
         }), 500
 
 if __name__ == '__main__':
