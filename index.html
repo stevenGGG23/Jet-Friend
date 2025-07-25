@@ -3299,7 +3299,7 @@
               </div>
               <div class="highlight-title">All-in-One Assistant</div>
               <div class="highlight-desc">
-                Flights, hotels, attractions, discounts, packing lists — all in
+                Flights, hotels, attractions, discounts, packing lists �� all in
                 one place.
               </div>
             </div>
@@ -4038,6 +4038,12 @@
                 alert('Please enter a message first');
                 return;
               }
+
+            // Clear input immediately upon clicking send
+            if (chatInput) {
+              chatInput.value = '';
+              chatInput.style.height = 'auto';
+            }
 
             // Disable send button temporarily
             sendButton.disabled = true;
