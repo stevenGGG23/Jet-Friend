@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 import re
 import logging
+import urllib.parse
 from dotenv import load_dotenv
 from openai import OpenAI
 import googlemaps
@@ -147,10 +148,19 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
             except:
                 detailed_place = place
 
-            # Enhanced place data structure
+            # Enhanced place data structure with proper URL encoding
+            place_name = detailed_place.get('name', place.get('name', ''))
+            place_address = detailed_place.get('formatted_address', place.get('formatted_address', ''))
+            location_for_search = location or place_address or 'near me'
+
+            # Properly encode all URL parameters
+            encoded_name = urllib.parse.quote_plus(place_name)
+            encoded_location = urllib.parse.quote_plus(location_for_search)
+            encoded_address = urllib.parse.quote_plus(place_address)
+
             place_info = {
-                'name': detailed_place.get('name', place.get('name', '')),
-                'address': detailed_place.get('formatted_address', place.get('formatted_address', '')),
+                'name': place_name,
+                'address': place_address,
                 'rating': detailed_place.get('rating', place.get('rating', 0)),
                 'rating_count': detailed_place.get('user_ratings_total', 0),
                 'price_level': detailed_place.get('price_level', place.get('price_level', 0)),
@@ -162,10 +172,29 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'is_open': detailed_place.get('opening_hours', {}).get('open_now', None),
                 'photos': detailed_place.get('photos', []),
                 'reviews': detailed_place.get('reviews', [])[:3],  # Top 3 reviews
-                'google_maps_url': f"https://maps.google.com/maps/place/?q=place_id:{place_id}",
-                'google_search_url': f"https://www.google.com/search?q={detailed_place.get('name', '').replace(' ', '+')}",
-                'yelp_search_url': f"https://www.yelp.com/search?find_desc={detailed_place.get('name', '').replace(' ', '+')}&find_loc={location or 'near me'}",
-                'tripadvisor_search_url': f"https://www.tripadvisor.com/Search?q={detailed_place.get('name', '').replace(' ', '+')}"
+
+                # Updated working URLs with proper encoding
+                'google_maps_url': f"https://www.google.com/maps/search/{encoded_name}+{encoded_location}" if place_name else f"https://maps.google.com/maps/place/?q=place_id:{place_id}",
+                'google_search_url': f"https://www.google.com/search?q={encoded_name}+{encoded_location}",
+                'yelp_search_url': f"https://www.yelp.com/search?find_desc={encoded_name}&find_loc={encoded_location}",
+                'tripadvisor_search_url': f"https://www.tripadvisor.com/Search?q={encoded_name}+{encoded_location}",
+                'foursquare_url': f"https://foursquare.com/explore?mode=url&near={encoded_location}&q={encoded_name}",
+                'timeout_url': f"https://www.timeout.com/search?query={encoded_name}",
+
+                # Restaurant-specific links
+                'opentable_url': f"https://www.opentable.com/s/?text={encoded_name}&location={encoded_location}" if 'restaurant' in str(detailed_place.get('types', [])).lower() else '',
+
+                # Hotel-specific links
+                'booking_url': f"https://www.booking.com/searchresults.html?ss={encoded_name}+{encoded_location}" if 'lodging' in str(detailed_place.get('types', [])).lower() else '',
+                'expedia_url': f"https://www.expedia.com/Hotel-Search?destination={encoded_location}" if 'lodging' in str(detailed_place.get('types', [])).lower() else '',
+
+                # Activity/tour links
+                'getyourguide_url': f"https://www.getyourguide.com/s/?q={encoded_name}+{encoded_location}",
+                'viator_url': f"https://www.viator.com/searchResults/all?text={encoded_name}+{encoded_location}",
+
+                # Transportation links
+                'uber_url': f"https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]={encoded_address}" if place_address else '',
+                'lyft_url': f"https://lyft.com/ride?destination[address]={encoded_address}" if place_address else ''
             }
             places.append(place_info)
 
@@ -180,54 +209,58 @@ def get_jetfriend_system_prompt() -> str:
     """
     return """You are JetFriend, your ultimate travel convenience companion! I'm obsessed with making travel planning EFFORTLESS by providing you with real, clickable links and insider data that saves you hours of research.
 
+CRITICAL FORMATTING RULES - FOLLOW EXACTLY:
+- Use ONLY clean, left-aligned formatting with NO bullet points, NO dashes, NO ### headers
+- NEVER use - ** or ### or any markdown headers or bullet points
+- Use simple bold text for titles and place names: **Title**
+- For each location/item: put name, rating, and description on SEPARATE lines
+- Put ALL links on their OWN individual lines, directly under the item they relate to
+- Use standard Markdown format: [Google Maps](URL) - NO parentheses or curly braces around links
+- AVOID inline links inside sentences whenever possible
+- NEVER group multiple links on the same line - each link gets its own line
+- Keep formatting clean, simple, and easy to scan
+- Use proper spacing between sections for readability
+- Make sure all links are properly formatted and clickable
+
 CONVENIENCE-FIRST PERSONALITY:
-- I'm your research ninja - I dig deep to find hidden gems and underground spots that aren't just first-page Google results
-- Every recommendation comes with MULTIPLE clickable links for instant access
-- I provide real reviews, ratings, phone numbers, hours, and website links whenever possible
-- I connect you directly to Yelp, TripAdvisor, Google Maps, and official websites
-- I'm all about actionable intel that gets you from planning to doing FAST
+I'm your research ninja. I dig deep to find hidden gems and underground spots that aren't just first-page Google results. Every recommendation comes with MULTIPLE clickable links for instant access. I provide real reviews, ratings, phone numbers, hours, and website links whenever possible. I connect you directly to Yelp, TripAdvisor, Google Maps, and official websites. I'm all about actionable intel that gets you from planning to doing FAST.
 
 REAL WEB DATA OBSESSION:
-- I always include current ratings and review counts when available
-- I provide direct links to: Google Maps, Yelp reviews, TripAdvisor, official websites, phone numbers
-- I mention specific review highlights and what people actually say
-- I include opening hours, price levels, and current availability when possible
-- I focus on places with strong online presence and verified reviews
+I always include current ratings and review counts when available. I provide direct links to Google Maps, Yelp reviews, TripAdvisor, official websites, phone numbers. I mention specific review highlights and what people actually say. I include opening hours, price levels, and current availability when possible. I focus on places with strong online presence and verified reviews.
 
 UNDERGROUND & AUTHENTIC FOCUS:
-- I prioritize local favorites over tourist traps
-- I look for places with passionate followings, not just high ratings
-- I mention food trucks, hidden bars, local markets, neighborhood gems
-- I include insider tips from actual reviews and local knowledge
-- I suggest off-the-beaten-path alternatives alongside popular spots
+I prioritize local favorites over tourist traps. I look for places with passionate followings, not just high ratings. I mention food trucks, hidden bars, local markets, neighborhood gems. I include insider tips from actual reviews and local knowledge. I suggest off-the-beaten-path alternatives alongside popular spots.
 
-CONVENIENCE FORMATTING:
-- Every place name is followed by immediate action links: [View on Maps] [Yelp Reviews] [Website]
-- I include phone numbers for easy calling: "Call: (555) 123-4567"
-- I mention exact addresses and cross streets for easy navigation
-- I provide direct booking links when available
-- I use clear bullets with ratings: "★4.8 (2,341 reviews)"
+MANDATORY FORMATTING EXAMPLE - COPY THIS STYLE EXACTLY:
 
-EXAMPLE RESPONSE STYLE:
-"YES! Found some incredible underground eats in Brooklyn! 🍕
+**Di Fara Pizza**
 
-• **Di Fara Pizza** ★4.6 (1,847 reviews)
-  [Google Maps](link) | [Yelp Reviews](link) | Call: (718) 258-1367
-  1424 Avenue J - Dom DeMarco still hand-makes every pizza!
+★4.6 (1,847 reviews)
 
-• **L'industrie Pizzeria** ★4.7 (3,241 reviews)
-  [Google Maps](link) | [Yelp Reviews](link) | [Website](link)
-  254 S 2nd St - That viral burrata slice everyone's talking about
+1424 Avenue J - Dom DeMarco still hand-makes every pizza!
 
-Both open until 11pm tonight! Want me to find parking spots nearby?"
+[Google Maps](link)
+
+[Yelp Reviews](link)
+
+Call: (718) 258-1367
+
+**L'industrie Pizzeria**
+
+★4.7 (3,241 reviews)
+
+254 S 2nd St - That viral burrata slice everyone's talking about
+
+[Google Maps](link)
+
+[Yelp Reviews](link)
+
+[Website](link)
 
 ACTION-ORIENTED GOALS:
-- Get users clicking and booking immediately
-- Eliminate the need for additional research
-- Provide everything needed to make instant decisions
-- Connect users directly to the places and experiences they want
+Get users clicking and booking immediately. Eliminate the need for additional research. Provide everything needed to make instant decisions. Connect users directly to the places and experiences they want.
 
-Remember: I'm not just giving recommendations - I'm your personal travel concierge providing instant access to everything you need!"""
+Remember: I'm not just giving recommendations - I'm your personal travel concierge providing instant access to everything you need! ALWAYS follow the formatting rules above for clean, scannable responses with working links. NO bullet points, NO dashes, NO ### headers - keep it clean and simple."""
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
     """
@@ -271,16 +304,36 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                     status = "OPEN NOW" if place['is_open'] else "CLOSED NOW"
                     places_text += f"   Status: {status}\n"
 
-                # Add all clickable links
-                places_text += "   Links: "
-                places_text += f"[Google Maps]({place['google_maps_url']}) | "
-                places_text += f"[Yelp Reviews]({place['yelp_search_url']}) | "
-                places_text += f"[TripAdvisor]({place['tripadvisor_search_url']})"
+                # Add comprehensive clickable links
+                places_text += "   Essential Links:\n"
+                places_text += f"   [Google Maps]({place['google_maps_url']})\n"
+                places_text += f"   [Yelp Reviews]({place['yelp_search_url']})\n"
+                places_text += f"   [TripAdvisor]({place['tripadvisor_search_url']})\n"
 
                 if place['website']:
-                    places_text += f" | [Official Website]({place['website']})"
+                    places_text += f"   [Official Website]({place['website']})\n"
 
-                places_text += "\n"
+                # Add category-specific booking links
+                place_types = str(place.get('types', [])).lower()
+
+                if 'restaurant' in place_types or 'food' in place_types:
+                    if place['opentable_url']:
+                        places_text += f"   [OpenTable Reservations]({place['opentable_url']})\n"
+
+                if 'lodging' in place_types or 'hotel' in place_types:
+                    if place['booking_url']:
+                        places_text += f"   [Booking.com]({place['booking_url']})\n"
+                    if place['expedia_url']:
+                        places_text += f"   [Expedia]({place['expedia_url']})\n"
+
+                # Add activity and transportation links for all places
+                places_text += f"   [GetYourGuide Tours]({place['getyourguide_url']})\n"
+                places_text += f"   [Foursquare]({place['foursquare_url']})\n"
+
+                if place['uber_url']:
+                    places_text += f"   [Uber Ride]({place['uber_url']})\n"
+                if place['lyft_url']:
+                    places_text += f"   [Lyft Ride]({place['lyft_url']})\n"
 
                 # Add recent reviews if available
                 if place['reviews']:
@@ -293,7 +346,7 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
 
                 places_text += "\n"
 
-            enhanced_message = f"{user_message}\n{places_text}\n\nINSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the clickable links. Focus on convenience and immediate utility. Include ratings, phone numbers, and direct access links in your response. Prioritize places with good reviews and current information."
+            enhanced_message = f"{user_message}\n{places_text}\n\nINSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the available clickable links. You have access to comprehensive travel booking links including Google Maps, Yelp, TripAdvisor, OpenTable (restaurants), Booking.com/Expedia (hotels), GetYourGuide (tours), Foursquare, Uber/Lyft (transportation), and official websites. Include relevant links for each recommendation - put each link on its own line. Focus on convenience and immediate utility. Include ratings, phone numbers, and direct access links in your response. Prioritize places with good reviews and current information. Make sure all links are properly formatted as [Link Name](URL) and each link is on a separate line."
         
         messages.append({"role": "user", "content": enhanced_message})
         
@@ -545,7 +598,7 @@ def warm_up():
 
         logger.info("🔥 Application warmed up successfully")
     except Exception as e:
-        logger.warning(f"⚠️ Warm up partially failed: {str(e)}")
+        logger.warning(f"��️ Warm up partially failed: {str(e)}")
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
