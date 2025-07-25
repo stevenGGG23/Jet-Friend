@@ -3973,13 +3973,19 @@
 
             // Handle line breaks and bullet points for better formatting
             if (type === 'ai') {
-              // For AI messages, preserve line breaks and format lists
-              const formattedMessage = message
-                .replace(/\n/g, '<br>')
-                .replace(/•\s/g, '<br>• ')
-                .replace(/(\d+\.\s)/g, '<br>$1')
-                .replace(/^<br>/, ''); // Remove leading break
-              paragraph.innerHTML = formattedMessage;
+              // Check if message contains HTML tags (likely structured itinerary content)
+              if (message.includes('<div class="') || message.includes('<div style=')) {
+                // For structured HTML content, render as-is
+                paragraph.innerHTML = message;
+              } else {
+                // For plain text AI messages, preserve line breaks and format lists
+                const formattedMessage = message
+                  .replace(/\n/g, '<br>')
+                  .replace(/•\s/g, '<br>• ')
+                  .replace(/(\d+\.\s)/g, '<br>$1')
+                  .replace(/^<br>/, ''); // Remove leading break
+                paragraph.innerHTML = formattedMessage;
+              }
             } else {
               // For user messages, keep as text content for security
               paragraph.textContent = message;
