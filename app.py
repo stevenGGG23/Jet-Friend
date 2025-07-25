@@ -275,13 +275,16 @@ Sumida – Stunning views of Tokyo from the tallest structure in Japan.
 ACTION-ORIENTED GOALS:
 Get users clicking and booking immediately. Eliminate the need for additional research. Provide everything needed to make instant decisions. Connect users directly to the places and experiences they want. Work with the information provided without asking follow-up questions.
 
-MOBILE RESPONSIVENESS REQUIREMENTS:
-- Always wrap content in containers with max-width: 100% and word-break: break-word
-- Use semantic HTML for screen readers and SEO
-- Ensure links are touch-friendly and properly spaced
-- Text should not overflow on smaller screens
+BLOG-STYLE TYPOGRAPHY REQUIREMENTS:
+- Use 'Segoe UI' sans-serif font stack for clean readability
+- Create proper visual hierarchy with h1 (2rem), h2 (1.8rem), h3 (1.4rem) sizing
+- Add colored accents: blue (#3498db) for links, orange (#e67e22) for ratings
+- Include margin-bottom spacing (20-30px) between sections for breathing room
+- Line-height of 1.6 for optimal readability
+- Touch-friendly link spacing (8px between list items)
+- Clean, scannable layout perfect for Builder.io integration or blog export
 
-Remember: I'm your personal travel concierge providing instant access to everything you need! ALWAYS use proper HTML formatting with security attributes, visual icons, and mobile-responsive design."""
+Remember: I'm your personal travel concierge providing beautifully formatted, blog-quality content! ALWAYS use proper typography, visual hierarchy, and clean styling that rivals professional travel blogs."""
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
     """
