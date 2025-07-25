@@ -6,21 +6,75 @@
     <title>JetFriend - Your AI Travel Companion</title>
 
     <!-- Favicon Links -->
-    <link rel="icon" type="image/x-icon" href="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=ico&width=32">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=png&width=32">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=png&width=16">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=png&width=180">
+    <link rel="icon" type="image/x-icon" href="https://cdn.builder.io/api/v1/image/assets%2Fabe9c7b18bdd485d8d636e7c281c5277%2Ff8ea8cd408854fdaadb189abd8c2dbcf?format=ico&width=32">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.builder.io/api/v1/image/assets%2Fabe9c7b18bdd485d8d636e7c281c5277%2Ff8ea8cd408854fdaadb189abd8c2dbcf?format=png&width=32">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.builder.io/api/v1/image/assets%2Fabe9c7b18bdd485d8d636e7c281c5277%2Ff8ea8cd408854fdaadb189abd8c2dbcf?format=png&width=16">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.builder.io/api/v1/image/assets%2Fabe9c7b18bdd485d8d636e7c281c5277%2Ff8ea8cd408854fdaadb189abd8c2dbcf?format=png&width=180">
 
         <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       rel="stylesheet"
+      media="print" onload="this.media='all'"
     />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" media="print" onload="this.media='all'">
+    <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet"></noscript>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"></noscript>
+
+    <!-- DNS prefetch for external domains -->
+    <link rel="dns-prefetch" href="//images.pexels.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+
     <style>
+      /* Critical CSS first */
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+      }
+
+      /* Loading screen styles */
+      .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0a0a1a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+      }
+
+      .loading-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 3px solid rgba(139, 92, 246, 0.3);
+        border-top: 3px solid #8b5cf6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .loading-text {
+        margin-top: 20px;
+        color: #8b5cf6;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
       }
 
       body {
@@ -1279,12 +1333,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg");
+                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.2) blur(1px);
         z-index: -1;
         animation: kenBurnsSmooth 100s ease-in-out infinite;
+        will-change: transform;
       }
 
       .mobile-app-content {
@@ -1436,12 +1491,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33057683/pexels-photo-33057683.jpeg");
+                background-image: url("https://images.pexels.com/photos/33057683/pexels-photo-33057683.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.1) blur(2px);
         z-index: -2;
         animation: kenBurnsSmooth 60s ease-in-out infinite;
+        will-change: transform;
         opacity: 0.3;
         mask: linear-gradient(
           180deg,
@@ -1672,12 +1728,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33067204/pexels-photo-33067204.jpeg");
+                background-image: url("https://images.pexels.com/photos/33067204/pexels-photo-33067204.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.2) blur(0.5px);
         z-index: -1;
         animation: kenBurnsSmooth 120s ease-in-out infinite;
+        will-change: transform;
       }
 
       .pricing-grid {
@@ -1752,12 +1809,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg");
+                background-image: url("https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.25) blur(0.5px);
         z-index: -1;
         animation: kenBurnsSmooth 100s ease-in-out infinite;
+        will-change: transform;
       }
 
       .about-content {
@@ -1843,12 +1901,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-                background-image: url("https://images.pexels.com/photos/33048475/pexels-photo-33048475.jpeg");
+                background-image: url("https://images.pexels.com/photos/33048475/pexels-photo-33048475.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1");
         background-size: cover;
         background-position: center;
         filter: brightness(0.3) blur(0.5px);
         z-index: -1;
         animation: kenBurnsSmooth 130s ease-in-out infinite;
+        will-change: transform;
       }
 
       .contact-grid {
@@ -2297,34 +2356,7 @@
         will-change: transform;
       }
 
-      /* Loading animation */
-      .page-loader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--background-dark);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        transition: opacity 0.5s ease;
-      }
-
-      .loader-hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      .loader-spinner {
-        width: 60px;
-        height: 60px;
-        border: 4px solid rgba(139, 92, 246, 0.2);
-        border-radius: 50%;
-        border-top-color: var(--primary-purple);
-        animation: spin 1s ease-in-out infinite;
-      }
+      /* Old loading styles removed - using new loading-screen styles instead */
 
       @keyframes spin {
         to {
@@ -2372,8 +2404,12 @@
     </style>
   </head>
   <body>
-    <div class="page-loader" id="pageLoader">
-      <div class="loader-spinner"></div>
+    <!-- Optimized Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+      <div>
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading JetFriend...</div>
+      </div>
     </div>
 
     <!-- Modern Left-Side Drawer Navigation -->
@@ -3586,7 +3622,10 @@
       // Page loader
       window.addEventListener("load", function () {
         setTimeout(() => {
-          document.getElementById("pageLoader").classList.add("loader-hidden");
+          const loadingScreen = document.getElementById("loadingScreen");
+          if (loadingScreen && loadingScreen.classList) {
+            loadingScreen.classList.add("hidden");
+          }
         }, 1500);
       });
 
@@ -3981,7 +4020,7 @@
             }, 2000);
           });
         } else {
-          console.error('❌ Test API button not found');
+          console.error('��� Test API button not found');
         }
 
         // Main send button functionality using JetFriend API
@@ -3993,7 +4032,7 @@
               console.log('📤 Send button clicked');
 
               const inputText = chatInput ? chatInput.value.trim() : '';
-              console.log('📝 Input text:', inputText);
+              console.log('���� Input text:', inputText);
 
               if (!inputText) {
                 alert('Please enter a message first');
@@ -4154,6 +4193,136 @@
 
                         // Close the consolidated DOMContentLoaded listener
       });
+
+      // Performance optimizations
+      document.addEventListener('DOMContentLoaded', function() {
+        // Hide loading screen once content is ready with better error handling
+        const hideLoadingScreen = () => {
+          try {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen && loadingScreen.classList) {
+              loadingScreen.classList.add('hidden');
+              setTimeout(() => {
+                if (loadingScreen && loadingScreen.style) {
+                  loadingScreen.style.display = 'none';
+                }
+              }, 500);
+            }
+          } catch (error) {
+            console.warn('Loading screen hide error:', error);
+          }
+        };
+
+        // Wait for images and critical content to load
+        try {
+          Promise.all([
+            document.fonts ? document.fonts.ready : Promise.resolve(),
+            new Promise(resolve => {
+              if (document.readyState === 'complete') {
+                resolve();
+              } else {
+                window.addEventListener('load', resolve);
+              }
+            })
+          ]).then(() => {
+            setTimeout(hideLoadingScreen, 300); // Small delay for smooth UX
+          }).catch(error => {
+            console.warn('Performance loading error:', error);
+            hideLoadingScreen(); // Still hide the loading screen
+          });
+        } catch (error) {
+          console.warn('Performance initialization error:', error);
+          hideLoadingScreen();
+        }
+
+        // Fallback: hide loading screen after max 3 seconds regardless
+        setTimeout(hideLoadingScreen, 3000);
+      });
+
+      // Lazy load background images for better performance
+      if ('IntersectionObserver' in window) {
+        try {
+          const observerOptions = {
+            root: null,
+            threshold: 0.1,
+            rootMargin: '50px'
+          };
+
+          const lazyBackgroundObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              try {
+                if (entry.isIntersecting && entry.target) {
+                  const element = entry.target;
+                  const bgImage = element.dataset ? element.dataset.bgImage : null;
+                  if (bgImage && element.style && element.classList) {
+                    element.style.backgroundImage = `url(${bgImage})`;
+                    element.classList.add('bg-loaded');
+                    lazyBackgroundObserver.unobserve(element);
+                  }
+                }
+              } catch (error) {
+                console.warn('Lazy loading error for element:', error);
+              }
+            });
+          }, observerOptions);
+        } catch (error) {
+          console.warn('IntersectionObserver initialization error:', error);
+        }
+      }
+
+      // Preload critical resources
+      window.addEventListener('DOMContentLoaded', () => {
+        try {
+          // Preload hero section background
+          if (window.Image) {
+            const heroImg = new Image();
+            heroImg.src = 'https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1';
+
+            // Cache other images for later sections
+            setTimeout(() => {
+              try {
+                ['33057683', '33067204', '33048475'].forEach(id => {
+                  const img = new Image();
+                  img.src = `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1`;
+                });
+              } catch (error) {
+                console.warn('Image preloading error:', error);
+              }
+            }, 2000);
+          }
+        } catch (error) {
+          console.warn('Resource preloading error:', error);
+        }
+      });
+
+      // Optimize animations for low-end devices
+      try {
+        if (window.matchMedia) {
+          const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+          if (prefersReducedMotion && prefersReducedMotion.matches && document.documentElement && document.documentElement.style) {
+            document.documentElement.style.setProperty('--animation-duration', '0.1s');
+          }
+        }
+      } catch (error) {
+        console.warn('Animation optimization error:', error);
+      }
+
+      // Performance monitoring
+      if ('performance' in window && window.performance) {
+        window.addEventListener('load', () => {
+          try {
+            if (performance.getEntriesByType) {
+              const perfData = performance.getEntriesByType('navigation')[0];
+              if (perfData && perfData.loadEventEnd && perfData.fetchStart && perfData.domInteractive) {
+                console.log(`🚀 Page Load Time: ${Math.round(perfData.loadEventEnd - perfData.fetchStart)}ms`);
+                console.log(`⚡ Time to Interactive: ${Math.round(perfData.domInteractive - perfData.fetchStart)}ms`);
+              }
+            }
+          } catch (error) {
+            console.warn('Performance monitoring error:', error);
+          }
+        });
+      }
     </script>
   </body>
 </html>
