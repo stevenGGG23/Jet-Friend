@@ -367,9 +367,9 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
 
 INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the available clickable HTML links. You have access to comprehensive travel booking links including Google Maps, Yelp, TripAdvisor, OpenTable (restaurants), Booking.com/Expedia (hotels), GetYourGuide (tours), Foursquare, Uber/Lyft (transportation), and official websites.
 
-CRITICAL: Output proper HTML anchor tags with target="_blank" and rel="noopener noreferrer". Put each link on its own line like this:
-<a href="https://www.google.com/maps/search/place+name+location" target="_blank" rel="noopener noreferrer">Google Maps</a>
-<a href="https://www.yelp.com/search?find_desc=place+name&find_loc=location" target="_blank" rel="noopener noreferrer">Yelp Reviews</a>
+CRITICAL: Output proper HTML anchor tags with security attributes and visual icons. Use semantic HTML structure and mobile-responsive containers:
+<a href="https://www.google.com/maps/search/place+name+location" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
+<a href="https://www.yelp.com/search?find_desc=place+name&find_loc=location" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
 
 Include ratings, phone numbers, and direct access HTML links in your response. Prioritize places with good reviews and current information. Focus on convenience and immediate utility. Work with the information provided without asking follow-up questions."""
         
