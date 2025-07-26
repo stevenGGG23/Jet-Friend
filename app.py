@@ -140,7 +140,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
             try:
                 place_details_result = gmaps_client.place(
                     place_id=place_id,
-                    fields=['name', 'formatted_address', 'rating', 'price_level',
+                    fields=['name', 'formatted_address', 'rating', 'price_level', 
                            'types', 'website', 'formatted_phone_number', 'opening_hours',
                            'photos', 'reviews', 'user_ratings_total', 'url']
                 )
