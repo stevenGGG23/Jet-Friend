@@ -275,12 +275,6 @@ COMPACT SPACING RULES:
 - Keep descriptions under 100 characters
 - Maximum 3 links per activity
 
-NEVER USE:
-- **bold** markdown
-- ### headers
-- Inline styles like style="..."
-- Extra \n\n line breaks
-- Vertical link stacking
 
 ALWAYS INCLUDE:
 - Google Maps link for each location
