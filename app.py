@@ -243,8 +243,8 @@ GENERAL RULES:
 - For restaurant/hotel lists: Use bullet points or numbered lists
 - For single recommendations: Provide detailed paragraph descriptions
 - For itineraries: Use the HTML structure
-- Always include practical links (Google Maps, official sites, reviews)
-- Keep descriptions concise and useful
+- Always include practical links (Google Maps, official sites, reviews), if you can't find a working link for one don't include it 
+- Keep descriptions concise and useful but also try to sell it to them
 - Include ratings, prices, and key details when available
 
 EXAMPLES OF QUERY TYPES:
