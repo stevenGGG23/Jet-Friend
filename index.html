@@ -744,11 +744,11 @@
 
       .chat-container {
           flex: 1;
-          padding: 15px;
+          padding: 12px;
           overflow-y: auto;
           display: flex;
           flex-direction: column;
-          gap: 12px;
+          gap: 10px;
           background: linear-gradient(180deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8));
       }
 
@@ -760,6 +760,13 @@
           color: #e2e8f0;
           border: 1px solid rgba(255, 255, 255, 0.1);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+          max-width: 85%;
+          padding: 10px 12px;
+          border-radius: 12px;
+          font-size: 12px;
+          line-height: 1.4;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
       }
 
       .user-message {
@@ -767,6 +774,13 @@
           background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           color: #f1f5f9;
           box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+          max-width: 85%;
+          padding: 10px 12px;
+          border-radius: 12px;
+          font-size: 12px;
+          line-height: 1.4;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
       }
 
             .bot-avatar {
@@ -795,13 +809,16 @@
           background: linear-gradient(135deg, rgba(51, 65, 85, 0.6), rgba(71, 85, 105, 0.4));
           border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 12px;
-          padding: 12px;
-          margin: 8px 0;
+          padding: 10px;
+          margin: 6px 0;
           backdrop-filter: blur(15px);
           max-width: 100%;
+          width: 100%;
           text-align: left;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
           transition: all 0.2s ease;
+          box-sizing: border-box;
+          overflow: hidden;
       }
 
       .itinerary-item:hover {
@@ -813,87 +830,97 @@
       .day-header {
           color: #06b6d4;
           font-weight: 700;
-          font-size: 16px;
-          margin-bottom: 12px;
-          margin-top: 12px;
+          font-size: 14px;
+          margin-bottom: 8px;
+          margin-top: 8px;
           text-align: left;
           line-height: 1.2;
           border-bottom: 1px solid rgba(6, 182, 212, 0.2);
-          padding-bottom: 6px;
+          padding-bottom: 4px;
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
       }
 
       .activity {
           color: #e2e8f0;
-          font-size: 14px;
-          line-height: 1.5;
+          font-size: 12px;
+          line-height: 1.4;
           margin: 0;
           text-align: left;
           white-space: pre-line;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
       }
       .day-icon {
           background: linear-gradient(135deg, #06b6d4, #0891b2);
           color: white;
-          width: 20px;
-          height: 20px;
+          width: 18px;
+          height: 18px;
           border-radius: 50%;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          font-size: 11px;
+          font-size: 10px;
           font-weight: 700;
           box-shadow: 0 2px 6px rgba(6, 182, 212, 0.3);
           flex-shrink: 0;
       }
 
       .activity-name {
-          font-size: 15px;
+          font-size: 13px;
           font-weight: 600;
           color: white;
-          margin-bottom: 6px;
+          margin-bottom: 4px;
           line-height: 1.3;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
       }
 
       .activity-rating {
           display: flex;
           align-items: center;
-          gap: 6px;
-          margin-bottom: 8px;
+          gap: 4px;
+          margin-bottom: 6px;
+          flex-wrap: wrap;
       }
 
       .stars {
           color: #fbbf24;
-          font-size: 13px;
+          font-size: 11px;
           line-height: 1;
       }
 
       .rating-text {
           color: #94a3b8;
-          font-size: 12px;
+          font-size: 10px;
       }
 
       .activity-links {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
-          margin-top: 8px;
+          gap: 6px;
+          margin-top: 6px;
       }
 
       .activity-link {
           display: inline-flex;
           align-items: center;
-          gap: 3px;
+          gap: 2px;
           color: #06b6d4;
           text-decoration: none;
-          font-size: 11px;
+          font-size: 9px;
           background: rgba(6, 182, 212, 0.1);
-          padding: 4px 8px;
-          border-radius: 12px;
+          padding: 3px 6px;
+          border-radius: 8px;
           border: 1px solid rgba(6, 182, 212, 0.2);
           transition: all 0.2s ease;
           white-space: nowrap;
+          max-width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
       }
 
       .activity-link:hover {
@@ -953,29 +980,31 @@
       }
 
       .input-container {
-          padding: 12px 15px;
+          padding: 10px 12px;
           background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
           border-top: 1px solid rgba(255, 255, 255, 0.1);
           display: flex;
-          gap: 8px;
+          gap: 6px;
           align-items: center;
           backdrop-filter: blur(20px);
       }
 
       .message-input {
           flex: 1;
-          padding: 8px 12px;
+          padding: 6px 10px;
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 16px;
-          font-size: 12px;
+          border-radius: 12px;
+          font-size: 11px;
           outline: none;
           background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(51, 65, 85, 0.4));
           color: #e2e8f0;
           backdrop-filter: blur(10px);
+          min-height: 28px;
       }
 
       .message-input::placeholder {
           color: #64748b;
+          font-size: 11px;
       }
 
       .message-input:focus {
@@ -984,8 +1013,8 @@
       }
 
       .send-btn {
-          width: 32px;
-          height: 32px;
+          width: 28px;
+          height: 28px;
           background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           border: none;
           border-radius: 50%;
@@ -994,8 +1023,9 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 12px;
+          font-size: 10px;
           transition: all 0.3s ease;
+          flex-shrink: 0;
       }
 
       .send-btn:hover {
@@ -1337,49 +1367,170 @@
             /* Mobile responsiveness for hero chatbot */
       @media (max-width: 768px) {
         .hero-chatbot-container {
-          margin: 40px 10px 0;
+          margin: 30px 8px 0;
           border-radius: 16px;
+          max-width: calc(100vw - 16px);
         }
 
         .chat-messages {
-          padding: 20px;
-          min-height: 350px;
+          padding: 16px;
+          min-height: 280px;
+          max-height: 300px;
+          gap: 16px;
         }
 
         .chat-input-container {
-          padding: 20px;
-        }
-
-        .input-wrapper {
-          flex-wrap: wrap;
+          padding: 16px;
           gap: 8px;
         }
 
-        .model-selector {
-          order: -1;
-          width: 100%;
+        .chat-input {
+          padding: 10px 14px;
+          font-size: 14px;
+          min-height: 36px;
+          border-radius: 12px;
         }
 
-        .model-btn {
-          width: 100%;
-          justify-content: space-between;
+        .send-button {
+          width: 36px;
+          height: 36px;
+          font-size: 14px;
+          margin-left: 4px;
         }
 
         .message {
-          max-width: 90%;
-          padding: 15px 18px;
+          max-width: 85%;
+          padding: 12px 16px;
           font-size: 14px;
+          border-radius: 12px;
+          line-height: 1.5;
         }
 
         .ai-avatar,
         .user-avatar {
-          width: 36px;
-          height: 36px;
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
         }
 
         .ai-avatar img {
-          width: 20px;
-          height: 20px;
+          width: 18px;
+          height: 18px;
+        }
+
+        .user-avatar i {
+          font-size: 16px;
+        }
+
+        .message-group {
+          gap: 12px;
+        }
+      }
+
+      /* Extra small screens - phone portrait */
+      @media (max-width: 480px) {
+        .hero-chatbot-container {
+          margin: 20px 6px 0;
+          border-radius: 14px;
+        }
+
+        .chat-messages {
+          padding: 12px;
+          min-height: 250px;
+          max-height: 280px;
+          gap: 12px;
+        }
+
+        .chat-input-container {
+          padding: 12px;
+          gap: 6px;
+        }
+
+        .chat-input {
+          padding: 8px 12px;
+          font-size: 13px;
+          min-height: 32px;
+          border-radius: 10px;
+        }
+
+        .send-button {
+          width: 32px;
+          height: 32px;
+          font-size: 12px;
+          border-radius: 6px;
+        }
+
+        .message {
+          max-width: 88%;
+          padding: 10px 14px;
+          font-size: 13px;
+          border-radius: 10px;
+          line-height: 1.4;
+        }
+
+        .ai-avatar,
+        .user-avatar {
+          width: 28px;
+          height: 28px;
+          border-radius: 6px;
+        }
+
+        .ai-avatar img {
+          width: 16px;
+          height: 16px;
+        }
+
+        .user-avatar i {
+          font-size: 14px;
+        }
+
+        .message-group {
+          gap: 10px;
+        }
+
+        /* Improve text wrapping and readability */
+        .message p {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
+        }
+
+        /* Make scrollbar thinner on mobile */
+        .chat-messages::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        /* Ensure content doesn't overflow horizontally */
+        .hero-chatbot-container * {
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+
+        /* Better text handling for long messages */
+        .message {
+          word-break: break-word;
+        }
+
+        /* Adjust hero padding on mobile */
+        .hero {
+          padding: 100px 15px 40px;
+        }
+
+        .hero-content {
+          max-width: 100%;
+          padding: 0 5px;
+        }
+      }
+
+      /* Landscape phone optimization */
+      @media (max-width: 768px) and (orientation: landscape) {
+        .hero-chatbot-container {
+          margin: 20px 8px 0;
+        }
+
+        .chat-messages {
+          min-height: 200px;
+          max-height: 220px;
         }
       }
 
@@ -3113,7 +3264,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >✓</span
+                  >��</span
                 >
                 Real-time deal alerts
               </li>
