@@ -870,51 +870,57 @@
       }
 
       .activity-name {
-          font-size: 15px;
+          font-size: 13px;
           font-weight: 600;
           color: white;
-          margin-bottom: 6px;
+          margin-bottom: 4px;
           line-height: 1.3;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
       }
 
       .activity-rating {
           display: flex;
           align-items: center;
-          gap: 6px;
-          margin-bottom: 8px;
+          gap: 4px;
+          margin-bottom: 6px;
+          flex-wrap: wrap;
       }
 
       .stars {
           color: #fbbf24;
-          font-size: 13px;
+          font-size: 11px;
           line-height: 1;
       }
 
       .rating-text {
           color: #94a3b8;
-          font-size: 12px;
+          font-size: 10px;
       }
 
       .activity-links {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
-          margin-top: 8px;
+          gap: 6px;
+          margin-top: 6px;
       }
 
       .activity-link {
           display: inline-flex;
           align-items: center;
-          gap: 3px;
+          gap: 2px;
           color: #06b6d4;
           text-decoration: none;
-          font-size: 11px;
+          font-size: 9px;
           background: rgba(6, 182, 212, 0.1);
-          padding: 4px 8px;
-          border-radius: 12px;
+          padding: 3px 6px;
+          border-radius: 8px;
           border: 1px solid rgba(6, 182, 212, 0.2);
           transition: all 0.2s ease;
           white-space: nowrap;
+          max-width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
       }
 
       .activity-link:hover {
