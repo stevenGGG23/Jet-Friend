@@ -1337,49 +1337,137 @@
             /* Mobile responsiveness for hero chatbot */
       @media (max-width: 768px) {
         .hero-chatbot-container {
-          margin: 40px 10px 0;
+          margin: 30px 8px 0;
           border-radius: 16px;
+          max-width: calc(100vw - 16px);
         }
 
         .chat-messages {
-          padding: 20px;
-          min-height: 350px;
+          padding: 16px;
+          min-height: 280px;
+          max-height: 300px;
+          gap: 16px;
         }
 
         .chat-input-container {
-          padding: 20px;
-        }
-
-        .input-wrapper {
-          flex-wrap: wrap;
+          padding: 16px;
           gap: 8px;
         }
 
-        .model-selector {
-          order: -1;
-          width: 100%;
+        .chat-input {
+          padding: 10px 14px;
+          font-size: 14px;
+          min-height: 36px;
+          border-radius: 12px;
         }
 
-        .model-btn {
-          width: 100%;
-          justify-content: space-between;
+        .send-button {
+          width: 36px;
+          height: 36px;
+          font-size: 14px;
+          margin-left: 4px;
         }
 
         .message {
-          max-width: 90%;
-          padding: 15px 18px;
+          max-width: 85%;
+          padding: 12px 16px;
           font-size: 14px;
+          border-radius: 12px;
+          line-height: 1.5;
         }
 
         .ai-avatar,
         .user-avatar {
-          width: 36px;
-          height: 36px;
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
         }
 
         .ai-avatar img {
-          width: 20px;
-          height: 20px;
+          width: 18px;
+          height: 18px;
+        }
+
+        .user-avatar i {
+          font-size: 16px;
+        }
+
+        .message-group {
+          gap: 12px;
+        }
+      }
+
+      /* Extra small screens - phone portrait */
+      @media (max-width: 480px) {
+        .hero-chatbot-container {
+          margin: 20px 6px 0;
+          border-radius: 14px;
+        }
+
+        .chat-messages {
+          padding: 12px;
+          min-height: 250px;
+          max-height: 280px;
+          gap: 12px;
+        }
+
+        .chat-input-container {
+          padding: 12px;
+          gap: 6px;
+        }
+
+        .chat-input {
+          padding: 8px 12px;
+          font-size: 13px;
+          min-height: 32px;
+          border-radius: 10px;
+        }
+
+        .send-button {
+          width: 32px;
+          height: 32px;
+          font-size: 12px;
+          border-radius: 6px;
+        }
+
+        .message {
+          max-width: 88%;
+          padding: 10px 14px;
+          font-size: 13px;
+          border-radius: 10px;
+          line-height: 1.4;
+        }
+
+        .ai-avatar,
+        .user-avatar {
+          width: 28px;
+          height: 28px;
+          border-radius: 6px;
+        }
+
+        .ai-avatar img {
+          width: 16px;
+          height: 16px;
+        }
+
+        .user-avatar i {
+          font-size: 14px;
+        }
+
+        .message-group {
+          gap: 10px;
+        }
+
+        /* Improve text wrapping and readability */
+        .message p {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
+        }
+
+        /* Make scrollbar thinner on mobile */
+        .chat-messages::-webkit-scrollbar {
+          width: 4px;
         }
       }
 
