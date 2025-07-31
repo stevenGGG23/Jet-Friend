@@ -967,29 +967,31 @@
       }
 
       .input-container {
-          padding: 12px 15px;
+          padding: 10px 12px;
           background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
           border-top: 1px solid rgba(255, 255, 255, 0.1);
           display: flex;
-          gap: 8px;
+          gap: 6px;
           align-items: center;
           backdrop-filter: blur(20px);
       }
 
       .message-input {
           flex: 1;
-          padding: 8px 12px;
+          padding: 6px 10px;
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 16px;
-          font-size: 12px;
+          border-radius: 12px;
+          font-size: 11px;
           outline: none;
           background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(51, 65, 85, 0.4));
           color: #e2e8f0;
           backdrop-filter: blur(10px);
+          min-height: 28px;
       }
 
       .message-input::placeholder {
           color: #64748b;
+          font-size: 11px;
       }
 
       .message-input:focus {
@@ -998,8 +1000,8 @@
       }
 
       .send-btn {
-          width: 32px;
-          height: 32px;
+          width: 28px;
+          height: 28px;
           background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           border: none;
           border-radius: 50%;
@@ -1008,8 +1010,9 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 12px;
+          font-size: 10px;
           transition: all 0.3s ease;
+          flex-shrink: 0;
       }
 
       .send-btn:hover {
@@ -2717,7 +2720,7 @@
                     <div class="message bot-message">
                       Absolutely. Based on your preferences, here's a suggestion:
                       <br><br>
-                      �� Best time to fly: November 6–15 (cheapest dates)<br>
+                      • Best time to fly: November 6–15 (cheapest dates)<br>
                       • Ideal location to stay: Kichijoji (peaceful area, near Ghibli Museum and nature spots)<br>
                       • Estimated trip cost: around $2,180
                       <br><br>
