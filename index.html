@@ -809,13 +809,16 @@
           background: linear-gradient(135deg, rgba(51, 65, 85, 0.6), rgba(71, 85, 105, 0.4));
           border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 12px;
-          padding: 12px;
-          margin: 8px 0;
+          padding: 10px;
+          margin: 6px 0;
           backdrop-filter: blur(15px);
           max-width: 100%;
+          width: 100%;
           text-align: left;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
           transition: all 0.2s ease;
+          box-sizing: border-box;
+          overflow: hidden;
       }
 
       .itinerary-item:hover {
