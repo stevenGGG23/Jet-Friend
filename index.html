@@ -4267,6 +4267,16 @@
             // Show typing indicator
             const typingMessageElement = addMessageToChat('JetFriend is thinking...', 'ai');
 
+            // Set timer to change message after 10 seconds
+            let messageTimer = setTimeout(() => {
+              if (typingMessageElement && typingMessageElement.parentNode) {
+                const messageText = typingMessageElement.querySelector('.message p');
+                if (messageText && messageText.textContent.trim() === 'JetFriend is thinking...') {
+                  messageText.textContent = 'Just one moment';
+                }
+              }
+            }, 10000);
+
             // Get conversation history (last 10 messages for context)
             const conversationHistory = [];
             const messages = chatMessages.querySelectorAll('.message-group');
