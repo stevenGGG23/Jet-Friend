@@ -4297,7 +4297,8 @@
               // Send message to JetFriend API
               const result = await window.jetfriendAPI.sendMessage(inputText, conversationHistory);
 
-              // Remove typing indicator safely
+              // Clear message timer and remove typing indicator safely
+              clearTimeout(messageTimer);
               try {
                 if (typingMessageElement && typingMessageElement.parentNode) {
                   typingMessageElement.remove();
