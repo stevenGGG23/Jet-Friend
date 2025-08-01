@@ -4332,7 +4332,8 @@
             } catch (error) {
               console.log('❌ Unexpected error:', error);
 
-              // Remove typing indicator safely
+              // Clear message timer and remove typing indicator safely
+              clearTimeout(messageTimer);
               try {
                 if (typingMessageElement && typingMessageElement.parentNode) {
                   typingMessageElement.remove();
