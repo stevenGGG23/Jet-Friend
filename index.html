@@ -1692,62 +1692,12 @@
         }
       }
 
-      /* Enhanced Features Section */
-      .features {
-        padding: 120px 20px;
-        background:
-          radial-gradient(
-            circle at 20% 20%,
-            rgba(139, 92, 246, 0.15) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 80% 80%,
-            rgba(96, 165, 250, 0.15) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 40% 60%,
-            rgba(56, 189, 248, 0.1) 0%,
-            transparent 50%
-          ),
-          linear-gradient(
-            180deg,
-            rgba(139, 92, 246, 0.05) 0%,
-            var(--card-bg) 50%,
-            rgba(96, 165, 250, 0.05) 100%
-          );
-        position: relative;
-        overflow: hidden;
-        perspective: 1000px;
-        transform-style: preserve-3d;
-      }
+
 
       /* Add subtle blended background image */
 
 
-      /* Floating organic shapes */
-      .features::after {
-        content: "";
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background:
-          radial-gradient(
-            ellipse 300px 200px at 25% 25%,
-            rgba(139, 92, 246, 0.08) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            ellipse 400px 300px at 75% 75%,
-            rgba(96, 165, 250, 0.08) 0%,
-            transparent 50%
-          );
-        animation: floatOrganicShapesSmooth 80s ease-in-out infinite;
-        z-index: -1;
-      }
+
 
       @keyframes floatOrganicShapesSmooth {
         0% {
@@ -1772,23 +1722,7 @@
         }
       }
 
-      .features::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 2px,
-          rgba(139, 92, 246, 0.03) 2px,
-          rgba(139, 92, 246, 0.03) 4px
-        );
-        animation: slidePattern 30s linear infinite;
-        z-index: -1;
-      }
+
 
       @keyframes slidePattern {
         0% {
@@ -1819,104 +1753,27 @@
         background-clip: text;
       }
 
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-        gap: 35px;
-        perspective: 1500px;
-        transform-style: preserve-3d;
-      }
 
-      .feature-card {
-        padding: 45px;
-        border-radius: 25px;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        cursor: pointer;
-        background: var(--glass-bg);
-        backdrop-filter: blur(20px);
-        border: 1px solid var(--border-color);
-        transform-style: preserve-3d;
-        transform: translateZ(0) rotateX(0deg) rotateY(0deg);
-      }
 
-      /* Static positioning for feature cards */
-      .feature-card {
-        transform: none;
-      }
 
-      .feature-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-          135deg,
-          rgba(139, 92, 246, 0.15) 0%,
-          rgba(96, 165, 250, 0.15) 100%
-        );
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        border-radius: 25px;
-      }
 
-      .feature-card:hover::before {
-        opacity: 1;
-      }
 
-      .feature-card:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow:
-          0 20px 40px rgba(139, 92, 246, 0.3),
-          0 0 30px rgba(96, 165, 250, 0.2);
-      }
 
-      .feature-icon {
-        width: 70px;
-        height: 70px;
-        margin-bottom: 25px;
-        background: linear-gradient(
-          135deg,
-          var(--primary-purple) 0%,
-          var(--light-blue) 100%
-        );
-        border-radius: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.4s ease;
-        position: relative;
-        z-index: 1;
-      }
 
-      .feature-card:hover .feature-icon {
-        transform: rotate(10deg) scale(1.1);
-        box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
-      }
 
-      .feature-icon i {
-        font-size: 32px;
-        color: white;
-      }
 
-      .feature-card h3 {
-        font-size: 1.6rem;
-        font-weight: 700;
-        margin-bottom: 18px;
-        position: relative;
-        z-index: 1;
-        color: #ffffff;
-      }
 
-      .feature-card p {
-        color: rgba(255, 255, 255, 0.85);
-        position: relative;
-        z-index: 1;
-        line-height: 1.7;
-      }
+
+
+
+
+
+
+
+
+
+
+
 
       /* Pricing Section */
       .pricing {
