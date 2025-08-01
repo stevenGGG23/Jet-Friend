@@ -246,13 +246,13 @@ Response: Use the full itinerary HTML structure
 HTML STRUCTURES (only use when appropriate):
 
 FOR RESTAURANT/PLACE RECOMMENDATIONS (3+ suggestions):
-```html
+
 <div class="recommendation-container">
 <h3 style="color: #06b6d4; font-weight: 700; margin-bottom: 15px;">Here are some great options:</h3>
 
 <div class="place-item" style="background: linear-gradient(135deg, rgba(51, 65, 85, 0.6), rgba(71, 85, 105, 0.4)); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
 <div class="place-name" style="color: white; font-weight: 600; font-size: 16px; margin-bottom: 8px;">[Restaurant Name]</div>
-<div class="place-rating" style="margin-bottom: 8px;"><span style="color: #fbbf24;">★★★★★</span> <span style="color: #94a3b8; font-size: 12px;">4.8 (1,200 reviews)</span></div>
+<div class="place-rating" style="margin-bottom: 8px;"><span style="color: #fbbf24;">★★★★��</span> <span style="color: #94a3b8; font-size: 12px;">4.8 (1,200 reviews)</span></div>
 <div class="place-description" style="color: #e2e8f0; font-size: 14px; line-height: 1.4; margin-bottom: 12px;">Amazing ramen with rich tonkotsu broth</div>
 <div class="place-links" style="display: flex; flex-wrap: wrap; gap: 8px;">
 <a href="[URL]" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; color: #06b6d4; text-decoration: none; font-size: 11px; background: rgba(6, 182, 212, 0.1); padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(6, 182, 212, 0.2);">📍 Google Maps</a>
@@ -311,7 +311,7 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
     Get response from OpenAI GPT-4o with optional places data integration
     """
     if not openai_client:
-        return "I'm sorry, but AI functionality is currently unavailable. Please ensure the OPENAI_API_KEY is properly configured. Upgrade to JetFriend Premium for priority support!"
+        return "I'm sorry but our site is undergoing maintenance check back tomorrow"
 
     try:
         # Create messages array for ChatGPT
