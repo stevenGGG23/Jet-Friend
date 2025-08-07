@@ -5,25 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JetFriend - Your AI Travel Companion</title>
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jetfriend.com/">
-    <meta property="og:title" content="JetFriend - Your AI Travel Companion">
-    <meta property="og:description" content="Discover the world with JetFriend, your intelligent AI travel companion. Get personalized recommendations, itineraries, and travel advice for your next adventure.">
-    <meta property="og:image" content="https://cdn.builder.io/api/v1/image/assets%2Fabe9c7b18bdd485d8d636e7c281c5277%2Ff8ea8cd408854fdaadb189abd8c2dbcf?format=png&width=1200&height=630">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://jetfriend.com/">
-    <meta property="twitter:title" content="JetFriend - Your AI Travel Companion">
-    <meta property="twitter:description" content="Discover the world with JetFriend, your intelligent AI travel companion. Get personalized recommendations, itineraries, and travel advice for your next adventure.">
-    <meta property="twitter:image" content="https://cdn.builder.io/api/v1/image/assets%2Fabe9c7b18bdd485d8d636e7c281c5277%2Ff8ea8cd408854fdaadb189abd8c2dbcf?format=png&width=1200&height=630">
-
-    <!-- Additional SEO meta tags -->
-    <meta name="description" content="Discover the world with JetFriend, your intelligent AI travel companion. Get personalized recommendations, itineraries, and travel advice for your next adventure.">
-    <meta name="keywords" content="travel, AI, companion, itinerary, recommendations, trip planning, travel assistant">
-    <meta name="author" content="JetFriend">
-
     <!-- Favicon Links -->
     <link rel="icon" type="image/x-icon" href="https://cdn.builder.io/api/v1/image/assets%2Fabe9c7b18bdd485d8d636e7c281c5277%2Ff8ea8cd408854fdaadb189abd8c2dbcf?format=ico&width=32">
     <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.builder.io/api/v1/image/assets%2Fabe9c7b18bdd485d8d636e7c281c5277%2Ff8ea8cd408854fdaadb189abd8c2dbcf?format=png&width=32">
@@ -763,11 +744,11 @@
 
       .chat-container {
           flex: 1;
-          padding: 12px;
+          padding: 15px;
           overflow-y: auto;
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          gap: 12px;
           background: linear-gradient(180deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8));
       }
 
@@ -779,13 +760,6 @@
           color: #e2e8f0;
           border: 1px solid rgba(255, 255, 255, 0.1);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-          max-width: 85%;
-          padding: 10px 12px;
-          border-radius: 12px;
-          font-size: 12px;
-          line-height: 1.4;
-          word-wrap: break-word;
-          overflow-wrap: break-word;
       }
 
       .user-message {
@@ -793,13 +767,6 @@
           background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           color: #f1f5f9;
           box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
-          max-width: 85%;
-          padding: 10px 12px;
-          border-radius: 12px;
-          font-size: 12px;
-          line-height: 1.4;
-          word-wrap: break-word;
-          overflow-wrap: break-word;
       }
 
             .bot-avatar {
@@ -828,16 +795,13 @@
           background: linear-gradient(135deg, rgba(51, 65, 85, 0.6), rgba(71, 85, 105, 0.4));
           border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 12px;
-          padding: 10px;
-          margin: 6px 0;
+          padding: 12px;
+          margin: 8px 0;
           backdrop-filter: blur(15px);
           max-width: 100%;
-          width: 100%;
           text-align: left;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
           transition: all 0.2s ease;
-          box-sizing: border-box;
-          overflow: hidden;
       }
 
       .itinerary-item:hover {
@@ -849,97 +813,87 @@
       .day-header {
           color: #06b6d4;
           font-weight: 700;
-          font-size: 14px;
-          margin-bottom: 8px;
-          margin-top: 8px;
+          font-size: 16px;
+          margin-bottom: 12px;
+          margin-top: 12px;
           text-align: left;
           line-height: 1.2;
           border-bottom: 1px solid rgba(6, 182, 212, 0.2);
-          padding-bottom: 4px;
+          padding-bottom: 6px;
           display: flex;
           align-items: center;
-          gap: 6px;
-          word-wrap: break-word;
-          overflow-wrap: break-word;
+          gap: 8px;
       }
 
       .activity {
           color: #e2e8f0;
-          font-size: 12px;
-          line-height: 1.4;
+          font-size: 14px;
+          line-height: 1.5;
           margin: 0;
           text-align: left;
           white-space: pre-line;
-          word-wrap: break-word;
-          overflow-wrap: break-word;
       }
       .day-icon {
           background: linear-gradient(135deg, #06b6d4, #0891b2);
           color: white;
-          width: 18px;
-          height: 18px;
+          width: 20px;
+          height: 20px;
           border-radius: 50%;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          font-size: 10px;
+          font-size: 11px;
           font-weight: 700;
           box-shadow: 0 2px 6px rgba(6, 182, 212, 0.3);
           flex-shrink: 0;
       }
 
       .activity-name {
-          font-size: 13px;
+          font-size: 15px;
           font-weight: 600;
           color: white;
-          margin-bottom: 4px;
+          margin-bottom: 6px;
           line-height: 1.3;
-          word-wrap: break-word;
-          overflow-wrap: break-word;
       }
 
       .activity-rating {
           display: flex;
           align-items: center;
-          gap: 4px;
-          margin-bottom: 6px;
-          flex-wrap: wrap;
+          gap: 6px;
+          margin-bottom: 8px;
       }
 
       .stars {
           color: #fbbf24;
-          font-size: 11px;
+          font-size: 13px;
           line-height: 1;
       }
 
       .rating-text {
           color: #94a3b8;
-          font-size: 10px;
+          font-size: 12px;
       }
 
       .activity-links {
           display: flex;
           flex-wrap: wrap;
-          gap: 6px;
-          margin-top: 6px;
+          gap: 8px;
+          margin-top: 8px;
       }
 
       .activity-link {
           display: inline-flex;
           align-items: center;
-          gap: 2px;
+          gap: 3px;
           color: #06b6d4;
           text-decoration: none;
-          font-size: 9px;
+          font-size: 11px;
           background: rgba(6, 182, 212, 0.1);
-          padding: 3px 6px;
-          border-radius: 8px;
+          padding: 4px 8px;
+          border-radius: 12px;
           border: 1px solid rgba(6, 182, 212, 0.2);
           transition: all 0.2s ease;
           white-space: nowrap;
-          max-width: 100%;
-          overflow: hidden;
-          text-overflow: ellipsis;
       }
 
       .activity-link:hover {
@@ -999,31 +953,29 @@
       }
 
       .input-container {
-          padding: 10px 12px;
+          padding: 12px 15px;
           background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
           border-top: 1px solid rgba(255, 255, 255, 0.1);
           display: flex;
-          gap: 6px;
+          gap: 8px;
           align-items: center;
           backdrop-filter: blur(20px);
       }
 
       .message-input {
           flex: 1;
-          padding: 6px 10px;
+          padding: 8px 12px;
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 12px;
-          font-size: 11px;
+          border-radius: 16px;
+          font-size: 12px;
           outline: none;
           background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(51, 65, 85, 0.4));
           color: #e2e8f0;
           backdrop-filter: blur(10px);
-          min-height: 28px;
       }
 
       .message-input::placeholder {
           color: #64748b;
-          font-size: 11px;
       }
 
       .message-input:focus {
@@ -1032,8 +984,8 @@
       }
 
       .send-btn {
-          width: 28px;
-          height: 28px;
+          width: 32px;
+          height: 32px;
           background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           border: none;
           border-radius: 50%;
@@ -1042,9 +994,8 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 10px;
+          font-size: 12px;
           transition: all 0.3s ease;
-          flex-shrink: 0;
       }
 
       .send-btn:hover {
@@ -1112,7 +1063,7 @@
 
                         /* Hero Chatbot Integration */
       .hero-chatbot-container {
-        max-width: 1000px;
+        max-width: 900px;
         margin: 60px auto 0;
         background: var(--glass-bg);
         backdrop-filter: blur(20px);
@@ -1124,8 +1075,8 @@
       }
 
       .chat-messages {
-        min-height: 400px; 
-        max-height: 400px;
+        min-height: 400px;
+        max-height: 500px;
         overflow-y: auto;
         padding: 30px;
         display: flex;
@@ -1386,170 +1337,49 @@
             /* Mobile responsiveness for hero chatbot */
       @media (max-width: 768px) {
         .hero-chatbot-container {
-          margin: 30px 8px 0;
+          margin: 40px 10px 0;
           border-radius: 16px;
-          max-width: calc(100vw - 16px);
         }
 
         .chat-messages {
-          padding: 16px;
-          min-height: 280px;
-          max-height: 300px;
-          gap: 16px;
+          padding: 20px;
+          min-height: 350px;
         }
 
         .chat-input-container {
-          padding: 16px;
+          padding: 20px;
+        }
+
+        .input-wrapper {
+          flex-wrap: wrap;
           gap: 8px;
         }
 
-        .chat-input {
-          padding: 10px 14px;
-          font-size: 14px;
-          min-height: 36px;
-          border-radius: 12px;
+        .model-selector {
+          order: -1;
+          width: 100%;
         }
 
-        .send-button {
+        .model-btn {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .message {
+          max-width: 90%;
+          padding: 15px 18px;
+          font-size: 14px;
+        }
+
+        .ai-avatar,
+        .user-avatar {
           width: 36px;
           height: 36px;
-          font-size: 14px;
-          margin-left: 4px;
-        }
-
-        .message {
-          max-width: 85%;
-          padding: 12px 16px;
-          font-size: 14px;
-          border-radius: 12px;
-          line-height: 1.5;
-        }
-
-        .ai-avatar,
-        .user-avatar {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
         }
 
         .ai-avatar img {
-          width: 18px;
-          height: 18px;
-        }
-
-        .user-avatar i {
-          font-size: 16px;
-        }
-
-        .message-group {
-          gap: 12px;
-        }
-      }
-
-      /* Extra small screens - phone portrait */
-      @media (max-width: 480px) {
-        .hero-chatbot-container {
-          margin: 20px 6px 0;
-          border-radius: 14px;
-        }
-
-        .chat-messages {
-          padding: 12px;
-          min-height: 250px;
-          max-height: 280px;
-          gap: 12px;
-        }
-
-        .chat-input-container {
-          padding: 12px;
-          gap: 6px;
-        }
-
-        .chat-input {
-          padding: 8px 12px;
-          font-size: 13px;
-          min-height: 32px;
-          border-radius: 10px;
-        }
-
-        .send-button {
-          width: 32px;
-          height: 32px;
-          font-size: 12px;
-          border-radius: 6px;
-        }
-
-        .message {
-          max-width: 88%;
-          padding: 10px 14px;
-          font-size: 13px;
-          border-radius: 10px;
-          line-height: 1.4;
-        }
-
-        .ai-avatar,
-        .user-avatar {
-          width: 28px;
-          height: 28px;
-          border-radius: 6px;
-        }
-
-        .ai-avatar img {
-          width: 16px;
-          height: 16px;
-        }
-
-        .user-avatar i {
-          font-size: 14px;
-        }
-
-        .message-group {
-          gap: 10px;
-        }
-
-        /* Improve text wrapping and readability */
-        .message p {
-          word-wrap: break-word;
-          overflow-wrap: break-word;
-          hyphens: auto;
-        }
-
-        /* Make scrollbar thinner on mobile */
-        .chat-messages::-webkit-scrollbar {
-          width: 4px;
-        }
-
-        /* Ensure content doesn't overflow horizontally */
-        .hero-chatbot-container * {
-          max-width: 100%;
-          box-sizing: border-box;
-        }
-
-        /* Better text handling for long messages */
-        .message {
-          word-break: break-word;
-        }
-
-        /* Adjust hero padding on mobile */
-        .hero {
-          padding: 100px 15px 40px;
-        }
-
-        .hero-content {
-          max-width: 100%;
-          padding: 0 5px;
-        }
-      }
-
-      /* Landscape phone optimization */
-      @media (max-width: 768px) and (orientation: landscape) {
-        .hero-chatbot-container {
-          margin: 20px 8px 0;
-        }
-
-        .chat-messages {
-          min-height: 200px;
-          max-height: 220px;
+          width: 20px;
+          height: 20px;
         }
       }
 
@@ -1692,18 +1522,112 @@
         }
       }
 
-
+      /* Enhanced Features Section */
+      .features {
+        padding: 120px 20px;
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(139, 92, 246, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(96, 165, 250, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 60%,
+            rgba(56, 189, 248, 0.1) 0%,
+            transparent 50%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(139, 92, 246, 0.05) 0%,
+            var(--card-bg) 50%,
+            rgba(96, 165, 250, 0.05) 100%
+          );
+        position: relative;
+        overflow: hidden;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+      }
 
       /* Add subtle blended background image */
 
 
+      /* Floating organic shapes */
+      .features::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background:
+          radial-gradient(
+            ellipse 300px 200px at 25% 25%,
+            rgba(139, 92, 246, 0.08) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse 400px 300px at 75% 75%,
+            rgba(96, 165, 250, 0.08) 0%,
+            transparent 50%
+          );
+        animation: floatOrganicShapesSmooth 80s ease-in-out infinite;
+        z-index: -1;
+      }
 
+      @keyframes floatOrganicShapesSmooth {
+        0% {
+          transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+        }
+        20% {
+          transform: translateX(80px) translateY(-40px) rotate(3deg) scale(1.05);
+        }
+        40% {
+          transform: translateX(-30px) translateY(60px) rotate(-2deg)
+            scale(0.95);
+        }
+        60% {
+          transform: translateX(50px) translateY(-20px) rotate(4deg) scale(1.03);
+        }
+        80% {
+          transform: translateX(-20px) translateY(30px) rotate(-1deg)
+            scale(0.98);
+        }
+        100% {
+          transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+        }
+      }
 
+      .features::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 2px,
+          rgba(139, 92, 246, 0.03) 2px,
+          rgba(139, 92, 246, 0.03) 4px
+        );
+        animation: slidePattern 30s linear infinite;
+        z-index: -1;
+      }
 
-
-
-
-
+      @keyframes slidePattern {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(20px);
+        }
+      }
 
       .container {
         max-width: 1200px;
@@ -1725,27 +1649,104 @@
         background-clip: text;
       }
 
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 35px;
+        perspective: 1500px;
+        transform-style: preserve-3d;
+      }
 
+      .feature-card {
+        padding: 45px;
+        border-radius: 25px;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        transform-style: preserve-3d;
+        transform: translateZ(0) rotateX(0deg) rotateY(0deg);
+      }
 
+      /* Static positioning for feature cards */
+      .feature-card {
+        transform: none;
+      }
 
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(139, 92, 246, 0.15) 0%,
+          rgba(96, 165, 250, 0.15) 100%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 25px;
+      }
 
+      .feature-card:hover::before {
+        opacity: 1;
+      }
 
+      .feature-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow:
+          0 20px 40px rgba(139, 92, 246, 0.3),
+          0 0 30px rgba(96, 165, 250, 0.2);
+      }
 
+      .feature-icon {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 25px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          var(--light-blue) 100%
+        );
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.4s ease;
+        position: relative;
+        z-index: 1;
+      }
 
+      .feature-card:hover .feature-icon {
+        transform: rotate(10deg) scale(1.1);
+        box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
+      }
 
+      .feature-icon i {
+        font-size: 32px;
+        color: white;
+      }
 
+      .feature-card h3 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+        position: relative;
+        z-index: 1;
+        color: #ffffff;
+      }
 
-
-
-
-
-
-
-
-
-
-
-
+      .feature-card p {
+        color: rgba(255, 255, 255, 0.85);
+        position: relative;
+        z-index: 1;
+        line-height: 1.7;
+      }
 
       /* Pricing Section */
       .pricing {
@@ -2324,6 +2325,7 @@
           padding: 18px 35px;
         }
 
+        .features-grid,
         .pricing-grid,
         .highlights-grid,
         .contact-grid {
@@ -2475,7 +2477,9 @@
       </div>
 
       <ul class="nav-links">
-
+        <li>
+          <a href="#features"><i class="fas fa-star"></i>Features</a>
+        </li>
         <li>
           <a href="#pricing"><i class="fas fa-tag"></i>Pricing</a>
         </li>
@@ -2487,7 +2491,12 @@
         </li>
       </ul>
 
-
+      <div class="nav-cta">
+        <a href="#" class="cta-nav">
+          <i class="fas fa-rocket" style="margin-right: 8px"></i>
+          Get Started
+        </a>
+      </div>
 
       <div class="nav-footer">
         <p>© 2025 JetFriend<br />Revolutionizing travel with AI</p>
@@ -2705,7 +2714,125 @@
       </div>
     </section>
 
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 20px">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F66e9d989ca404a6d957d5f336cd80a28%2Fcc897948ed114e71b3d66d7737c736d2?format=webp&width=800"
+            alt="JetFriend Logo"
+            style="
+              width: 80px;
+              height: auto;
+              opacity: 1;
+              filter: brightness(0) invert(1);
+            "
+          />
+        </div>
+        <h2 class="section-title animate-on-scroll">Everything You Need</h2>
+        <div class="features-grid">
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>AI-Powered Planning</h3>
+            <p>
+              Chat naturally with our AI to plan trips. It learns your
+              preferences and suggests personalized experiences you'll actually
+              love.
+            </p>
+          </div>
 
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-tags"></i>
+            </div>
+            <h3>Smart Deal Hunting</h3>
+            <p>
+              Automatically finds and applies the best discount codes, cashback
+              offers, and hidden deals across flights, hotels, and activities.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-route"></i>
+            </div>
+            <h3>Dynamic Itineraries</h3>
+            <p>
+              Visual timelines with walking distances, activity durations, and
+              real-time updates based on weather and local events.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3>Mobile & Web Sync</h3>
+            <p>
+              Access your trips anywhere. Auto-syncs with your calendar, email
+              confirmations, and provides offline access to your itinerary.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <h3>Local Intelligence</h3>
+            <p>
+              Get insider recommendations from locals, real-time crowd levels,
+              and hidden gems that other tourists miss.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-clipboard-check"></i>
+            </div>
+            <h3>Smart Logistics</h3>
+            <p>
+              Packing lists, visa requirements, vaccination reminders, and
+              currency tips - all automatically generated for your destination.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-plane"></i>
+            </div>
+            <h3>Flight Price Tracking</h3>
+            <p>
+              Monitor flight prices 24/7 and get alerts when prices drop. Our AI
+              predicts the best time to book for maximum savings.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>Group Travel</h3>
+            <p>
+              Coordinate group trips with shared itineraries, split costs
+              automatically, and manage preferences for multiple travelers.
+            </p>
+          </div>
+
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Travel Insurance</h3>
+            <p>
+              Get personalized travel insurance recommendations and instant
+              coverage for unexpected changes or cancellations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Stats Section -->
     <section class="stats">
@@ -2986,7 +3113,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >��</span
+                  >✓</span
                 >
                 Real-time deal alerts
               </li>
@@ -3029,7 +3156,7 @@
                 Packing & visa reminders
               </li>
             </ul>
-           <button class="btn btn-primary" style="width: 100%; background: #666; border-color: #666; cursor: default; opacity: 0.7; text-align: center; display: flex; align-items: center; justify-content: center;" disabled>Coming Soon</button>
+            <button class="btn btn-primary" style="width: 100%; background: #666; border-color: #666; cursor: default; opacity: 0.7;" disabled>Coming Soon</button>
           </div>
 
           <div class="pricing-card animate-on-scroll">
@@ -3429,7 +3556,7 @@
           />
         </div>
                 <div class="footer-links">
-          <a href="https://www.linkedin.com/posts/jet-friend_check-us-out-website-link-jet-friendcom-activity-7353072048455282688-uOui?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEavYe4BXJGk1G1A1HGCaUnseqKJHT0x0EE" target="_blank" rel="noopener noreferrer">Careers</a>
+          <a href="https://linkedin.com/company/jetfriend" target="_blank" rel="noopener noreferrer">Careers</a>
           <a href="https://www.instagram.com/jet.friend/" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-instagram" style="margin-right: 5px;"></i>Follow Us
           </a>
@@ -3970,16 +4097,6 @@
             // Show typing indicator
             const typingMessageElement = addMessageToChat('JetFriend is thinking...', 'ai');
 
-            // Set timer to change message after 10 seconds
-            let messageTimer = setTimeout(() => {
-              if (typingMessageElement && typingMessageElement.parentNode) {
-                const messageText = typingMessageElement.querySelector('.message p');
-                if (messageText && messageText.textContent.trim() === 'JetFriend is thinking...') {
-                  messageText.textContent = 'Just one moment';
-                }
-              }
-            }, 10000);
-
             // Get conversation history (last 10 messages for context)
             const conversationHistory = [];
             const messages = chatMessages.querySelectorAll('.message-group');
@@ -4000,8 +4117,7 @@
               // Send message to JetFriend API
               const result = await window.jetfriendAPI.sendMessage(inputText, conversationHistory);
 
-              // Clear message timer and remove typing indicator safely
-              clearTimeout(messageTimer);
+              // Remove typing indicator safely
               try {
                 if (typingMessageElement && typingMessageElement.parentNode) {
                   typingMessageElement.remove();
@@ -4035,8 +4151,7 @@
             } catch (error) {
               console.log('❌ Unexpected error:', error);
 
-              // Clear message timer and remove typing indicator safely
-              clearTimeout(messageTimer);
+              // Remove typing indicator safely
               try {
                 if (typingMessageElement && typingMessageElement.parentNode) {
                   typingMessageElement.remove();
