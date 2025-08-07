@@ -23,12 +23,11 @@ google_places_api_key = os.getenv("GOOGLE_PLACES_API_KEY")
 openai_client = None
 if openai_api_key:
     try:
-        openai_client = OpenAI(api_key=openai_api_key)
+        # This is the line that needs to be fixed
+        openai_client = OpenAI(api_key=openai_api_key) 
         logger.info("✅ OpenAI client initialized successfully")
     except Exception as e:
         logger.warning(f"Failed to initialize OpenAI client: {str(e)}")
-else:
-    logger.warning("OPENAI_API_KEY not set in environment variables")
 
 # Initialize Google Maps client
 gmaps_client = None
