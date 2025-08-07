@@ -4,19 +4,14 @@ import os
 import requests
 import logging
 from dotenv import load_dotenv
-import openai  # <-- add this import
+import openai
+import googlemaps
+import urllib.parse
+import re
+from typing import List, Dict
 
 # Load environment variables
 load_dotenv()
-
-# Get your OpenAI key
-openai_api_key = os.getenv("OPENAI_API_KEY")
-
-# Create the OpenAI client
-openai_client = openai.OpenAI(api_key=openai_api_key)
-
-# If you're using the older global style (not recommended)
-# openai.api_key = openai_api_key
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -29,15 +24,25 @@ CORS(app)  # Enable CORS for all routes
 openai_api_key = os.getenv("OPENAI_API_KEY")
 google_places_api_key = os.getenv("GOOGLE_PLACES_API_KEY")
 
-# Initialize OpenAI client
+# Initialize OpenAI client with error handling
 openai_client = None
 if openai_api_key:
     try:
-        # This is the line that needs to be fixed
-        openai_client = OpenAI(api_key=openai_api_key) 
+        # Fixed OpenAI client initialization
+        openai_client = openai.OpenAI(api_key=openai_api_key)
         logger.info("✅ OpenAI client initialized successfully")
     except Exception as e:
         logger.warning(f"Failed to initialize OpenAI client: {str(e)}")
+        # Fallback: try alternative initialization method
+        try:
+            openai.api_key = openai_api_key
+            openai_client = openai
+            logger.info("✅ OpenAI client initialized with fallback method")
+        except Exception as fallback_error:
+            logger.error(f"Both OpenAI initialization methods failed: {str(fallback_error)}")
+            openai_client = None
+else:
+    logger.warning("OPENAI_API_KEY not set in environment variables")
 
 # Initialize Google Maps client
 gmaps_client = None
@@ -473,7 +478,7 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                         places_text += f" ({place['rating_count']:,} reviews)"
                     places_text += "\n"
 
-                # THIS IS THE CORRECTED AND IMPROVED BLOCK
+                # Fixed price level handling
                 if place.get('price_level'):
                     try:
                         # Ensure price_level is an integer before multiplication
@@ -483,7 +488,6 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                     except (ValueError, TypeError):
                         # This handles cases where price_level might not be a valid number
                         pass
-                # END OF CORRECTION
 
                 if place.get('tags'):
                     places_text += f"   Tags: {', '.join(place['tags'])}\n"
@@ -560,15 +564,31 @@ TOKEN OPTIMIZATION: Create {len(places_data)} detailed visual place cards to ens
         messages.append({"role": "user", "content": enhanced_message})
         
         # Make API call to OpenAI with increased token limit
-        response = openai_client.chat.completions.create(
-            model="gpt-4o",
-            messages=messages,
-            max_tokens=8000,  # Increased for visual content
-            temperature=0.7,
-            top_p=0.9
-        )
-        
-        return response.choices[0].message.content.strip()
+        # Handle both old and new OpenAI client methods
+        try:
+            if hasattr(openai_client, 'chat') and hasattr(openai_client.chat, 'completions'):
+                # New OpenAI client (v1.0+)
+                response = openai_client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=messages,
+                    max_tokens=8000,
+                    temperature=0.7,
+                    top_p=0.9
+                )
+                return response.choices[0].message.content.strip()
+            else:
+                # Fallback to old OpenAI client
+                response = openai.ChatCompletion.create(
+                    model="gpt-4o",
+                    messages=messages,
+                    max_tokens=8000,
+                    temperature=0.7,
+                    top_p=0.9
+                )
+                return response.choices[0].message['content'].strip()
+        except Exception as api_error:
+            logger.error(f"OpenAI API call failed: {str(api_error)}")
+            return f"I'm experiencing some technical difficulties with the AI service right now. Please try again in a moment!"
         
     except Exception as e:
         logger.error(f"Error getting AI response: {str(e)}")
