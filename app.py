@@ -1,18 +1,18 @@
-from flask import Flask, request, jsonify, send_from_directory
+rom flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 import requests
 import logging
 from dotenv import load_dotenv
-import openai  # ✅ ADD THIS
+import openai  # <-- add this import
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
 
-# Get the OpenAI API key from environment
+# Get your OpenAI key
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-# ✅ ADD THIS AFTER loading the API key
+# Create the OpenAI client
 openai_client = openai.OpenAI(api_key=openai_api_key)
 
 # If you're using the older global style (not recommended)
