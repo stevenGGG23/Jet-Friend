@@ -1,12 +1,22 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
-import re
+import requests
 import logging
-import urllib.parse
-from openai import OpenAI
-import googlemaps
-from typing import Optional, Dict, List
+from dotenv import load_dotenv
+import openai  # ✅ ADD THIS
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the OpenAI API key from environment
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+# ✅ ADD THIS AFTER loading the API key
+openai_client = openai.OpenAI(api_key=openai_api_key)
+
+# If you're using the older global style (not recommended)
+# openai.api_key = openai_api_key
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
