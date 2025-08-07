@@ -294,8 +294,8 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 place_details_result = gmaps_client.place(
                     place_id=place_id,
                     fields=['name', 'formatted_address', 'rating', 'price_level', 
-                           'types', 'website', 'formatted_phone_number', 'opening_hours',
-                           'photos', 'reviews', 'user_ratings_total', 'url']
+                            'types', 'website', 'formatted_phone_number', 'opening_hours',
+                            'photos', 'reviews', 'user_ratings_total', 'url']
                 )
                 detailed_place = place_details_result.get('result', {})
             except:
@@ -327,8 +327,8 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'reviews': detailed_place.get('reviews', [])[:3],  # Top 3 reviews
 
                 # Updated working URLs with proper encoding
-                'google_maps_url': f"https://www.google.com/maps/search/{encoded_name}+{encoded_location}" if place_name else f"https://maps.google.com/maps/place/?q=place_id:{place_id}",
-                'google_search_url': f"https://www.google.com/search?q={encoded_name}+{encoded_location}",
+                'Maps_url': f"https://www.google.com/maps/search/{encoded_name}+{encoded_location}" if place_name else f"https://maps.google.com/maps/place/?q=place_id:{place_id}",
+                'Google Search_url': f"https://www.google.com/search?q={encoded_name}+{encoded_location}",
                 'yelp_search_url': f"https://www.yelp.com/search?find_desc={encoded_name}&find_loc={encoded_location}",
                 'tripadvisor_search_url': f"https://www.tripadvisor.com/Search?q={encoded_name}+{encoded_location}",
                 'foursquare_url': f"https://foursquare.com/explore?mode=url&near={encoded_location}&q={encoded_name}",
@@ -458,15 +458,23 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 places_text += f"   Address: {place['address']}\n"
                 places_text += f"   Category: {place.get('category', 'general')}\n"
 
-                if place['rating']:
+                if place.get('rating'):
                     places_text += f"   Rating: ★{place['rating']}"
-                    if place['rating_count']:
+                    if place.get('rating_count'):
                         places_text += f" ({place['rating_count']:,} reviews)"
                     places_text += "\n"
 
-                if place['price_level']:
-                    price_symbols = '$' * place['price_level']
-                    places_text += f"   Price: {price_symbols}\n"
+                # THIS IS THE CORRECTED AND IMPROVED BLOCK
+                if place.get('price_level'):
+                    try:
+                        # Ensure price_level is an integer before multiplication
+                        price_level = int(place['price_level'])
+                        price_symbols = '$' * price_level
+                        places_text += f"   Price: {price_symbols}\n"
+                    except (ValueError, TypeError):
+                        # This handles cases where price_level might not be a valid number
+                        pass
+                # END OF CORRECTION
 
                 if place.get('tags'):
                     places_text += f"   Tags: {', '.join(place['tags'])}\n"
@@ -477,52 +485,52 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 if place.get('photos'):
                     places_text += f"   Photos Available: {len(place['photos'])} images\n"
 
-                if place['phone']:
+                if place.get('phone'):
                     places_text += f"   Phone: {place['phone']}\n"
 
-                if place['is_open'] is not None:
+                if place.get('is_open') is not None:
                     status = "OPEN NOW" if place['is_open'] else "CLOSED NOW"
                     places_text += f"   Status: {status}\n"
 
                 # Add comprehensive clickable links
                 places_text += "   Essential Links:\n"
-                places_text += f"   [Google Maps]({place['google_maps_url']})\n"
+                places_text += f"   [Google Maps]({place['Maps_url']})\n"
                 places_text += f"   [Yelp Reviews]({place['yelp_search_url']})\n"
                 places_text += f"   [TripAdvisor]({place['tripadvisor_search_url']})\n"
 
-                if place['website']:
+                if place.get('website'):
                     places_text += f"   [Official Website]({place['website']})\n"
 
                 # Add category-specific booking links
                 place_types = str(place.get('types', [])).lower()
 
                 if 'restaurant' in place_types or 'food' in place_types:
-                    if place['opentable_url']:
+                    if place.get('opentable_url'):
                         places_text += f"   [OpenTable Reservations]({place['opentable_url']})\n"
 
                 if 'lodging' in place_types or 'hotel' in place_types:
-                    if place['booking_url']:
+                    if place.get('booking_url'):
                         places_text += f"   [Booking.com]({place['booking_url']})\n"
-                    if place['expedia_url']:
+                    if place.get('expedia_url'):
                         places_text += f"   [Expedia]({place['expedia_url']})\n"
 
                 # Add activity and transportation links for all places
                 places_text += f"   [GetYourGuide Tours]({place['getyourguide_url']})\n"
                 places_text += f"   [Foursquare]({place['foursquare_url']})\n"
 
-                if place['uber_url']:
+                if place.get('uber_url'):
                     places_text += f"   [Uber Ride]({place['uber_url']})\n"
-                if place['lyft_url']:
+                if place.get('lyft_url'):
                     places_text += f"   [Lyft Ride]({place['lyft_url']})\n"
 
                 # Add recent reviews if available
-                if place['reviews']:
+                if place.get('reviews'):
                     places_text += "   Recent Reviews:\n"
                     for review in place['reviews'][:2]:  # Top 2 reviews
                         reviewer = review.get('author_name', 'Anonymous')
                         rating = review.get('rating', 0)
                         text = review.get('text', '')[:100] + "..." if len(review.get('text', '')) > 100 else review.get('text', '')
-                        places_text += f"     - {reviewer} (★{rating}): {text}\n"
+                        places_text += f"      - {reviewer} (★{rating}): {text}\n"
 
                 places_text += "\n"
 
