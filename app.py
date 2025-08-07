@@ -4,7 +4,7 @@ import os
 import requests
 import logging
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
 import googlemaps
 import urllib.parse
 import re
@@ -24,39 +24,27 @@ CORS(app)  # Enable CORS for all routes
 openai_api_key = os.getenv("OPENAI_API_KEY")
 google_places_api_key = os.getenv("GOOGLE_PLACES_API_KEY")
 
-# Initialize OpenAI client with improved error handling
+# Initialize OpenAI client - SIMPLIFIED APPROACH
 openai_client = None
-openai_fallback_mode = False
-
-if openai_api_key:
+if openai_api_key and openai_api_key != "your-openai-api-key-here":
     try:
-        # Try new OpenAI client initialization
-        openai_client = openai.OpenAI(api_key=openai_api_key)
+        openai_client = OpenAI(api_key=openai_api_key)
         logger.info("✅ OpenAI client initialized successfully")
     except Exception as e:
         logger.warning(f"Failed to initialize OpenAI client: {str(e)}")
-        # Fallback: use old-style global API key
-        try:
-            openai.api_key = openai_api_key
-            openai_client = "fallback"  # Flag to indicate fallback mode
-            openai_fallback_mode = True
-            logger.info("✅ OpenAI client initialized with fallback method")
-        except Exception as fallback_error:
-            logger.error(f"Both OpenAI initialization methods failed: {str(fallback_error)}")
-            openai_client = None
 else:
-    logger.warning("OPENAI_API_KEY not set in environment variables")
+    logger.warning("OPENAI_API_KEY not set. AI functionality will be limited.")
 
 # Initialize Google Maps client
 gmaps_client = None
-if google_places_api_key:
+if google_places_api_key and google_places_api_key != "your-google-places-api-key-here":
     try:
         gmaps_client = googlemaps.Client(key=google_places_api_key)
         logger.info("✅ Google Maps client initialized successfully")
     except Exception as e:
         logger.warning(f"Failed to initialize Google Maps client: {str(e)}")
 else:
-    logger.warning("GOOGLE_PLACES_API_KEY not set in environment variables")
+    logger.warning("GOOGLE_PLACES_API_KEY not set. Location features will be limited.")
 
 def detect_location_query(message: str) -> bool:
     """
@@ -566,28 +554,16 @@ TOKEN OPTIMIZATION: Create {len(places_data)} detailed visual place cards to ens
         
         messages.append({"role": "user", "content": enhanced_message})
         
-        # Make API call to OpenAI with proper fallback handling
+        # Make API call to OpenAI - SIMPLIFIED APPROACH
         try:
-            if openai_fallback_mode:
-                # Use old-style OpenAI API call
-                response = openai.ChatCompletion.create(
-                    model="gpt-4o",
-                    messages=messages,
-                    max_tokens=8000,
-                    temperature=0.7,
-                    top_p=0.9
-                )
-                return response.choices[0].message['content'].strip()
-            else:
-                # Use new OpenAI client
-                response = openai_client.chat.completions.create(
-                    model="gpt-4o",
-                    messages=messages,
-                    max_tokens=8000,
-                    temperature=0.7,
-                    top_p=0.9
-                )
-                return response.choices[0].message.content.strip()
+            response = openai_client.chat.completions.create(
+                model="gpt-4o",
+                messages=messages,
+                max_tokens=8000,
+                temperature=0.7,
+                top_p=0.9
+            )
+            return response.choices[0].message.content.strip()
                 
         except Exception as api_error:
             logger.error(f"OpenAI API call failed: {str(api_error)}")
