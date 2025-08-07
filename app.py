@@ -24,19 +24,22 @@ CORS(app)  # Enable CORS for all routes
 openai_api_key = os.getenv("OPENAI_API_KEY")
 google_places_api_key = os.getenv("GOOGLE_PLACES_API_KEY")
 
-# Initialize OpenAI client with error handling
+# Initialize OpenAI client with improved error handling
 openai_client = None
+openai_fallback_mode = False
+
 if openai_api_key:
     try:
-        # Fixed OpenAI client initialization
+        # Try new OpenAI client initialization
         openai_client = openai.OpenAI(api_key=openai_api_key)
         logger.info("✅ OpenAI client initialized successfully")
     except Exception as e:
         logger.warning(f"Failed to initialize OpenAI client: {str(e)}")
-        # Fallback: try alternative initialization method
+        # Fallback: use old-style global API key
         try:
             openai.api_key = openai_api_key
-            openai_client = openai
+            openai_client = "fallback"  # Flag to indicate fallback mode
+            openai_fallback_mode = True
             logger.info("✅ OpenAI client initialized with fallback method")
         except Exception as fallback_error:
             logger.error(f"Both OpenAI initialization methods failed: {str(fallback_error)}")
@@ -563,21 +566,10 @@ TOKEN OPTIMIZATION: Create {len(places_data)} detailed visual place cards to ens
         
         messages.append({"role": "user", "content": enhanced_message})
         
-        # Make API call to OpenAI with increased token limit
-        # Handle both old and new OpenAI client methods
+        # Make API call to OpenAI with proper fallback handling
         try:
-            if hasattr(openai_client, 'chat') and hasattr(openai_client.chat, 'completions'):
-                # New OpenAI client (v1.0+)
-                response = openai_client.chat.completions.create(
-                    model="gpt-4o",
-                    messages=messages,
-                    max_tokens=8000,
-                    temperature=0.7,
-                    top_p=0.9
-                )
-                return response.choices[0].message.content.strip()
-            else:
-                # Fallback to old OpenAI client
+            if openai_fallback_mode:
+                # Use old-style OpenAI API call
                 response = openai.ChatCompletion.create(
                     model="gpt-4o",
                     messages=messages,
@@ -586,6 +578,17 @@ TOKEN OPTIMIZATION: Create {len(places_data)} detailed visual place cards to ens
                     top_p=0.9
                 )
                 return response.choices[0].message['content'].strip()
+            else:
+                # Use new OpenAI client
+                response = openai_client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=messages,
+                    max_tokens=8000,
+                    temperature=0.7,
+                    top_p=0.9
+                )
+                return response.choices[0].message.content.strip()
+                
         except Exception as api_error:
             logger.error(f"OpenAI API call failed: {str(api_error)}")
             return f"I'm experiencing some technical difficulties with the AI service right now. Please try again in a moment!"
