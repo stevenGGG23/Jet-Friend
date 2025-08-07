@@ -64,6 +64,146 @@ def detect_location_query(message: str) -> bool:
     message_lower = message.lower()
     return any(keyword in message_lower for keyword in location_keywords)
 
+def process_google_photos(photos_data, place_name):
+    """
+    Process Google Places photos and create proper URLs
+    """
+    processed_photos = []
+    
+    if not photos_data or not google_places_api_key:
+        return processed_photos
+    
+    try:
+        for i, photo in enumerate(photos_data[:3]):  # Limit to 3 photos
+            photo_reference = photo.get('photo_reference')
+            if photo_reference:
+                # Create different sizes for responsive images
+                photo_urls = {
+                    'thumb': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photoreference={photo_reference}&key={google_places_api_key}",
+                    'medium': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={google_places_api_key}",
+                    'large': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_places_api_key}"
+                }
+                
+                processed_photos.append({
+                    'urls': photo_urls,
+                    'alt': f"{place_name} photo {i+1}",
+                    'source': 'Google Places'
+                })
+    except Exception as e:
+        logger.error(f"Error processing Google photos: {str(e)}")
+    
+    return processed_photos
+
+def get_fallback_image_by_type(place_types):
+    """
+    Return high-quality fallback images based on place type
+    """
+    type_images = {
+        'restaurant': 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
+        'lodging': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
+        'tourist_attraction': 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80',
+        'museum': 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=800&q=80',
+        'shopping_mall': 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
+        'park': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
+        'cafe': 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80',
+        'bar': 'https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=800&q=80'
+    }
+    
+    if place_types:
+        for place_type in place_types:
+            if place_type in type_images:
+                return type_images[place_type]
+    
+    # Default travel image
+    return 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80'
+
+def get_place_category(place_types):
+    """
+    Categorize places for better UI organization
+    """
+    if not place_types:
+        return 'general'
+        
+    categories = {
+        'food': ['restaurant', 'cafe', 'bar', 'bakery', 'meal_takeaway', 'food'],
+        'accommodation': ['lodging', 'hotel', 'resort'],
+        'attractions': ['tourist_attraction', 'museum', 'amusement_park', 'zoo'],
+        'shopping': ['shopping_mall', 'store', 'clothing_store'],
+        'entertainment': ['night_club', 'movie_theater', 'casino'],
+        'transport': ['airport', 'train_station', 'bus_station'],
+        'nature': ['park', 'beach', 'hiking_area']
+    }
+    
+    for category, types in categories.items():
+        if any(ptype in place_types for ptype in types):
+            return category
+    
+    return 'general'
+
+def generate_place_tags(detailed_place, place_types):
+    """
+    Generate relevant tags for better display
+    """
+    tags = []
+    
+    # Rating-based tags
+    rating = detailed_place.get('rating', 0)
+    if rating >= 4.5:
+        tags.append('Highly Rated')
+    elif rating >= 4.0:
+        tags.append('Well Rated')
+    
+    # Price level tags
+    price_level = detailed_place.get('price_level', 0)
+    if price_level == 1:
+        tags.append('Budget Friendly')
+    elif price_level == 4:
+        tags.append('Luxury')
+    elif price_level >= 2:
+        tags.append('Mid-Range')
+    
+    # Type-based tags
+    if place_types:
+        if any('restaurant' in ptype for ptype in place_types):
+            tags.append('Dining')
+        if any('tourist_attraction' in ptype for ptype in place_types):
+            tags.append('Must See')
+        if any('lodging' in ptype for ptype in place_types):
+            tags.append('Accommodation')
+    
+    # Status tags
+    if detailed_place.get('opening_hours', {}).get('open_now'):
+        tags.append('Open Now')
+    
+    return tags[:4]  # Limit to 4 tags
+
+def enhance_place_data(place, detailed_place):
+    """
+    Add enhanced visual data to existing place structure
+    """
+    place_name = detailed_place.get('name', place.get('name', ''))
+    place_types = detailed_place.get('types', place.get('types', []))
+    
+    # Process photos
+    photos = process_google_photos(
+        detailed_place.get('photos', []), 
+        place_name
+    )
+    
+    # Get fallback image if no photos
+    fallback_image = get_fallback_image_by_type(place_types)
+    hero_image = photos[0]['urls']['large'] if photos else fallback_image
+    
+    # Return enhanced data to ADD to existing place_info dict
+    return {
+        'photos': photos,
+        'hero_image': hero_image,
+        'thumbnail': photos[0]['urls']['thumb'] if photos else fallback_image,
+        'category': get_place_category(place_types),
+        'tags': generate_place_tags(detailed_place, place_types),
+        'photo_count': len(photos)
+    }
+
 def search_underground_places(query: str, location: str = None) -> List[Dict]:
     """
     Search for underground, authentic, and local favorite places
@@ -103,7 +243,7 @@ def search_underground_places(query: str, location: str = None) -> List[Dict]:
 
 def search_places(query: str, location: str = None, radius: int = 5000) -> List[Dict]:
     """
-    Enhanced search for places using Google Places API with detailed information
+    Enhanced search for places using Google Places API with visual content
     """
     if not gmaps_client:
         return []
@@ -158,6 +298,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
             encoded_location = urllib.parse.quote_plus(location_for_search)
             encoded_address = urllib.parse.quote_plus(place_address)
 
+            # Create base place_info with existing structure
             place_info = {
                 'name': place_name,
                 'address': place_address,
@@ -170,7 +311,6 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'phone': detailed_place.get('formatted_phone_number', ''),
                 'opening_hours': detailed_place.get('opening_hours', {}).get('weekday_text', []),
                 'is_open': detailed_place.get('opening_hours', {}).get('open_now', None),
-                'photos': detailed_place.get('photos', []),
                 'reviews': detailed_place.get('reviews', [])[:3],  # Top 3 reviews
 
                 # Updated working URLs with proper encoding
@@ -196,6 +336,11 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'uber_url': f"https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]={encoded_address}" if place_address else '',
                 'lyft_url': f"https://lyft.com/ride?destination[address]={encoded_address}" if place_address else ''
             }
+
+            # Add enhanced visual data
+            enhanced_data = enhance_place_data(place, detailed_place)
+            place_info.update(enhanced_data)
+
             places.append(place_info)
 
         return places
@@ -205,110 +350,75 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
 
 def get_jetfriend_system_prompt() -> str:
     """
-    Return the enhanced JetFriend personality with SMART formatting
+    Enhanced system prompt with visual place cards
     """
-    return """You are JetFriend, an AI travel assistant. You help with ALL types of travel queries - from restaurant recommendations to full itineraries.
+    return """You are JetFriend, a premium AI travel assistant with access to high-quality visual content.
 
-FORMATTING RULES - Use the RIGHT format for each response type:
+ENHANCED FORMATTING FOR PLACE RECOMMENDATIONS:
 
-1. **SIMPLE CONVERSATIONAL RESPONSES** (plain text):
-   - Basic questions: "What time should I arrive at the airport?"
-   - General advice: "How much should I tip in Japan?"
-   - Weather queries: "What's the weather like in Tokyo?"
-   - Simple explanations: "What is jet lag?"
-   - Use clean, conversational text with clickable links
+When you have multiple place recommendations (3+), create visual place cards using this format:
 
-2. **STRUCTURED RECOMMENDATIONS** (HTML formatting):
-   - Multiple restaurant/hotel/attraction suggestions
-   - Comparison responses
-   - Lists with ratings, prices, links
-   - Any response with 3+ places/options
+<div class="place-card" style="background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('{HERO_IMAGE}'); background-size: cover; background-position: center; border-radius: 16px; padding: 24px; margin: 20px 0; color: white; position: relative; min-height: 200px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
 
-3. **FULL ITINERARIES** (HTML day structure):
-   - Multi-day trip planning
-   - Day-by-day schedules
-   - Complete travel plans
+<div style="position: relative; z-index: 2;">
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+<h3 style="color: white; font-weight: 700; font-size: 20px; margin: 0;">{PLACE_NAME}</h3>
+<span style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 600;">{CATEGORY}</span>
+</div>
 
-RESPONSE EXAMPLES:
+<div style="margin-bottom: 12px;">
+<span style="color: #fbbf24; font-size: 16px;">{STAR_RATING}</span>
+<span style="color: #e5e7eb; margin-left: 8px; font-size: 14px;">{RATING} ({REVIEW_COUNT} reviews)</span>
+</div>
 
-**Simple Question → Plain Text Response:**
-User: "What time should I arrive for an international flight?"
-Response: "For international flights, arrive 3 hours early. This gives you time for check-in, security, and any unexpected delays. Some airports are faster, but 3 hours is the safe standard."
+<p style="color: #f3f4f6; margin-bottom: 16px; line-height: 1.5; font-size: 14px;">{ADDRESS}</p>
 
-**Restaurant Request → HTML Structure:**
-User: "Best ramen in Tokyo"
-Response: Use the HTML place-item structure below
+<div style="margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 6px;">
+{TAGS_AS_BADGES}
+</div>
 
-**Itinerary Request → Full HTML:**
-User: "3-day Tokyo trip"
-Response: Use the full itinerary HTML structure
+<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+{BOOKING_LINKS}
+</div>
 
-HTML STRUCTURES (only use when appropriate):
+{PHOTO_GALLERY_IF_AVAILABLE}
 
-FOR RESTAURANT/PLACE RECOMMENDATIONS (3+ suggestions):
-
-<div class="recommendation-container">
-<h3 style="color: #06b6d4; font-weight: 700; margin-bottom: 15px;">Here are some great options:</h3>
-
-<div class="place-item" style="background: linear-gradient(135deg, rgba(51, 65, 85, 0.6), rgba(71, 85, 105, 0.4)); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
-<div class="place-name" style="color: white; font-weight: 600; font-size: 16px; margin-bottom: 8px;">[Restaurant Name]</div>
-<div class="place-rating" style="margin-bottom: 8px;"><span style="color: #fbbf24;">★★★★��</span> <span style="color: #94a3b8; font-size: 12px;">4.8 (1,200 reviews)</span></div>
-<div class="place-description" style="color: #e2e8f0; font-size: 14px; line-height: 1.4; margin-bottom: 12px;">Amazing ramen with rich tonkotsu broth</div>
-<div class="place-links" style="display: flex; flex-wrap: wrap; gap: 8px;">
-<a href="[URL]" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; color: #06b6d4; text-decoration: none; font-size: 11px; background: rgba(6, 182, 212, 0.1); padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(6, 182, 212, 0.2);">📍 Google Maps</a>
-<a href="[URL]" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; color: #06b6d4; text-decoration: none; font-size: 11px; background: rgba(6, 182, 212, 0.1); padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(6, 182, 212, 0.2);">⭐ Yelp</a>
 </div>
 </div>
 
+TAG BADGE FORMAT:
+<span style="background: rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">{TAG_TEXT}</span>
+
+LINK FORMAT:
+<a href="{URL}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; color: #06b6d4; text-decoration: none; font-size: 11px; background: rgba(6, 182, 212, 0.15); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(6, 182, 212, 0.3);">Google Maps</a>
+
+PHOTO GALLERY FORMAT (when multiple photos available):
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 12px; border-radius: 8px; overflow: hidden;">
+<img src="{PHOTO_URL}" alt="{ALT_TEXT}" style="width: 100%; height: 60px; object-fit: cover;">
 </div>
-```
 
-FOR ITINERARIES:
-```html
-<div class="itinerary-container">
-<div class="day-header"><span class="day-icon">1</span>Day 1: Tokyo Highlights</div>
-<div class="itinerary-item">
-<div class="activity-name">Senso-ji Temple</div>
-<div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.6 (15K reviews)</span></div>
-<div class="activity">Historic Buddhist temple in Asakusa district</div>
-<div class="activity-links">
-<a href="[URL]" target="_blank" class="activity-link">📍 Google Maps</a>
-<a href="[URL]" target="_blank" class="activity-link">🌐 Website</a>
-</div>
-</div>
-</div>
-```
+For single place recommendations or simple questions, use plain text with markdown links.
 
-LINK FORMATTING FOR ALL RESPONSES:
-- For plain text: Use markdown-style links [Google Maps](URL) 
-- For HTML: Use anchor tags <a href="URL" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
-- NEVER show raw URLs like https://www.google.com/maps/...
-- Always include emojis with links: 📍 🌐 ⭐ 🍽️
+Use real place data when available including photos, ratings, and comprehensive booking links."""
 
-DECISION FLOWCHART:
-1. Is it a simple question/explanation? → Plain text
-2. Are you recommending 3+ places? → HTML structure  
-3. Is it a multi-day itinerary? → Full HTML itinerary
-4. Is it a single place recommendation? → Plain text with links
-
-EXAMPLES:
-❌ Wrong: Using HTML for "Jet lag typically lasts 1 day per time zone crossed"
-✅ Right: Plain text response
-
-❌ Wrong: Plain text for "Best 5 restaurants in NYC" 
-✅ Right: HTML place-item structure
-
-✅ Right: "For great ramen, try [Ippudo](https://maps.google.com) in Shibuya - they're famous for their tonkotsu broth!"
-
-PERSONALITY:
-- Conversational and helpful
-- Match the complexity of response to the query
-- Use formatting that enhances readability
-- Be practical and actionable"""
+def calculate_estimated_tokens(places_data, conversation_history=None):
+    """
+    Estimate tokens needed for visual place cards and conversation
+    """
+    base_tokens = 1000  # For system prompt + instructions
+    tokens_per_place = 1500  # Conservative estimate for visual cards with photos
+    
+    # Add conversation history tokens
+    if conversation_history:
+        history_tokens = len(conversation_history) * 100  # Rough estimate
+        base_tokens += history_tokens
+    
+    total_estimated = base_tokens + (len(places_data) * tokens_per_place)
+    return total_estimated
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
     """
-    Get response from OpenAI GPT-4o with optional places data integration
+    Get response from OpenAI GPT-4o with enhanced places data integration and adaptive token management
     """
     if not openai_client:
         return "I'm sorry but our site is undergoing maintenance check back tomorrow"
@@ -323,13 +433,32 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 role = "user" if msg.get("role") == "user" else "assistant"
                 messages.append({"role": role, "content": msg.get("content", "")})
         
-        # Enhance user message with comprehensive places data
+        # ADAPTIVE TOKEN MANAGEMENT: Optimize place count based on estimated token usage
+        if places_data and len(places_data) > 0:
+            estimated_tokens = calculate_estimated_tokens(places_data, conversation_history)
+            
+            # Adaptive place count based on token limit (leave 1000 tokens buffer)
+            if estimated_tokens > 7000:
+                max_places = min(len(places_data), 3)  # Limit to 3 high-quality places
+                places_data = places_data[:max_places]
+                logger.info(f"🎯 Optimized to {max_places} places to ensure complete visual responses (estimated {estimated_tokens} tokens)")
+            elif estimated_tokens > 6000:
+                max_places = min(len(places_data), 4)  # Allow 4 places
+                places_data = places_data[:max_places]
+                logger.info(f"🎯 Optimized to {max_places} places for balanced response (estimated {estimated_tokens} tokens)")
+            else:
+                max_places = min(len(places_data), 5)  # Up to 5 places when tokens allow
+                places_data = places_data[:max_places]
+                logger.info(f"🎯 Using {max_places} places with available token capacity (estimated {estimated_tokens} tokens)")
+        
+        # Enhance user message with comprehensive places data including visual content
         enhanced_message = user_message
         if places_data and len(places_data) > 0:
-            places_text = "\n\nREAL-TIME PLACE DATA WITH FULL WEB LINKS:\n"
-            for i, place in enumerate(places_data[:5], 1):  # Top 5 places
+            places_text = "\n\nREAL-TIME PLACE DATA WITH VISUAL CONTENT (OPTIMIZED FOR TOKENS):\n"
+            for i, place in enumerate(places_data, 1):  # Use optimized place count
                 places_text += f"{i}. **{place['name']}**\n"
                 places_text += f"   Address: {place['address']}\n"
+                places_text += f"   Category: {place.get('category', 'general')}\n"
 
                 if place['rating']:
                     places_text += f"   Rating: ★{place['rating']}"
@@ -338,8 +467,397 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                     places_text += "\n"
 
                 if place['price_level']:
-                    price_symbols = '$' * place['price_level']
+                    price_symbols = '
+        
+        messages.append({"role": "user", "content": enhanced_message})
+        
+        # Make API call to OpenAI with increased token limit
+        response = openai_client.chat.completions.create(
+            model="gpt-4o",
+            messages=messages,
+            max_tokens=8000,  # Increased for visual content
+            temperature=0.7,
+            top_p=0.9
+        )
+        
+        return response.choices[0].message.content.strip()
+        
+    except Exception as e:
+        logger.error(f"Error getting AI response: {str(e)}")
+        return f"I'm experiencing some technical difficulties right now. Please try again in a moment! Error details: {str(e)[:50]}..."
+
+@app.route('/')
+def serve_index():
+    """Serve the main HTML file"""
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    """Serve static files"""
+    return send_from_directory('.', filename)
+
+@app.route('/api/chat', methods=['POST'])
+def chat():
+    """Handle chat messages with enhanced visual integration"""
+    try:
+        data = request.json
+        user_message = data.get('message', '').strip()
+        conversation_history = data.get('history', [])
+        
+        if not user_message:
+            return jsonify({'error': 'Message is required'}), 400
+        
+        # Check if query requires location data
+        places_data = []
+        is_location_query = detect_location_query(user_message)
+
+        if is_location_query and gmaps_client:
+            # Extract location from message or use general search
+            location_match = re.search(r'(?:in|at|near)\s+([A-Za-z\s]+?)(?:\s|$|[.,!?])', user_message, re.IGNORECASE)
+            location = location_match.group(1).strip() if location_match else None
+
+            # Search for both regular and underground places
+            regular_places = search_places(user_message, location)
+            underground_places = search_underground_places(user_message, location)
+
+            # Combine and deduplicate by place_id
+            all_places = []
+            seen_ids = set()
+
+            # Prioritize underground places for authentic experience
+            for place in underground_places + regular_places:
+                place_id = place.get('place_id', '')
+                if place_id and place_id not in seen_ids:
+                    seen_ids.add(place_id)
+                    all_places.append(place)
+
+            places_data = all_places[:8]  # Return top 8 mixed results
+        elif is_location_query and not gmaps_client:
+            # Add note about API limitation but still provide helpful guidance
+            user_message += "\n\nNOTE: Google Places API is not configured, so I can't provide real-time visual content right now, but I can still give you excellent travel advice!"
+        
+        # Get AI response with enhanced visual data
+        ai_response = get_ai_response(user_message, conversation_history, places_data)
+        
+        # Log for debugging
+        logger.info(f"Chat request: '{user_message}' - Location detected: {detect_location_query(user_message)} - Places found: {len(places_data)}")
+        if places_data:
+            logger.info(f"Sample place data: {places_data[0]['name'] if places_data else 'None'}")
+
+        return jsonify({
+            'success': True,
+            'response': ai_response,
+            'places_found': len(places_data),
+            'enhanced_with_visuals': len(places_data) > 0,
+            'location_detected': detect_location_query(user_message),
+            'gmaps_available': gmaps_client is not None,
+            'debug_location': location if 'location' in locals() else None,
+            'has_photos': any(place.get('photos', []) for place in places_data),
+            'timestamp': request.timestamp if hasattr(request, 'timestamp') else None
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in chat endpoint: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Internal server error',
+            'message': 'Sorry, I encountered an error. Please try again!'
+        }), 500
+
+@app.route('/api/places', methods=['POST'])
+def places_search():
+    """External places search endpoint with visual content"""
+    try:
+        data = request.json
+        query = data.get('query', '').strip()
+        location = data.get('location', '').strip()
+        radius = data.get('radius', 5000)
+        
+        if not query:
+            return jsonify({'error': 'Query is required'}), 400
+        
+        if not gmaps_client:
+            return jsonify({
+                'success': False,
+                'error': 'Google Places API not configured',
+                'message': 'Location search unavailable. Please configure your API keys!'
+            }), 503
+        
+        places_data = search_places(query, location, radius)
+        
+        return jsonify({
+            'success': True,
+            'places': places_data,
+            'count': len(places_data),
+            'query': query,
+            'location': location if location else 'Global search',
+            'visual_content_available': any(place.get('photos', []) for place in places_data)
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in places search: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'message': 'Places search error. Please try again!'
+        }), 500
+
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Health check endpoint with enhanced API status"""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'JetFriend Enhanced API',
+        'version': '3.0.0',
+        'features': {
+            'openai_gpt4o': openai_client is not None,
+            'google_places': gmaps_client is not None,
+            'visual_content': True,
+            'photo_processing': True,
+            'enhanced_categorization': True,
+            'location_detection': True,
+            'underground_search': gmaps_client is not None,
+            'fallback_images': True
+        }
+    })
+
+@app.route('/api/test-ai', methods=['GET'])
+def test_ai():
+    """Test OpenAI connectivity with enhanced prompt"""
+    if not openai_client:
+        return jsonify({
+            'success': False,
+            'error': 'OPENAI_API_KEY not configured',
+            'ai_status': 'disconnected',
+            'message': 'Please set the OPENAI_API_KEY environment variable.'
+        }), 503
+
+    try:
+        test_response = get_ai_response("Hello! Can you confirm you're working correctly as the enhanced JetFriend with visual capabilities?")
+        return jsonify({
+            'success': True,
+            'test_response': test_response,
+            'ai_status': 'connected',
+            'model': 'gpt-4o',
+            'enhanced_features': 'enabled'
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'ai_status': 'disconnected'
+        }), 500
+
+@app.route('/api/test-places', methods=['GET'])
+def test_places():
+    """Enhanced test for Google Places API with visual content"""
+    if not gmaps_client:
+        return jsonify({
+            'success': False,
+            'error': 'GOOGLE_PLACES_API_KEY not configured',
+            'places_status': 'disconnected',
+            'message': 'Please set the GOOGLE_PLACES_API_KEY environment variable.'
+        }), 503
+
+    try:
+        # Test multiple search types with visual content
+        test_query = "pizza restaurant"
+        test_location = "San Francisco"
+
+        logger.info(f"Testing Enhanced Google Places API with query: '{test_query}' in '{test_location}'")
+
+        # Test regular search with visual content
+        regular_places = search_places(test_query, test_location)
+
+        # Test underground search
+        underground_places = search_underground_places(test_query, test_location)
+
+        # Test basic API connectivity
+        basic_test = gmaps_client.places(query="Starbucks San Francisco")
+
+        # Count places with visual content
+        places_with_photos = sum(1 for place in regular_places if place.get('photos'))
+        places_with_hero_images = sum(1 for place in regular_places if place.get('hero_image'))
+
+        return jsonify({
+            'success': True,
+            'places_status': 'connected',
+            'regular_search_results': len(regular_places),
+            'underground_search_results': len(underground_places),
+            'basic_api_results': len(basic_test.get('results', [])),
+            'visual_content': {
+                'places_with_photos': places_with_photos,
+                'places_with_hero_images': places_with_hero_images,
+                'fallback_images_available': True
+            },
+            'sample_place': {
+                'name': regular_places[0]['name'] if regular_places else None,
+                'has_photos': bool(regular_places[0].get('photos')) if regular_places else False,
+                'hero_image': regular_places[0].get('hero_image') if regular_places else None,
+                'category': regular_places[0].get('category') if regular_places else None,
+                'tags': regular_places[0].get('tags') if regular_places else None
+            },
+            'test_query': test_query,
+            'test_location': test_location,
+            'enhanced_features': {
+                'photo_processing': True,
+                'categorization': True,
+                'tagging': True,
+                'fallback_images': True
+            }
+        })
+    except Exception as e:
+        logger.error(f"Enhanced Places API test failed: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'places_status': 'disconnected',
+            'error_type': type(e).__name__
+        }), 500
+
+@app.route('/api/place-details', methods=['POST'])
+def get_place_details():
+    """Get detailed information about a specific place including all visual content"""
+    try:
+        data = request.json
+        place_id = data.get('place_id', '').strip()
+        
+        if not place_id:
+            return jsonify({'error': 'Place ID is required'}), 400
+        
+        if not gmaps_client:
+            return jsonify({
+                'success': False,
+                'error': 'Google Places API not configured'
+            }), 503
+        
+        # Get comprehensive place details
+        place_details_result = gmaps_client.place(
+            place_id=place_id,
+            fields=['name', 'formatted_address', 'rating', 'price_level', 
+                   'types', 'website', 'formatted_phone_number', 'opening_hours',
+                   'photos', 'reviews', 'user_ratings_total', 'url', 'geometry']
+        )
+        
+        detailed_place = place_details_result.get('result', {})
+        place_name = detailed_place.get('name', '')
+        place_types = detailed_place.get('types', [])
+        
+        # Process all visual content
+        photos = process_google_photos(detailed_place.get('photos', []), place_name)
+        fallback_image = get_fallback_image_by_type(place_types)
+        
+        enhanced_details = {
+            'place_id': place_id,
+            'name': place_name,
+            'address': detailed_place.get('formatted_address', ''),
+            'rating': detailed_place.get('rating', 0),
+            'rating_count': detailed_place.get('user_ratings_total', 0),
+            'price_level': detailed_place.get('price_level', 0),
+            'types': place_types,
+            'website': detailed_place.get('website', ''),
+            'phone': detailed_place.get('formatted_phone_number', ''),
+            'opening_hours': detailed_place.get('opening_hours', {}).get('weekday_text', []),
+            'is_open': detailed_place.get('opening_hours', {}).get('open_now', None),
+            
+            # Enhanced Visual Content
+            'photos': photos,
+            'hero_image': photos[0]['urls']['large'] if photos else fallback_image,
+            'thumbnail': photos[0]['urls']['thumb'] if photos else fallback_image,
+            'photo_count': len(photos),
+            'fallback_image': fallback_image,
+            
+            # Enhanced Categorization
+            'category': get_place_category(place_types),
+            'tags': generate_place_tags(detailed_place, place_types),
+            
+            # All Reviews
+            'reviews': detailed_place.get('reviews', []),
+            
+            # Location Data
+            'geometry': detailed_place.get('geometry', {}),
+            'url': detailed_place.get('url', '')
+        }
+        
+        return jsonify({
+            'success': True,
+            'place': enhanced_details,
+            'visual_content_available': len(photos) > 0,
+            'enhanced_features': True
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting place details: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+# Performance optimizations for cold starts
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000  # 1 year cache for static files
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False  # Disable pretty printing for performance
+
+# Add caching headers for static files
+@app.after_request
+def add_header(response):
+    # Add cache headers for better performance
+    if request.endpoint and 'static' in request.endpoint:
+        response.cache_control.max_age = 31536000  # 1 year
+        response.cache_control.public = True
+
+    # Add compression hint
+    response.headers['Vary'] = 'Accept-Encoding'
+
+    # Security headers
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+
+    return response
+
+# Warm up the application
+def warm_up():
+    """Warm up the application by initializing connections"""
+    try:
+        # Test OpenAI connection if available
+        if openai_client:
+            logger.info("🔥 Warming up OpenAI connection...")
+
+        # Test Google Places if available
+        if gmaps_client:
+            logger.info("🔥 Warming up Google Places connection...")
+
+        logger.info("🔥 Enhanced JetFriend application warmed up successfully")
+    except Exception as e:
+        logger.warning(f"⚠️ Warm up partially failed: {str(e)}")
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
+
+    print(f"🚀 JetFriend Enhanced API v3.0 starting on port {port}")
+    print(f"🌐 Visit: http://localhost:{port}")
+    print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
+    print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
+    print(f"📸 Visual Content: ✅ Enhanced Photo Processing")
+    print(f"🎨 UI Features: ✅ Categories, Tags, Hero Images")
+    print(f"🔍 Underground Search: {'✅ Enabled' if gmaps_client else '❌ Requires Google Places API'}")
+    print(f"🎯 Fallback Images: ✅ High-Quality Defaults")
+
+    # Warm up the application
+    warm_up()
+
+    app.run(host='0.0.0.0', port=port, debug=debug_mode, threaded=True) * place['price_level']
                     places_text += f"   Price: {price_symbols}\n"
+
+                if place.get('tags'):
+                    places_text += f"   Tags: {', '.join(place['tags'])}\n"
+
+                if place.get('hero_image'):
+                    places_text += f"   Hero Image: {place['hero_image']}\n"
+
+                if place.get('photos'):
+                    places_text += f"   Photos Available: {len(place['photos'])} images\n"
 
                 if place['phone']:
                     places_text += f"   Phone: {place['phone']}\n"
@@ -394,21 +912,23 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
 
 {places_text}
 
-INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the available clickable HTML links. You have access to comprehensive travel booking links including Google Maps, Yelp, TripAdvisor, OpenTable (restaurants), Booking.com/Expedia (hotels), GetYourGuide (tours), Foursquare, Uber/Lyft (transportation), and official websites.
+INSTRUCTIONS: Create visually stunning place recommendations using the enhanced place card format with hero images as backgrounds. You have comprehensive data including:
+- High-quality photos and hero images from Google Places
+- Professional categorization and smart tags
+- Complete booking ecosystem links
+- Real-time status and reviews
 
-CRITICAL: Output proper HTML anchor tags with security attributes and visual icons. Use semantic HTML structure and mobile-responsive containers:
-<a href="https://www.google.com/maps/search/place+name+location" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
-<a href="https://www.yelp.com/search?find_desc=place+name&find_loc=location" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
+IMPORTANT: The place count has been optimized for token efficiency. Focus on creating detailed, high-quality visual place cards rather than trying to include more places. Use the enhanced HTML place card format with hero images as card backgrounds. Include photo galleries when multiple images are available. Focus on professional presentation with working functionality.
 
-Include ratings, phone numbers, and direct access HTML links in your response. Prioritize places with good reviews and current information. Focus on convenience and immediate utility. Work with the information provided without asking follow-up questions."""
+TOKEN OPTIMIZATION: Create {len(places_data)} detailed visual place cards to ensure complete responses without truncation."""
         
         messages.append({"role": "user", "content": enhanced_message})
         
-        # Make API call to OpenAI
+        # Make API call to OpenAI with increased token limit
         response = openai_client.chat.completions.create(
             model="gpt-4o",
             messages=messages,
-            max_tokens=4000,
+            max_tokens=8000,  # Increased for visual content
             temperature=0.7,
             top_p=0.9
         )
@@ -417,7 +937,7 @@ Include ratings, phone numbers, and direct access HTML links in your response. P
         
     except Exception as e:
         logger.error(f"Error getting AI response: {str(e)}")
-        return f"I'm experiencing some technical difficulties right now. Please try again in a moment! For priority support and advanced features, upgrade to JetFriend Premium. Error details: {str(e)[:50]}..."
+        return f"I'm experiencing some technical difficulties right now. Please try again in a moment! Error details: {str(e)[:50]}..."
 
 @app.route('/')
 def serve_index():
@@ -431,7 +951,7 @@ def serve_static(filename):
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    """Handle chat messages with optional location data integration"""
+    """Handle chat messages with enhanced visual integration"""
     try:
         data = request.json
         user_message = data.get('message', '').strip()
@@ -467,24 +987,25 @@ def chat():
             places_data = all_places[:8]  # Return top 8 mixed results
         elif is_location_query and not gmaps_client:
             # Add note about API limitation but still provide helpful guidance
-            user_message += "\n\nNOTE: Google Places API is not configured, so I can't provide real-time links right now, but I can still give you excellent travel advice and ask follow-up questions to help plan your trip!"
+            user_message += "\n\nNOTE: Google Places API is not configured, so I can't provide real-time visual content right now, but I can still give you excellent travel advice!"
         
-        # Get AI response with enhanced data
+        # Get AI response with enhanced visual data
         ai_response = get_ai_response(user_message, conversation_history, places_data)
         
         # Log for debugging
         logger.info(f"Chat request: '{user_message}' - Location detected: {detect_location_query(user_message)} - Places found: {len(places_data)}")
         if places_data:
-            logger.info(f"Sample place data: {places_data[0] if places_data else 'None'}")
+            logger.info(f"Sample place data: {places_data[0]['name'] if places_data else 'None'}")
 
         return jsonify({
             'success': True,
             'response': ai_response,
             'places_found': len(places_data),
-            'enhanced_with_location': len(places_data) > 0,
+            'enhanced_with_visuals': len(places_data) > 0,
             'location_detected': detect_location_query(user_message),
             'gmaps_available': gmaps_client is not None,
             'debug_location': location if 'location' in locals() else None,
+            'has_photos': any(place.get('photos', []) for place in places_data),
             'timestamp': request.timestamp if hasattr(request, 'timestamp') else None
         })
         
@@ -493,12 +1014,12 @@ def chat():
         return jsonify({
             'success': False,
             'error': 'Internal server error',
-            'message': 'Sorry, I encountered an error. For priority support, upgrade to JetFriend Premium!'
+            'message': 'Sorry, I encountered an error. Please try again!'
         }), 500
 
 @app.route('/api/places', methods=['POST'])
 def places_search():
-    """External places search endpoint"""
+    """External places search endpoint with visual content"""
     try:
         data = request.json
         query = data.get('query', '').strip()
@@ -512,7 +1033,7 @@ def places_search():
             return jsonify({
                 'success': False,
                 'error': 'Google Places API not configured',
-                'message': 'Location search unavailable. Upgrade to JetFriend Premium for enhanced location services!'
+                'message': 'Location search unavailable. Please configure your API keys!'
             }), 503
         
         places_data = search_places(query, location, radius)
@@ -522,7 +1043,8 @@ def places_search():
             'places': places_data,
             'count': len(places_data),
             'query': query,
-            'location': location if location else 'Global search'
+            'location': location if location else 'Global search',
+            'visual_content_available': any(place.get('photos', []) for place in places_data)
         })
         
     except Exception as e:
@@ -530,42 +1052,47 @@ def places_search():
         return jsonify({
             'success': False,
             'error': str(e),
-            'message': 'Places search error. For priority support, upgrade to JetFriend Premium!'
+            'message': 'Places search error. Please try again!'
         }), 500
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Health check endpoint with API status"""
+    """Health check endpoint with enhanced API status"""
     return jsonify({
         'status': 'healthy',
-        'service': 'JetFriend API',
-        'version': '2.0.0',
+        'service': 'JetFriend Enhanced API',
+        'version': '3.0.0',
         'features': {
             'openai_gpt4o': openai_client is not None,
             'google_places': gmaps_client is not None,
+            'visual_content': True,
+            'photo_processing': True,
+            'enhanced_categorization': True,
             'location_detection': True,
-            'premium_features': False
+            'underground_search': gmaps_client is not None,
+            'fallback_images': True
         }
     })
 
 @app.route('/api/test-ai', methods=['GET'])
 def test_ai():
-    """Test OpenAI connectivity"""
+    """Test OpenAI connectivity with enhanced prompt"""
     if not openai_client:
         return jsonify({
             'success': False,
             'error': 'OPENAI_API_KEY not configured',
             'ai_status': 'disconnected',
-            'message': 'Please set the OPENAI_API_KEY environment variable. Upgrade to JetFriend Premium for priority API access!'
+            'message': 'Please set the OPENAI_API_KEY environment variable.'
         }), 503
 
     try:
-        test_response = get_ai_response("Hello! Can you tell me you're working correctly as JetFriend?")
+        test_response = get_ai_response("Hello! Can you confirm you're working correctly as the enhanced JetFriend with visual capabilities?")
         return jsonify({
             'success': True,
             'test_response': test_response,
             'ai_status': 'connected',
-            'model': 'gpt-4o'
+            'model': 'gpt-4o',
+            'enhanced_features': 'enabled'
         })
     except Exception as e:
         return jsonify({
@@ -576,23 +1103,23 @@ def test_ai():
 
 @app.route('/api/test-places', methods=['GET'])
 def test_places():
-    """Enhanced test for Google Places API connectivity with detailed debugging"""
+    """Enhanced test for Google Places API with visual content"""
     if not gmaps_client:
         return jsonify({
             'success': False,
             'error': 'GOOGLE_PLACES_API_KEY not configured',
             'places_status': 'disconnected',
-            'message': 'Please set the GOOGLE_PLACES_API_KEY environment variable. Upgrade to JetFriend Premium for enhanced location services!'
+            'message': 'Please set the GOOGLE_PLACES_API_KEY environment variable.'
         }), 503
 
     try:
-        # Test multiple search types
+        # Test multiple search types with visual content
         test_query = "pizza restaurant"
         test_location = "San Francisco"
 
-        logger.info(f"Testing Google Places API with query: '{test_query}' in '{test_location}'")
+        logger.info(f"Testing Enhanced Google Places API with query: '{test_query}' in '{test_location}'")
 
-        # Test regular search
+        # Test regular search with visual content
         regular_places = search_places(test_query, test_location)
 
         # Test underground search
@@ -601,25 +1128,122 @@ def test_places():
         # Test basic API connectivity
         basic_test = gmaps_client.places(query="Starbucks San Francisco")
 
+        # Count places with visual content
+        places_with_photos = sum(1 for place in regular_places if place.get('photos'))
+        places_with_hero_images = sum(1 for place in regular_places if place.get('hero_image'))
+
         return jsonify({
             'success': True,
             'places_status': 'connected',
             'regular_search_results': len(regular_places),
             'underground_search_results': len(underground_places),
             'basic_api_results': len(basic_test.get('results', [])),
-            'sample_regular_place': regular_places[0] if regular_places else None,
-            'sample_underground_place': underground_places[0] if underground_places else None,
-            'api_response_sample': basic_test.get('results', [])[0] if basic_test.get('results') else None,
+            'visual_content': {
+                'places_with_photos': places_with_photos,
+                'places_with_hero_images': places_with_hero_images,
+                'fallback_images_available': True
+            },
+            'sample_place': {
+                'name': regular_places[0]['name'] if regular_places else None,
+                'has_photos': bool(regular_places[0].get('photos')) if regular_places else False,
+                'hero_image': regular_places[0].get('hero_image') if regular_places else None,
+                'category': regular_places[0].get('category') if regular_places else None,
+                'tags': regular_places[0].get('tags') if regular_places else None
+            },
             'test_query': test_query,
-            'test_location': test_location
+            'test_location': test_location,
+            'enhanced_features': {
+                'photo_processing': True,
+                'categorization': True,
+                'tagging': True,
+                'fallback_images': True
+            }
         })
     except Exception as e:
-        logger.error(f"Places API test failed: {str(e)}")
+        logger.error(f"Enhanced Places API test failed: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e),
             'places_status': 'disconnected',
             'error_type': type(e).__name__
+        }), 500
+
+@app.route('/api/place-details', methods=['POST'])
+def get_place_details():
+    """Get detailed information about a specific place including all visual content"""
+    try:
+        data = request.json
+        place_id = data.get('place_id', '').strip()
+        
+        if not place_id:
+            return jsonify({'error': 'Place ID is required'}), 400
+        
+        if not gmaps_client:
+            return jsonify({
+                'success': False,
+                'error': 'Google Places API not configured'
+            }), 503
+        
+        # Get comprehensive place details
+        place_details_result = gmaps_client.place(
+            place_id=place_id,
+            fields=['name', 'formatted_address', 'rating', 'price_level', 
+                   'types', 'website', 'formatted_phone_number', 'opening_hours',
+                   'photos', 'reviews', 'user_ratings_total', 'url', 'geometry']
+        )
+        
+        detailed_place = place_details_result.get('result', {})
+        place_name = detailed_place.get('name', '')
+        place_types = detailed_place.get('types', [])
+        
+        # Process all visual content
+        photos = process_google_photos(detailed_place.get('photos', []), place_name)
+        fallback_image = get_fallback_image_by_type(place_types)
+        
+        enhanced_details = {
+            'place_id': place_id,
+            'name': place_name,
+            'address': detailed_place.get('formatted_address', ''),
+            'rating': detailed_place.get('rating', 0),
+            'rating_count': detailed_place.get('user_ratings_total', 0),
+            'price_level': detailed_place.get('price_level', 0),
+            'types': place_types,
+            'website': detailed_place.get('website', ''),
+            'phone': detailed_place.get('formatted_phone_number', ''),
+            'opening_hours': detailed_place.get('opening_hours', {}).get('weekday_text', []),
+            'is_open': detailed_place.get('opening_hours', {}).get('open_now', None),
+            
+            # Enhanced Visual Content
+            'photos': photos,
+            'hero_image': photos[0]['urls']['large'] if photos else fallback_image,
+            'thumbnail': photos[0]['urls']['thumb'] if photos else fallback_image,
+            'photo_count': len(photos),
+            'fallback_image': fallback_image,
+            
+            # Enhanced Categorization
+            'category': get_place_category(place_types),
+            'tags': generate_place_tags(detailed_place, place_types),
+            
+            # All Reviews
+            'reviews': detailed_place.get('reviews', []),
+            
+            # Location Data
+            'geometry': detailed_place.get('geometry', {}),
+            'url': detailed_place.get('url', '')
+        }
+        
+        return jsonify({
+            'success': True,
+            'place': enhanced_details,
+            'visual_content_available': len(photos) > 0,
+            'enhanced_features': True
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting place details: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
         }), 500
 
 # Performance optimizations for cold starts
@@ -640,6 +1264,7 @@ def add_header(response):
     # Security headers
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
 
     return response
 
@@ -655,18 +1280,22 @@ def warm_up():
         if gmaps_client:
             logger.info("🔥 Warming up Google Places connection...")
 
-        logger.info("🔥 Application warmed up successfully")
+        logger.info("🔥 Enhanced JetFriend application warmed up successfully")
     except Exception as e:
-        logger.warning(f"��️ Warm up partially failed: {str(e)}")
+        logger.warning(f"⚠️ Warm up partially failed: {str(e)}")
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-    print(f"🚀 JetFriend API v2.0 starting on port {port}")
+    print(f"🚀 JetFriend Enhanced API v3.0 starting on port {port}")
     print(f"🌐 Visit: http://localhost:{port}")
     print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
     print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
+    print(f"📸 Visual Content: ✅ Enhanced Photo Processing")
+    print(f"🎨 UI Features: ✅ Categories, Tags, Hero Images")
+    print(f"🔍 Underground Search: {'✅ Enabled' if gmaps_client else '❌ Requires Google Places API'}")
+    print(f"🎯 Fallback Images: ✅ High-Quality Defaults")
 
     # Warm up the application
     warm_up()
