@@ -488,11 +488,22 @@ SMART TAGS SYSTEM:
 CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
-PHOTO SOURCES (use realistic restaurant/travel photos):
-- Food: https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg
-- Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
-- Dishes: https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg
-- Exterior: https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg
+PHOTO USAGE (use REAL Google Places photos from the data):
+- Hero Image: Use place.hero_image as background-image in place-hero div style
+- Thumbnail Gallery: Use place.photos[0].urls.thumb, place.photos[1].urls.thumb, etc.
+- Fallback Photos: Only use Pexels URLs if no real photos available:
+  - Food: https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg
+  - Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
+  - Exterior: https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg
+
+CRITICAL PLACE CARD FORMATTING:
+- Maximum width: 600px, height: 250px
+- Use place.hero_image as background with dark overlay for text readability
+- Yellow stars (#fbbf24) for ratings
+- Semi-transparent category badge (background: rgba(255,255,255,0.2))
+- 20px spacing between cards
+- Photo gallery: 3 columns desktop, 2 mobile
+- object-fit: cover for all images
 
 ALWAYS INCLUDE:
 - Google Maps link for each location
