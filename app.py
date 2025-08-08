@@ -117,7 +117,13 @@ def detect_location_query(message: str) -> bool:
         # Booking & Reservations
         'reservations', 'book', 'booking', 'reserve', 'tickets',
         'call', 'contact', 'website', 'menu', 'prices', 'cost',
-        'opening hours', 'schedule', 'availability'
+        'opening hours', 'schedule', 'availability',
+
+        # Additional location triggers
+        'where', 'location', 'place', 'spot', 'venue', 'destination',
+        'address', 'find', 'search', 'recommend', 'suggest', 'show me',
+        'best', 'top', 'good', 'great', 'nice', 'cheap', 'expensive',
+        'close', 'nearby', 'around here', 'walking distance'
     ]
     
     message_lower = message.lower()
@@ -783,7 +789,7 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                         reviewer = review.get('author_name', 'Anonymous')
                         rating = review.get('rating', 0)
                         text = review.get('text', '')[:100] + "..." if len(review.get('text', '')) > 100 else review.get('text', '')
-                        places_text += f"     - {reviewer} (���{rating}): {text}\n"
+                        places_text += f"     - {reviewer} (★{rating}): {text}\n"
 
                 places_text += "\n"
 
@@ -1173,7 +1179,7 @@ def warm_up():
 
         logger.info("🔥 Application warmed up successfully")
     except Exception as e:
-        logger.warning(f"��️ Warm up partially failed: {str(e)}")
+        logger.warning(f"⚠️ Warm up partially failed: {str(e)}")
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
