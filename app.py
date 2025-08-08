@@ -168,9 +168,9 @@ def generate_smart_tags(place_data: Dict) -> List[str]:
 
     return tags
 
-def get_place_photos(place_id: str, max_photos: int = 5) -> List[str]:
+def get_place_photos(place_id: str, max_photos: int = 5) -> List[Dict]:
     """
-    Get photo URLs for a place using Google Places Photo API
+    Get photo URLs for a place using Google Places Photo API with multiple sizes
     """
     if not gmaps_client:
         return []
@@ -183,16 +183,25 @@ def get_place_photos(place_id: str, max_photos: int = 5) -> List[str]:
         )
 
         photos = place_details.get('result', {}).get('photos', [])
-        photo_urls = []
+        photo_data = []
 
         for photo in photos[:max_photos]:
             photo_reference = photo.get('photo_reference')
             if photo_reference:
-                # Generate photo URL
-                photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={google_places_api_key}"
-                photo_urls.append(photo_url)
+                # Generate photo URLs in different sizes
+                photo_info = {
+                    'reference': photo_reference,
+                    'urls': {
+                        'thumb': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference={photo_reference}&key={google_places_api_key}",
+                        'medium': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={google_places_api_key}",
+                        'large': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_places_api_key}"
+                    },
+                    'width': photo.get('width', 400),
+                    'height': photo.get('height', 300)
+                }
+                photo_data.append(photo_info)
 
-        return photo_urls
+        return photo_data
     except Exception as e:
         logger.warning(f"Failed to get photos for place {place_id}: {str(e)}")
         return []
@@ -204,7 +213,7 @@ def get_category_badge(place_types: List[str]) -> str:
     # Priority mapping for place types
     category_map = {
         'restaurant': '🍽️ Restaurant',
-        'food': '🍽️ Restaurant',
+        'food': '🍽�� Restaurant',
         'meal_takeaway': '���� Takeaway',
         'cafe': '☕ Café',
         'bar': '🍻 Bar',
