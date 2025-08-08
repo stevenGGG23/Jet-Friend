@@ -1246,13 +1246,8 @@
           padding: 10px;
         }
 
-        .photo-grid {
-          grid-template-columns: repeat(2, 1fr);
-          max-height: 50px;
-        }
-
-        .photo-item img {
-          height: 50px;
+        .photo-gallery {
+          display: none;
         }
 
         .place-name {
@@ -3541,7 +3536,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >✓</span
+                  >���</span
                 >
                 Mobile apps & integrations
               </li>
@@ -4158,7 +4153,7 @@
 
         // Test API connectivity
         async testConnection() {
-          console.log('��� TESTING JETFRIEND API CONNECTIVITY');
+          console.log('🔧 TESTING JETFRIEND API CONNECTIVITY');
           console.log('API URL:', this.baseURL);
 
           try {
@@ -4230,7 +4225,7 @@
               return { success: false, error: errorData.error || errorData.message || `HTTP ${response.status}` };
             }
           } catch (error) {
-            console.log('��� Network error:', error);
+            console.log('❌ Network error:', error);
             return { success: false, error: error.message };
           }
         }
@@ -4329,7 +4324,7 @@
           console.log('✅ Test API button found, adding event listener');
           testWebhookButton.addEventListener('click', async function(e) {
             e.preventDefault();
-            console.log('🧪 Test API button clicked');
+            console.log('�� Test API button clicked');
 
             // Add a test message to chat
             addMessageToChat('🔧 Testing JetFriend API connection...', 'ai');
