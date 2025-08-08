@@ -281,7 +281,9 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
             places_result = gmaps_client.places(query=query)
 
         places = []
-        for place in places_result.get('results', [])[:8]:  # Increased to 8 results
+        raw_places = []
+
+        for place in places_result.get('results', [])[:12]:  # Get more results for filtering
             place_id = place.get('place_id', '')
 
             # Get detailed place information
@@ -290,7 +292,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                     place_id=place_id,
                     fields=['name', 'formatted_address', 'rating', 'price_level',
                            'types', 'website', 'formatted_phone_number', 'opening_hours',
-                           'photos', 'reviews', 'user_ratings_total', 'url']
+                           'photos', 'reviews', 'user_ratings_total', 'url', 'geometry']
                 )
                 detailed_place = place_details_result.get('result', {})
             except:
@@ -334,6 +336,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'is_open': detailed_place.get('opening_hours', {}).get('open_now', None),
                 'photos': detailed_place.get('photos', []),
                 'reviews': detailed_place.get('reviews', [])[:3],  # Top 3 reviews
+                'geometry': detailed_place.get('geometry', place.get('geometry', {})),
 
                 # Enhanced features
                 'smart_tags': smart_tags,
@@ -365,7 +368,35 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'uber_url': f"https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]={encoded_address}" if place_address else '',
                 'lyft_url': f"https://lyft.com/ride?destination[address]={encoded_address}" if place_address else ''
             }
-            places.append(place_info)
+            raw_places.append(place_info)
+
+        # Apply comprehensive data validation and enhancement
+        if data_processor:
+            logger.info(f"🔍 Processing {len(raw_places)} places through comprehensive validation...")
+
+            enhanced_places = []
+            for place_data in raw_places:
+                try:
+                    enhanced_place = data_processor.process_place_data(place_data)
+                    enhanced_places.append(enhanced_place)
+                except Exception as e:
+                    logger.warning(f"Failed to process place {place_data.get('name', 'Unknown')}: {str(e)}")
+                    # Fall back to original data if processing fails
+                    enhanced_places.append(place_data)
+
+            # Filter for high-confidence results only
+            high_confidence_places = data_processor.filter_high_confidence_places(
+                enhanced_places,
+                min_confidence=0.6  # Adjustable threshold
+            )
+
+            places = high_confidence_places[:8]  # Return top 8 high-confidence places
+
+            logger.info(f"✅ Filtered to {len(places)} high-confidence places with validated data")
+        else:
+            # Fallback to original processing if data processor unavailable
+            places = raw_places[:8]
+            logger.warning("Using fallback processing - data validation unavailable")
 
         return places
     except Exception as e:
