@@ -491,7 +491,7 @@ SMART TAGS SYSTEM:
 - premium: Use for high-end, luxury places
 
 CATEGORY BADGES:
-🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, �� Spa
+🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
 PHOTO USAGE:
 - DO NOT use hero image backgrounds or transparent overlays
@@ -1022,13 +1022,16 @@ def warm_up():
         logger.warning(f"⚠️ Warm up partially failed: {str(e)}")
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5001))
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-    print(f"🚀 JetFriend API v2.0 starting on port {port}")
+    print(f"🚀 JetFriend API v2.1 starting on port {port}")
     print(f"🌐 Visit: http://localhost:{port}")
     print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
     print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
+    print(f"🔍 Data Validation: {'✅ Active' if data_processor else '❌ Not configured'}")
+    print(f"🖼️ Image Sourcing: {'✅ Active' if data_processor and data_processor.image_sourcer else '❌ Not configured'}")
+    print(f"🏗️ Builder.io Integration: {'✅ Ready' if data_processor else '❌ Limited'}")
 
     # Warm up the application
     warm_up()
