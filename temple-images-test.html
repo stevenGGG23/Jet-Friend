@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetFriend - Temple Images Test</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        .temple-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .temple-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .temple-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .temple-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
+        }
+        .temple-info {
+            padding: 20px;
+        }
+        .temple-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        .temple-location {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .temple-type {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .image-source {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 10px;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .error {
+            text-align: center;
+            padding: 20px;
+            color: #e53e3e;
+            background: #fed7d7;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        .success {
+            text-align: center;
+            padding: 20px;
+            color: #38a169;
+            background: #c6f6d5;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏯 JetFriend Temple Images</h1>
+        <p class="subtitle">Now displaying real temple images instead of generic placeholders!</p>
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <button class="test-button" onclick="loadTempleImages()">Load Temple Images</button>
+            <button class="test-button" onclick="testSpecificTemple()">Test Kinkaku-ji</button>
+            <button class="test-button" onclick="testRandomPlace()">Test Random Place</button>
+        </div>
+        
+        <div id="status"></div>
+        <div id="temple-grid" class="temple-grid"></div>
+    </div>
+
+    <script>
+        async function testImageAPI(placeName, placeTypes, location) {
+            try {
+                const response = await fetch('/api/image-sourcing-test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        place_name: placeName,
+                        place_types: placeTypes,
+                        location: location
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Error testing image API:', error);
+                throw error;
+            }
+        }
+
+        function createTempleCard(data, testData) {
+            const imageResult = data.image_result;
+            return `
+                <div class="temple-card">
+                    <img class="temple-image" 
+                         src="${imageResult.url}" 
+                         alt="${imageResult.alt_text || testData.place_name}"
+                         onerror="this.style.display='none'">
+                    <div class="temple-info">
+                        <div class="temple-name">${testData.place_name}</div>
+                        <div class="temple-location">📍 ${testData.location}</div>
+                        <div class="temple-type">${testData.place_types.join(', ')}</div>
+                        <div class="image-source">
+                            <strong>Source:</strong> ${imageResult.source}<br>
+                            <strong>Confidence:</strong> ${(imageResult.confidence * 100).toFixed(1)}%<br>
+                            <strong>License:</strong> ${imageResult.license}<br>
+                            <strong>Attribution:</strong> ${imageResult.attribution}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadTempleImages() {
+            const statusDiv = document.getElementById('status');
+            const gridDiv = document.getElementById('temple-grid');
+            
+            statusDiv.innerHTML = '<div class="loading">Loading temple images...</div>';
+            gridDiv.innerHTML = '';
+
+            const temples = [
+                { place_name: "Kinkaku-ji (Golden Pavilion)", place_types: ["tourist_attraction", "place_of_worship"], location: "Kyoto, Japan" },
+                { place_name: "Senso-ji Temple", place_types: ["tourist_attraction", "place_of_worship"], location: "Tokyo, Japan" },
+                { place_name: "Todai-ji Temple", place_types: ["tourist_attraction", "place_of_worship"], location: "Nara, Japan" },
+                { place_name: "Fushimi Inari Shrine", place_types: ["tourist_attraction", "place_of_worship"], location: "Kyoto, Japan" },
+                { place_name: "Tokyo Temple", place_types: ["place_of_worship"], location: "Tokyo, Japan" },
+                { place_name: "Kyoto Temple", place_types: ["place_of_worship"], location: "Kyoto, Japan" }
+            ];
+
+            try {
+                const results = await Promise.all(
+                    temples.map(temple => testImageAPI(temple.place_name, temple.place_types, temple.location))
+                );
+
+                statusDiv.innerHTML = '<div class="success">✅ Successfully loaded temple images!</div>';
+                
+                gridDiv.innerHTML = results.map((result, index) => 
+                    createTempleCard(result, temples[index])
+                ).join('');
+
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="error">❌ Error loading images: ${error.message}</div>`;
+            }
+        }
+
+        async function testSpecificTemple() {
+            const statusDiv = document.getElementById('status');
+            const gridDiv = document.getElementById('temple-grid');
+            
+            statusDiv.innerHTML = '<div class="loading">Testing Kinkaku-ji Golden Pavilion...</div>';
+            gridDiv.innerHTML = '';
+
+            try {
+                const result = await testImageAPI(
+                    "Kinkaku-ji Golden Pavilion", 
+                    ["tourist_attraction", "place_of_worship"], 
+                    "Kyoto, Japan"
+                );
+
+                statusDiv.innerHTML = '<div class="success">✅ Kinkaku-ji image loaded successfully!</div>';
+                gridDiv.innerHTML = createTempleCard(result, {
+                    place_name: "Kinkaku-ji Golden Pavilion",
+                    place_types: ["tourist_attraction", "place_of_worship"],
+                    location: "Kyoto, Japan"
+                });
+
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="error">❌ Error loading Kinkaku-ji: ${error.message}</div>`;
+            }
+        }
+
+        async function testRandomPlace() {
+            const statusDiv = document.getElementById('status');
+            const gridDiv = document.getElementById('temple-grid');
+            
+            statusDiv.innerHTML = '<div class="loading">Testing random restaurant...</div>';
+            gridDiv.innerHTML = '';
+
+            try {
+                const result = await testImageAPI(
+                    "Sushi Restaurant", 
+                    ["restaurant", "food"], 
+                    "Tokyo, Japan"
+                );
+
+                statusDiv.innerHTML = '<div class="success">✅ Restaurant image loaded successfully!</div>';
+                gridDiv.innerHTML = createTempleCard(result, {
+                    place_name: "Sushi Restaurant",
+                    place_types: ["restaurant", "food"],
+                    location: "Tokyo, Japan"
+                });
+
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="error">❌ Error loading restaurant: ${error.message}</div>`;
+            }
+        }
+
+        // Load temple images automatically when page loads
+        window.addEventListener('load', loadTempleImages);
+    </script>
+</body>
+</html>

@@ -221,12 +221,27 @@ class ImageSourcer:
             'restaurant': 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'hotel': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'attraction': 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'temple': 'https://images.pexels.com/photos/1444424/pexels-photo-1444424.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'shrine': 'https://images.pexels.com/photos/4331617/pexels-photo-4331617.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'place_of_worship': 'https://images.pexels.com/photos/1444424/pexels-photo-1444424.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'tourist_attraction': 'https://images.pexels.com/photos/4022092/pexels-photo-4022092.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'bar': 'https://images.pexels.com/photos/941864/pexels-photo-941864.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'cafe': 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'museum': 'https://images.pexels.com/photos/1263986/pexels-photo-1263986.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'park': 'https://images.pexels.com/photos/1680172/pexels-photo-1680172.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'shopping': 'https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'default': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        }
+
+        # Specific high-quality images for famous temples and landmarks
+        self.specific_place_images = {
+            'kinkaku-ji': 'https://images.pexels.com/photos/4022092/pexels-photo-4022092.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'golden pavilion': 'https://images.pexels.com/photos/4022092/pexels-photo-4022092.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'senso-ji': 'https://images.pexels.com/photos/4331617/pexels-photo-4331617.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'todai-ji': 'https://images.pexels.com/photos/1444424/pexels-photo-1444424.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'fushimi inari': 'https://images.pexels.com/photos/4331617/pexels-photo-4331617.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'tokyo temple': 'https://images.pexels.com/photos/4331617/pexels-photo-4331617.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'kyoto temple': 'https://images.pexels.com/photos/4022092/pexels-photo-4022092.jpeg?auto=compress&cs=tinysrgb&w=1200'
         }
     
     def get_primary_image(self, place_name: str, place_types: List[str], location: str = None) -> Dict:
@@ -257,7 +272,7 @@ class ImageSourcer:
             return image_result
         
         # Fallback to curated stock images
-        fallback_image = self._get_fallback_image(place_types)
+        fallback_image = self._get_fallback_image(place_types, place_name)
         image_result.update(fallback_image)
         
         return image_result
@@ -339,10 +354,25 @@ class ImageSourcer:
             logger.error(f"Web licensed image search failed: {str(e)}")
             return {'success': False, 'error': f'Web search error: {str(e)}'}
     
-    def _get_fallback_image(self, place_types: List[str]) -> Dict:
+    def _get_fallback_image(self, place_types: List[str], place_name: str = "") -> Dict:
         """Get appropriate fallback image based on place type with enhanced categorization"""
         place_types_str = str(place_types).lower()
+        place_name_lower = place_name.lower()
 
+        # First check for specific famous places
+        for specific_place, image_url in self.specific_place_images.items():
+            if specific_place in place_name_lower:
+                return {
+                    'success': True,
+                    'url': image_url,
+                    'source': 'pexels_specific',
+                    'license': 'pexels_license',
+                    'confidence': 0.9,  # High confidence for specific places
+                    'alt_text': f'{place_name} - {specific_place}',
+                    'attribution': 'Pexels'
+                }
+
+        # Then categorize by place type
         if 'restaurant' in place_types_str or 'food' in place_types_str or 'meal_takeaway' in place_types_str:
             image_url = self.fallback_images['restaurant']
             category = 'restaurant'
@@ -355,9 +385,12 @@ class ImageSourcer:
         elif 'lodging' in place_types_str or 'hotel' in place_types_str:
             image_url = self.fallback_images['hotel']
             category = 'hotel'
+        elif 'place_of_worship' in place_types_str or 'temple' in place_types_str or 'shrine' in place_types_str:
+            image_url = self.fallback_images['temple']
+            category = 'temple'
         elif 'tourist_attraction' in place_types_str:
-            image_url = self.fallback_images['attraction']
-            category = 'attraction'
+            image_url = self.fallback_images['tourist_attraction']
+            category = 'tourist_attraction'
         elif 'museum' in place_types_str:
             image_url = self.fallback_images['museum']
             category = 'museum'
@@ -376,7 +409,7 @@ class ImageSourcer:
             'url': image_url,
             'source': 'pexels_licensed',
             'license': 'pexels_license',
-            'confidence': 0.6,  # Increased confidence for better categorization
+            'confidence': 0.7,  # Increased confidence for better categorization
             'alt_text': f'{category.title()} image',
             'attribution': 'Pexels'
         }
