@@ -511,7 +511,10 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'uber_url': f"https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]={encoded_address}" if place_address else '',
                 'lyft_url': f"https://lyft.com/ride?destination[address]={encoded_address}" if place_address else ''
             }
-            raw_places.append(place_info)
+
+            # Validate and filter links to prevent dead links
+            validated_place_info = validate_and_filter_links(place_info)
+            raw_places.append(validated_place_info)
 
         # Apply comprehensive data validation and enhancement
         if data_processor:
