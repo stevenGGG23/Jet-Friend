@@ -706,6 +706,10 @@ def chat():
         
         # Get AI response with enhanced data
         ai_response = get_ai_response(user_message, conversation_history, places_data)
+
+        # Post-process response to substitute real URLs and add conditional links
+        if places_data:
+            ai_response = substitute_real_urls(ai_response, places_data)
         
         # Log for debugging
         logger.info(f"Chat request: '{user_message}' - Location detected: {detect_location_query(user_message)} - Places found: {len(places_data)}")
