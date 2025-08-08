@@ -583,6 +583,8 @@ NEVER USE:
 - Inline styles like style="..."
 - Extra \n\n line breaks
 - Vertical link stacking
+- Photo galleries or multiple images per place
+- Any <div class="photo-gallery"> sections
 
 SMART TAGS SYSTEM:
 - highly-rated: Use for places with 4.5+ stars and 100+ reviews
