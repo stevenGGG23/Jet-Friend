@@ -216,12 +216,17 @@ class ImageSourcer:
         self.google_search_engine_id = google_search_engine_id
         self.session = requests.Session()
         
-        # Fallback image sources with proper licensing
+        # Fallback image sources with proper licensing - high quality versions
         self.fallback_images = {
-            'restaurant': 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg',
-            'hotel': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg',
-            'attraction': 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
-            'default': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'
+            'restaurant': 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'hotel': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'attraction': 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'bar': 'https://images.pexels.com/photos/941864/pexels-photo-941864.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'cafe': 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'museum': 'https://images.pexels.com/photos/1263986/pexels-photo-1263986.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'park': 'https://images.pexels.com/photos/1680172/pexels-photo-1680172.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'shopping': 'https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'default': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200'
         }
     
     def get_primary_image(self, place_name: str, place_types: List[str], location: str = None) -> Dict:
@@ -335,28 +340,43 @@ class ImageSourcer:
             return {'success': False, 'error': f'Web search error: {str(e)}'}
     
     def _get_fallback_image(self, place_types: List[str]) -> Dict:
-        """Get appropriate fallback image based on place type"""
+        """Get appropriate fallback image based on place type with enhanced categorization"""
         place_types_str = str(place_types).lower()
-        
-        if 'restaurant' in place_types_str or 'food' in place_types_str:
+
+        if 'restaurant' in place_types_str or 'food' in place_types_str or 'meal_takeaway' in place_types_str:
             image_url = self.fallback_images['restaurant']
             category = 'restaurant'
+        elif 'bar' in place_types_str or 'night_club' in place_types_str:
+            image_url = self.fallback_images['bar']
+            category = 'bar'
+        elif 'cafe' in place_types_str:
+            image_url = self.fallback_images['cafe']
+            category = 'cafe'
         elif 'lodging' in place_types_str or 'hotel' in place_types_str:
             image_url = self.fallback_images['hotel']
             category = 'hotel'
-        elif 'tourist_attraction' in place_types_str or 'museum' in place_types_str:
+        elif 'tourist_attraction' in place_types_str:
             image_url = self.fallback_images['attraction']
             category = 'attraction'
+        elif 'museum' in place_types_str:
+            image_url = self.fallback_images['museum']
+            category = 'museum'
+        elif 'park' in place_types_str:
+            image_url = self.fallback_images['park']
+            category = 'park'
+        elif 'shopping' in place_types_str or 'store' in place_types_str:
+            image_url = self.fallback_images['shopping']
+            category = 'shopping'
         else:
             image_url = self.fallback_images['default']
             category = 'default'
-        
+
         return {
             'success': True,
             'url': image_url,
             'source': 'pexels_licensed',
             'license': 'pexels_license',
-            'confidence': 0.5,
+            'confidence': 0.6,  # Increased confidence for better categorization
             'alt_text': f'{category.title()} image',
             'attribution': 'Pexels'
         }

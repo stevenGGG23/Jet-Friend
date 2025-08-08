@@ -928,10 +928,12 @@
 
       .place-hero {
         position: relative;
-        height: 120px;
+        height: 200px; /* Increased for better image display */
+        width: 100%;
         overflow: hidden;
         background: linear-gradient(135deg, #1e293b, #334155);
         flex-shrink: 0;
+        border-radius: 12px 12px 0 0; /* Match card border radius */
       }
 
       .place-hero::after {
@@ -947,9 +949,10 @@
       .place-hero-image {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: cover; /* Ensures consistent aspect ratio */
         transition: transform 0.6s ease;
         filter: brightness(0.8);
+        display: block; /* Remove any inline spacing */
       }
 
       .place-hero::before {
@@ -1166,7 +1169,7 @@
         }
 
         .place-hero {
-          height: 100px;
+          height: 160px; /* Larger on mobile for better visibility */
         }
 
         .place-content {

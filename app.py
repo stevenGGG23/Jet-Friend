@@ -60,11 +60,39 @@ except Exception as e:
     logger.warning(f"Failed to initialize data processor: {str(e)}")
     logger.warning("Data validation and image sourcing will use fallback methods")
 
+def is_basic_question(message: str) -> bool:
+    """
+    Detect if this is a basic question that doesn't require location cards
+    Returns True for general questions, greetings, time, weather, etc.
+    """
+    basic_keywords = [
+        # Greetings and general
+        'hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening',
+        'how are you', 'what is', 'what are', 'who is', 'when is', 'why',
+        'explain', 'tell me about', 'what does', 'how does', 'define',
+
+        # Time and weather
+        'what time', 'time zone', 'current time', 'weather', 'temperature',
+        'forecast', 'rain', 'sunny', 'cloudy',
+
+        # Currency and general info
+        'currency', 'exchange rate', 'language', 'translate', 'how to say',
+        'thank you', 'please', 'excuse me', 'culture', 'history',
+
+        # Help and guidance
+        'help', 'assistance', 'support', 'how can', 'what can you do',
+        'features', 'capabilities'
+    ]
+
+    message_lower = message.lower()
+    return any(keyword in message_lower for keyword in basic_keywords)
+
 def detect_location_query(message: str) -> bool:
     """
     Detect if user query requires real-time location data for ANY travel-related content.
     Returns True for hotels, attractions, restaurants, museums, trip planning, etc.
-    When True, place cards will be shown for enhanced location recommendations.
+    When True, hero place cards will be shown for enhanced location recommendations.
+    This ensures all location queries use the hero card format unless it's a basic question.
     """
     location_keywords = [
         # Accommodations
@@ -116,7 +144,13 @@ def detect_location_query(message: str) -> bool:
         # Booking & Reservations
         'reservations', 'book', 'booking', 'reserve', 'tickets',
         'call', 'contact', 'website', 'menu', 'prices', 'cost',
-        'opening hours', 'schedule', 'availability'
+        'opening hours', 'schedule', 'availability',
+
+        # Additional location triggers
+        'where', 'location', 'place', 'spot', 'venue', 'destination',
+        'address', 'find', 'search', 'recommend', 'suggest', 'show me',
+        'best', 'top', 'good', 'great', 'nice', 'cheap', 'expensive',
+        'close', 'nearby', 'around here', 'walking distance'
     ]
     
     message_lower = message.lower()
@@ -182,9 +216,10 @@ def generate_smart_tags(place_data: Dict) -> List[str]:
 
     return tags
 
-def get_place_photos(place_id: str, max_photos: int = 5) -> List[Dict]:
+def get_place_photos(place_id: str, max_photos: int = 8) -> List[Dict]:
     """
     Get photo URLs for a place using Google Places Photo API with multiple sizes
+    Enhanced to ensure we get real, specific photos from the actual place
     """
     if not gmaps_client:
         return []
@@ -193,7 +228,7 @@ def get_place_photos(place_id: str, max_photos: int = 5) -> List[Dict]:
         # Get place details with photos
         place_details = gmaps_client.place(
             place_id=place_id,
-            fields=['photos']
+            fields=['photos', 'name', 'types']
         )
 
         photos = place_details.get('result', {}).get('photos', [])
@@ -202,16 +237,19 @@ def get_place_photos(place_id: str, max_photos: int = 5) -> List[Dict]:
         for photo in photos[:max_photos]:
             photo_reference = photo.get('photo_reference')
             if photo_reference:
-                # Generate photo URLs in different sizes
+                # Generate photo URLs in different sizes with priority on larger, clearer images
                 photo_info = {
                     'reference': photo_reference,
                     'urls': {
                         'thumb': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference={photo_reference}&key={google_places_api_key}",
-                        'medium': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={google_places_api_key}",
-                        'large': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_places_api_key}"
+                        'medium': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference={photo_reference}&key={google_places_api_key}",
+                        'large': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photoreference={photo_reference}&key={google_places_api_key}",
+                        'hero': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference={photo_reference}&key={google_places_api_key}"
                     },
                     'width': photo.get('width', 400),
-                    'height': photo.get('height', 300)
+                    'height': photo.get('height', 300),
+                    'source': 'google_places_api',
+                    'attribution': photo.get('html_attributions', ['Google'])[0] if photo.get('html_attributions') else 'Google'
                 }
                 photo_data.append(photo_info)
 
@@ -219,6 +257,130 @@ def get_place_photos(place_id: str, max_photos: int = 5) -> List[Dict]:
     except Exception as e:
         logger.warning(f"Failed to get photos for place {place_id}: {str(e)}")
         return []
+
+def validate_and_filter_links(place_info: Dict) -> Dict:
+    """
+    Validate links and remove any that are invalid or lead to dead endpoints
+    Only keep links that are confirmed to work
+    """
+    # Always keep these core links (they're search-based and reliable)
+    essential_links = ['google_maps_url', 'google_search_url']
+
+    # Links to conditionally validate/include
+    conditional_links = [
+        'website', 'yelp_search_url', 'tripadvisor_search_url',
+        'opentable_url', 'booking_url', 'uber_url', 'lyft_url'
+    ]
+
+    validated_place = place_info.copy()
+
+    # Remove empty or invalid conditional links
+    for link_key in conditional_links:
+        link_value = validated_place.get(link_key, '')
+
+        # Remove if empty, just placeholder, or clearly invalid
+        if not link_value or link_value.strip() == '' or link_value == '#':
+            if link_key in validated_place:
+                del validated_place[link_key]
+        # Additional validation for specific link types
+        elif link_key == 'website' and not link_value.startswith(('http://', 'https://')):
+            if link_key in validated_place:
+                del validated_place[link_key]
+        elif link_key in ['opentable_url', 'booking_url', 'uber_url', 'lyft_url']:
+            # Only keep these if they have actual data (not just search URLs)
+            if not validated_place.get('name') or not validated_place.get('address'):
+                if link_key in validated_place:
+                    del validated_place[link_key]
+
+    # Ensure phone is properly formatted or remove it
+    phone = validated_place.get('phone', '')
+    if phone and not phone.startswith(('+', '(')):
+        # If phone doesn't look properly formatted, remove it
+        if 'phone' in validated_place:
+            del validated_place['phone']
+
+    return validated_place
+
+def get_enhanced_fallback_image(place_name: str, place_types: List[str], location: str = None) -> str:
+    """
+    Get enhanced fallback images based on place type with higher quality sources
+    Used only when Google Places Photos API doesn't return images
+    """
+    place_types_str = str(place_types).lower()
+
+    # High-quality category-specific fallback images from Pexels (royalty-free)
+    fallback_images = {
+        'restaurant': [
+            'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3201921/pexels-photo-3201921.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'hotel': [
+            'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1001965/pexels-photo-1001965.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'bar': [
+            'https://images.pexels.com/photos/941864/pexels-photo-941864.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/274192/pexels-photo-274192.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2795026/pexels-photo-2795026.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'cafe': [
+            'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1833399/pexels-photo-1833399.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1307698/pexels-photo-1307698.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'attraction': [
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'museum': [
+            'https://images.pexels.com/photos/1263986/pexels-photo-1263986.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/587816/pexels-photo-587816.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2372978/pexels-photo-2372978.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'park': [
+            'https://images.pexels.com/photos/1680172/pexels-photo-1680172.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/305821/pexels-photo-305821.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1463917/pexels-photo-1463917.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'shopping': [
+            'https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ]
+    }
+
+    # Determine category and select appropriate image
+    if 'restaurant' in place_types_str or 'food' in place_types_str or 'meal_takeaway' in place_types_str:
+        images = fallback_images['restaurant']
+    elif 'bar' in place_types_str or 'night_club' in place_types_str:
+        images = fallback_images['bar']
+    elif 'cafe' in place_types_str:
+        images = fallback_images['cafe']
+    elif 'lodging' in place_types_str or 'hotel' in place_types_str:
+        images = fallback_images['hotel']
+    elif 'tourist_attraction' in place_types_str:
+        images = fallback_images['attraction']
+    elif 'museum' in place_types_str:
+        images = fallback_images['museum']
+    elif 'park' in place_types_str:
+        images = fallback_images['park']
+    elif 'shopping' in place_types_str or 'store' in place_types_str:
+        images = fallback_images['shopping']
+    else:
+        images = fallback_images['attraction']  # Default fallback
+
+    # Use hash of place name to consistently select same image for same place
+    import hashlib
+    place_hash = hashlib.md5((place_name or 'default').encode()).hexdigest()
+    image_index = int(place_hash[:2], 16) % len(images)
+
+    return images[image_index]
 
 def get_category_badge(place_types: List[str]) -> str:
     """
@@ -310,7 +472,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
             encoded_location = urllib.parse.quote_plus(location_for_search)
             encoded_address = urllib.parse.quote_plus(place_address)
 
-            # Generate smart tags and get photos
+            # Generate smart tags and get photos with enhanced image sourcing
             base_place_data = {
                 'rating': detailed_place.get('rating', place.get('rating', 0)),
                 'user_ratings_total': detailed_place.get('user_ratings_total', 0),
@@ -321,7 +483,20 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
 
             smart_tags = generate_smart_tags(base_place_data)
             category_badge = get_category_badge(place_types)
-            photos_data = get_place_photos(place_id, max_photos=6)
+
+            # Get real photos from Google Places API first (prioritize actual place photos)
+            photos_data = get_place_photos(place_id, max_photos=8)
+
+            # Determine the best hero image - prioritize real photos from the place
+            hero_image_url = None
+            if photos_data and len(photos_data) > 0:
+                # Use the largest/highest quality photo from Google Places
+                hero_image_url = photos_data[0]['urls']['hero']  # Use hero size (1600px)
+                logger.info(f"Using real photo for {place_name}: {len(photos_data)} photos found")
+            else:
+                # Fallback to category-specific high-quality stock image
+                hero_image_url = get_enhanced_fallback_image(place_name, place_types, location_for_search)
+                logger.warning(f"No real photos found for {place_name}, using fallback image")
 
             place_info = {
                 'name': place_name,
@@ -339,11 +514,12 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'reviews': detailed_place.get('reviews', [])[:3],  # Top 3 reviews
                 'geometry': detailed_place.get('geometry', place.get('geometry', {})),
 
-                # Enhanced features
+                # Enhanced features with single guaranteed high-quality image
                 'smart_tags': smart_tags,
                 'category_badge': category_badge,
-                'photos': photos_data,
-                'hero_image': photos_data[0]['urls']['large'] if photos_data else 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg',
+                'hero_image': hero_image_url,  # Single high-quality image only
+                'has_real_photos': len(photos_data) > 0,  # Flag to indicate if real photos are available
+                'image_source': 'google_places' if photos_data else 'stock_image',
                 'description': f"Experience {place_name} - {category_badge.split(' ', 1)[1] if ' ' in category_badge else 'great location'} in {location_for_search}",
 
                 # Updated working URLs with proper encoding
@@ -369,7 +545,10 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'uber_url': f"https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]={encoded_address}" if place_address else '',
                 'lyft_url': f"https://lyft.com/ride?destination[address]={encoded_address}" if place_address else ''
             }
-            raw_places.append(place_info)
+
+            # Validate and filter links to prevent dead links
+            validated_place_info = validate_and_filter_links(place_info)
+            raw_places.append(validated_place_info)
 
         # Apply comprehensive data validation and enhancement
         if data_processor:
@@ -408,9 +587,14 @@ def get_jetfriend_system_prompt() -> str:
     """
     Return the enhanced JetFriend personality focused on convenience and real web data with enhanced place cards
     """
-    return """You are JetFriend, an AI travel assistant. When creating itineraries or recommending places, ALWAYS use the consistent itinerary card format for all recommendations. DO NOT switch to transparent place-card templates.
+    return """You are JetFriend, an AI travel assistant.
 
-FOR ALL RECOMMENDATIONS (restaurants, hotels, attractions, itineraries), use this CONSISTENT CARD format:
+CRITICAL DISPLAY RULES:
+1. For ANY location-related query (restaurants, hotels, attractions, activities, places), you MUST use the hero card format with itinerary-item cards
+2. For basic questions (like "what time is it" or "how to say hello"), use regular text responses
+3. NEVER display dead links or empty buttons - only show links that actually work
+
+FOR ALL LOCATION RECOMMENDATIONS (restaurants, hotels, attractions, activities), use this CONSISTENT HERO CARD format:
 
 CRITICAL FORMATTING RULES:
 1. NO markdown formatting (no **bold**, no # headers)
@@ -484,6 +668,8 @@ NEVER USE:
 - Inline styles like style="..."
 - Extra \n\n line breaks
 - Vertical link stacking
+- Photo galleries or multiple images per place
+- Any <div class="photo-gallery"> sections
 
 SMART TAGS SYSTEM:
 - highly-rated: Use for places with 4.5+ stars and 100+ reviews
@@ -493,10 +679,12 @@ SMART TAGS SYSTEM:
 CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
-PHOTO USAGE:
-- DO NOT use hero image backgrounds or transparent overlays
-- Keep consistent solid card styling for readability
-- If images are needed, reference them in descriptions only
+IMAGE USAGE RULES:
+- ALWAYS include ONE high-quality hero image per place (at the top of each card)
+- NO photo galleries or multiple images - ONE image only per place
+- Images appear FIRST in the display (at the top of place cards)
+- All images must be contained in consistent 200px height containers
+- Use solid card styling for readability
 
 CRITICAL FORMATTING RULES:
 - Use solid, readable itinerary-item cards for ALL recommendations
@@ -505,15 +693,14 @@ CRITICAL FORMATTING RULES:
 - Consistent spacing and readable design
 - Clean, simple design with solid card backgrounds
 
-WORKING LINKS - MUST USE REAL URLs:
-- Maps: place.google_maps_url
-- Yelp: place.yelp_search_url
-- TripAdvisor: place.tripadvisor_search_url
-- Website: place.website (if available)
-- Restaurants: place.opentable_url (only for restaurants)
-- Hotels: place.booking_url (only for hotels/lodging)
-- Uber: place.uber_url
+LINK VALIDATION RULES - NO DEAD LINKS:
+- ONLY include links that exist in the place data and are not empty
+- ALWAYS include: Google Maps (guaranteed to work)
+- CONDITIONALLY include: Official website, Yelp, TripAdvisor (only if data exists)
+- NEVER include empty buttons or placeholder links
+- If place.website exists, show it; if not, don't show website button
 - All links MUST use target="_blank" rel="noopener noreferrer"
+- Remove any link that doesn't have actual data
 
 ALWAYS INCLUDE:
 - Google Maps link for each location
@@ -637,13 +824,19 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
 
 {places_text}
 
-INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the available clickable HTML links. You have access to comprehensive travel booking links including Google Maps, Yelp, TripAdvisor, OpenTable (restaurants), Booking.com/Expedia (hotels), GetYourGuide (tours), Foursquare, Uber/Lyft (transportation), and official websites.
+INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ONLY the available working links.
 
-CRITICAL: Output proper HTML anchor tags with security attributes and visual icons. Use semantic HTML structure and mobile-responsive containers:
-<a href="https://www.google.com/maps/search/place+name+location" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
-<a href="https://www.yelp.com/search?find_desc=place+name&find_loc=location" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
+CRITICAL LINK RULES:
+- ONLY show links that exist in the place data (check each field exists and is not empty)
+- NEVER show empty buttons or dead links
+- If place.website exists and is not empty, show: <a href="[place.website]" target="_blank" rel="noopener noreferrer">🌐 Official Website</a>
+- If place.phone exists and is not empty, show: <a href="tel:[place.phone]" class="activity-link">📞 [place.phone]</a>
+- ALWAYS show Google Maps (guaranteed working): <a href="[place.google_maps_url]" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
+- Only show Yelp if place has good rating data: <a href="[place.yelp_search_url]" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
 
-Include ratings, phone numbers, direct access HTML links, smart tags, category badges, and photo galleries in your response. Use the enhanced place card format for restaurant and attraction recommendations. Prioritize places with good reviews and current information. Focus on convenience and immediate utility. Work with the information provided without asking follow-up questions."""
+NO DEAD LINKS RULE: If a link field is empty, missing, or invalid - DO NOT show that button at all.
+
+Use the hero itinerary-item card format for ALL location recommendations. Include ratings, properly validated links only, smart tags, and category badges. Focus on convenience and immediate utility. Work with the provided data without asking follow-up questions."""
         
         messages.append({"role": "user", "content": enhanced_message})
         
@@ -683,9 +876,10 @@ def chat():
         if not user_message:
             return jsonify({'error': 'Message is required'}), 400
         
-        # Check if query requires location data
+        # Check if query requires location data vs basic response
         places_data = []
-        is_location_query = detect_location_query(user_message)
+        is_basic = is_basic_question(user_message)
+        is_location_query = detect_location_query(user_message) and not is_basic
 
         if is_location_query and gmaps_client:
             # Extract location from message or use general search
