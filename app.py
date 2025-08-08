@@ -476,9 +476,8 @@ SMART TAGS SYSTEM:
 CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
-PHOTO USAGE (use REAL Google Places photos from the data):
-- Hero Image: Use place.hero_image as background-image in place-hero div style
-- Thumbnail Gallery: Use place.photos[0].urls.thumb, place.photos[1].urls.thumb, etc.
+PHOTO USAGE:
+- Hero Image: Use place.hero_image as background-image in place-hero div style only
 - Fallback Photos: Only use Pexels URLs if no real photos available:
   - Food: https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg
   - Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
@@ -490,8 +489,7 @@ CRITICAL PLACE CARD FORMATTING:
 - Yellow stars (#fbbf24) for ratings
 - Semi-transparent category badge (background: rgba(255,255,255,0.2))
 - 16px spacing between cards (compact)
-- Photo gallery: 3 columns desktop, 2 mobile
-- object-fit: cover for all images
+- Clean, simple design - hero image background only, no photo galleries
 
 WORKING LINKS - MUST USE REAL URLs:
 - Maps: place.google_maps_url
