@@ -28,11 +28,11 @@
       /* Enhanced Place Cards Styles */
       .place-card {
         max-width: 600px;
-        height: 240px;
+        min-height: 250px;
+        height: auto;
         background: rgba(30, 41, 59, 0.95);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 16px;
-        overflow: hidden;
         margin: 20px 0;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(20px);
@@ -131,10 +131,9 @@
       .place-content {
         padding: 16px;
         position: relative;
-        flex: 1;
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
       }
 
       .place-header {
@@ -279,7 +278,8 @@
       @media (max-width: 768px) {
         .place-card {
           max-width: 100%;
-          height: 280px;
+          min-height: 250px;
+          height: auto;
           margin: 16px 0;
         }
         
@@ -325,7 +325,6 @@
                 <div class="place-hero-overlay"></div>
                 <div class="place-smart-tags">
                     <span class="smart-tag highly-rated">Highly Rated</span>
-                    <span class="smart-tag open-now">Open Now</span>
                 </div>
                 <div class="place-category-badge">🍽️ Restaurant</div>
             </div>
@@ -343,7 +342,6 @@
                     <a href="https://www.google.com/maps/search/Sakura+Ramen+House+Tokyo" target="_blank" rel="noopener noreferrer" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
                     <a href="https://www.yelp.com/search?find_desc=Sakura+Ramen+House&find_loc=Tokyo" target="_blank" rel="noopener noreferrer" class="booking-link yelp"><i class="fas fa-star"></i> Yelp</a>
                     <a href="https://www.opentable.com/s/?text=Sakura+Ramen+House&location=Tokyo" target="_blank" rel="noopener noreferrer" class="booking-link opentable"><i class="fas fa-utensils"></i> Reserve</a>
-                    <a href="https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]=123+Tokyo+Street+Shibuya" target="_blank" rel="noopener noreferrer" class="booking-link uber"><i class="fas fa-car"></i> Uber</a>
                 </div>
                 <div class="photo-gallery">
                     <div class="gallery-title"><i class="fas fa-images"></i> Photos</div>
@@ -379,7 +377,6 @@
                     <a href="https://www.google.com/maps/search/Grand+Palace+Hotel+Tokyo" target="_blank" rel="noopener noreferrer" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
                     <a href="https://www.yelp.com/search?find_desc=Grand+Palace+Hotel&find_loc=Tokyo" target="_blank" rel="noopener noreferrer" class="booking-link yelp"><i class="fas fa-star"></i> Reviews</a>
                     <a href="https://www.booking.com/searchresults.html?ss=Grand+Palace+Hotel+Tokyo" target="_blank" rel="noopener noreferrer" class="booking-link booking"><i class="fas fa-bed"></i> Book</a>
-                    <a href="https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]=456+Hotel+Street+Tokyo" target="_blank" rel="noopener noreferrer" class="booking-link uber"><i class="fas fa-car"></i> Uber</a>
                 </div>
                 <div class="photo-gallery">
                     <div class="gallery-title"><i class="fas fa-images"></i> Photos</div>

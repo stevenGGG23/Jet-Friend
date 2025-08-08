@@ -906,11 +906,11 @@
       /* Enhanced Place Cards Styles */
       .place-card {
         max-width: 600px;
-        height: 240px;
+        min-height: 250px;
+        height: auto;
         background: rgba(30, 41, 59, 0.95);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
-        overflow: hidden;
         margin: 16px 0;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(20px);
@@ -932,6 +932,16 @@
         overflow: hidden;
         background: linear-gradient(135deg, #1e293b, #334155);
         flex-shrink: 0;
+      }
+
+      .place-hero::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: inherit;
+        background-size: cover;
+        background-position: center;
+        z-index: 0;
       }
 
       .place-hero-image {
@@ -1028,10 +1038,9 @@
       .place-content {
         padding: 12px;
         position: relative;
-        flex: 1;
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
       }
 
       .place-header {
@@ -1174,16 +1183,6 @@
         transform: translateY(-2px);
       }
 
-      .booking-link.uber {
-        background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(30, 30, 30, 0.8));
-        border-color: rgba(255, 255, 255, 0.2);
-        color: white;
-      }
-
-      .booking-link.uber:hover {
-        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.9));
-        transform: translateY(-2px);
-      }
 
       .booking-link.website {
         background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.1));
@@ -1234,7 +1233,8 @@
       @media (max-width: 768px) {
         .place-card {
           max-width: 100%;
-          height: 260px;
+          min-height: 250px;
+          height: auto;
           margin: 12px 0;
         }
 
@@ -3019,9 +3019,6 @@
 
       <ul class="nav-links">
         <li>
-          <a href="#features"><i class="fas fa-star"></i>Features</a>
-        </li>
-        <li>
           <a href="#pricing"><i class="fas fa-tag"></i>Pricing</a>
         </li>
         <li>
@@ -3032,12 +3029,6 @@
         </li>
       </ul>
 
-      <div class="nav-cta">
-        <a href="#" class="cta-nav">
-          <i class="fas fa-rocket" style="margin-right: 8px"></i>
-          Get Started
-        </a>
-      </div>
 
       <div class="nav-footer">
         <p>© 2025 JetFriend<br />Revolutionizing travel with AI</p>
@@ -3147,7 +3138,7 @@
 
                   <div class="chat-container" id="chatContainer">
                     <div class="message user-message">
-                      I'm thinking about going to Japan in November. I want a chill trip �� ramen, anime, nature. Budget is around $2500. Can you help?
+                      I'm thinking about going to Japan in November. I want a chill trip - ramen, anime, nature. Budget is around $2500. Can you help?
                     </div>
 
                     <div class="bot-avatar">
@@ -3359,7 +3350,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >��</span
+                  >✓</span
                 >
                 Chat support
               </li>
@@ -3644,7 +3635,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >���</span
+                  >✓</span
                 >
                 Mobile apps & integrations
               </li>
@@ -3717,7 +3708,7 @@
     <section class="about" id="about">
       <div class="container">
         <h2 class="section-title animate-on-scroll">
-          Meet JetFriend 🚀 Your AI Travel Buddy
+          Meet JetFriend - Your AI Travel Buddy
         </h2>
 
         <div class="about-content">
@@ -3758,8 +3749,7 @@
               </div>
               <div class="highlight-title">Real-Time & Dynamic</div>
               <div class="highlight-desc">
-                Weather updates, local event alerts, live chat for instant help,
-                and multi-device sync.
+                AI-powered travel suggestions, place card recommendations with booking links, conversational travel planning, and personalized trip guidance.
               </div>
             </div>
 
@@ -3955,7 +3945,6 @@
           />
         </div>
                 <div class="footer-links">
-          <a href="https://linkedin.com/company/jetfriend" target="_blank" rel="noopener noreferrer">Careers</a>
           <a href="https://www.instagram.com/jet.friend/" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-instagram" style="margin-right: 5px;"></i>Follow Us
           </a>
@@ -4432,7 +4421,7 @@
           console.log('✅ Test API button found, adding event listener');
           testWebhookButton.addEventListener('click', async function(e) {
             e.preventDefault();
-            console.log('�� Test API button clicked');
+            console.log('🔘 Test API button clicked');
 
             // Add a test message to chat
             addMessageToChat('🔧 Testing JetFriend API connection...', 'ai');
@@ -4461,7 +4450,7 @@
             }, 2000);
           });
         } else {
-          console.error('��� Test API button not found');
+          console.error('❌ Test API button not found');
         }
 
         // Main send button functionality using JetFriend API
@@ -4473,7 +4462,7 @@
               console.log('📤 Send button clicked');
 
               const inputText = chatInput ? chatInput.value.trim() : '';
-              console.log('���� Input text:', inputText);
+              console.log('📝 Input text:', inputText);
 
               if (!inputText) {
                 alert('Please enter a message first');
