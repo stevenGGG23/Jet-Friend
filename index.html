@@ -4474,8 +4474,30 @@
             // Add user message to chat
             addMessageToChat(inputText, 'user');
 
-            // Show typing indicator
+            // Show typing indicator with alternating messages
             const typingMessageElement = addMessageToChat('JetFriend is thinking...', 'ai');
+
+            // Create alternating thinking messages to show system is active
+            let messageIndex = 0;
+            const thinkingMessages = [
+              'JetFriend is thinking...',
+              'One moment please...',
+              'Searching for the best options...',
+              'Almost ready...',
+              'Just a few more seconds...'
+            ];
+
+            const messageInterval = setInterval(() => {
+              if (typingMessageElement && typingMessageElement.parentNode) {
+                messageIndex = (messageIndex + 1) % thinkingMessages.length;
+                const messageContent = typingMessageElement.querySelector('.message p');
+                if (messageContent) {
+                  messageContent.textContent = thinkingMessages[messageIndex];
+                }
+              } else {
+                clearInterval(messageInterval);
+              }
+            }, 6000); // Switch message every 6 seconds
 
             // Get conversation history (last 10 messages for context)
             const conversationHistory = [];
