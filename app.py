@@ -839,7 +839,13 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
 
 {places_text}
 
-INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ONLY the available working links.
+INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ONLY the available working links and images.
+
+CRITICAL IMAGE RULES:
+- ALWAYS use the HERO IMAGE URL provided for each place
+- Format: <img src="[HERO IMAGE URL]" alt="[place name]" class="place-hero-image" loading="lazy">
+- Place image FIRST in each itinerary-item card inside a place-hero div
+- Every restaurant, bar, hotel, attraction MUST have the hero image displayed
 
 CRITICAL LINK RULES:
 - ONLY show links that exist in the place data (check each field exists and is not empty)
