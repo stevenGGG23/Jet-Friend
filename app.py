@@ -224,6 +224,87 @@ def get_place_photos(place_id: str, max_photos: int = 8) -> List[Dict]:
         logger.warning(f"Failed to get photos for place {place_id}: {str(e)}")
         return []
 
+def get_enhanced_fallback_image(place_name: str, place_types: List[str], location: str = None) -> str:
+    """
+    Get enhanced fallback images based on place type with higher quality sources
+    Used only when Google Places Photos API doesn't return images
+    """
+    place_types_str = str(place_types).lower()
+
+    # High-quality category-specific fallback images from Pexels (royalty-free)
+    fallback_images = {
+        'restaurant': [
+            'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3201921/pexels-photo-3201921.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'hotel': [
+            'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1001965/pexels-photo-1001965.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'bar': [
+            'https://images.pexels.com/photos/941864/pexels-photo-941864.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/274192/pexels-photo-274192.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2795026/pexels-photo-2795026.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'cafe': [
+            'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1833399/pexels-photo-1833399.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1307698/pexels-photo-1307698.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'attraction': [
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'museum': [
+            'https://images.pexels.com/photos/1263986/pexels-photo-1263986.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/587816/pexels-photo-587816.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2372978/pexels-photo-2372978.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'park': [
+            'https://images.pexels.com/photos/1680172/pexels-photo-1680172.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/305821/pexels-photo-305821.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1463917/pexels-photo-1463917.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'shopping': [
+            'https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ]
+    }
+
+    # Determine category and select appropriate image
+    if 'restaurant' in place_types_str or 'food' in place_types_str or 'meal_takeaway' in place_types_str:
+        images = fallback_images['restaurant']
+    elif 'bar' in place_types_str or 'night_club' in place_types_str:
+        images = fallback_images['bar']
+    elif 'cafe' in place_types_str:
+        images = fallback_images['cafe']
+    elif 'lodging' in place_types_str or 'hotel' in place_types_str:
+        images = fallback_images['hotel']
+    elif 'tourist_attraction' in place_types_str:
+        images = fallback_images['attraction']
+    elif 'museum' in place_types_str:
+        images = fallback_images['museum']
+    elif 'park' in place_types_str:
+        images = fallback_images['park']
+    elif 'shopping' in place_types_str or 'store' in place_types_str:
+        images = fallback_images['shopping']
+    else:
+        images = fallback_images['attraction']  # Default fallback
+
+    # Use hash of place name to consistently select same image for same place
+    import hashlib
+    place_hash = hashlib.md5((place_name or 'default').encode()).hexdigest()
+    image_index = int(place_hash[:2], 16) % len(images)
+
+    return images[image_index]
+
 def get_category_badge(place_types: List[str]) -> str:
     """
     Determine the primary category badge for a place
