@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Cards Test - Visual Formatting</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+      body {
+        background: #0a0a1a;
+        color: white;
+        font-family: 'Inter', sans-serif;
+        padding: 20px;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #8b5cf6;
+      }
+
+      /* Enhanced Place Cards Styles */
+      .place-card {
+        max-width: 600px;
+        height: 250px;
+        background: rgba(30, 41, 59, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        overflow: hidden;
+        margin: 20px 0;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        position: relative;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .place-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2), 0 0 30px rgba(139, 92, 246, 0.1);
+        border-color: rgba(6, 182, 212, 0.3);
+      }
+
+      .place-hero {
+        position: relative;
+        height: 140px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1e293b, #334155);
+        flex-shrink: 0;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .place-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.4));
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .place-hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .place-smart-tags {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 3;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .smart-tag {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      }
+
+      .smart-tag.highly-rated {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
+      }
+
+      .smart-tag.open-now {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.9));
+      }
+
+      .place-category-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 3;
+        padding: 6px 10px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+      }
+
+      .place-content {
+        padding: 16px;
+        position: relative;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .place-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+
+      .place-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        line-height: 1.3;
+        flex: 1;
+        margin-right: 12px;
+      }
+
+      .place-rating {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background: rgba(245, 158, 11, 0.2);
+        border-radius: 12px;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+      }
+
+      .place-stars {
+        color: #fbbf24;
+        font-size: 12px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      .place-rating-text {
+        color: #f59e0b;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .place-address {
+        color: #94a3b8;
+        font-size: 13px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .place-description {
+        color: #e2e8f0;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+        flex: 1;
+      }
+
+      .place-booking-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .booking-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .booking-link.maps {
+        background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 168, 83, 0.1));
+        border-color: rgba(66, 133, 244, 0.3);
+        color: #4285f4;
+      }
+
+      .booking-link.yelp {
+        background: linear-gradient(135deg, rgba(255, 28, 28, 0.1), rgba(214, 25, 32, 0.1));
+        border-color: rgba(255, 28, 28, 0.3);
+        color: #ff1c1c;
+      }
+
+      .booking-link.opentable {
+        background: linear-gradient(135deg, rgba(218, 54, 47, 0.1), rgba(183, 28, 28, 0.1));
+        border-color: rgba(218, 54, 47, 0.3);
+        color: #da362f;
+      }
+
+      .photo-gallery {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .gallery-title {
+        font-size: 11px;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        max-height: 60px;
+        overflow: hidden;
+      }
+
+      .photo-item {
+        border-radius: 6px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .photo-item:hover {
+        transform: scale(1.05);
+      }
+
+      .photo-item img {
+        width: 100%;
+        height: 60px;
+        object-fit: cover;
+      }
+
+      @media (max-width: 768px) {
+        .place-card {
+          max-width: 100%;
+          height: 280px;
+          margin: 16px 0;
+        }
+        
+        .place-hero {
+          height: 120px;
+        }
+        
+        .place-content {
+          padding: 12px;
+        }
+        
+        .photo-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .place-name {
+          font-size: 16px;
+        }
+        
+        .place-description {
+          font-size: 13px;
+          line-height: 1.4;
+        }
+
+        .place-booking-links {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .booking-link {
+          font-size: 9px;
+          padding: 5px 6px;
+        }
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Place Cards Visual Formatting Test</h1>
+        
+        <!-- Restaurant Card with Real Google Photos Simulation -->
+        <div class="place-card">
+            <div class="place-hero" style="background-image: url('https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg');">
+                <div class="place-hero-overlay"></div>
+                <div class="place-smart-tags">
+                    <span class="smart-tag highly-rated">Highly Rated</span>
+                    <span class="smart-tag open-now">Open Now</span>
+                </div>
+                <div class="place-category-badge">🍽️ Restaurant</div>
+            </div>
+            <div class="place-content">
+                <div class="place-header">
+                    <h3 class="place-name">Sakura Ramen House</h3>
+                    <div class="place-rating">
+                        <span class="place-stars">★★★★★</span>
+                        <span class="place-rating-text">4.7 (2.1k)</span>
+                    </div>
+                </div>
+                <div class="place-address"><i class="fas fa-map-marker-alt"></i> 123 Tokyo Street, Shibuya</div>
+                <div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth. Famous for their late-night service.</div>
+                <div class="place-booking-links">
+                    <a href="#" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
+                    <a href="#" class="booking-link yelp"><i class="fas fa-star"></i> Yelp</a>
+                    <a href="#" class="booking-link opentable"><i class="fas fa-utensils"></i> Reserve</a>
+                </div>
+                <div class="photo-gallery">
+                    <div class="gallery-title"><i class="fas fa-images"></i> Photos</div>
+                    <div class="photo-grid">
+                        <div class="photo-item"><img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg" alt="Interior" /></div>
+                        <div class="photo-item"><img src="https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg" alt="Food" /></div>
+                        <div class="photo-item"><img src="https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg" alt="Exterior" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hotel Card -->
+        <div class="place-card">
+            <div class="place-hero" style="background-image: url('https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg');">
+                <div class="place-hero-overlay"></div>
+                <div class="place-smart-tags">
+                    <span class="smart-tag highly-rated">Highly Rated</span>
+                </div>
+                <div class="place-category-badge">🏨 Hotel</div>
+            </div>
+            <div class="place-content">
+                <div class="place-header">
+                    <h3 class="place-name">Grand Palace Hotel</h3>
+                    <div class="place-rating">
+                        <span class="place-stars">★★★★☆</span>
+                        <span class="place-rating-text">4.2 (856)</span>
+                    </div>
+                </div>
+                <div class="place-address"><i class="fas fa-map-marker-alt"></i> 456 Hotel Street, Central Tokyo</div>
+                <div class="place-description">Luxury hotel with traditional Japanese hospitality and modern amenities in the heart of Tokyo.</div>
+                <div class="place-booking-links">
+                    <a href="#" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
+                    <a href="#" class="booking-link yelp"><i class="fas fa-star"></i> Reviews</a>
+                    <a href="#" class="booking-link opentable"><i class="fas fa-bed"></i> Book</a>
+                </div>
+                <div class="photo-gallery">
+                    <div class="gallery-title"><i class="fas fa-images"></i> Photos</div>
+                    <div class="photo-grid">
+                        <div class="photo-item"><img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg" alt="Lobby" /></div>
+                        <div class="photo-item"><img src="https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg" alt="Room" /></div>
+                        <div class="photo-item"><img src="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg" alt="Pool" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; padding: 20px; background: rgba(139, 92, 246, 0.1); border-radius: 12px;">
+            <h3 style="color: #8b5cf6; margin-bottom: 16px;">✅ Visual Formatting Requirements Met:</h3>
+            <ul style="color: #e2e8f0; line-height: 1.6;">
+                <li>✅ Maximum width: 600px, height: 250px</li>
+                <li>✅ Hero image with dark gradient overlay for text readability</li>
+                <li>✅ Yellow stars (#fbbf24) for ratings</li>
+                <li>✅ Semi-transparent category badge (rgba(255,255,255,0.2))</li>
+                <li>✅ 20px spacing between cards</li>
+                <li>✅ Photo gallery: 3 columns desktop, 2 mobile</li>
+                <li>✅ object-fit: cover for image consistency</li>
+                <li>✅ Mobile responsive design</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
