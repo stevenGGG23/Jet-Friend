@@ -481,48 +481,13 @@ CRITICAL: ALWAYS use the same consistent itinerary-item card format for ALL reco
 
 def substitute_real_urls(ai_response: str, places_data: List[Dict]) -> str:
     """
-    Post-process AI response to substitute placeholder URLs with real working links
+    Post-process AI response to substitute placeholder URLs with real working links for itinerary format
     """
     if not places_data:
         return ai_response
 
-    # For each place card in the response, substitute real URLs
-    for i, place in enumerate(places_data):
-        place_types = str(place.get('types', [])).lower()
-
-        # Build conditional restaurant links
-        conditional_restaurant_links = ""
-        if 'restaurant' in place_types or 'food' in place_types or 'meal_takeaway' in place_types:
-            if place.get('opentable_url'):
-                conditional_restaurant_links += f'<a href="{place["opentable_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-utensils"></i> Reserve</a>\n'
-            if place.get('website'):
-                conditional_restaurant_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-globe"></i> Website</a>\n'
-
-        # Build conditional hotel links
-        conditional_hotel_links = ""
-        if 'lodging' in place_types or 'hotel' in place_types:
-            if place.get('booking_url'):
-                conditional_hotel_links += f'<a href="{place["booking_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-bed"></i> Book</a>\n'
-            if place.get('website'):
-                conditional_hotel_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-globe"></i> Website</a>\n'
-
-        # If neither restaurant nor hotel, show general website link
-        if not conditional_restaurant_links and not conditional_hotel_links and place.get('website'):
-            conditional_restaurant_links = f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-globe"></i> Website</a>\n'
-
-        # Substitute URLs in the response
-        ai_response = ai_response.replace('{google_maps_url}', place.get('google_maps_url', '#'))
-        ai_response = ai_response.replace('{yelp_search_url}', place.get('yelp_search_url', '#'))
-        ai_response = ai_response.replace('{tripadvisor_search_url}', place.get('tripadvisor_search_url', '#'))
-        ai_response = ai_response.replace('{uber_url}', place.get('uber_url', '#'))
-        ai_response = ai_response.replace('{conditional_restaurant_links}', conditional_restaurant_links)
-        ai_response = ai_response.replace('{conditional_hotel_links}', conditional_hotel_links)
-
-        # Substitute photo URLs
-        ai_response = ai_response.replace('{hero_image}', place.get('hero_image', 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'))
-
-        # Photo thumbnail substitution removed - using hero image only
-
+    # Since we're using consistent itinerary format, the AI should be including real URLs directly
+    # This function is mainly for any remaining placeholder substitutions
     return ai_response
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
