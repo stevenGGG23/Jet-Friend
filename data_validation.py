@@ -272,7 +272,7 @@ class ImageSourcer:
             return image_result
         
         # Fallback to curated stock images
-        fallback_image = self._get_fallback_image(place_types)
+        fallback_image = self._get_fallback_image(place_types, place_name)
         image_result.update(fallback_image)
         
         return image_result
