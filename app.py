@@ -234,7 +234,7 @@ def get_category_badge(place_types: List[str]) -> str:
         if place_type in category_map:
             return category_map[place_type]
 
-    return '📍 Place'
+    return '�� Place'
 
 def search_places(query: str, location: str = None, radius: int = 5000) -> List[Dict]:
     """
@@ -325,7 +325,8 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 # Enhanced features
                 'smart_tags': smart_tags,
                 'category_badge': category_badge,
-                'photo_urls': photo_urls,
+                'photos': photos_data,
+                'hero_image': photos_data[0]['urls']['large'] if photos_data else 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg',
                 'description': f"Experience {place_name} - {category_badge.split(' ', 1)[1] if ' ' in category_badge else 'great location'} in {location_for_search}",
 
                 # Updated working URLs with proper encoding
