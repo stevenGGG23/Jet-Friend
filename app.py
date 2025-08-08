@@ -45,20 +45,61 @@ else:
 
 def detect_location_query(message: str) -> bool:
     """
-    Detect if user query requires real-time location or restaurant data
+    Detect if user query requires real-time location data for ANY travel-related content.
+    Returns True for hotels, attractions, restaurants, museums, trip planning, etc.
+    When True, place cards will be shown for enhanced location recommendations.
     """
     location_keywords = [
-        'restaurant', 'hotel', 'attraction', 'museum', 'park', 'beach',
-        'airport', 'station', 'shopping', 'mall', 'cafe', 'bar', 'club',
-        'gym', 'hospital', 'pharmacy', 'bank', 'atm', 'gas station',
-        'near me', 'nearby', 'around', 'close to', 'in ', 'at ',
+        # Accommodations
+        'restaurant', 'hotel', 'hostel', 'resort', 'accommodation', 'lodge', 'inn',
+        'motel', 'villa', 'apartment', 'airbnb', 'where to stay',
+
+        # Attractions & Sights
+        'attraction', 'museum', 'park', 'beach', 'gallery', 'theater', 'cinema',
+        'zoo', 'aquarium', 'castle', 'palace', 'cathedral', 'church', 'temple',
+        'monument', 'landmark', 'viewpoint', 'scenic', 'observation deck',
+
+        # Transportation
+        'airport', 'station', 'train', 'bus', 'metro', 'subway', 'taxi', 'uber',
+        'transport', 'terminal', 'port', 'ferry', 'cruise',
+
+        # Shopping & Entertainment
+        'shopping', 'mall', 'market', 'boutique', 'store', 'outlet',
+        'cafe', 'bar', 'club', 'pub', 'lounge', 'brewery', 'winery',
+        'nightlife', 'entertainment', 'theater', 'concert', 'festival',
+
+        # Services & Facilities
+        'gym', 'spa', 'hospital', 'pharmacy', 'bank', 'atm', 'gas station',
+        'embassy', 'consulate', 'police', 'tourist information',
+
+        # Location Qualifiers
+        'near me', 'nearby', 'around', 'close to', 'in ', 'at ', 'around ',
         'best places', 'top rated', 'reviews', 'open now', 'hours',
         'directions', 'how to get', 'distance', 'travel time',
-        'food', 'eat', 'drink', 'stay', 'sleep', 'visit', 'see', 'do',
+
+        # Activities & Experiences
+        'food', 'eat', 'drink', 'dine', 'taste', 'try',
+        'stay', 'sleep', 'rest', 'relax',
+        'visit', 'see', 'do', 'explore', 'discover', 'experience',
+        'tour', 'excursion', 'adventure', 'activity', 'things to do',
         'breakfast', 'lunch', 'dinner', 'brunch', 'coffee', 'dessert',
-        'nightlife', 'entertainment', 'activities', 'sights', 'landmarks',
+        'activities', 'sights', 'landmarks', 'attractions',
+
+        # Travel Planning Keywords
+        'trip', 'travel', 'vacation', 'holiday', 'itinerary', 'plan',
+        'day trip', 'weekend', 'getaway', 'journey', 'tour',
+        '1 day', '2 day', '3 day', '4 day', '5 day', 'week',
+        'day 1', 'day 2', 'day 3', 'first day', 'second day',
+
+        # Local & Authentic
         'hidden gems', 'local favorites', 'underground', 'authentic',
-        'reservations', 'book', 'call', 'website', 'menu', 'prices'
+        'local', 'traditional', 'typical', 'famous', 'popular',
+        'must see', 'must visit', 'must try', 'bucket list',
+
+        # Booking & Reservations
+        'reservations', 'book', 'booking', 'reserve', 'tickets',
+        'call', 'contact', 'website', 'menu', 'prices', 'cost',
+        'opening hours', 'schedule', 'availability'
     ]
     
     message_lower = message.lower()
@@ -127,9 +168,9 @@ def generate_smart_tags(place_data: Dict) -> List[str]:
 
     return tags
 
-def get_place_photos(place_id: str, max_photos: int = 5) -> List[str]:
+def get_place_photos(place_id: str, max_photos: int = 5) -> List[Dict]:
     """
-    Get photo URLs for a place using Google Places Photo API
+    Get photo URLs for a place using Google Places Photo API with multiple sizes
     """
     if not gmaps_client:
         return []
@@ -142,16 +183,25 @@ def get_place_photos(place_id: str, max_photos: int = 5) -> List[str]:
         )
 
         photos = place_details.get('result', {}).get('photos', [])
-        photo_urls = []
+        photo_data = []
 
         for photo in photos[:max_photos]:
             photo_reference = photo.get('photo_reference')
             if photo_reference:
-                # Generate photo URL
-                photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={google_places_api_key}"
-                photo_urls.append(photo_url)
+                # Generate photo URLs in different sizes
+                photo_info = {
+                    'reference': photo_reference,
+                    'urls': {
+                        'thumb': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference={photo_reference}&key={google_places_api_key}",
+                        'medium': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={google_places_api_key}",
+                        'large': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_places_api_key}"
+                    },
+                    'width': photo.get('width', 400),
+                    'height': photo.get('height', 300)
+                }
+                photo_data.append(photo_info)
 
-        return photo_urls
+        return photo_data
     except Exception as e:
         logger.warning(f"Failed to get photos for place {place_id}: {str(e)}")
         return []
@@ -168,7 +218,7 @@ def get_category_badge(place_types: List[str]) -> str:
         'cafe': '☕ Café',
         'bar': '🍻 Bar',
         'lodging': '🏨 Hotel',
-        'tourist_attraction': '🎯 Attraction',
+        'tourist_attraction': '�� Attraction',
         'museum': '🏛️ Museum',
         'park': '🌳 Park',
         'shopping_mall': '🛍️ Shopping',
@@ -255,7 +305,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
 
             smart_tags = generate_smart_tags(base_place_data)
             category_badge = get_category_badge(place_types)
-            photo_urls = get_place_photos(place_id, max_photos=6)
+            photos_data = get_place_photos(place_id, max_photos=6)
 
             place_info = {
                 'name': place_name,
@@ -275,7 +325,8 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 # Enhanced features
                 'smart_tags': smart_tags,
                 'category_badge': category_badge,
-                'photo_urls': photo_urls,
+                'photos': photos_data,
+                'hero_image': photos_data[0]['urls']['large'] if photos_data else 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg',
                 'description': f"Experience {place_name} - {category_badge.split(' ', 1)[1] if ' ' in category_badge else 'great location'} in {location_for_search}",
 
                 # Updated working URLs with proper encoding
@@ -314,11 +365,10 @@ def get_jetfriend_system_prompt() -> str:
     """
     return """You are JetFriend, an AI travel assistant. When creating itineraries or recommending places, you can use BOTH traditional itinerary format AND enhanced place cards.
 
-FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format:
+FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format with proper visual structure:
 
 <div class="place-card">
-<div class="place-hero">
-<img class="place-hero-image" src="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg" alt="Restaurant" />
+<div class="place-hero" style="background-image: url('{hero_image}'); background-size: cover; background-position: center;">
 <div class="place-hero-overlay"></div>
 <div class="place-smart-tags">
 <span class="smart-tag highly-rated">Highly Rated</span>
@@ -337,25 +387,20 @@ FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format:
 </div>
 </div>
 <div class="place-address"><i class="fas fa-map-marker-alt"></i> 123 Tokyo Street, Shibuya</div>
-<div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth. Famous for their late-night service and cozy atmosphere.</div>
-<div class="place-features">
-<span class="place-feature"><i class="fas fa-wifi"></i> Free WiFi</span>
-<span class="place-feature"><i class="fas fa-credit-card"></i> Cards OK</span>
-<span class="place-feature"><i class="fas fa-clock"></i> Open Late</span>
-</div>
+<div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth.</div>
 <div class="place-booking-links">
-<a href="#" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
-<a href="#" class="booking-link yelp"><i class="fas fa-star"></i> Yelp Reviews</a>
-<a href="#" class="booking-link opentable"><i class="fas fa-utensils"></i> Reserve</a>
-<a href="#" class="booking-link uber"><i class="fas fa-car"></i> Get Ride</a>
+<a href="{google_maps_url}" target="_blank" rel="noopener noreferrer" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
+<a href="{yelp_search_url}" target="_blank" rel="noopener noreferrer" class="booking-link yelp"><i class="fas fa-star"></i> Yelp</a>
+{conditional_restaurant_links}
+{conditional_hotel_links}
+<a href="{uber_url}" target="_blank" rel="noopener noreferrer" class="booking-link uber"><i class="fas fa-car"></i> Uber</a>
 </div>
 <div class="photo-gallery">
 <div class="gallery-title"><i class="fas fa-images"></i> Photos</div>
 <div class="photo-grid">
-<div class="photo-item"><img src="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg" alt="Food" /></div>
-<div class="photo-item"><img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg" alt="Interior" /></div>
-<div class="photo-item"><img src="https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg" alt="Dish" /></div>
-<div class="photo-item more">+3 more</div>
+<div class="photo-item"><img src="{photo_thumb_1}" alt="View 1" /></div>
+<div class="photo-item"><img src="{photo_thumb_2}" alt="View 2" /></div>
+<div class="photo-item"><img src="{photo_thumb_3}" alt="View 3" /></div>
 </div>
 </div>
 </div>
@@ -381,7 +426,7 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="activity">Asakusa �� Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/senso-ji+temple+asakusa+tokyo" target="_blank" class="activity-link">📍 Google Maps</a>
-<a href="https://senso-ji.jp" target="_blank" class="activity-link">🌐 Official Website</a>
+<a href="https://senso-ji.jp" target="_blank" class="activity-link">�� Official Website</a>
 <a href="https://www.yelp.com/search?find_desc=senso-ji+temple&find_loc=asakusa+tokyo" target="_blank" class="activity-link">⭐ Yelp Reviews</a>
 </div>
 </div>
@@ -445,11 +490,32 @@ SMART TAGS SYSTEM:
 CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
-PHOTO SOURCES (use realistic restaurant/travel photos):
-- Food: https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg
-- Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
-- Dishes: https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg
-- Exterior: https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg
+PHOTO USAGE (use REAL Google Places photos from the data):
+- Hero Image: Use place.hero_image as background-image in place-hero div style
+- Thumbnail Gallery: Use place.photos[0].urls.thumb, place.photos[1].urls.thumb, etc.
+- Fallback Photos: Only use Pexels URLs if no real photos available:
+  - Food: https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg
+  - Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
+  - Exterior: https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg
+
+CRITICAL PLACE CARD FORMATTING:
+- Maximum width: 600px, height: 240px (compact design)
+- Use place.hero_image as background with dark overlay for text readability
+- Yellow stars (#fbbf24) for ratings
+- Semi-transparent category badge (background: rgba(255,255,255,0.2))
+- 16px spacing between cards (compact)
+- Photo gallery: 3 columns desktop, 2 mobile
+- object-fit: cover for all images
+
+WORKING LINKS - MUST USE REAL URLs:
+- Maps: place.google_maps_url
+- Yelp: place.yelp_search_url
+- TripAdvisor: place.tripadvisor_search_url
+- Website: place.website (if available)
+- Restaurants: place.opentable_url (only for restaurants)
+- Hotels: place.booking_url (only for hotels/lodging)
+- Uber: place.uber_url
+- All links MUST use target="_blank" rel="noopener noreferrer"
 
 ALWAYS INCLUDE:
 - Google Maps link for each location
@@ -463,6 +529,65 @@ ALWAYS INCLUDE:
 
 For itineraries: Use day-icon numbers 1, 2, 3 and keep under 2000 characters.
 For place cards: Use enhanced format with photos, tags, and booking links."""
+
+def substitute_real_urls(ai_response: str, places_data: List[Dict]) -> str:
+    """
+    Post-process AI response to substitute placeholder URLs with real working links
+    """
+    if not places_data:
+        return ai_response
+
+    # For each place card in the response, substitute real URLs
+    for i, place in enumerate(places_data):
+        place_types = str(place.get('types', [])).lower()
+
+        # Build conditional restaurant links
+        conditional_restaurant_links = ""
+        if 'restaurant' in place_types or 'food' in place_types or 'meal_takeaway' in place_types:
+            if place.get('opentable_url'):
+                conditional_restaurant_links += f'<a href="{place["opentable_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link opentable"><i class="fas fa-utensils"></i> Reserve</a>\n'
+            if place.get('website'):
+                conditional_restaurant_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link website"><i class="fas fa-globe"></i> Website</a>\n'
+
+        # Build conditional hotel links
+        conditional_hotel_links = ""
+        if 'lodging' in place_types or 'hotel' in place_types:
+            if place.get('booking_url'):
+                conditional_hotel_links += f'<a href="{place["booking_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link booking"><i class="fas fa-bed"></i> Book</a>\n'
+            if place.get('website'):
+                conditional_hotel_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link website"><i class="fas fa-globe"></i> Website</a>\n'
+
+        # If neither restaurant nor hotel, show general website link
+        if not conditional_restaurant_links and not conditional_hotel_links and place.get('website'):
+            conditional_restaurant_links = f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link website"><i class="fas fa-globe"></i> Website</a>\n'
+
+        # Substitute URLs in the response
+        ai_response = ai_response.replace('{google_maps_url}', place.get('google_maps_url', '#'))
+        ai_response = ai_response.replace('{yelp_search_url}', place.get('yelp_search_url', '#'))
+        ai_response = ai_response.replace('{tripadvisor_search_url}', place.get('tripadvisor_search_url', '#'))
+        ai_response = ai_response.replace('{uber_url}', place.get('uber_url', '#'))
+        ai_response = ai_response.replace('{conditional_restaurant_links}', conditional_restaurant_links)
+        ai_response = ai_response.replace('{conditional_hotel_links}', conditional_hotel_links)
+
+        # Substitute photo URLs
+        ai_response = ai_response.replace('{hero_image}', place.get('hero_image', 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'))
+
+        # Substitute thumbnail photos
+        photos = place.get('photos', [])
+        for j in range(3):
+            placeholder = f'{{photo_thumb_{j+1}}}'
+            if j < len(photos) and photos[j].get('urls', {}).get('thumb'):
+                ai_response = ai_response.replace(placeholder, photos[j]['urls']['thumb'])
+            else:
+                # Fallback images
+                fallback_urls = [
+                    'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
+                    'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg',
+                    'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'
+                ]
+                ai_response = ai_response.replace(placeholder, fallback_urls[j] if j < len(fallback_urls) else fallback_urls[0])
+
+    return ai_response
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
     """
@@ -506,8 +631,9 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 if place.get('category_badge'):
                     places_text += f"   Category: {place['category_badge']}\n"
 
-                if place.get('photo_urls'):
-                    places_text += f"   Photos Available: {len(place['photo_urls'])} images\n"
+                if place.get('photos'):
+                    places_text += f"   Photos Available: {len(place['photos'])} images\n"
+                    places_text += f"   Hero Image: {place.get('hero_image', 'Default fallback')}\n"
 
                 if place['phone']:
                     places_text += f"   Phone: {place['phone']}\n"
@@ -639,6 +765,10 @@ def chat():
         
         # Get AI response with enhanced data
         ai_response = get_ai_response(user_message, conversation_history, places_data)
+
+        # Post-process response to substitute real URLs and add conditional links
+        if places_data:
+            ai_response = substitute_real_urls(ai_response, places_data)
         
         # Log for debugging
         logger.info(f"Chat request: '{user_message}' - Location detected: {detect_location_query(user_message)} - Places found: {len(places_data)}")

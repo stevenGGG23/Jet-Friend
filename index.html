@@ -905,15 +905,19 @@
 
       /* Enhanced Place Cards Styles */
       .place-card {
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.9));
+        max-width: 600px;
+        height: 240px;
+        background: rgba(30, 41, 59, 0.95);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
+        border-radius: 12px;
         overflow: hidden;
-        margin: 12px 0;
+        margin: 16px 0;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(20px);
         position: relative;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
       }
 
       .place-card:hover {
@@ -924,9 +928,10 @@
 
       .place-hero {
         position: relative;
-        height: 200px;
+        height: 120px;
         overflow: hidden;
         background: linear-gradient(135deg, #1e293b, #334155);
+        flex-shrink: 0;
       }
 
       .place-hero-image {
@@ -935,6 +940,18 @@
         object-fit: cover;
         transition: transform 0.6s ease;
         filter: brightness(0.8);
+      }
+
+      .place-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.4));
+        z-index: 1;
+        pointer-events: none;
       }
 
       .place-card:hover .place-hero-image {
@@ -948,15 +965,16 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.2));
-        z-index: 1;
+        background: transparent;
+        z-index: 2;
+        pointer-events: none;
       }
 
       .place-smart-tags {
         position: absolute;
         top: 12px;
         left: 12px;
-        z-index: 2;
+        z-index: 3;
         display: flex;
         gap: 6px;
         flex-wrap: wrap;
@@ -995,27 +1013,32 @@
         position: absolute;
         top: 12px;
         right: 12px;
-        z-index: 2;
+        z-index: 3;
         padding: 6px 10px;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(255, 255, 255, 0.2);
         color: white;
         border-radius: 20px;
         font-size: 11px;
         font-weight: 600;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
       }
 
       .place-content {
-        padding: 16px;
+        padding: 12px;
         position: relative;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
       }
 
       .place-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
       }
 
       .place-name {
@@ -1046,8 +1069,9 @@
       }
 
       .place-stars {
-        color: #f59e0b;
+        color: #fbbf24;
         font-size: 12px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
       }
 
       .place-rating-text {
@@ -1058,18 +1082,19 @@
 
       .place-address {
         color: #94a3b8;
-        font-size: 13px;
-        margin-bottom: 12px;
+        font-size: 12px;
+        margin-bottom: 8px;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 4px;
       }
 
       .place-description {
         color: #e2e8f0;
-        font-size: 14px;
-        line-height: 1.5;
-        margin-bottom: 16px;
+        font-size: 13px;
+        line-height: 1.4;
+        margin-bottom: 12px;
+        flex: 1;
       }
 
       .place-features {
@@ -1092,25 +1117,28 @@
       }
 
       .place-booking-links {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 8px;
       }
 
       .booking-link {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        padding: 8px 12px;
-        border-radius: 12px;
-        font-size: 11px;
+        gap: 4px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 10px;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.3s ease;
         border: 1px solid;
         text-align: center;
         white-space: nowrap;
+        flex: 1;
+        min-width: 70px;
       }
 
       .booking-link.maps {
@@ -1157,6 +1185,28 @@
         transform: translateY(-2px);
       }
 
+      .booking-link.website {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.1));
+        border-color: rgba(34, 197, 94, 0.3);
+        color: #22c55e;
+      }
+
+      .booking-link.website:hover {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2));
+        transform: translateY(-2px);
+      }
+
+      .booking-link.booking {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+        border-color: rgba(59, 130, 246, 0.3);
+        color: #3b82f6;
+      }
+
+      .booking-link.booking:hover {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2));
+        transform: translateY(-2px);
+      }
+
       .photo-gallery {
         margin-top: 16px;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -1175,10 +1225,50 @@
 
       .photo-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 8px;
-        max-height: 100px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        max-height: 60px;
         overflow: hidden;
+      }
+
+      @media (max-width: 768px) {
+        .place-card {
+          max-width: 100%;
+          height: 260px;
+          margin: 12px 0;
+        }
+
+        .place-hero {
+          height: 100px;
+        }
+
+        .place-content {
+          padding: 10px;
+        }
+
+        .photo-gallery {
+          display: none;
+        }
+
+        .place-name {
+          font-size: 15px;
+        }
+
+        .place-description {
+          font-size: 12px;
+          line-height: 1.4;
+        }
+
+        .place-booking-links {
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+
+        .booking-link {
+          font-size: 9px;
+          padding: 5px 8px;
+          min-width: 60px;
+        }
       }
 
       .photo-item {
@@ -1195,7 +1285,7 @@
 
       .photo-item img {
         width: 100%;
-        height: 80px;
+        height: 60px;
         object-fit: cover;
       }
 
@@ -1658,6 +1748,25 @@
         }
       }
 
+      /* Subtle animation for thinking messages */
+      .ai-message p {
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      .thinking-message {
+        opacity: 0.8;
+        animation: subtlePulse 2s ease-in-out infinite;
+      }
+
+      @keyframes subtlePulse {
+        0%, 100% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
       /* Scrollbar styling for chat messages */
       .chat-messages::-webkit-scrollbar {
         width: 6px;
@@ -1677,20 +1786,34 @@
         border-radius: 3px;
       }
 
-            /* Mobile responsiveness for hero chatbot */
+            /* Enhanced Mobile responsiveness for hero chatbot */
       @media (max-width: 768px) {
         .hero-chatbot-container {
-          margin: 40px 10px 0;
+          margin: 20px 8px 0;
           border-radius: 16px;
+          box-shadow: 0 15px 35px rgba(139, 92, 246, 0.15);
         }
 
         .chat-messages {
-          padding: 20px;
-          min-height: 350px;
+          padding: 16px;
+          min-height: 400px;
+          max-height: 60vh;
         }
 
         .chat-input-container {
-          padding: 20px;
+          padding: 16px;
+        }
+
+        .chat-input {
+          font-size: 16px;
+          padding: 14px 16px;
+          min-height: 44px;
+        }
+
+        .send-button {
+          width: 44px;
+          height: 44px;
+          font-size: 18px;
         }
 
         .input-wrapper {
@@ -1709,9 +1832,10 @@
         }
 
         .message {
-          max-width: 90%;
-          padding: 15px 18px;
-          font-size: 14px;
+          max-width: 95%;
+          padding: 12px 16px;
+          font-size: 15px;
+          line-height: 1.5;
         }
 
         .ai-avatar,
@@ -1845,23 +1969,97 @@
         }
       }
 
-      /* Mobile responsiveness for mobile app section */
+      /* Enhanced Mobile responsiveness for mobile app section */
       @media (max-width: 768px) {
         .mobile-app-content {
           grid-template-columns: 1fr;
-          gap: 40px;
+          gap: 30px;
+          padding: 0 16px;
         }
 
         .app-info {
-          padding: 30px 20px;
+          padding: 24px 20px;
+          border-radius: 20px;
         }
 
         .app-info h3 {
           font-size: 1.8rem;
+          text-align: center;
         }
 
         .phone-preview .iphone {
-          transform: scale(0.7);
+          transform: scale(0.8);
+          margin: 20px 0;
+        }
+
+        .feature-point {
+          padding: 12px 16px;
+          gap: 12px;
+        }
+
+        .feature-point i {
+          font-size: 18px;
+          min-width: 20px;
+        }
+      }
+
+      /* Mobile-first touch optimization */
+      @media (max-width: 480px) {
+        .hero {
+          padding: 80px 16px 40px;
+        }
+
+        .hero h1 {
+          font-size: clamp(2.5rem, 6vw, 4rem);
+          margin-bottom: 20px;
+        }
+
+        .nav-trigger {
+          top: 20px;
+          left: 20px;
+          width: 50px;
+          height: 50px;
+        }
+
+        .nav-drawer {
+          width: 100vw;
+          left: -100vw;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+          gap: 16px;
+          margin-bottom: 40px;
+        }
+
+        .btn {
+          width: 100%;
+          padding: 16px 32px;
+          font-size: 16px;
+          min-height: 48px;
+        }
+
+        .hero-chatbot-container {
+          margin: 16px 8px 0;
+        }
+
+        .place-card {
+          margin: 12px 0;
+          height: 220px;
+        }
+
+        .place-hero {
+          height: 90px;
+        }
+
+        .place-content {
+          padding: 8px;
+        }
+
+        .booking-link {
+          font-size: 9px;
+          padding: 4px 6px;
+          min-width: 55px;
         }
       }
 
@@ -3161,7 +3359,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >✓</span
+                  >��</span
                 >
                 Chat support
               </li>
@@ -3446,7 +3644,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >✓</span
+                  >���</span
                 >
                 Mobile apps & integrations
               </li>
@@ -4234,7 +4432,7 @@
           console.log('✅ Test API button found, adding event listener');
           testWebhookButton.addEventListener('click', async function(e) {
             e.preventDefault();
-            console.log('🧪 Test API button clicked');
+            console.log('�� Test API button clicked');
 
             // Add a test message to chat
             addMessageToChat('🔧 Testing JetFriend API connection...', 'ai');
@@ -4295,8 +4493,38 @@
             // Add user message to chat
             addMessageToChat(inputText, 'user');
 
-            // Show typing indicator
+            // Show typing indicator with alternating messages
             const typingMessageElement = addMessageToChat('JetFriend is thinking...', 'ai');
+
+            // Add thinking message animation class
+            if (typingMessageElement) {
+              const messageContent = typingMessageElement.querySelector('.message p');
+              if (messageContent) {
+                messageContent.classList.add('thinking-message');
+              }
+            }
+
+            // Create alternating thinking messages to show system is active
+            let messageIndex = 0;
+            const thinkingMessages = [
+              'JetFriend is thinking...',
+              'One moment please...',
+              'Searching for the best options...',
+              'Almost ready...',
+              'Just a few more seconds...'
+            ];
+
+            const messageInterval = setInterval(() => {
+              if (typingMessageElement && typingMessageElement.parentNode) {
+                messageIndex = (messageIndex + 1) % thinkingMessages.length;
+                const messageContent = typingMessageElement.querySelector('.message p');
+                if (messageContent) {
+                  messageContent.textContent = thinkingMessages[messageIndex];
+                }
+              } else {
+                clearInterval(messageInterval);
+              }
+            }, 6000); // Switch message every 6 seconds
 
             // Get conversation history (last 10 messages for context)
             const conversationHistory = [];
@@ -4306,7 +4534,16 @@
             recentMessages.forEach(messageGroup => {
               const isUser = messageGroup.classList.contains('user-message-group');
               const messageElement = messageGroup.querySelector('.message p');
-              if (messageElement && messageElement.textContent.trim() !== 'JetFriend is thinking...') {
+              const messageText = messageElement ? messageElement.textContent.trim() : '';
+              const isThinkingMessage = [
+                'JetFriend is thinking...',
+                'One moment please...',
+                'Searching for the best options...',
+                'Almost ready...',
+                'Just a few more seconds...'
+              ].includes(messageText);
+
+              if (messageElement && !isThinkingMessage) {
                 conversationHistory.push({
                   role: isUser ? 'user' : 'assistant',
                   content: messageElement.textContent.trim()
@@ -4320,6 +4557,7 @@
 
               // Remove typing indicator safely
               try {
+                clearInterval(messageInterval); // Clear the alternating message interval
                 if (typingMessageElement && typingMessageElement.parentNode) {
                   typingMessageElement.remove();
                 }
@@ -4328,8 +4566,48 @@
               }
 
               if (result.success && result.data && result.data.response) {
-                // Add AI response to chat
+                // Log place card metadata for debugging
+                console.log('📍 Place Cards Metadata:', {
+                  places_found: result.data.places_found,
+                  enhanced_with_location: result.data.enhanced_with_location,
+                  location_detected: result.data.location_detected,
+                  gmaps_available: result.data.gmaps_available
+                });
+
+                // Add AI response to chat (place cards are embedded in the response HTML)
                 addMessageToChat(result.data.response, 'ai');
+
+                // Show additional place card info if places were found
+                if (result.data.places_found > 0) {
+                  console.log(`✅ Place cards shown: ${result.data.places_found} places found for location-based query`);
+
+                  // Optional: Add a subtle visual indicator that enhanced location data was used
+                  const locationBadge = document.createElement('div');
+                  locationBadge.style.cssText = `
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(96, 165, 250, 0.1));
+                    color: #8b5cf6;
+                    padding: 4px 8px;
+                    border-radius: 12px;
+                    font-size: 11px;
+                    font-weight: 600;
+                    margin-top: 8px;
+                    border: 1px solid rgba(139, 92, 246, 0.2);
+                  `;
+                  locationBadge.innerHTML = `<i class="fas fa-map-marker-alt"></i> Enhanced with ${result.data.places_found} real places`;
+
+                  // Add badge to the last message
+                  const lastMessage = chatMessages.querySelector('.message-group:last-child .ai-message');
+                  if (lastMessage) {
+                    lastMessage.appendChild(locationBadge);
+                  }
+                } else if (result.data.location_detected && !result.data.gmaps_available) {
+                  console.log('⚠️ Location query detected but Google Places API not available');
+                } else if (result.data.location_detected) {
+                  console.log('📍 Location query detected but no places found');
+                }
 
                 // Visual feedback - success
                 this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
@@ -4354,6 +4632,7 @@
 
               // Remove typing indicator safely
               try {
+                clearInterval(messageInterval); // Clear the alternating message interval
                 if (typingMessageElement && typingMessageElement.parentNode) {
                   typingMessageElement.remove();
                 }
