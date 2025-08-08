@@ -354,10 +354,25 @@ class ImageSourcer:
             logger.error(f"Web licensed image search failed: {str(e)}")
             return {'success': False, 'error': f'Web search error: {str(e)}'}
     
-    def _get_fallback_image(self, place_types: List[str]) -> Dict:
+    def _get_fallback_image(self, place_types: List[str], place_name: str = "") -> Dict:
         """Get appropriate fallback image based on place type with enhanced categorization"""
         place_types_str = str(place_types).lower()
+        place_name_lower = place_name.lower()
 
+        # First check for specific famous places
+        for specific_place, image_url in self.specific_place_images.items():
+            if specific_place in place_name_lower:
+                return {
+                    'success': True,
+                    'url': image_url,
+                    'source': 'pexels_specific',
+                    'license': 'pexels_license',
+                    'confidence': 0.9,  # High confidence for specific places
+                    'alt_text': f'{place_name} - {specific_place}',
+                    'attribution': 'Pexels'
+                }
+
+        # Then categorize by place type
         if 'restaurant' in place_types_str or 'food' in place_types_str or 'meal_takeaway' in place_types_str:
             image_url = self.fallback_images['restaurant']
             category = 'restaurant'
@@ -370,9 +385,12 @@ class ImageSourcer:
         elif 'lodging' in place_types_str or 'hotel' in place_types_str:
             image_url = self.fallback_images['hotel']
             category = 'hotel'
+        elif 'place_of_worship' in place_types_str or 'temple' in place_types_str or 'shrine' in place_types_str:
+            image_url = self.fallback_images['temple']
+            category = 'temple'
         elif 'tourist_attraction' in place_types_str:
-            image_url = self.fallback_images['attraction']
-            category = 'attraction'
+            image_url = self.fallback_images['tourist_attraction']
+            category = 'tourist_attraction'
         elif 'museum' in place_types_str:
             image_url = self.fallback_images['museum']
             category = 'museum'
@@ -391,7 +409,7 @@ class ImageSourcer:
             'url': image_url,
             'source': 'pexels_licensed',
             'license': 'pexels_license',
-            'confidence': 0.6,  # Increased confidence for better categorization
+            'confidence': 0.7,  # Increased confidence for better categorization
             'alt_text': f'{category.title()} image',
             'attribution': 'Pexels'
         }
