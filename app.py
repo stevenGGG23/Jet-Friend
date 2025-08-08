@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import googlemaps
 from typing import Optional, Dict, List
+from data_validation import ComprehensiveDataProcessor, DataValidator, ImageSourcer
 
 # Load environment variables from .env file
 load_dotenv()
@@ -848,7 +849,7 @@ def warm_up():
     try:
         # Test OpenAI connection if available
         if openai_client:
-            logger.info("🔥 Warming up OpenAI connection...")
+            logger.info("�� Warming up OpenAI connection...")
 
         # Test Google Places if available
         if gmaps_client:
