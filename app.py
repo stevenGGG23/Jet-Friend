@@ -161,10 +161,7 @@ def generate_smart_tags(place_data: Dict) -> List[str]:
     elif price_level >= 4:
         tags.append('premium')
 
-    # Open Now tag
-    is_open = place_data.get('opening_hours', {}).get('open_now')
-    if is_open:
-        tags.append('open-now')
+    # Open Now tag removed - unreliable data source
 
     return tags
 
@@ -443,7 +440,7 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="day-header"><span class="day-icon">2</span>Day 2: Kyoto – History and Temples</div>
 <div class="itinerary-item">
 <div class="activity-name">Fushimi Inari Shrine</div>
-<div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.7 (50,000 reviews)</span></div>
+<div class="activity-rating"><span class="stars">★★★��★</span><span class="rating-text">4.7 (50,000 reviews)</span></div>
 <div class="activity">Famous for thousands of red torii gates forming scenic walking paths.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/fushimi+inari+shrine+kyoto" target="_blank" class="activity-link">📍 Google Maps</a>
