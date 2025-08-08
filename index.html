@@ -3359,7 +3359,7 @@
                     color: var(--light-blue);
                     font-weight: bold;
                   "
-                  >✓</span
+                  >��</span
                 >
                 Chat support
               </li>
@@ -4495,6 +4495,14 @@
 
             // Show typing indicator with alternating messages
             const typingMessageElement = addMessageToChat('JetFriend is thinking...', 'ai');
+
+            // Add thinking message animation class
+            if (typingMessageElement) {
+              const messageContent = typingMessageElement.querySelector('.message p');
+              if (messageContent) {
+                messageContent.classList.add('thinking-message');
+              }
+            }
 
             // Create alternating thinking messages to show system is active
             let messageIndex = 0;
