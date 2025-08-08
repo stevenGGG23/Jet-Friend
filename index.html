@@ -1767,20 +1767,34 @@
         border-radius: 3px;
       }
 
-            /* Mobile responsiveness for hero chatbot */
+            /* Enhanced Mobile responsiveness for hero chatbot */
       @media (max-width: 768px) {
         .hero-chatbot-container {
-          margin: 40px 10px 0;
+          margin: 20px 8px 0;
           border-radius: 16px;
+          box-shadow: 0 15px 35px rgba(139, 92, 246, 0.15);
         }
 
         .chat-messages {
-          padding: 20px;
-          min-height: 350px;
+          padding: 16px;
+          min-height: 400px;
+          max-height: 60vh;
         }
 
         .chat-input-container {
-          padding: 20px;
+          padding: 16px;
+        }
+
+        .chat-input {
+          font-size: 16px;
+          padding: 14px 16px;
+          min-height: 44px;
+        }
+
+        .send-button {
+          width: 44px;
+          height: 44px;
+          font-size: 18px;
         }
 
         .input-wrapper {
@@ -1799,9 +1813,10 @@
         }
 
         .message {
-          max-width: 90%;
-          padding: 15px 18px;
-          font-size: 14px;
+          max-width: 95%;
+          padding: 12px 16px;
+          font-size: 15px;
+          line-height: 1.5;
         }
 
         .ai-avatar,
@@ -1935,23 +1950,37 @@
         }
       }
 
-      /* Mobile responsiveness for mobile app section */
+      /* Enhanced Mobile responsiveness for mobile app section */
       @media (max-width: 768px) {
         .mobile-app-content {
           grid-template-columns: 1fr;
-          gap: 40px;
+          gap: 30px;
+          padding: 0 16px;
         }
 
         .app-info {
-          padding: 30px 20px;
+          padding: 24px 20px;
+          border-radius: 20px;
         }
 
         .app-info h3 {
           font-size: 1.8rem;
+          text-align: center;
         }
 
         .phone-preview .iphone {
-          transform: scale(0.7);
+          transform: scale(0.8);
+          margin: 20px 0;
+        }
+
+        .feature-point {
+          padding: 12px 16px;
+          gap: 12px;
+        }
+
+        .feature-point i {
+          font-size: 18px;
+          min-width: 20px;
         }
       }
 
