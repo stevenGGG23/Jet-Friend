@@ -530,6 +530,65 @@ ALWAYS INCLUDE:
 For itineraries: Use day-icon numbers 1, 2, 3 and keep under 2000 characters.
 For place cards: Use enhanced format with photos, tags, and booking links."""
 
+def substitute_real_urls(ai_response: str, places_data: List[Dict]) -> str:
+    """
+    Post-process AI response to substitute placeholder URLs with real working links
+    """
+    if not places_data:
+        return ai_response
+
+    # For each place card in the response, substitute real URLs
+    for i, place in enumerate(places_data):
+        place_types = str(place.get('types', [])).lower()
+
+        # Build conditional restaurant links
+        conditional_restaurant_links = ""
+        if 'restaurant' in place_types or 'food' in place_types or 'meal_takeaway' in place_types:
+            if place.get('opentable_url'):
+                conditional_restaurant_links += f'<a href="{place["opentable_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link opentable"><i class="fas fa-utensils"></i> Reserve</a>\n'
+            if place.get('website'):
+                conditional_restaurant_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link website"><i class="fas fa-globe"></i> Website</a>\n'
+
+        # Build conditional hotel links
+        conditional_hotel_links = ""
+        if 'lodging' in place_types or 'hotel' in place_types:
+            if place.get('booking_url'):
+                conditional_hotel_links += f'<a href="{place["booking_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link booking"><i class="fas fa-bed"></i> Book</a>\n'
+            if place.get('website'):
+                conditional_hotel_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link website"><i class="fas fa-globe"></i> Website</a>\n'
+
+        # If neither restaurant nor hotel, show general website link
+        if not conditional_restaurant_links and not conditional_hotel_links and place.get('website'):
+            conditional_restaurant_links = f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link website"><i class="fas fa-globe"></i> Website</a>\n'
+
+        # Substitute URLs in the response
+        ai_response = ai_response.replace('{google_maps_url}', place.get('google_maps_url', '#'))
+        ai_response = ai_response.replace('{yelp_search_url}', place.get('yelp_search_url', '#'))
+        ai_response = ai_response.replace('{tripadvisor_search_url}', place.get('tripadvisor_search_url', '#'))
+        ai_response = ai_response.replace('{uber_url}', place.get('uber_url', '#'))
+        ai_response = ai_response.replace('{conditional_restaurant_links}', conditional_restaurant_links)
+        ai_response = ai_response.replace('{conditional_hotel_links}', conditional_hotel_links)
+
+        # Substitute photo URLs
+        ai_response = ai_response.replace('{hero_image}', place.get('hero_image', 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'))
+
+        # Substitute thumbnail photos
+        photos = place.get('photos', [])
+        for j in range(3):
+            placeholder = f'{{photo_thumb_{j+1}}}'
+            if j < len(photos) and photos[j].get('urls', {}).get('thumb'):
+                ai_response = ai_response.replace(placeholder, photos[j]['urls']['thumb'])
+            else:
+                # Fallback images
+                fallback_urls = [
+                    'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
+                    'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg',
+                    'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'
+                ]
+                ai_response = ai_response.replace(placeholder, fallback_urls[j] if j < len(fallback_urls) else fallback_urls[0])
+
+    return ai_response
+
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
     """
     Get response from OpenAI GPT-4o with optional places data integration
