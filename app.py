@@ -218,13 +218,13 @@ def get_category_badge(place_types: List[str]) -> str:
         'cafe': '☕ Café',
         'bar': '🍻 Bar',
         'lodging': '🏨 Hotel',
-        'tourist_attraction': '🎯 Attraction',
+        'tourist_attraction': '�� Attraction',
         'museum': '🏛️ Museum',
         'park': '🌳 Park',
         'shopping_mall': '🛍️ Shopping',
         'store': '🛍️ Store',
         'gym': '💪 Fitness',
-        'spa': '�� Spa',
+        'spa': '🧘 Spa',
         'hospital': '🏥 Medical',
         'bank': '🏦 Bank',
         'gas_station': '⛽ Gas Station'
@@ -426,7 +426,7 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="activity">Asakusa �� Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/senso-ji+temple+asakusa+tokyo" target="_blank" class="activity-link">📍 Google Maps</a>
-<a href="https://senso-ji.jp" target="_blank" class="activity-link">🌐 Official Website</a>
+<a href="https://senso-ji.jp" target="_blank" class="activity-link">�� Official Website</a>
 <a href="https://www.yelp.com/search?find_desc=senso-ji+temple&find_loc=asakusa+tokyo" target="_blank" class="activity-link">⭐ Yelp Reviews</a>
 </div>
 </div>
@@ -499,13 +499,23 @@ PHOTO USAGE (use REAL Google Places photos from the data):
   - Exterior: https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg
 
 CRITICAL PLACE CARD FORMATTING:
-- Maximum width: 600px, height: 250px
+- Maximum width: 600px, height: 240px (compact design)
 - Use place.hero_image as background with dark overlay for text readability
 - Yellow stars (#fbbf24) for ratings
 - Semi-transparent category badge (background: rgba(255,255,255,0.2))
-- 20px spacing between cards
+- 16px spacing between cards (compact)
 - Photo gallery: 3 columns desktop, 2 mobile
 - object-fit: cover for all images
+
+WORKING LINKS - MUST USE REAL URLs:
+- Maps: place.google_maps_url
+- Yelp: place.yelp_search_url
+- TripAdvisor: place.tripadvisor_search_url
+- Website: place.website (if available)
+- Restaurants: place.opentable_url (only for restaurants)
+- Hotels: place.booking_url (only for hotels/lodging)
+- Uber: place.uber_url
+- All links MUST use target="_blank" rel="noopener noreferrer"
 
 ALWAYS INCLUDE:
 - Google Maps link for each location
