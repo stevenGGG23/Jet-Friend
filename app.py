@@ -659,15 +659,14 @@ CRITICAL FORMATTING RULES:
 - Consistent spacing and readable design
 - Clean, simple design with solid card backgrounds
 
-WORKING LINKS - MUST USE REAL URLs:
-- Maps: place.google_maps_url
-- Yelp: place.yelp_search_url
-- TripAdvisor: place.tripadvisor_search_url
-- Website: place.website (if available)
-- Restaurants: place.opentable_url (only for restaurants)
-- Hotels: place.booking_url (only for hotels/lodging)
-- Uber: place.uber_url
+LINK VALIDATION RULES - NO DEAD LINKS:
+- ONLY include links that exist in the place data and are not empty
+- ALWAYS include: Google Maps (guaranteed to work)
+- CONDITIONALLY include: Official website, Yelp, TripAdvisor (only if data exists)
+- NEVER include empty buttons or placeholder links
+- If place.website exists, show it; if not, don't show website button
 - All links MUST use target="_blank" rel="noopener noreferrer"
+- Remove any link that doesn't have actual data
 
 ALWAYS INCLUDE:
 - Google Maps link for each location
