@@ -437,11 +437,14 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'reviews': detailed_place.get('reviews', [])[:3],  # Top 3 reviews
                 'geometry': detailed_place.get('geometry', place.get('geometry', {})),
 
-                # Enhanced features
+                # Enhanced features with guaranteed high-quality images
                 'smart_tags': smart_tags,
                 'category_badge': category_badge,
                 'photos': photos_data,
-                'hero_image': photos_data[0]['urls']['large'] if photos_data else 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg',
+                'hero_image': hero_image_url,  # Always guaranteed to have a high-quality image
+                'has_real_photos': len(photos_data) > 0,  # Flag to indicate if real photos are available
+                'photo_count': len(photos_data),
+                'image_source': 'google_places' if photos_data else 'stock_image',
                 'description': f"Experience {place_name} - {category_badge.split(' ', 1)[1] if ' ' in category_badge else 'great location'} in {location_for_search}",
 
                 # Updated working URLs with proper encoding
