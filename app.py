@@ -182,9 +182,10 @@ def generate_smart_tags(place_data: Dict) -> List[str]:
 
     return tags
 
-def get_place_photos(place_id: str, max_photos: int = 5) -> List[Dict]:
+def get_place_photos(place_id: str, max_photos: int = 8) -> List[Dict]:
     """
     Get photo URLs for a place using Google Places Photo API with multiple sizes
+    Enhanced to ensure we get real, specific photos from the actual place
     """
     if not gmaps_client:
         return []
@@ -193,7 +194,7 @@ def get_place_photos(place_id: str, max_photos: int = 5) -> List[Dict]:
         # Get place details with photos
         place_details = gmaps_client.place(
             place_id=place_id,
-            fields=['photos']
+            fields=['photos', 'name', 'types']
         )
 
         photos = place_details.get('result', {}).get('photos', [])
@@ -202,16 +203,19 @@ def get_place_photos(place_id: str, max_photos: int = 5) -> List[Dict]:
         for photo in photos[:max_photos]:
             photo_reference = photo.get('photo_reference')
             if photo_reference:
-                # Generate photo URLs in different sizes
+                # Generate photo URLs in different sizes with priority on larger, clearer images
                 photo_info = {
                     'reference': photo_reference,
                     'urls': {
                         'thumb': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference={photo_reference}&key={google_places_api_key}",
-                        'medium': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={google_places_api_key}",
-                        'large': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_places_api_key}"
+                        'medium': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference={photo_reference}&key={google_places_api_key}",
+                        'large': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photoreference={photo_reference}&key={google_places_api_key}",
+                        'hero': f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference={photo_reference}&key={google_places_api_key}"
                     },
                     'width': photo.get('width', 400),
-                    'height': photo.get('height', 300)
+                    'height': photo.get('height', 300),
+                    'source': 'google_places_api',
+                    'attribution': photo.get('html_attributions', ['Google'])[0] if photo.get('html_attributions') else 'Google'
                 }
                 photo_data.append(photo_info)
 
