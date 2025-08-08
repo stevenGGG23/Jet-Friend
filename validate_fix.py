@@ -79,7 +79,7 @@ print("=" * 50)
 all_passed = True
 for query, expected in test_cases:
     result = detect_location_query_test(query)
-    status = "✅ PASS" if result == expected else "�� FAIL"
+    status = "✅ PASS" if result == expected else "❌ FAIL"
     place_cards = "YES" if result else "NO"
     print(f"{status} | '{query}' → Place Cards: {place_cards}")
     if result != expected:
