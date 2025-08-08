@@ -779,9 +779,12 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 if place.get('category_badge'):
                     places_text += f"   Category: {place['category_badge']}\n"
 
-                if place.get('photos'):
-                    places_text += f"   Photos Available: {len(place['photos'])} images\n"
-                    places_text += f"   Hero Image: {place.get('hero_image', 'Default fallback')}\n"
+                # Add hero image information prominently
+                hero_image_url = place.get('hero_image')
+                if hero_image_url:
+                    places_text += f"   🖼️ HERO IMAGE URL: {hero_image_url}\n"
+                    places_text += f"   Image Source: {place.get('image_source', 'google_places')}\n"
+                    places_text += f"   Has Real Photos: {place.get('has_real_photos', False)}\n"
 
                 if place['phone']:
                     places_text += f"   Phone: {place['phone']}\n"
