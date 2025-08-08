@@ -213,7 +213,7 @@ def get_category_badge(place_types: List[str]) -> str:
     # Priority mapping for place types
     category_map = {
         'restaurant': '🍽️ Restaurant',
-        'food': '🍽�� Restaurant',
+        'food': '🍽️ Restaurant',
         'meal_takeaway': '���� Takeaway',
         'cafe': '☕ Café',
         'bar': '🍻 Bar',
@@ -305,7 +305,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
 
             smart_tags = generate_smart_tags(base_place_data)
             category_badge = get_category_badge(place_types)
-            photo_urls = get_place_photos(place_id, max_photos=6)
+            photos_data = get_place_photos(place_id, max_photos=6)
 
             place_info = {
                 'name': place_name,
