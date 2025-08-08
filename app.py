@@ -691,11 +691,12 @@ CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
 IMAGE USAGE RULES:
-- ALWAYS include ONE high-quality hero image per place (at the top of each card)
+- ALWAYS include ONE high-quality hero image per place using the place-hero structure
+- Use the hero_image URL from place data: <img src="[place.hero_image]" alt="[place.name]" class="place-hero-image" loading="lazy">
+- If no real image available, use category-specific fallback from the enhanced fallback system
+- Images appear FIRST in each itinerary-item card (before activity-name)
 - NO photo galleries or multiple images - ONE image only per place
-- Images appear FIRST in the display (at the top of place cards)
-- All images must be contained in consistent 200px height containers
-- Use solid card styling for readability
+- All images must use place-hero container and place-hero-image class
 
 CRITICAL FORMATTING RULES:
 - Use solid, readable itinerary-item cards for ALL recommendations
