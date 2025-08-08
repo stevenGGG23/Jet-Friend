@@ -471,7 +471,6 @@ NEVER USE:
 SMART TAGS SYSTEM:
 - highly-rated: Use for places with 4.5+ stars and 100+ reviews
 - budget-friendly: Use for affordable options ($ or $$)
-- open-now: Use when place is currently open
 - premium: Use for high-end, luxury places
 
 CATEGORY BADGES:
