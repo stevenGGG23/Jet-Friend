@@ -4,6 +4,7 @@ import os
 import re
 import logging
 import urllib.parse
+import time
 from dotenv import load_dotenv
 from openai import OpenAI
 import googlemaps
@@ -490,7 +491,7 @@ SMART TAGS SYSTEM:
 - premium: Use for high-end, luxury places
 
 CATEGORY BADGES:
-🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
+🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, �� Spa
 
 PHOTO USAGE:
 - DO NOT use hero image backgrounds or transparent overlays
