@@ -549,8 +549,9 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 if place.get('category_badge'):
                     places_text += f"   Category: {place['category_badge']}\n"
 
-                if place.get('photo_urls'):
-                    places_text += f"   Photos Available: {len(place['photo_urls'])} images\n"
+                if place.get('photos'):
+                    places_text += f"   Photos Available: {len(place['photos'])} images\n"
+                    places_text += f"   Hero Image: {place.get('hero_image', 'Default fallback')}\n"
 
                 if place['phone']:
                     places_text += f"   Phone: {place['phone']}\n"
