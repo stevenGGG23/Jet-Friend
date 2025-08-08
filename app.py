@@ -224,6 +224,49 @@ def get_place_photos(place_id: str, max_photos: int = 8) -> List[Dict]:
         logger.warning(f"Failed to get photos for place {place_id}: {str(e)}")
         return []
 
+def validate_and_filter_links(place_info: Dict) -> Dict:
+    """
+    Validate links and remove any that are invalid or lead to dead endpoints
+    Only keep links that are confirmed to work
+    """
+    # Always keep these core links (they're search-based and reliable)
+    essential_links = ['google_maps_url', 'google_search_url']
+
+    # Links to conditionally validate/include
+    conditional_links = [
+        'website', 'yelp_search_url', 'tripadvisor_search_url',
+        'opentable_url', 'booking_url', 'uber_url', 'lyft_url'
+    ]
+
+    validated_place = place_info.copy()
+
+    # Remove empty or invalid conditional links
+    for link_key in conditional_links:
+        link_value = validated_place.get(link_key, '')
+
+        # Remove if empty, just placeholder, or clearly invalid
+        if not link_value or link_value.strip() == '' or link_value == '#':
+            if link_key in validated_place:
+                del validated_place[link_key]
+        # Additional validation for specific link types
+        elif link_key == 'website' and not link_value.startswith(('http://', 'https://')):
+            if link_key in validated_place:
+                del validated_place[link_key]
+        elif link_key in ['opentable_url', 'booking_url', 'uber_url', 'lyft_url']:
+            # Only keep these if they have actual data (not just search URLs)
+            if not validated_place.get('name') or not validated_place.get('address'):
+                if link_key in validated_place:
+                    del validated_place[link_key]
+
+    # Ensure phone is properly formatted or remove it
+    phone = validated_place.get('phone', '')
+    if phone and not phone.startswith(('+', '(')):
+        # If phone doesn't look properly formatted, remove it
+        if 'phone' in validated_place:
+            del validated_place['phone']
+
+    return validated_place
+
 def get_enhanced_fallback_image(place_name: str, place_types: List[str], location: str = None) -> str:
     """
     Get enhanced fallback images based on place type with higher quality sources
