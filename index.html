@@ -906,16 +906,16 @@
       /* Enhanced Place Cards Styles */
       .place-card {
         max-width: 600px;
-        height: 250px;
+        height: 240px;
         background: rgba(30, 41, 59, 0.95);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
+        border-radius: 12px;
         overflow: hidden;
-        margin: 20px 0;
+        margin: 16px 0;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(20px);
         position: relative;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
         display: flex;
         flex-direction: column;
       }
@@ -928,7 +928,7 @@
 
       .place-hero {
         position: relative;
-        height: 140px;
+        height: 120px;
         overflow: hidden;
         background: linear-gradient(135deg, #1e293b, #334155);
         flex-shrink: 0;
@@ -1026,7 +1026,7 @@
       }
 
       .place-content {
-        padding: 16px;
+        padding: 12px;
         position: relative;
         flex: 1;
         display: flex;
@@ -1038,7 +1038,7 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
       }
 
       .place-name {
@@ -1082,18 +1082,19 @@
 
       .place-address {
         color: #94a3b8;
-        font-size: 13px;
-        margin-bottom: 12px;
+        font-size: 12px;
+        margin-bottom: 8px;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 4px;
       }
 
       .place-description {
         color: #e2e8f0;
-        font-size: 14px;
-        line-height: 1.5;
-        margin-bottom: 16px;
+        font-size: 13px;
+        line-height: 1.4;
+        margin-bottom: 12px;
+        flex: 1;
       }
 
       .place-features {
@@ -1116,25 +1117,28 @@
       }
 
       .place-booking-links {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 8px;
       }
 
       .booking-link {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        padding: 8px 12px;
-        border-radius: 12px;
-        font-size: 11px;
+        gap: 4px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 10px;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.3s ease;
         border: 1px solid;
         text-align: center;
         white-space: nowrap;
+        flex: 1;
+        min-width: 70px;
       }
 
       .booking-link.maps {
