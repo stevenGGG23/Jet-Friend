@@ -4,10 +4,12 @@ import os
 import re
 import logging
 import urllib.parse
+import time
 from dotenv import load_dotenv
 from openai import OpenAI
 import googlemaps
 from typing import Optional, Dict, List
+from data_validation import ComprehensiveDataProcessor, DataValidator, ImageSourcer
 
 # Load environment variables from .env file
 load_dotenv()
@@ -22,6 +24,8 @@ CORS(app)  # Enable CORS for all routes
 # Initialize APIs
 openai_api_key = os.getenv("OPENAI_API_KEY")
 google_places_api_key = os.getenv("GOOGLE_PLACES_API_KEY")
+google_images_api_key = os.getenv("GOOGLE_IMAGES_API_KEY")
+google_search_engine_id = os.getenv("GOOGLE_SEARCH_ENGINE_ID")
 
 # Initialize OpenAI client
 openai_client = None
@@ -42,6 +46,19 @@ if google_places_api_key and google_places_api_key != "your-google-places-api-ke
         logger.warning(f"Failed to initialize Google Maps client: {str(e)}")
 else:
     logger.warning("GOOGLE_PLACES_API_KEY not set. Location features will be limited.")
+
+# Initialize Comprehensive Data Processor for Builder.io integration
+data_processor = None
+try:
+    data_processor = ComprehensiveDataProcessor(
+        gmaps_client=gmaps_client,
+        google_images_api_key=google_images_api_key,
+        google_search_engine_id=google_search_engine_id
+    )
+    logger.info("✅ Comprehensive Data Processor initialized for Builder.io integration")
+except Exception as e:
+    logger.warning(f"Failed to initialize data processor: {str(e)}")
+    logger.warning("Data validation and image sourcing will use fallback methods")
 
 def detect_location_query(message: str) -> bool:
     """
@@ -265,7 +282,9 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
             places_result = gmaps_client.places(query=query)
 
         places = []
-        for place in places_result.get('results', [])[:8]:  # Increased to 8 results
+        raw_places = []
+
+        for place in places_result.get('results', [])[:12]:  # Get more results for filtering
             place_id = place.get('place_id', '')
 
             # Get detailed place information
@@ -274,7 +293,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                     place_id=place_id,
                     fields=['name', 'formatted_address', 'rating', 'price_level',
                            'types', 'website', 'formatted_phone_number', 'opening_hours',
-                           'photos', 'reviews', 'user_ratings_total', 'url']
+                           'photos', 'reviews', 'user_ratings_total', 'url', 'geometry']
                 )
                 detailed_place = place_details_result.get('result', {})
             except:
@@ -318,6 +337,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'is_open': detailed_place.get('opening_hours', {}).get('open_now', None),
                 'photos': detailed_place.get('photos', []),
                 'reviews': detailed_place.get('reviews', [])[:3],  # Top 3 reviews
+                'geometry': detailed_place.get('geometry', place.get('geometry', {})),
 
                 # Enhanced features
                 'smart_tags': smart_tags,
@@ -349,7 +369,35 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'uber_url': f"https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]={encoded_address}" if place_address else '',
                 'lyft_url': f"https://lyft.com/ride?destination[address]={encoded_address}" if place_address else ''
             }
-            places.append(place_info)
+            raw_places.append(place_info)
+
+        # Apply comprehensive data validation and enhancement
+        if data_processor:
+            logger.info(f"🔍 Processing {len(raw_places)} places through comprehensive validation...")
+
+            enhanced_places = []
+            for place_data in raw_places:
+                try:
+                    enhanced_place = data_processor.process_place_data(place_data)
+                    enhanced_places.append(enhanced_place)
+                except Exception as e:
+                    logger.warning(f"Failed to process place {place_data.get('name', 'Unknown')}: {str(e)}")
+                    # Fall back to original data if processing fails
+                    enhanced_places.append(place_data)
+
+            # Filter for high-confidence results only
+            high_confidence_places = data_processor.filter_high_confidence_places(
+                enhanced_places,
+                min_confidence=0.6  # Adjustable threshold
+            )
+
+            places = high_confidence_places[:8]  # Return top 8 high-confidence places
+
+            logger.info(f"✅ Filtered to {len(places)} high-confidence places with validated data")
+        else:
+            # Fallback to original processing if data processor unavailable
+            places = raw_places[:8]
+            logger.warning("Using fallback processing - data validation unavailable")
 
         return places
     except Exception as e:
@@ -360,40 +408,9 @@ def get_jetfriend_system_prompt() -> str:
     """
     Return the enhanced JetFriend personality focused on convenience and real web data with enhanced place cards
     """
-    return """You are JetFriend, an AI travel assistant. When creating itineraries or recommending places, you can use BOTH traditional itinerary format AND enhanced place cards.
+    return """You are JetFriend, an AI travel assistant. When creating itineraries or recommending places, ALWAYS use the consistent itinerary card format for all recommendations. DO NOT switch to transparent place-card templates.
 
-FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format with proper visual structure:
-
-<div class="place-card">
-<div class="place-hero" style="background-image: url('{hero_image}'); background-size: cover; background-position: center;">
-<div class="place-hero-overlay"></div>
-<div class="place-smart-tags">
-<span class="smart-tag highly-rated">Highly Rated</span>
-</div>
-<div class="place-category-badge">🍽️ Restaurant</div>
-</div>
-<div class="place-content">
-<div class="place-header">
-<h3 class="place-name">Sakura Ramen House</h3>
-<div class="place-rating-container">
-<div class="place-rating">
-<span class="place-stars">★★★★★</span>
-<span class="place-rating-text">4.7 (2.1k)</span>
-</div>
-</div>
-</div>
-<div class="place-address"><i class="fas fa-map-marker-alt"></i> 123 Tokyo Street, Shibuya</div>
-<div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth.</div>
-<div class="place-booking-links">
-<a href="{google_maps_url}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-map-marker-alt"></i> Maps</a>
-<a href="{yelp_search_url}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-star"></i> Yelp</a>
-{conditional_restaurant_links}
-{conditional_hotel_links}
-</div>
-</div>
-</div>
-
-FOR TRADITIONAL ITINERARIES, continue using this format:
+FOR ALL RECOMMENDATIONS (restaurants, hotels, attractions, itineraries), use this CONSISTENT CARD format:
 
 CRITICAL FORMATTING RULES:
 1. NO markdown formatting (no **bold**, no # headers)
@@ -477,19 +494,16 @@ CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
 PHOTO USAGE:
-- Hero Image: Use place.hero_image as background-image in place-hero div style only
-- Fallback Photos: Only use Pexels URLs if no real photos available:
-  - Food: https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg
-  - Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
-  - Exterior: https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg
+- DO NOT use hero image backgrounds or transparent overlays
+- Keep consistent solid card styling for readability
+- If images are needed, reference them in descriptions only
 
-CRITICAL PLACE CARD FORMATTING:
-- Maximum width: 600px, height: 240px (compact design)
-- Use place.hero_image as background with dark overlay for text readability
+CRITICAL FORMATTING RULES:
+- Use solid, readable itinerary-item cards for ALL recommendations
+- NO transparent backgrounds or hero image overlays
 - Yellow stars (#fbbf24) for ratings
-- Semi-transparent category badge (background: rgba(255,255,255,0.2))
-- 16px spacing between cards (compact)
-- Clean, simple design - hero image background only, no photo galleries
+- Consistent spacing and readable design
+- Clean, simple design with solid card backgrounds
 
 WORKING LINKS - MUST USE REAL URLs:
 - Maps: place.google_maps_url
@@ -511,53 +525,17 @@ ALWAYS INCLUDE:
 - Category badges for easy identification
 - Multiple photos when available
 
-For itineraries: Use day-icon numbers 1, 2, 3 and keep under 2000 characters.
-For place cards: Use enhanced format with photos, tags, and booking links."""
+CRITICAL: ALWAYS use the same consistent itinerary-item card format for ALL recommendations. Never switch to transparent place-card templates. Use solid, readable backgrounds for all cards - restaurants, hotels, attractions, and itineraries. Keep responses under 2000 characters and use day-icon numbers 1, 2, 3 for itineraries."""
 
 def substitute_real_urls(ai_response: str, places_data: List[Dict]) -> str:
     """
-    Post-process AI response to substitute placeholder URLs with real working links
+    Post-process AI response to substitute placeholder URLs with real working links for itinerary format
     """
     if not places_data:
         return ai_response
 
-    # For each place card in the response, substitute real URLs
-    for i, place in enumerate(places_data):
-        place_types = str(place.get('types', [])).lower()
-
-        # Build conditional restaurant links
-        conditional_restaurant_links = ""
-        if 'restaurant' in place_types or 'food' in place_types or 'meal_takeaway' in place_types:
-            if place.get('opentable_url'):
-                conditional_restaurant_links += f'<a href="{place["opentable_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-utensils"></i> Reserve</a>\n'
-            if place.get('website'):
-                conditional_restaurant_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-globe"></i> Website</a>\n'
-
-        # Build conditional hotel links
-        conditional_hotel_links = ""
-        if 'lodging' in place_types or 'hotel' in place_types:
-            if place.get('booking_url'):
-                conditional_hotel_links += f'<a href="{place["booking_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-bed"></i> Book</a>\n'
-            if place.get('website'):
-                conditional_hotel_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-globe"></i> Website</a>\n'
-
-        # If neither restaurant nor hotel, show general website link
-        if not conditional_restaurant_links and not conditional_hotel_links and place.get('website'):
-            conditional_restaurant_links = f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-globe"></i> Website</a>\n'
-
-        # Substitute URLs in the response
-        ai_response = ai_response.replace('{google_maps_url}', place.get('google_maps_url', '#'))
-        ai_response = ai_response.replace('{yelp_search_url}', place.get('yelp_search_url', '#'))
-        ai_response = ai_response.replace('{tripadvisor_search_url}', place.get('tripadvisor_search_url', '#'))
-        ai_response = ai_response.replace('{uber_url}', place.get('uber_url', '#'))
-        ai_response = ai_response.replace('{conditional_restaurant_links}', conditional_restaurant_links)
-        ai_response = ai_response.replace('{conditional_hotel_links}', conditional_hotel_links)
-
-        # Substitute photo URLs
-        ai_response = ai_response.replace('{hero_image}', place.get('hero_image', 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'))
-
-        # Photo thumbnail substitution removed - using hero image only
-
+    # Since we're using consistent itinerary format, the AI should be including real URLs directly
+    # This function is mainly for any remaining placeholder substitutions
     return ai_response
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
@@ -808,14 +786,129 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'service': 'JetFriend API',
-        'version': '2.0.0',
+        'version': '2.1.0',
         'features': {
             'openai_gpt4o': openai_client is not None,
             'google_places': gmaps_client is not None,
             'location_detection': True,
+            'data_validation': data_processor is not None,
+            'image_sourcing': data_processor is not None and data_processor.image_sourcer is not None,
+            'comprehensive_validation': data_processor is not None,
             'premium_features': False
+        },
+        'builder_io_integration': {
+            'data_accuracy': data_processor is not None,
+            'link_validation': data_processor is not None,
+            'coordinate_verification': gmaps_client is not None,
+            'image_sourcing': data_processor is not None,
+            'licensing_compliance': True
         }
     })
+
+@app.route('/api/validation-status', methods=['GET'])
+def validation_status():
+    """Get comprehensive validation system status"""
+    if not data_processor:
+        return jsonify({
+            'success': False,
+            'error': 'Data validation system not available',
+            'status': 'disabled'
+        }), 503
+
+    # Test validation capabilities
+    test_results = {
+        'url_validation': False,
+        'coordinate_validation': False,
+        'contact_validation': False,
+        'image_sourcing': False,
+        'google_images_api': False,
+        'licensing_compliance': True
+    }
+
+    try:
+        # Test URL validation
+        test_url_result = data_processor.validator.validate_url('https://www.google.com')
+        test_results['url_validation'] = test_url_result.get('valid', False)
+
+        # Test coordinate validation (if Google Maps available)
+        if gmaps_client:
+            test_coord_result = data_processor.validator.validate_coordinates_match_address(
+                'Times Square, New York, NY', 40.7580, -73.9855
+            )
+            test_results['coordinate_validation'] = test_coord_result.get('valid', False)
+
+        # Test contact validation
+        test_contact_result = data_processor.validator.validate_contact_info(
+            phone='+1234567890',
+            website='https://www.example.com'
+        )
+        test_results['contact_validation'] = test_contact_result.get('confidence_score', 0) > 0
+
+        # Test image sourcing
+        test_image_result = data_processor.image_sourcer.get_primary_image(
+            'Test Restaurant', ['restaurant'], 'New York'
+        )
+        test_results['image_sourcing'] = test_image_result.get('url') is not None
+
+        # Check Google Images API
+        test_results['google_images_api'] = (
+            data_processor.image_sourcer.google_images_api_key is not None and
+            data_processor.image_sourcer.google_search_engine_id is not None
+        )
+
+    except Exception as e:
+        logger.error(f"Validation status test failed: {str(e)}")
+
+    return jsonify({
+        'success': True,
+        'status': 'active',
+        'capabilities': test_results,
+        'version': '1.0.0',
+        'last_tested': time.time()
+    })
+
+@app.route('/api/image-sourcing-test', methods=['POST'])
+def image_sourcing_test():
+    """Test image sourcing capabilities"""
+    if not data_processor:
+        return jsonify({
+            'success': False,
+            'error': 'Image sourcing system not available'
+        }), 503
+
+    try:
+        data = request.json
+        place_name = data.get('place_name', 'Test Place')
+        place_types = data.get('place_types', ['restaurant'])
+        location = data.get('location', 'New York')
+
+        # Test image sourcing
+        image_result = data_processor.image_sourcer.get_primary_image(
+            place_name, place_types, location
+        )
+
+        return jsonify({
+            'success': True,
+            'image_result': {
+                'url': image_result.get('url'),
+                'source': image_result.get('source'),
+                'license': image_result.get('license'),
+                'confidence': image_result.get('confidence'),
+                'attribution': image_result.get('attribution', '')
+            },
+            'test_parameters': {
+                'place_name': place_name,
+                'place_types': place_types,
+                'location': location
+            }
+        })
+
+    except Exception as e:
+        logger.error(f"Image sourcing test failed: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': f'Image sourcing test error: {str(e)}'
+        }), 500
 
 @app.route('/api/test-ai', methods=['GET'])
 def test_ai():
@@ -929,13 +1022,16 @@ def warm_up():
         logger.warning(f"⚠️ Warm up partially failed: {str(e)}")
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5001))
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-    print(f"🚀 JetFriend API v2.0 starting on port {port}")
+    print(f"🚀 JetFriend API v2.1 starting on port {port}")
     print(f"🌐 Visit: http://localhost:{port}")
     print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
     print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
+    print(f"🔍 Data Validation: {'✅ Active' if data_processor else '❌ Not configured'}")
+    print(f"🖼️ Image Sourcing: {'✅ Active' if data_processor and data_processor.image_sourcer else '❌ Not configured'}")
+    print(f"🏗️ Builder.io Integration: {'✅ Ready' if data_processor else '❌ Limited'}")
 
     # Warm up the application
     warm_up()
