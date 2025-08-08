@@ -870,9 +870,10 @@ def chat():
         if not user_message:
             return jsonify({'error': 'Message is required'}), 400
         
-        # Check if query requires location data
+        # Check if query requires location data vs basic response
         places_data = []
-        is_location_query = detect_location_query(user_message)
+        is_basic = is_basic_question(user_message)
+        is_location_query = detect_location_query(user_message) and not is_basic
 
         if is_location_query and gmaps_client:
             # Extract location from message or use general search
