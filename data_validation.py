@@ -221,12 +221,27 @@ class ImageSourcer:
             'restaurant': 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'hotel': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'attraction': 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'temple': 'https://images.pexels.com/photos/1444424/pexels-photo-1444424.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'shrine': 'https://images.pexels.com/photos/4331617/pexels-photo-4331617.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'place_of_worship': 'https://images.pexels.com/photos/1444424/pexels-photo-1444424.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'tourist_attraction': 'https://images.pexels.com/photos/4022092/pexels-photo-4022092.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'bar': 'https://images.pexels.com/photos/941864/pexels-photo-941864.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'cafe': 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'museum': 'https://images.pexels.com/photos/1263986/pexels-photo-1263986.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'park': 'https://images.pexels.com/photos/1680172/pexels-photo-1680172.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'shopping': 'https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'default': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        }
+
+        # Specific high-quality images for famous temples and landmarks
+        self.specific_place_images = {
+            'kinkaku-ji': 'https://images.pexels.com/photos/4022092/pexels-photo-4022092.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'golden pavilion': 'https://images.pexels.com/photos/4022092/pexels-photo-4022092.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'senso-ji': 'https://images.pexels.com/photos/4331617/pexels-photo-4331617.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'todai-ji': 'https://images.pexels.com/photos/1444424/pexels-photo-1444424.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'fushimi inari': 'https://images.pexels.com/photos/4331617/pexels-photo-4331617.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'tokyo temple': 'https://images.pexels.com/photos/4331617/pexels-photo-4331617.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'kyoto temple': 'https://images.pexels.com/photos/4022092/pexels-photo-4022092.jpeg?auto=compress&cs=tinysrgb&w=1200'
         }
     
     def get_primary_image(self, place_name: str, place_types: List[str], location: str = None) -> Dict:
