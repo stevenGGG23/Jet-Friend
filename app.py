@@ -161,10 +161,7 @@ def generate_smart_tags(place_data: Dict) -> List[str]:
     elif price_level >= 4:
         tags.append('premium')
 
-    # Open Now tag
-    is_open = place_data.get('opening_hours', {}).get('open_now')
-    if is_open:
-        tags.append('open-now')
+    # Open Now tag removed - unreliable data source
 
     return tags
 
@@ -372,7 +369,6 @@ FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format with proper visua
 <div class="place-hero-overlay"></div>
 <div class="place-smart-tags">
 <span class="smart-tag highly-rated">Highly Rated</span>
-<span class="smart-tag open-now">Open Now</span>
 </div>
 <div class="place-category-badge">🍽️ Restaurant</div>
 </div>
@@ -389,19 +385,10 @@ FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format with proper visua
 <div class="place-address"><i class="fas fa-map-marker-alt"></i> 123 Tokyo Street, Shibuya</div>
 <div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth.</div>
 <div class="place-booking-links">
-<a href="{google_maps_url}" target="_blank" rel="noopener noreferrer" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
-<a href="{yelp_search_url}" target="_blank" rel="noopener noreferrer" class="booking-link yelp"><i class="fas fa-star"></i> Yelp</a>
+<a href="{google_maps_url}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-map-marker-alt"></i> Maps</a>
+<a href="{yelp_search_url}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-star"></i> Yelp</a>
 {conditional_restaurant_links}
 {conditional_hotel_links}
-<a href="{uber_url}" target="_blank" rel="noopener noreferrer" class="booking-link uber"><i class="fas fa-car"></i> Uber</a>
-</div>
-<div class="photo-gallery">
-<div class="gallery-title"><i class="fas fa-images"></i> Photos</div>
-<div class="photo-grid">
-<div class="photo-item"><img src="{photo_thumb_1}" alt="View 1" /></div>
-<div class="photo-item"><img src="{photo_thumb_2}" alt="View 2" /></div>
-<div class="photo-item"><img src="{photo_thumb_3}" alt="View 3" /></div>
-</div>
 </div>
 </div>
 </div>
@@ -484,15 +471,13 @@ NEVER USE:
 SMART TAGS SYSTEM:
 - highly-rated: Use for places with 4.5+ stars and 100+ reviews
 - budget-friendly: Use for affordable options ($ or $$)
-- open-now: Use when place is currently open
 - premium: Use for high-end, luxury places
 
 CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
-PHOTO USAGE (use REAL Google Places photos from the data):
-- Hero Image: Use place.hero_image as background-image in place-hero div style
-- Thumbnail Gallery: Use place.photos[0].urls.thumb, place.photos[1].urls.thumb, etc.
+PHOTO USAGE:
+- Hero Image: Use place.hero_image as background-image in place-hero div style only
 - Fallback Photos: Only use Pexels URLs if no real photos available:
   - Food: https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg
   - Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
@@ -504,8 +489,7 @@ CRITICAL PLACE CARD FORMATTING:
 - Yellow stars (#fbbf24) for ratings
 - Semi-transparent category badge (background: rgba(255,255,255,0.2))
 - 16px spacing between cards (compact)
-- Photo gallery: 3 columns desktop, 2 mobile
-- object-fit: cover for all images
+- Clean, simple design - hero image background only, no photo galleries
 
 WORKING LINKS - MUST USE REAL URLs:
 - Maps: place.google_maps_url
@@ -545,21 +529,21 @@ def substitute_real_urls(ai_response: str, places_data: List[Dict]) -> str:
         conditional_restaurant_links = ""
         if 'restaurant' in place_types or 'food' in place_types or 'meal_takeaway' in place_types:
             if place.get('opentable_url'):
-                conditional_restaurant_links += f'<a href="{place["opentable_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link opentable"><i class="fas fa-utensils"></i> Reserve</a>\n'
+                conditional_restaurant_links += f'<a href="{place["opentable_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-utensils"></i> Reserve</a>\n'
             if place.get('website'):
-                conditional_restaurant_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link website"><i class="fas fa-globe"></i> Website</a>\n'
+                conditional_restaurant_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-globe"></i> Website</a>\n'
 
         # Build conditional hotel links
         conditional_hotel_links = ""
         if 'lodging' in place_types or 'hotel' in place_types:
             if place.get('booking_url'):
-                conditional_hotel_links += f'<a href="{place["booking_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link booking"><i class="fas fa-bed"></i> Book</a>\n'
+                conditional_hotel_links += f'<a href="{place["booking_url"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-bed"></i> Book</a>\n'
             if place.get('website'):
-                conditional_hotel_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link website"><i class="fas fa-globe"></i> Website</a>\n'
+                conditional_hotel_links += f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-globe"></i> Website</a>\n'
 
         # If neither restaurant nor hotel, show general website link
         if not conditional_restaurant_links and not conditional_hotel_links and place.get('website'):
-            conditional_restaurant_links = f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link website"><i class="fas fa-globe"></i> Website</a>\n'
+            conditional_restaurant_links = f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-globe"></i> Website</a>\n'
 
         # Substitute URLs in the response
         ai_response = ai_response.replace('{google_maps_url}', place.get('google_maps_url', '#'))
@@ -572,20 +556,7 @@ def substitute_real_urls(ai_response: str, places_data: List[Dict]) -> str:
         # Substitute photo URLs
         ai_response = ai_response.replace('{hero_image}', place.get('hero_image', 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'))
 
-        # Substitute thumbnail photos
-        photos = place.get('photos', [])
-        for j in range(3):
-            placeholder = f'{{photo_thumb_{j+1}}}'
-            if j < len(photos) and photos[j].get('urls', {}).get('thumb'):
-                ai_response = ai_response.replace(placeholder, photos[j]['urls']['thumb'])
-            else:
-                # Fallback images
-                fallback_urls = [
-                    'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
-                    'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg',
-                    'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'
-                ]
-                ai_response = ai_response.replace(placeholder, fallback_urls[j] if j < len(fallback_urls) else fallback_urls[0])
+        # Photo thumbnail substitution removed - using hero image only
 
     return ai_response
 
