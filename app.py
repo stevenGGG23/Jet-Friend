@@ -446,11 +446,9 @@ CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
 PHOTO USAGE:
-- Hero Image: Use place.hero_image as background-image in place-hero div style only
-- Fallback Photos: Only use Pexels URLs if no real photos available:
-  - Food: https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg
-  - Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
-  - Exterior: https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg
+- DO NOT use hero image backgrounds or transparent overlays
+- Keep consistent solid card styling for readability
+- If images are needed, reference them in descriptions only
 
 CRITICAL FORMATTING RULES:
 - Use solid, readable itinerary-item cards for ALL recommendations
