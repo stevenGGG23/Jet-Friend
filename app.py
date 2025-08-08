@@ -234,7 +234,7 @@ def get_category_badge(place_types: List[str]) -> str:
         if place_type in category_map:
             return category_map[place_type]
 
-    return '�� Place'
+    return '📍 Place'
 
 def search_places(query: str, location: str = None, radius: int = 5000) -> List[Dict]:
     """
@@ -365,11 +365,10 @@ def get_jetfriend_system_prompt() -> str:
     """
     return """You are JetFriend, an AI travel assistant. When creating itineraries or recommending places, you can use BOTH traditional itinerary format AND enhanced place cards.
 
-FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format:
+FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format with proper visual structure:
 
 <div class="place-card">
-<div class="place-hero">
-<img class="place-hero-image" src="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg" alt="Restaurant" />
+<div class="place-hero" style="background-image: url('{hero_image}'); background-size: cover; background-position: center;">
 <div class="place-hero-overlay"></div>
 <div class="place-smart-tags">
 <span class="smart-tag highly-rated">Highly Rated</span>
@@ -388,25 +387,18 @@ FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format:
 </div>
 </div>
 <div class="place-address"><i class="fas fa-map-marker-alt"></i> 123 Tokyo Street, Shibuya</div>
-<div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth. Famous for their late-night service and cozy atmosphere.</div>
-<div class="place-features">
-<span class="place-feature"><i class="fas fa-wifi"></i> Free WiFi</span>
-<span class="place-feature"><i class="fas fa-credit-card"></i> Cards OK</span>
-<span class="place-feature"><i class="fas fa-clock"></i> Open Late</span>
-</div>
+<div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth.</div>
 <div class="place-booking-links">
-<a href="#" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
-<a href="#" class="booking-link yelp"><i class="fas fa-star"></i> Yelp Reviews</a>
+<a href="#" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
+<a href="#" class="booking-link yelp"><i class="fas fa-star"></i> Yelp</a>
 <a href="#" class="booking-link opentable"><i class="fas fa-utensils"></i> Reserve</a>
-<a href="#" class="booking-link uber"><i class="fas fa-car"></i> Get Ride</a>
 </div>
 <div class="photo-gallery">
 <div class="gallery-title"><i class="fas fa-images"></i> Photos</div>
 <div class="photo-grid">
-<div class="photo-item"><img src="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg" alt="Food" /></div>
-<div class="photo-item"><img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg" alt="Interior" /></div>
-<div class="photo-item"><img src="https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg" alt="Dish" /></div>
-<div class="photo-item more">+3 more</div>
+<div class="photo-item"><img src="{photo_thumb_1}" alt="View 1" /></div>
+<div class="photo-item"><img src="{photo_thumb_2}" alt="View 2" /></div>
+<div class="photo-item"><img src="{photo_thumb_3}" alt="View 3" /></div>
 </div>
 </div>
 </div>
