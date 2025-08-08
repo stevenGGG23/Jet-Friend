@@ -23,6 +23,8 @@ CORS(app)  # Enable CORS for all routes
 # Initialize APIs
 openai_api_key = os.getenv("OPENAI_API_KEY")
 google_places_api_key = os.getenv("GOOGLE_PLACES_API_KEY")
+google_images_api_key = os.getenv("GOOGLE_IMAGES_API_KEY")
+google_search_engine_id = os.getenv("GOOGLE_SEARCH_ENGINE_ID")
 
 # Initialize OpenAI client
 openai_client = None
@@ -43,6 +45,19 @@ if google_places_api_key and google_places_api_key != "your-google-places-api-ke
         logger.warning(f"Failed to initialize Google Maps client: {str(e)}")
 else:
     logger.warning("GOOGLE_PLACES_API_KEY not set. Location features will be limited.")
+
+# Initialize Comprehensive Data Processor for Builder.io integration
+data_processor = None
+try:
+    data_processor = ComprehensiveDataProcessor(
+        gmaps_client=gmaps_client,
+        google_images_api_key=google_images_api_key,
+        google_search_engine_id=google_search_engine_id
+    )
+    logger.info("✅ Comprehensive Data Processor initialized for Builder.io integration")
+except Exception as e:
+    logger.warning(f"Failed to initialize data processor: {str(e)}")
+    logger.warning("Data validation and image sourcing will use fallback methods")
 
 def detect_location_query(message: str) -> bool:
     """
@@ -849,7 +864,7 @@ def warm_up():
     try:
         # Test OpenAI connection if available
         if openai_client:
-            logger.info("�� Warming up OpenAI connection...")
+            logger.info("🔥 Warming up OpenAI connection...")
 
         # Test Google Places if available
         if gmaps_client:
