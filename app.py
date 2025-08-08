@@ -60,6 +60,33 @@ except Exception as e:
     logger.warning(f"Failed to initialize data processor: {str(e)}")
     logger.warning("Data validation and image sourcing will use fallback methods")
 
+def is_basic_question(message: str) -> bool:
+    """
+    Detect if this is a basic question that doesn't require location cards
+    Returns True for general questions, greetings, time, weather, etc.
+    """
+    basic_keywords = [
+        # Greetings and general
+        'hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening',
+        'how are you', 'what is', 'what are', 'who is', 'when is', 'why',
+        'explain', 'tell me about', 'what does', 'how does', 'define',
+
+        # Time and weather
+        'what time', 'time zone', 'current time', 'weather', 'temperature',
+        'forecast', 'rain', 'sunny', 'cloudy',
+
+        # Currency and general info
+        'currency', 'exchange rate', 'language', 'translate', 'how to say',
+        'thank you', 'please', 'excuse me', 'culture', 'history',
+
+        # Help and guidance
+        'help', 'assistance', 'support', 'how can', 'what can you do',
+        'features', 'capabilities'
+    ]
+
+    message_lower = message.lower()
+    return any(keyword in message_lower for keyword in basic_keywords)
+
 def detect_location_query(message: str) -> bool:
     """
     Detect if user query requires real-time location data for ANY travel-related content.
