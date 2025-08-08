@@ -655,6 +655,8 @@ REQUIRED CSS CLASSES TO USE:
 - day-header: Day title with icon
 - day-icon: Numbered circle (1, 2, 3, etc.)
 - itinerary-item: Each activity card
+- place-hero: Image container at top of each card
+- place-hero-image: The actual image element
 - activity-name: Attraction/restaurant name
 - activity-rating: Rating container
 - stars: Visual star rating (★★★★★)
