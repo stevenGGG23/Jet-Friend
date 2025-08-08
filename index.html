@@ -906,11 +906,11 @@
       /* Enhanced Place Cards Styles */
       .place-card {
         max-width: 600px;
-        height: 240px;
+        min-height: 250px;
+        height: auto;
         background: rgba(30, 41, 59, 0.95);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
-        overflow: hidden;
         margin: 16px 0;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(20px);
@@ -932,6 +932,16 @@
         overflow: hidden;
         background: linear-gradient(135deg, #1e293b, #334155);
         flex-shrink: 0;
+      }
+
+      .place-hero::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: inherit;
+        background-size: cover;
+        background-position: center;
+        z-index: 0;
       }
 
       .place-hero-image {
@@ -1028,10 +1038,9 @@
       .place-content {
         padding: 12px;
         position: relative;
-        flex: 1;
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
       }
 
       .place-header {
@@ -1234,7 +1243,8 @@
       @media (max-width: 768px) {
         .place-card {
           max-width: 100%;
-          height: 260px;
+          min-height: 250px;
+          height: auto;
           margin: 12px 0;
         }
 
