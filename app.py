@@ -369,7 +369,6 @@ FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format with proper visua
 <div class="place-hero-overlay"></div>
 <div class="place-smart-tags">
 <span class="smart-tag highly-rated">Highly Rated</span>
-<span class="smart-tag open-now">Open Now</span>
 </div>
 <div class="place-category-badge">🍽️ Restaurant</div>
 </div>
@@ -386,19 +385,10 @@ FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format with proper visua
 <div class="place-address"><i class="fas fa-map-marker-alt"></i> 123 Tokyo Street, Shibuya</div>
 <div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth.</div>
 <div class="place-booking-links">
-<a href="{google_maps_url}" target="_blank" rel="noopener noreferrer" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
-<a href="{yelp_search_url}" target="_blank" rel="noopener noreferrer" class="booking-link yelp"><i class="fas fa-star"></i> Yelp</a>
+<a href="{google_maps_url}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-map-marker-alt"></i> Maps</a>
+<a href="{yelp_search_url}" target="_blank" rel="noopener noreferrer" class="booking-link"><i class="fas fa-star"></i> Yelp</a>
 {conditional_restaurant_links}
 {conditional_hotel_links}
-<a href="{uber_url}" target="_blank" rel="noopener noreferrer" class="booking-link uber"><i class="fas fa-car"></i> Uber</a>
-</div>
-<div class="photo-gallery">
-<div class="gallery-title"><i class="fas fa-images"></i> Photos</div>
-<div class="photo-grid">
-<div class="photo-item"><img src="{photo_thumb_1}" alt="View 1" /></div>
-<div class="photo-item"><img src="{photo_thumb_2}" alt="View 2" /></div>
-<div class="photo-item"><img src="{photo_thumb_3}" alt="View 3" /></div>
-</div>
 </div>
 </div>
 </div>
@@ -440,7 +430,7 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="day-header"><span class="day-icon">2</span>Day 2: Kyoto – History and Temples</div>
 <div class="itinerary-item">
 <div class="activity-name">Fushimi Inari Shrine</div>
-<div class="activity-rating"><span class="stars">★★★��★</span><span class="rating-text">4.7 (50,000 reviews)</span></div>
+<div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.7 (50,000 reviews)</span></div>
 <div class="activity">Famous for thousands of red torii gates forming scenic walking paths.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/fushimi+inari+shrine+kyoto" target="_blank" class="activity-link">📍 Google Maps</a>
