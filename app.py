@@ -477,8 +477,7 @@ ALWAYS INCLUDE:
 - Category badges for easy identification
 - Multiple photos when available
 
-For itineraries: Use day-icon numbers 1, 2, 3 and keep under 2000 characters.
-For place cards: Use enhanced format with photos, tags, and booking links."""
+CRITICAL: ALWAYS use the same consistent itinerary-item card format for ALL recommendations. Never switch to transparent place-card templates. Use solid, readable backgrounds for all cards - restaurants, hotels, attractions, and itineraries. Keep responses under 2000 characters and use day-icon numbers 1, 2, 3 for itineraries."""
 
 def substitute_real_urls(ai_response: str, places_data: List[Dict]) -> str:
     """
