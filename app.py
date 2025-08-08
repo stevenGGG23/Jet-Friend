@@ -594,10 +594,12 @@ SMART TAGS SYSTEM:
 CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
-PHOTO USAGE:
-- DO NOT use hero image backgrounds or transparent overlays
-- Keep consistent solid card styling for readability
-- If images are needed, reference them in descriptions only
+IMAGE USAGE RULES:
+- ALWAYS include ONE high-quality hero image per place (at the top of each card)
+- NO photo galleries or multiple images - ONE image only per place
+- Images appear FIRST in the display (at the top of place cards)
+- All images must be contained in consistent 200px height containers
+- Use solid card styling for readability
 
 CRITICAL FORMATTING RULES:
 - Use solid, readable itinerary-item cards for ALL recommendations
