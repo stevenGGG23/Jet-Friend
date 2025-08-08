@@ -785,14 +785,129 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'service': 'JetFriend API',
-        'version': '2.0.0',
+        'version': '2.1.0',
         'features': {
             'openai_gpt4o': openai_client is not None,
             'google_places': gmaps_client is not None,
             'location_detection': True,
+            'data_validation': data_processor is not None,
+            'image_sourcing': data_processor is not None and data_processor.image_sourcer is not None,
+            'comprehensive_validation': data_processor is not None,
             'premium_features': False
+        },
+        'builder_io_integration': {
+            'data_accuracy': data_processor is not None,
+            'link_validation': data_processor is not None,
+            'coordinate_verification': gmaps_client is not None,
+            'image_sourcing': data_processor is not None,
+            'licensing_compliance': True
         }
     })
+
+@app.route('/api/validation-status', methods=['GET'])
+def validation_status():
+    """Get comprehensive validation system status"""
+    if not data_processor:
+        return jsonify({
+            'success': False,
+            'error': 'Data validation system not available',
+            'status': 'disabled'
+        }), 503
+
+    # Test validation capabilities
+    test_results = {
+        'url_validation': False,
+        'coordinate_validation': False,
+        'contact_validation': False,
+        'image_sourcing': False,
+        'google_images_api': False,
+        'licensing_compliance': True
+    }
+
+    try:
+        # Test URL validation
+        test_url_result = data_processor.validator.validate_url('https://www.google.com')
+        test_results['url_validation'] = test_url_result.get('valid', False)
+
+        # Test coordinate validation (if Google Maps available)
+        if gmaps_client:
+            test_coord_result = data_processor.validator.validate_coordinates_match_address(
+                'Times Square, New York, NY', 40.7580, -73.9855
+            )
+            test_results['coordinate_validation'] = test_coord_result.get('valid', False)
+
+        # Test contact validation
+        test_contact_result = data_processor.validator.validate_contact_info(
+            phone='+1234567890',
+            website='https://www.example.com'
+        )
+        test_results['contact_validation'] = test_contact_result.get('confidence_score', 0) > 0
+
+        # Test image sourcing
+        test_image_result = data_processor.image_sourcer.get_primary_image(
+            'Test Restaurant', ['restaurant'], 'New York'
+        )
+        test_results['image_sourcing'] = test_image_result.get('url') is not None
+
+        # Check Google Images API
+        test_results['google_images_api'] = (
+            data_processor.image_sourcer.google_images_api_key is not None and
+            data_processor.image_sourcer.google_search_engine_id is not None
+        )
+
+    except Exception as e:
+        logger.error(f"Validation status test failed: {str(e)}")
+
+    return jsonify({
+        'success': True,
+        'status': 'active',
+        'capabilities': test_results,
+        'version': '1.0.0',
+        'last_tested': time.time()
+    })
+
+@app.route('/api/image-sourcing-test', methods=['POST'])
+def image_sourcing_test():
+    """Test image sourcing capabilities"""
+    if not data_processor:
+        return jsonify({
+            'success': False,
+            'error': 'Image sourcing system not available'
+        }), 503
+
+    try:
+        data = request.json
+        place_name = data.get('place_name', 'Test Place')
+        place_types = data.get('place_types', ['restaurant'])
+        location = data.get('location', 'New York')
+
+        # Test image sourcing
+        image_result = data_processor.image_sourcer.get_primary_image(
+            place_name, place_types, location
+        )
+
+        return jsonify({
+            'success': True,
+            'image_result': {
+                'url': image_result.get('url'),
+                'source': image_result.get('source'),
+                'license': image_result.get('license'),
+                'confidence': image_result.get('confidence'),
+                'attribution': image_result.get('attribution', '')
+            },
+            'test_parameters': {
+                'place_name': place_name,
+                'place_types': place_types,
+                'location': location
+            }
+        })
+
+    except Exception as e:
+        logger.error(f"Image sourcing test failed: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': f'Image sourcing test error: {str(e)}'
+        }), 500
 
 @app.route('/api/test-ai', methods=['GET'])
 def test_ai():
