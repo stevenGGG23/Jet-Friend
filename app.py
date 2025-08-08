@@ -824,13 +824,19 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
 
 {places_text}
 
-INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ALL the available clickable HTML links. You have access to comprehensive travel booking links including Google Maps, Yelp, TripAdvisor, OpenTable (restaurants), Booking.com/Expedia (hotels), GetYourGuide (tours), Foursquare, Uber/Lyft (transportation), and official websites.
+INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ONLY the available working links.
 
-CRITICAL: Output proper HTML anchor tags with security attributes and visual icons. Use semantic HTML structure and mobile-responsive containers:
-<a href="https://www.google.com/maps/search/place+name+location" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
-<a href="https://www.yelp.com/search?find_desc=place+name&find_loc=location" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
+CRITICAL LINK RULES:
+- ONLY show links that exist in the place data (check each field exists and is not empty)
+- NEVER show empty buttons or dead links
+- If place.website exists and is not empty, show: <a href="[place.website]" target="_blank" rel="noopener noreferrer">🌐 Official Website</a>
+- If place.phone exists and is not empty, show: <a href="tel:[place.phone]" class="activity-link">📞 [place.phone]</a>
+- ALWAYS show Google Maps (guaranteed working): <a href="[place.google_maps_url]" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
+- Only show Yelp if place has good rating data: <a href="[place.yelp_search_url]" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
 
-Include ratings, phone numbers, direct access HTML links, smart tags, category badges, and photo galleries in your response. Use the enhanced place card format for restaurant and attraction recommendations. Prioritize places with good reviews and current information. Focus on convenience and immediate utility. Work with the information provided without asking follow-up questions."""
+NO DEAD LINKS RULE: If a link field is empty, missing, or invalid - DO NOT show that button at all.
+
+Use the hero itinerary-item card format for ALL location recommendations. Include ratings, properly validated links only, smart tags, and category badges. Focus on convenience and immediate utility. Work with the provided data without asking follow-up questions."""
         
         messages.append({"role": "user", "content": enhanced_message})
         
