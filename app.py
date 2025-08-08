@@ -224,7 +224,7 @@ def get_category_badge(place_types: List[str]) -> str:
         'shopping_mall': '🛍️ Shopping',
         'store': '🛍️ Store',
         'gym': '💪 Fitness',
-        'spa': '🧘 Spa',
+        'spa': '�� Spa',
         'hospital': '🏥 Medical',
         'bank': '🏦 Bank',
         'gas_station': '⛽ Gas Station'
@@ -389,9 +389,11 @@ FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format with proper visua
 <div class="place-address"><i class="fas fa-map-marker-alt"></i> 123 Tokyo Street, Shibuya</div>
 <div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth.</div>
 <div class="place-booking-links">
-<a href="#" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
-<a href="#" class="booking-link yelp"><i class="fas fa-star"></i> Yelp</a>
-<a href="#" class="booking-link opentable"><i class="fas fa-utensils"></i> Reserve</a>
+<a href="{google_maps_url}" target="_blank" rel="noopener noreferrer" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Maps</a>
+<a href="{yelp_search_url}" target="_blank" rel="noopener noreferrer" class="booking-link yelp"><i class="fas fa-star"></i> Yelp</a>
+{conditional_restaurant_links}
+{conditional_hotel_links}
+<a href="{uber_url}" target="_blank" rel="noopener noreferrer" class="booking-link uber"><i class="fas fa-car"></i> Uber</a>
 </div>
 <div class="photo-gallery">
 <div class="gallery-title"><i class="fas fa-images"></i> Photos</div>
