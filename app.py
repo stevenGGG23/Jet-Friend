@@ -574,7 +574,7 @@ Include ratings, phone numbers, direct access HTML links, smart tags, category b
         
         # Make API call to OpenAI
         response = openai_client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o",  # You can change this to: "gpt-4o-2024-11-20", "o1-preview", or "o1-mini"
             messages=messages,
             max_tokens=800,  # Increased for enhanced place cards
             temperature=0.7,
