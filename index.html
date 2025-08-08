@@ -4521,6 +4521,7 @@
 
               // Remove typing indicator safely
               try {
+                clearInterval(messageInterval); // Clear the alternating message interval
                 if (typingMessageElement && typingMessageElement.parentNode) {
                   typingMessageElement.remove();
                 }
@@ -4595,6 +4596,7 @@
 
               // Remove typing indicator safely
               try {
+                clearInterval(messageInterval); // Clear the alternating message interval
                 if (typingMessageElement && typingMessageElement.parentNode) {
                   typingMessageElement.remove();
                 }
