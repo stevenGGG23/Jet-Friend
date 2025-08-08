@@ -64,7 +64,8 @@ def detect_location_query(message: str) -> bool:
     """
     Detect if user query requires real-time location data for ANY travel-related content.
     Returns True for hotels, attractions, restaurants, museums, trip planning, etc.
-    When True, place cards will be shown for enhanced location recommendations.
+    When True, hero place cards will be shown for enhanced location recommendations.
+    This ensures all location queries use the hero card format unless it's a basic question.
     """
     location_keywords = [
         # Accommodations
@@ -782,7 +783,7 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                         reviewer = review.get('author_name', 'Anonymous')
                         rating = review.get('rating', 0)
                         text = review.get('text', '')[:100] + "..." if len(review.get('text', '')) > 100 else review.get('text', '')
-                        places_text += f"     - {reviewer} (★{rating}): {text}\n"
+                        places_text += f"     - {reviewer} (���{rating}): {text}\n"
 
                 places_text += "\n"
 
@@ -1172,7 +1173,7 @@ def warm_up():
 
         logger.info("🔥 Application warmed up successfully")
     except Exception as e:
-        logger.warning(f"⚠️ Warm up partially failed: {str(e)}")
+        logger.warning(f"��️ Warm up partially failed: {str(e)}")
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
