@@ -609,6 +609,9 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="itinerary-container">
 <div class="day-header"><span class="day-icon">1</span>Day 1: Tokyo – Culture and Landmarks</div>
 <div class="itinerary-item">
+<div class="place-hero">
+<img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Senso-ji Temple" class="place-hero-image" loading="lazy">
+</div>
 <div class="activity-name">Senso-ji Temple</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (28,000 reviews)</span></div>
 <div class="activity">Asakusa - Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
@@ -619,6 +622,9 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 </div>
 </div>
 <div class="itinerary-item">
+<div class="place-hero">
+<img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Tokyo Skytree" class="place-hero-image" loading="lazy">
+</div>
 <div class="activity-name">Tokyo Skytree</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (85,000 reviews)</span></div>
 <div class="activity">Sumida – Stunning views of Tokyo from Japan's tallest structure.</div>
@@ -630,6 +636,9 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 </div>
 <div class="day-header"><span class="day-icon">2</span>Day 2: Kyoto – History and Temples</div>
 <div class="itinerary-item">
+<div class="place-hero">
+<img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Fushimi Inari Shrine" class="place-hero-image" loading="lazy">
+</div>
 <div class="activity-name">Fushimi Inari Shrine</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.7 (50,000 reviews)</span></div>
 <div class="activity">Famous for thousands of red torii gates forming scenic walking paths.</div>
