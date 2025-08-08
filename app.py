@@ -609,6 +609,9 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="itinerary-container">
 <div class="day-header"><span class="day-icon">1</span>Day 1: Tokyo – Culture and Landmarks</div>
 <div class="itinerary-item">
+<div class="place-hero">
+<img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Senso-ji Temple" class="place-hero-image" loading="lazy">
+</div>
 <div class="activity-name">Senso-ji Temple</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (28,000 reviews)</span></div>
 <div class="activity">Asakusa - Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
@@ -619,6 +622,9 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 </div>
 </div>
 <div class="itinerary-item">
+<div class="place-hero">
+<img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Tokyo Skytree" class="place-hero-image" loading="lazy">
+</div>
 <div class="activity-name">Tokyo Skytree</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (85,000 reviews)</span></div>
 <div class="activity">Sumida – Stunning views of Tokyo from Japan's tallest structure.</div>
@@ -630,6 +636,9 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 </div>
 <div class="day-header"><span class="day-icon">2</span>Day 2: Kyoto – History and Temples</div>
 <div class="itinerary-item">
+<div class="place-hero">
+<img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Fushimi Inari Shrine" class="place-hero-image" loading="lazy">
+</div>
 <div class="activity-name">Fushimi Inari Shrine</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.7 (50,000 reviews)</span></div>
 <div class="activity">Famous for thousands of red torii gates forming scenic walking paths.</div>
@@ -646,6 +655,8 @@ REQUIRED CSS CLASSES TO USE:
 - day-header: Day title with icon
 - day-icon: Numbered circle (1, 2, 3, etc.)
 - itinerary-item: Each activity card
+- place-hero: Image container at top of each card
+- place-hero-image: The actual image element
 - activity-name: Attraction/restaurant name
 - activity-rating: Rating container
 - stars: Visual star rating (★★★★★)
@@ -680,11 +691,12 @@ CATEGORY BADGES:
 🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
 IMAGE USAGE RULES:
-- ALWAYS include ONE high-quality hero image per place (at the top of each card)
+- ALWAYS include ONE high-quality hero image per place using the place-hero structure
+- Use the hero_image URL from place data: <img src="[place.hero_image]" alt="[place.name]" class="place-hero-image" loading="lazy">
+- If no real image available, use category-specific fallback from the enhanced fallback system
+- Images appear FIRST in each itinerary-item card (before activity-name)
 - NO photo galleries or multiple images - ONE image only per place
-- Images appear FIRST in the display (at the top of place cards)
-- All images must be contained in consistent 200px height containers
-- Use solid card styling for readability
+- All images must use place-hero container and place-hero-image class
 
 CRITICAL FORMATTING RULES:
 - Use solid, readable itinerary-item cards for ALL recommendations
@@ -767,9 +779,12 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 if place.get('category_badge'):
                     places_text += f"   Category: {place['category_badge']}\n"
 
-                if place.get('photos'):
-                    places_text += f"   Photos Available: {len(place['photos'])} images\n"
-                    places_text += f"   Hero Image: {place.get('hero_image', 'Default fallback')}\n"
+                # Add hero image information prominently
+                hero_image_url = place.get('hero_image')
+                if hero_image_url:
+                    places_text += f"   🖼️ HERO IMAGE URL: {hero_image_url}\n"
+                    places_text += f"   Image Source: {place.get('image_source', 'google_places')}\n"
+                    places_text += f"   Has Real Photos: {place.get('has_real_photos', False)}\n"
 
                 if place['phone']:
                     places_text += f"   Phone: {place['phone']}\n"
@@ -824,7 +839,13 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
 
 {places_text}
 
-INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ONLY the available working links.
+INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ONLY the available working links and images.
+
+CRITICAL IMAGE RULES:
+- ALWAYS use the HERO IMAGE URL provided for each place
+- Format: <img src="[HERO IMAGE URL]" alt="[place name]" class="place-hero-image" loading="lazy">
+- Place image FIRST in each itinerary-item card inside a place-hero div
+- Every restaurant, bar, hotel, attraction MUST have the hero image displayed
 
 CRITICAL LINK RULES:
 - ONLY show links that exist in the place data (check each field exists and is not empty)

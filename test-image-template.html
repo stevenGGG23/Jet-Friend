@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Image Template</title>
+    <link rel="stylesheet" href="index.html" type="text/css">
+    <style>
+        body {
+            font-family: Inter, sans-serif;
+            background: #0a0a1a;
+            color: white;
+            padding: 20px;
+        }
+        
+        .itinerary-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .itinerary-item {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .place-hero {
+            position: relative;
+            height: 180px;
+            width: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            flex-shrink: 0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .place-hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            filter: brightness(0.8);
+            display: block;
+        }
+        
+        .activity-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .activity-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .stars {
+            color: #fbbf24;
+            font-size: 14px;
+        }
+        
+        .rating-text {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        
+        .activity {
+            color: #e2e8f0;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        .activity-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .activity-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #06b6d4;
+            text-decoration: none;
+            font-size: 12px;
+            background: rgba(6, 182, 212, 0.1);
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .activity-link:hover {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: rgba(6, 182, 212, 0.4);
+            color: #22d3ee;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Template Test</h1>
+    
+    <div class="itinerary-container">
+        <div class="itinerary-item">
+            <div class="place-hero">
+                <img src="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Restaurant Example" class="place-hero-image" loading="lazy">
+            </div>
+            <div class="activity-name">Sushi Yoshitake</div>
+            <div class="activity-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-text">4.8 (1,200 reviews)</span>
+            </div>
+            <div class="activity">Michelin 3-star sushi restaurant in Ginza - authentic omakase experience with master chef.</div>
+            <div class="activity-links">
+                <a href="#" class="activity-link">📍 Google Maps</a>
+                <a href="#" class="activity-link">🌐 Official Website</a>
+                <a href="#" class="activity-link">⭐ Yelp Reviews</a>
+            </div>
+        </div>
+        
+        <div class="itinerary-item">
+            <div class="place-hero">
+                <img src="https://images.pexels.com/photos/941864/pexels-photo-941864.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Bar Example" class="place-hero-image" loading="lazy">
+            </div>
+            <div class="activity-name">New York Bar</div>
+            <div class="activity-rating">
+                <span class="stars">★★★★☆</span>
+                <span class="rating-text">4.6 (850 reviews)</span>
+            </div>
+            <div class="activity">Iconic bar in Park Hyatt Tokyo - stunning city views and premium cocktails featured in Lost in Translation.</div>
+            <div class="activity-links">
+                <a href="#" class="activity-link">📍 Google Maps</a>
+                <a href="#" class="activity-link">🍸 Reservations</a>
+                <a href="#" class="activity-link">⭐ Yelp Reviews</a>
+            </div>
+        </div>
+        
+        <div class="itinerary-item">
+            <div class="place-hero">
+                <img src="https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Hotel Example" class="place-hero-image" loading="lazy">
+            </div>
+            <div class="activity-name">Aman Tokyo</div>
+            <div class="activity-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-text">4.9 (456 reviews)</span>
+            </div>
+            <div class="activity">Luxury hotel blending traditional Japanese aesthetics with modern design in the heart of Tokyo.</div>
+            <div class="activity-links">
+                <a href="#" class="activity-link">📍 Google Maps</a>
+                <a href="#" class="activity-link">🏨 Book Now</a>
+                <a href="#" class="activity-link">⭐ Reviews</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

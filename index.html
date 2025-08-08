@@ -972,6 +972,18 @@
         filter: brightness(1);
       }
 
+      /* Specific styling for place-hero within itinerary-item cards */
+      .itinerary-item .place-hero {
+        height: 180px; /* Slightly smaller for itinerary cards */
+        margin-bottom: 12px;
+        border-radius: 8px; /* Rounded corners for better integration */
+      }
+
+      .itinerary-item:hover .place-hero-image {
+        transform: scale(1.05);
+        filter: brightness(0.9);
+      }
+
       .place-hero-overlay {
         position: absolute;
         top: 0;
