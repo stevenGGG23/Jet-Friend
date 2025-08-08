@@ -214,11 +214,11 @@ def get_category_badge(place_types: List[str]) -> str:
     category_map = {
         'restaurant': '🍽️ Restaurant',
         'food': '🍽️ Restaurant',
-        'meal_takeaway': '���� Takeaway',
+        'meal_takeaway': '🍴 Takeaway',
         'cafe': '☕ Café',
         'bar': '🍻 Bar',
         'lodging': '🏨 Hotel',
-        'tourist_attraction': '�� Attraction',
+        'tourist_attraction': '🏭 Attraction',
         'museum': '🏛️ Museum',
         'park': '🌳 Park',
         'shopping_mall': '🛍️ Shopping',
