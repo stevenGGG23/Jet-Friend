@@ -1748,6 +1748,25 @@
         }
       }
 
+      /* Subtle animation for thinking messages */
+      .ai-message p {
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      .thinking-message {
+        opacity: 0.8;
+        animation: subtlePulse 2s ease-in-out infinite;
+      }
+
+      @keyframes subtlePulse {
+        0%, 100% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
       /* Scrollbar styling for chat messages */
       .chat-messages::-webkit-scrollbar {
         width: 6px;
