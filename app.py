@@ -45,7 +45,9 @@ else:
 
 def detect_location_query(message: str) -> bool:
     """
-    Detect if user query requires real-time location or restaurant data
+    Detect if user query requires real-time location data for ANY travel-related content.
+    Returns True for hotels, attractions, restaurants, museums, trip planning, etc.
+    When True, place cards will be shown for enhanced location recommendations.
     """
     location_keywords = [
         # Accommodations
