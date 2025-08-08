@@ -897,10 +897,316 @@
       }
 
       .activity-link:hover {
-          background: rgba(6, 182, 212, 0.2);
-          border-color: rgba(6, 182, 212, 0.4);
-          color: #22d3ee;
-          transform: translateY(-1px);
+        background: rgba(6, 182, 212, 0.2);
+        border-color: rgba(6, 182, 212, 0.4);
+        color: #22d3ee;
+        transform: translateY(-1px);
+      }
+
+      /* Enhanced Place Cards Styles */
+      .place-card {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.9));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        overflow: hidden;
+        margin: 12px 0;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        position: relative;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .place-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2), 0 0 30px rgba(139, 92, 246, 0.1);
+        border-color: rgba(6, 182, 212, 0.3);
+      }
+
+      .place-hero {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1e293b, #334155);
+      }
+
+      .place-hero-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+        filter: brightness(0.8);
+      }
+
+      .place-card:hover .place-hero-image {
+        transform: scale(1.1);
+        filter: brightness(1);
+      }
+
+      .place-hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.2));
+        z-index: 1;
+      }
+
+      .place-smart-tags {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 2;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .smart-tag {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      }
+
+      .smart-tag.highly-rated {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
+      }
+
+      .smart-tag.budget-friendly {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(22, 163, 74, 0.9));
+      }
+
+      .smart-tag.open-now {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.9));
+      }
+
+      .smart-tag.premium {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(124, 58, 237, 0.9));
+      }
+
+      .place-category-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        padding: 6px 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .place-content {
+        padding: 16px;
+        position: relative;
+      }
+
+      .place-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+
+      .place-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        line-height: 1.3;
+        flex: 1;
+        margin-right: 12px;
+      }
+
+      .place-rating-container {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+      }
+
+      .place-rating {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background: rgba(245, 158, 11, 0.2);
+        border-radius: 12px;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+      }
+
+      .place-stars {
+        color: #f59e0b;
+        font-size: 12px;
+      }
+
+      .place-rating-text {
+        color: #f59e0b;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .place-address {
+        color: #94a3b8;
+        font-size: 13px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .place-description {
+        color: #e2e8f0;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 16px;
+      }
+
+      .place-features {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+
+      .place-feature {
+        padding: 4px 8px;
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        border-radius: 8px;
+        font-size: 11px;
+        color: #06b6d4;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .place-booking-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+      }
+
+      .booking-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .booking-link.maps {
+        background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 168, 83, 0.1));
+        border-color: rgba(66, 133, 244, 0.3);
+        color: #4285f4;
+      }
+
+      .booking-link.maps:hover {
+        background: linear-gradient(135deg, rgba(66, 133, 244, 0.2), rgba(52, 168, 83, 0.2));
+        transform: translateY(-2px);
+      }
+
+      .booking-link.yelp {
+        background: linear-gradient(135deg, rgba(255, 28, 28, 0.1), rgba(214, 25, 32, 0.1));
+        border-color: rgba(255, 28, 28, 0.3);
+        color: #ff1c1c;
+      }
+
+      .booking-link.yelp:hover {
+        background: linear-gradient(135deg, rgba(255, 28, 28, 0.2), rgba(214, 25, 32, 0.2));
+        transform: translateY(-2px);
+      }
+
+      .booking-link.opentable {
+        background: linear-gradient(135deg, rgba(218, 54, 47, 0.1), rgba(183, 28, 28, 0.1));
+        border-color: rgba(218, 54, 47, 0.3);
+        color: #da362f;
+      }
+
+      .booking-link.opentable:hover {
+        background: linear-gradient(135deg, rgba(218, 54, 47, 0.2), rgba(183, 28, 28, 0.2));
+        transform: translateY(-2px);
+      }
+
+      .booking-link.uber {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(30, 30, 30, 0.8));
+        border-color: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+
+      .booking-link.uber:hover {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.9));
+        transform: translateY(-2px);
+      }
+
+      .photo-gallery {
+        margin-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 16px;
+      }
+
+      .gallery-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 8px;
+        max-height: 100px;
+        overflow: hidden;
+      }
+
+      .photo-item {
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .photo-item:hover {
+        transform: scale(1.05);
+      }
+
+      .photo-item img {
+        width: 100%;
+        height: 80px;
+        object-fit: cover;
+      }
+
+      .photo-item.more {
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
       }
         .itinerary-container {
           max-width: 100%;
@@ -910,6 +1216,43 @@
           padding: 8px;
           border-radius: 8px;
           margin: 4px 0;
+      }
+
+      /* Enhanced itinerary styles for place cards */
+      .enhanced-itinerary {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.9));
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        border-radius: 16px;
+        padding: 16px;
+        margin: 12px 0;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .enhanced-day-header {
+        background: linear-gradient(135deg, #06b6d4, #0891b2);
+        color: white;
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        font-weight: 700;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+      }
+
+      .enhanced-day-icon {
+        background: rgba(255, 255, 255, 0.2);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 900;
       }
 
       .quick-actions {
