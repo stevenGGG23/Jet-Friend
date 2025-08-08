@@ -48,17 +48,56 @@ def detect_location_query(message: str) -> bool:
     Detect if user query requires real-time location or restaurant data
     """
     location_keywords = [
-        'restaurant', 'hotel', 'attraction', 'museum', 'park', 'beach',
-        'airport', 'station', 'shopping', 'mall', 'cafe', 'bar', 'club',
-        'gym', 'hospital', 'pharmacy', 'bank', 'atm', 'gas station',
-        'near me', 'nearby', 'around', 'close to', 'in ', 'at ',
+        # Accommodations
+        'restaurant', 'hotel', 'hostel', 'resort', 'accommodation', 'lodge', 'inn',
+        'motel', 'villa', 'apartment', 'airbnb', 'where to stay',
+
+        # Attractions & Sights
+        'attraction', 'museum', 'park', 'beach', 'gallery', 'theater', 'cinema',
+        'zoo', 'aquarium', 'castle', 'palace', 'cathedral', 'church', 'temple',
+        'monument', 'landmark', 'viewpoint', 'scenic', 'observation deck',
+
+        # Transportation
+        'airport', 'station', 'train', 'bus', 'metro', 'subway', 'taxi', 'uber',
+        'transport', 'terminal', 'port', 'ferry', 'cruise',
+
+        # Shopping & Entertainment
+        'shopping', 'mall', 'market', 'boutique', 'store', 'outlet',
+        'cafe', 'bar', 'club', 'pub', 'lounge', 'brewery', 'winery',
+        'nightlife', 'entertainment', 'theater', 'concert', 'festival',
+
+        # Services & Facilities
+        'gym', 'spa', 'hospital', 'pharmacy', 'bank', 'atm', 'gas station',
+        'embassy', 'consulate', 'police', 'tourist information',
+
+        # Location Qualifiers
+        'near me', 'nearby', 'around', 'close to', 'in ', 'at ', 'around ',
         'best places', 'top rated', 'reviews', 'open now', 'hours',
         'directions', 'how to get', 'distance', 'travel time',
-        'food', 'eat', 'drink', 'stay', 'sleep', 'visit', 'see', 'do',
+
+        # Activities & Experiences
+        'food', 'eat', 'drink', 'dine', 'taste', 'try',
+        'stay', 'sleep', 'rest', 'relax',
+        'visit', 'see', 'do', 'explore', 'discover', 'experience',
+        'tour', 'excursion', 'adventure', 'activity', 'things to do',
         'breakfast', 'lunch', 'dinner', 'brunch', 'coffee', 'dessert',
-        'nightlife', 'entertainment', 'activities', 'sights', 'landmarks',
+        'activities', 'sights', 'landmarks', 'attractions',
+
+        # Travel Planning Keywords
+        'trip', 'travel', 'vacation', 'holiday', 'itinerary', 'plan',
+        'day trip', 'weekend', 'getaway', 'journey', 'tour',
+        '1 day', '2 day', '3 day', '4 day', '5 day', 'week',
+        'day 1', 'day 2', 'day 3', 'first day', 'second day',
+
+        # Local & Authentic
         'hidden gems', 'local favorites', 'underground', 'authentic',
-        'reservations', 'book', 'call', 'website', 'menu', 'prices'
+        'local', 'traditional', 'typical', 'famous', 'popular',
+        'must see', 'must visit', 'must try', 'bucket list',
+
+        # Booking & Reservations
+        'reservations', 'book', 'booking', 'reserve', 'tickets',
+        'call', 'contact', 'website', 'menu', 'prices', 'cost',
+        'opening hours', 'schedule', 'availability'
     ]
     
     message_lower = message.lower()
