@@ -423,10 +423,10 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="itinerary-item">
 <div class="activity-name">Senso-ji Temple</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (28,000 reviews)</span></div>
-<div class="activity">Asakusa �� Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
+<div class="activity">Asakusa - Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/senso-ji+temple+asakusa+tokyo" target="_blank" class="activity-link">📍 Google Maps</a>
-<a href="https://senso-ji.jp" target="_blank" class="activity-link">�� Official Website</a>
+<a href="https://senso-ji.jp" target="_blank" class="activity-link">🌐 Official Website</a>
 <a href="https://www.yelp.com/search?find_desc=senso-ji+temple&find_loc=asakusa+tokyo" target="_blank" class="activity-link">⭐ Yelp Reviews</a>
 </div>
 </div>
@@ -955,7 +955,7 @@ def warm_up():
 
         logger.info("🔥 Application warmed up successfully")
     except Exception as e:
-        logger.warning(f"��️ Warm up partially failed: {str(e)}")
+        logger.warning(f"⚠️ Warm up partially failed: {str(e)}")
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
