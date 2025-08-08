@@ -576,7 +576,7 @@ Include ratings, phone numbers, direct access HTML links, smart tags, category b
         response = openai_client.chat.completions.create(
             model="gpt-4o",  # You can change this to: "gpt-4o-2024-11-20", "o1-preview", or "o1-mini"
             messages=messages,
-            max_tokens=800,  # Increased for enhanced place cards
+            max_tokens=8000,  # Increased for comprehensive responses
             temperature=0.7,
             top_p=0.9
         )
