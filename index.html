@@ -4572,7 +4572,16 @@
         if (chatMessages) {
           // Add a welcome message
           setTimeout(() => {
-            addMessageToChat('Welcome to JetFriend! I\'m your AI travel companion. Ask me anything about travel planning!', 'ai');
+            const welcomeMessage = `Welcome to JetFriend! 🌟 I'm your AI travel companion with enhanced place recommendations featuring:
+
+• 📸 Beautiful photo galleries
+• 🏷️ Smart tags (Highly Rated, Budget Friendly, Open Now)
+• 🔗 Direct booking links (Google Maps, Yelp, OpenTable, Uber)
+• 🏷️ Category badges for easy identification
+• ⭐ Professional place cards with visual overlays
+
+Ask me about restaurants, hotels, attractions, or travel planning!`;
+            addMessageToChat(welcomeMessage, 'ai');
           }, 1000);
         }
 
@@ -4655,23 +4664,63 @@
         }
       }
 
+      // Enhanced image cycling for hero backgrounds
+      let currentImageIndex = 0;
+      const heroImages = [
+        'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg',
+        'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg',
+        'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
+        'https://images.pexels.com/photos/8430515/pexels-photo-8430515.jpeg',
+        'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg'
+      ];
+
+      function cycleHeroImages() {
+        const heroImageElements = document.querySelectorAll('.hero-image');
+        if (heroImageElements.length === 0) return;
+
+        // Remove active class from current image
+        heroImageElements[currentImageIndex].classList.remove('active');
+
+        // Move to next image
+        currentImageIndex = (currentImageIndex + 1) % heroImageElements.length;
+
+        // Add active class to new image
+        heroImageElements[currentImageIndex].classList.add('active');
+      }
+
+      // Start image cycling after page load
+      window.addEventListener('load', () => {
+        // Start cycling after 5 seconds, then every 8 seconds
+        setTimeout(() => {
+          setInterval(cycleHeroImages, 8000);
+        }, 5000);
+      });
+
       // Preload critical resources
       window.addEventListener('DOMContentLoaded', () => {
         try {
-          // Preload hero section background
+          // Preload all hero section backgrounds
           if (window.Image) {
-            const heroImg = new Image();
-            heroImg.src = 'https://images.pexels.com/photos/33053824/pexels-photo-33053824.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1';
+            heroImages.forEach((src, index) => {
+              const heroImg = new Image();
+              heroImg.src = src;
+            });
 
-            // Cache other images for later sections
+            // Cache restaurant and travel images for place cards
             setTimeout(() => {
               try {
-                ['33057683', '33067204', '33048475'].forEach(id => {
+                const placeImages = [
+                  'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
+                  'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg',
+                  'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg',
+                  'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg'
+                ];
+                placeImages.forEach(src => {
                   const img = new Image();
-                  img.src = `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1`;
+                  img.src = src;
                 });
               } catch (error) {
-                console.warn('Image preloading error:', error);
+                console.warn('Place image preloading error:', error);
               }
             }, 2000);
           }
