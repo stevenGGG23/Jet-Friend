@@ -395,7 +395,7 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
             encoded_location = urllib.parse.quote_plus(location_for_search)
             encoded_address = urllib.parse.quote_plus(place_address)
 
-            # Generate smart tags and get photos
+            # Generate smart tags and get photos with enhanced image sourcing
             base_place_data = {
                 'rating': detailed_place.get('rating', place.get('rating', 0)),
                 'user_ratings_total': detailed_place.get('user_ratings_total', 0),
@@ -406,7 +406,20 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
 
             smart_tags = generate_smart_tags(base_place_data)
             category_badge = get_category_badge(place_types)
-            photos_data = get_place_photos(place_id, max_photos=6)
+
+            # Get real photos from Google Places API first (prioritize actual place photos)
+            photos_data = get_place_photos(place_id, max_photos=8)
+
+            # Determine the best hero image - prioritize real photos from the place
+            hero_image_url = None
+            if photos_data and len(photos_data) > 0:
+                # Use the largest/highest quality photo from Google Places
+                hero_image_url = photos_data[0]['urls']['hero']  # Use hero size (1600px)
+                logger.info(f"Using real photo for {place_name}: {len(photos_data)} photos found")
+            else:
+                # Fallback to category-specific high-quality stock image
+                hero_image_url = get_enhanced_fallback_image(place_name, place_types, location_for_search)
+                logger.warning(f"No real photos found for {place_name}, using fallback image")
 
             place_info = {
                 'name': place_name,
