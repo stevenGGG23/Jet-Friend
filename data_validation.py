@@ -216,12 +216,17 @@ class ImageSourcer:
         self.google_search_engine_id = google_search_engine_id
         self.session = requests.Session()
         
-        # Fallback image sources with proper licensing
+        # Fallback image sources with proper licensing - high quality versions
         self.fallback_images = {
-            'restaurant': 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg',
-            'hotel': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg',
-            'attraction': 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
-            'default': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'
+            'restaurant': 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'hotel': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'attraction': 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'bar': 'https://images.pexels.com/photos/941864/pexels-photo-941864.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'cafe': 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'museum': 'https://images.pexels.com/photos/1263986/pexels-photo-1263986.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'park': 'https://images.pexels.com/photos/1680172/pexels-photo-1680172.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'shopping': 'https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'default': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200'
         }
     
     def get_primary_image(self, place_name: str, place_types: List[str], location: str = None) -> Dict:
