@@ -4507,7 +4507,16 @@
             recentMessages.forEach(messageGroup => {
               const isUser = messageGroup.classList.contains('user-message-group');
               const messageElement = messageGroup.querySelector('.message p');
-              if (messageElement && messageElement.textContent.trim() !== 'JetFriend is thinking...') {
+              const messageText = messageElement ? messageElement.textContent.trim() : '';
+              const isThinkingMessage = [
+                'JetFriend is thinking...',
+                'One moment please...',
+                'Searching for the best options...',
+                'Almost ready...',
+                'Just a few more seconds...'
+              ].includes(messageText);
+
+              if (messageElement && !isThinkingMessage) {
                 conversationHistory.push({
                   role: isUser ? 'user' : 'assistant',
                   content: messageElement.textContent.trim()
