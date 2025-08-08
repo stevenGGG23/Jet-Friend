@@ -452,13 +452,12 @@ PHOTO USAGE:
   - Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
   - Exterior: https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg
 
-CRITICAL PLACE CARD FORMATTING:
-- Maximum width: 600px, height: 240px (compact design)
-- Use place.hero_image as background with dark overlay for text readability
+CRITICAL FORMATTING RULES:
+- Use solid, readable itinerary-item cards for ALL recommendations
+- NO transparent backgrounds or hero image overlays
 - Yellow stars (#fbbf24) for ratings
-- Semi-transparent category badge (background: rgba(255,255,255,0.2))
-- 16px spacing between cards (compact)
-- Clean, simple design - hero image background only, no photo galleries
+- Consistent spacing and readable design
+- Clean, simple design with solid card backgrounds
 
 WORKING LINKS - MUST USE REAL URLs:
 - Maps: place.google_maps_url
