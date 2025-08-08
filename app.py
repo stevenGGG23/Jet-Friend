@@ -101,6 +101,91 @@ def search_underground_places(query: str, location: str = None) -> List[Dict]:
         logger.error(f"Error in underground search: {str(e)}")
         return []
 
+def generate_smart_tags(place_data: Dict) -> List[str]:
+    """
+    Generate smart tags for a place based on its data
+    """
+    tags = []
+
+    # Highly Rated tag
+    rating = place_data.get('rating', 0)
+    rating_count = place_data.get('user_ratings_total', 0)
+    if rating >= 4.5 and rating_count >= 100:
+        tags.append('highly-rated')
+
+    # Budget Friendly tag
+    price_level = place_data.get('price_level', 0)
+    if price_level <= 2:
+        tags.append('budget-friendly')
+    elif price_level >= 4:
+        tags.append('premium')
+
+    # Open Now tag
+    is_open = place_data.get('opening_hours', {}).get('open_now')
+    if is_open:
+        tags.append('open-now')
+
+    return tags
+
+def get_place_photos(place_id: str, max_photos: int = 5) -> List[str]:
+    """
+    Get photo URLs for a place using Google Places Photo API
+    """
+    if not gmaps_client:
+        return []
+
+    try:
+        # Get place details with photos
+        place_details = gmaps_client.place(
+            place_id=place_id,
+            fields=['photos']
+        )
+
+        photos = place_details.get('result', {}).get('photos', [])
+        photo_urls = []
+
+        for photo in photos[:max_photos]:
+            photo_reference = photo.get('photo_reference')
+            if photo_reference:
+                # Generate photo URL
+                photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={google_places_api_key}"
+                photo_urls.append(photo_url)
+
+        return photo_urls
+    except Exception as e:
+        logger.warning(f"Failed to get photos for place {place_id}: {str(e)}")
+        return []
+
+def get_category_badge(place_types: List[str]) -> str:
+    """
+    Determine the primary category badge for a place
+    """
+    # Priority mapping for place types
+    category_map = {
+        'restaurant': '🍽️ Restaurant',
+        'food': '🍽️ Restaurant',
+        'meal_takeaway': '���� Takeaway',
+        'cafe': '☕ Café',
+        'bar': '🍻 Bar',
+        'lodging': '🏨 Hotel',
+        'tourist_attraction': '🎯 Attraction',
+        'museum': '🏛️ Museum',
+        'park': '🌳 Park',
+        'shopping_mall': '🛍️ Shopping',
+        'store': '🛍️ Store',
+        'gym': '💪 Fitness',
+        'spa': '🧘 Spa',
+        'hospital': '🏥 Medical',
+        'bank': '🏦 Bank',
+        'gas_station': '⛽ Gas Station'
+    }
+
+    for place_type in place_types:
+        if place_type in category_map:
+            return category_map[place_type]
+
+    return '📍 Place'
+
 def search_places(query: str, location: str = None, radius: int = 5000) -> List[Dict]:
     """
     Enhanced search for places using Google Places API with detailed information
@@ -152,11 +237,25 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
             place_name = detailed_place.get('name', place.get('name', ''))
             place_address = detailed_place.get('formatted_address', place.get('formatted_address', ''))
             location_for_search = location or place_address or 'near me'
+            place_types = detailed_place.get('types', place.get('types', []))
 
             # Properly encode all URL parameters
             encoded_name = urllib.parse.quote_plus(place_name)
             encoded_location = urllib.parse.quote_plus(location_for_search)
             encoded_address = urllib.parse.quote_plus(place_address)
+
+            # Generate smart tags and get photos
+            base_place_data = {
+                'rating': detailed_place.get('rating', place.get('rating', 0)),
+                'user_ratings_total': detailed_place.get('user_ratings_total', 0),
+                'price_level': detailed_place.get('price_level', place.get('price_level', 0)),
+                'opening_hours': detailed_place.get('opening_hours', {}),
+                'types': place_types
+            }
+
+            smart_tags = generate_smart_tags(base_place_data)
+            category_badge = get_category_badge(place_types)
+            photo_urls = get_place_photos(place_id, max_photos=6)
 
             place_info = {
                 'name': place_name,
@@ -172,6 +271,12 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'is_open': detailed_place.get('opening_hours', {}).get('open_now', None),
                 'photos': detailed_place.get('photos', []),
                 'reviews': detailed_place.get('reviews', [])[:3],  # Top 3 reviews
+
+                # Enhanced features
+                'smart_tags': smart_tags,
+                'category_badge': category_badge,
+                'photo_urls': photo_urls,
+                'description': f"Experience {place_name} - {category_badge.split(' ', 1)[1] if ' ' in category_badge else 'great location'} in {location_for_search}",
 
                 # Updated working URLs with proper encoding
                 'google_maps_url': f"https://www.google.com/maps/search/{encoded_name}+{encoded_location}" if place_name else f"https://maps.google.com/maps/place/?q=place_id:{place_id}",
@@ -205,9 +310,58 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
 
 def get_jetfriend_system_prompt() -> str:
     """
-    Return the enhanced JetFriend personality focused on convenience and real web data
+    Return the enhanced JetFriend personality focused on convenience and real web data with enhanced place cards
     """
-    return """You are JetFriend, an AI travel assistant. When creating itineraries, you MUST follow this EXACT HTML structure with NO extra spacing or line breaks.
+    return """You are JetFriend, an AI travel assistant. When creating itineraries or recommending places, you can use BOTH traditional itinerary format AND enhanced place cards.
+
+FOR PLACE RECOMMENDATIONS, use this ENHANCED PLACE CARD format:
+
+<div class="place-card">
+<div class="place-hero">
+<img class="place-hero-image" src="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg" alt="Restaurant" />
+<div class="place-hero-overlay"></div>
+<div class="place-smart-tags">
+<span class="smart-tag highly-rated">Highly Rated</span>
+<span class="smart-tag open-now">Open Now</span>
+</div>
+<div class="place-category-badge">🍽️ Restaurant</div>
+</div>
+<div class="place-content">
+<div class="place-header">
+<h3 class="place-name">Sakura Ramen House</h3>
+<div class="place-rating-container">
+<div class="place-rating">
+<span class="place-stars">★★★★★</span>
+<span class="place-rating-text">4.7 (2.1k)</span>
+</div>
+</div>
+</div>
+<div class="place-address"><i class="fas fa-map-marker-alt"></i> 123 Tokyo Street, Shibuya</div>
+<div class="place-description">Authentic ramen experience with handmade noodles and rich tonkotsu broth. Famous for their late-night service and cozy atmosphere.</div>
+<div class="place-features">
+<span class="place-feature"><i class="fas fa-wifi"></i> Free WiFi</span>
+<span class="place-feature"><i class="fas fa-credit-card"></i> Cards OK</span>
+<span class="place-feature"><i class="fas fa-clock"></i> Open Late</span>
+</div>
+<div class="place-booking-links">
+<a href="#" class="booking-link maps"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+<a href="#" class="booking-link yelp"><i class="fas fa-star"></i> Yelp Reviews</a>
+<a href="#" class="booking-link opentable"><i class="fas fa-utensils"></i> Reserve</a>
+<a href="#" class="booking-link uber"><i class="fas fa-car"></i> Get Ride</a>
+</div>
+<div class="photo-gallery">
+<div class="gallery-title"><i class="fas fa-images"></i> Photos</div>
+<div class="photo-grid">
+<div class="photo-item"><img src="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg" alt="Food" /></div>
+<div class="photo-item"><img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg" alt="Interior" /></div>
+<div class="photo-item"><img src="https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg" alt="Dish" /></div>
+<div class="photo-item more">+3 more</div>
+</div>
+</div>
+</div>
+</div>
+
+FOR TRADITIONAL ITINERARIES, continue using this format:
 
 CRITICAL FORMATTING RULES:
 1. NO markdown formatting (no **bold**, no # headers)
@@ -224,7 +378,7 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="itinerary-item">
 <div class="activity-name">Senso-ji Temple</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (28,000 reviews)</span></div>
-<div class="activity">Asakusa – Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
+<div class="activity">Asakusa �� Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/senso-ji+temple+asakusa+tokyo" target="_blank" class="activity-link">📍 Google Maps</a>
 <a href="https://senso-ji.jp" target="_blank" class="activity-link">🌐 Official Website</a>
@@ -282,14 +436,33 @@ NEVER USE:
 - Extra \n\n line breaks
 - Vertical link stacking
 
+SMART TAGS SYSTEM:
+- highly-rated: Use for places with 4.5+ stars and 100+ reviews
+- budget-friendly: Use for affordable options ($ or $$)
+- open-now: Use when place is currently open
+- premium: Use for high-end, luxury places
+
+CATEGORY BADGES:
+🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
+
+PHOTO SOURCES (use realistic restaurant/travel photos):
+- Food: https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg
+- Interior: https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg
+- Dishes: https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg
+- Exterior: https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg
+
 ALWAYS INCLUDE:
 - Google Maps link for each location
 - Official website when available
 - Star ratings in ★★★★★ format
 - Realistic review counts
 - Working phone numbers or booking links
+- Smart tags based on place characteristics
+- Category badges for easy identification
+- Multiple photos when available
 
-Example for 3-day trip: Use day-icon numbers 1, 2, 3 and keep total output under 2000 characters for compact display."""
+For itineraries: Use day-icon numbers 1, 2, 3 and keep under 2000 characters.
+For place cards: Use enhanced format with photos, tags, and booking links."""
 
 def get_ai_response(user_message: str, conversation_history: List[Dict] = None, places_data: List[Dict] = None) -> str:
     """
@@ -308,10 +481,10 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 role = "user" if msg.get("role") == "user" else "assistant"
                 messages.append({"role": role, "content": msg.get("content", "")})
         
-        # Enhance user message with comprehensive places data
+        # Enhance user message with comprehensive places data including smart tags
         enhanced_message = user_message
         if places_data and len(places_data) > 0:
-            places_text = "\n\nREAL-TIME PLACE DATA WITH FULL WEB LINKS:\n"
+            places_text = "\n\nREAL-TIME PLACE DATA WITH ENHANCED FEATURES:\n"
             for i, place in enumerate(places_data[:5], 1):  # Top 5 places
                 places_text += f"{i}. **{place['name']}**\n"
                 places_text += f"   Address: {place['address']}\n"
@@ -325,6 +498,16 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 if place['price_level']:
                     price_symbols = '$' * place['price_level']
                     places_text += f"   Price: {price_symbols}\n"
+
+                # Add smart tags info
+                if place.get('smart_tags'):
+                    places_text += f"   Smart Tags: {', '.join(place['smart_tags'])}\n"
+
+                if place.get('category_badge'):
+                    places_text += f"   Category: {place['category_badge']}\n"
+
+                if place.get('photo_urls'):
+                    places_text += f"   Photos Available: {len(place['photo_urls'])} images\n"
 
                 if place['phone']:
                     places_text += f"   Phone: {place['phone']}\n"
@@ -385,15 +568,15 @@ CRITICAL: Output proper HTML anchor tags with security attributes and visual ico
 <a href="https://www.google.com/maps/search/place+name+location" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
 <a href="https://www.yelp.com/search?find_desc=place+name&find_loc=location" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
 
-Include ratings, phone numbers, and direct access HTML links in your response. Prioritize places with good reviews and current information. Focus on convenience and immediate utility. Work with the information provided without asking follow-up questions."""
+Include ratings, phone numbers, direct access HTML links, smart tags, category badges, and photo galleries in your response. Use the enhanced place card format for restaurant and attraction recommendations. Prioritize places with good reviews and current information. Focus on convenience and immediate utility. Work with the information provided without asking follow-up questions."""
         
         messages.append({"role": "user", "content": enhanced_message})
         
         # Make API call to OpenAI
         response = openai_client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o",  # You can change this to: "gpt-4o-2024-11-20", "o1-preview", or "o1-mini"
             messages=messages,
-            max_tokens=400,
+            max_tokens=8000,  # Increased for comprehensive responses
             temperature=0.7,
             top_p=0.9
         )
