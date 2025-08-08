@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetFriend Thinking Messages Test</title>
+    <style>
+        body {
+            background: #0a0a1a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+        }
+
+        .demo-container {
+            max-width: 600px;
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        h1 {
+            color: #8b5cf6;
+            margin-bottom: 30px;
+        }
+
+        .thinking-demo {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(51, 65, 85, 0.7));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #e2e8f0;
+            font-size: 15px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease-in-out;
+            animation: subtlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .controls {
+            margin: 20px 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #8b5cf6, #60a5fa);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .info {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .info h3 {
+            color: #8b5cf6;
+            margin-bottom: 15px;
+        }
+
+        .info ul {
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .timing {
+            color: #60a5fa;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🤖 JetFriend Thinking Messages Demo</h1>
+        
+        <div class="thinking-demo" id="thinkingMessage">
+            JetFriend is thinking...
+        </div>
+        
+        <div class="controls">
+            <button onclick="startDemo()">▶️ Start Demo</button>
+            <button onclick="stopDemo()">⏹️ Stop Demo</button>
+            <button onclick="resetDemo()">🔄 Reset</button>
+        </div>
+        
+        <div class="timing" id="timing">
+            Next message change in: <span id="countdown">6</span> seconds
+        </div>
+        
+        <div class="info">
+            <h3>✨ How It Works:</h3>
+            <ul>
+                <li><strong>Prevents Freeze Anxiety:</strong> Shows the system is actively processing</li>
+                <li><strong>6-Second Intervals:</strong> Changes message every 6 seconds</li>
+                <li><strong>Variety of Messages:</strong> 5 different encouraging messages</li>
+                <li><strong>Smooth Transitions:</strong> Subtle animation keeps it engaging</li>
+                <li><strong>Auto-Cleanup:</strong> Stops when real response arrives</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let messageIndex = 0;
+        let messageInterval = null;
+        let countdownInterval = null;
+        let countdownSeconds = 6;
+
+        const thinkingMessages = [
+            'JetFriend is thinking...',
+            'One moment please...',
+            'Searching for the best options...',
+            'Almost ready...',
+            'Just a few more seconds...'
+        ];
+
+        const messageElement = document.getElementById('thinkingMessage');
+        const countdownElement = document.getElementById('countdown');
+
+        function updateMessage() {
+            messageIndex = (messageIndex + 1) % thinkingMessages.length;
+            messageElement.textContent = thinkingMessages[messageIndex];
+            countdownSeconds = 6; // Reset countdown
+        }
+
+        function updateCountdown() {
+            countdownSeconds--;
+            countdownElement.textContent = countdownSeconds;
+            
+            if (countdownSeconds <= 0) {
+                countdownSeconds = 6;
+            }
+        }
+
+        function startDemo() {
+            stopDemo(); // Clear any existing intervals
+            
+            // Start message rotation
+            messageInterval = setInterval(updateMessage, 6000);
+            
+            // Start countdown
+            countdownInterval = setInterval(updateCountdown, 1000);
+            
+            // Reset to first message
+            messageIndex = 0;
+            messageElement.textContent = thinkingMessages[0];
+            countdownSeconds = 6;
+            countdownElement.textContent = countdownSeconds;
+        }
+
+        function stopDemo() {
+            if (messageInterval) {
+                clearInterval(messageInterval);
+                messageInterval = null;
+            }
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }
+
+        function resetDemo() {
+            stopDemo();
+            messageIndex = 0;
+            messageElement.textContent = thinkingMessages[0];
+            countdownSeconds = 6;
+            countdownElement.textContent = countdownSeconds;
+        }
+
+        // Auto-start demo
+        window.addEventListener('load', startDemo);
+    </script>
+</body>
+</html>
