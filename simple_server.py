@@ -243,11 +243,25 @@ if __name__ == "__main__":
     class ReusableTCPServer(socketserver.TCPServer):
         allow_reuse_address = True
 
-    with ReusableTCPServer(("", port), JetFriendHandler) as httpd:
-        print(f"🚀 JetFriend API starting on port {port}")
-        print(f"🌐 Visit: http://localhost:{port}")
-        if os.getenv("GEMINI_API_KEY"):
-            print("✅ Gemini AI integration enabled")
-        else:
-            print("⚠️  Gemini AI integration disabled - no API key found")
-        httpd.serve_forever()
+    # Try to start server, if port busy try next port
+    max_attempts = 10
+    for attempt in range(max_attempts):
+        try:
+            with ReusableTCPServer(("", port), JetFriendHandler) as httpd:
+                print(f"🚀 JetFriend API starting on port {port}")
+                print(f"🌐 Visit: http://localhost:{port}")
+                if os.getenv("GEMINI_API_KEY"):
+                    print("✅ Gemini AI integration enabled")
+                else:
+                    print("⚠️  Gemini AI integration disabled - no API key found")
+                httpd.serve_forever()
+                break
+        except OSError as e:
+            if e.errno == 98:  # Address already in use
+                print(f"⚠️  Port {port} is busy, trying port {port + 1}")
+                port += 1
+                if attempt == max_attempts - 1:
+                    print(f"❌ Could not find available port after {max_attempts} attempts")
+                    exit(1)
+            else:
+                raise e
