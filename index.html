@@ -931,7 +931,7 @@
         height: 200px; /* Increased for better image display */
         width: 100%;
         overflow: hidden;
-        background: linear-gradient(135deg, #1e293b, #334155);
+        background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
         flex-shrink: 0;
         border-radius: 12px 12px 0 0; /* Match card border radius */
       }
@@ -950,9 +950,19 @@
         width: 100%;
         height: 100%;
         object-fit: cover; /* Ensures consistent aspect ratio */
-        transition: transform 0.6s ease;
+        transition: transform 0.6s ease, opacity 0.3s ease;
         filter: brightness(0.8);
         display: block; /* Remove any inline spacing */
+        opacity: 0; /* Start hidden, fade in when loaded */
+        z-index: 2;
+      }
+
+      .place-hero-image.loaded {
+        opacity: 1;
+      }
+
+      .place-hero-image.error {
+        display: none;
       }
 
       .place-hero::before {
@@ -972,6 +982,11 @@
         filter: brightness(1);
       }
 
+      .place-card:hover .place-hero {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
       /* Specific styling for place-hero within itinerary-item cards */
       .itinerary-item .place-hero {
         height: 180px; /* Slightly smaller for itinerary cards */
@@ -984,6 +999,56 @@
         filter: brightness(0.9);
       }
 
+      .itinerary-item:hover .place-hero {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Loading skeleton animation */
+      .place-hero-skeleton {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.4) 50%,
+          rgba(255, 255, 255, 0) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        z-index: 1;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      .place-hero-skeleton.hidden {
+        display: none;
+      }
+
+      /* Fallback emoji icon */
+      .place-hero-fallback {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 48px;
+        z-index: 3;
+        display: none;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .place-hero-fallback.show {
+        display: block;
+      }
+
       .place-hero-overlay {
         position: absolute;
         top: 0;
@@ -991,7 +1056,7 @@
         width: 100%;
         height: 100%;
         background: transparent;
-        z-index: 2;
+        z-index: 4;
         pointer-events: none;
       }
 
