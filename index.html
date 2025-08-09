@@ -4398,6 +4398,104 @@
           }
         }
 
+        // Place hero image handling functions
+        function initializePlaceHeroImages(container) {
+          const placeHeroContainers = container.querySelectorAll('.place-hero');
+
+          placeHeroContainers.forEach(heroContainer => {
+            const existingImage = heroContainer.querySelector('.place-hero-image');
+
+            if (existingImage) {
+              // Add skeleton animation while loading
+              addSkeletonAnimation(heroContainer);
+
+              // Add fallback icon
+              addFallbackIcon(heroContainer);
+
+              // Set up image loading handlers
+              setupImageHandlers(existingImage, heroContainer);
+            }
+          });
+        }
+
+        function addSkeletonAnimation(heroContainer) {
+          const skeleton = document.createElement('div');
+          skeleton.className = 'place-hero-skeleton';
+          heroContainer.appendChild(skeleton);
+        }
+
+        function addFallbackIcon(heroContainer) {
+          const fallback = document.createElement('div');
+          fallback.className = 'place-hero-fallback';
+
+          // Determine appropriate emoji based on context
+          const activityName = heroContainer.parentElement?.querySelector('.activity-name')?.textContent || '';
+          const activityText = heroContainer.parentElement?.querySelector('.activity')?.textContent || '';
+
+          let emoji = '🏞️'; // Default landscape
+
+          if (activityName.toLowerCase().includes('restaurant') || activityText.toLowerCase().includes('food') || activityText.toLowerCase().includes('dining')) {
+            emoji = '🍽️';
+          } else if (activityName.toLowerCase().includes('hotel') || activityText.toLowerCase().includes('hotel') || activityText.toLowerCase().includes('accommodation')) {
+            emoji = '🏨';
+          } else if (activityName.toLowerCase().includes('temple') || activityName.toLowerCase().includes('shrine') || activityText.toLowerCase().includes('temple')) {
+            emoji = '⛩️';
+          } else if (activityName.toLowerCase().includes('museum') || activityText.toLowerCase().includes('museum') || activityText.toLowerCase().includes('art')) {
+            emoji = '🏛️';
+          } else if (activityName.toLowerCase().includes('park') || activityText.toLowerCase().includes('park') || activityText.toLowerCase().includes('garden')) {
+            emoji = '🌳';
+          } else if (activityName.toLowerCase().includes('tower') || activityName.toLowerCase().includes('skytree') || activityText.toLowerCase().includes('tower')) {
+            emoji = '🗼';
+          } else if (activityText.toLowerCase().includes('shopping') || activityText.toLowerCase().includes('market')) {
+            emoji = '🛍️';
+          } else if (activityText.toLowerCase().includes('bar') || activityText.toLowerCase().includes('drink')) {
+            emoji = '🍺';
+          }
+
+          fallback.textContent = emoji;
+          heroContainer.appendChild(fallback);
+        }
+
+        function setupImageHandlers(image, heroContainer) {
+          const skeleton = heroContainer.querySelector('.place-hero-skeleton');
+          const fallback = heroContainer.querySelector('.place-hero-fallback');
+
+          // Show skeleton initially
+          if (skeleton) {
+            skeleton.classList.remove('hidden');
+          }
+
+          // Handle successful image load
+          image.addEventListener('load', function() {
+            this.classList.add('loaded');
+            if (skeleton) {
+              skeleton.classList.add('hidden');
+            }
+            if (fallback) {
+              fallback.classList.remove('show');
+            }
+          });
+
+          // Handle image error
+          image.addEventListener('error', function() {
+            this.classList.add('error');
+            if (skeleton) {
+              skeleton.classList.add('hidden');
+            }
+            if (fallback) {
+              fallback.classList.add('show');
+            }
+          });
+
+          // If image is already loaded (cached), trigger load event
+          if (image.complete && image.naturalHeight !== 0) {
+            image.dispatchEvent(new Event('load'));
+          } else if (image.complete) {
+            // Image failed to load
+            image.dispatchEvent(new Event('error'));
+          }
+        }
+
 
 
                 // Test API button functionality
