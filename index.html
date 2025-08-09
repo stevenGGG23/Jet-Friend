@@ -795,20 +795,15 @@
           background: linear-gradient(135deg, rgba(51, 65, 85, 0.6), rgba(71, 85, 105, 0.4));
           border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 12px;
-          padding: 12px;
+          padding: 18px;
           margin: 8px 0;
           backdrop-filter: blur(15px);
           max-width: 100%;
           text-align: left;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-          transition: all 0.2s ease;
+          transition: all 0.3s ease;
       }
 
-      .itinerary-item:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-          border-color: rgba(6, 182, 212, 0.3);
-      }
 
       .day-header {
           color: #06b6d4;
@@ -849,24 +844,32 @@
       }
 
       .activity-name {
-          font-size: 15px;
-          font-weight: 600;
+          font-size: 20px;
+          font-weight: 700;
           color: white;
-          margin-bottom: 6px;
+          margin-bottom: 8px;
           line-height: 1.3;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          letter-spacing: -0.02em;
       }
 
       .activity-rating {
           display: flex;
           align-items: center;
-          gap: 6px;
-          margin-bottom: 8px;
+          gap: 8px;
+          margin-bottom: 10px;
       }
 
       .stars {
-          color: #fbbf24;
-          font-size: 13px;
+          color: #f59e0b;
+          background: linear-gradient(45deg, #f59e0b, #fbbf24);
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-size: 16px;
           line-height: 1;
+          text-shadow: 0 1px 2px rgba(245, 158, 11, 0.3);
+          filter: drop-shadow(0 1px 1px rgba(245, 158, 11, 0.2));
       }
 
       .rating-text {
@@ -912,7 +915,7 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         margin: 16px 0;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(20px);
         position: relative;
         box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
@@ -920,20 +923,15 @@
         flex-direction: column;
       }
 
-      .place-card:hover {
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2), 0 0 30px rgba(139, 92, 246, 0.1);
-        border-color: rgba(6, 182, 212, 0.3);
-      }
 
       .place-hero {
         position: relative;
-        height: 200px; /* Increased for better image display */
+        height: 240px; /* Increased for better visual impact */
         width: 100%;
         overflow: hidden;
         background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
         flex-shrink: 0;
-        border-radius: 12px 12px 0 0; /* Match card border radius */
+        border-radius: 12px 12px 0 0; /* Rounded corners only on top */
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
@@ -951,7 +949,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover; /* Ensures consistent aspect ratio */
-        transition: transform 0.6s ease, opacity 0.3s ease;
+        transition: transform 0.3s ease, opacity 0.3s ease;
         filter: brightness(0.8);
         display: block; /* Remove any inline spacing */
         opacity: 0; /* Start hidden, fade in when loaded */
@@ -979,31 +977,31 @@
       }
 
       .place-card:hover .place-hero-image {
-        transform: scale(1.1);
+        transform: scale(1.08);
         filter: brightness(1);
       }
 
-      .place-card:hover .place-hero {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      .place-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25), 0 0 30px rgba(139, 92, 246, 0.15);
       }
 
       /* Specific styling for place-hero within itinerary-item cards */
       .itinerary-item .place-hero {
-        height: 180px; /* Slightly smaller for itinerary cards */
-        margin-bottom: 12px;
-        border-radius: 8px; /* Rounded corners for better integration */
+        height: 220px; /* Increased height for better visual impact */
+        margin-bottom: 16px;
+        border-radius: 12px 12px 0 0; /* Rounded corners only on top */
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
       .itinerary-item:hover .place-hero-image {
-        transform: scale(1.05);
+        transform: scale(1.06);
         filter: brightness(0.9);
       }
 
-      .itinerary-item:hover .place-hero {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      .itinerary-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(6, 182, 212, 0.1);
       }
 
       /* Loading skeleton animation */
