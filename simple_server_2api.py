@@ -369,27 +369,33 @@ if __name__ == "__main__":
 
     # Try to start server, if port busy try next port
     max_attempts = 10
+    started = False
+
     for attempt in range(max_attempts):
         try:
-            with ReusableTCPServer(("", port), JetFriendHandler) as httpd:
-                print(f"🚀 JetFriend API (2-API Version) starting on port {port}")
-                print(f"🌐 Visit: http://localhost:{port}")
-                
-                # Check API configuration
-                openai_configured = bool(os.getenv("OPENAI_API_KEY") and os.getenv("OPENAI_API_KEY") != "your-openai-key-here")
-                google_configured = bool(os.getenv("GOOGLE_PLACES_API_KEY") and os.getenv("GOOGLE_PLACES_API_KEY") != "your-google-places-key-here")
-                
-                print(f"🤖 OpenAI ChatGPT: {'✅ Connected' if openai_configured else '❌ Not configured'}")
-                print(f"📍 Google Places: {'✅ Connected' if google_configured else '❌ Not configured'}")
-                print(f"📸 Images: {'✅ Google Photos API' if google_configured else '❌ Limited to fallback'}")
-                
-                if not openai_configured:
-                    print("⚠️  Set OPENAI_API_KEY for AI chat functionality")
-                if not google_configured:
-                    print("⚠️  Set GOOGLE_PLACES_API_KEY for location & image features")
-                
-                httpd.serve_forever()
-                break
+            httpd = ReusableTCPServer(("", port), JetFriendHandler)
+            print(f"🚀 JetFriend API (2-API Version) starting on port {port}")
+            print(f"🌐 Visit: http://localhost:{port}")
+            print(f"📊 Server status: RUNNING on 0.0.0.0:{port}")
+
+            # Check API configuration
+            openai_configured = bool(os.getenv("OPENAI_API_KEY") and os.getenv("OPENAI_API_KEY") != "your-openai-key-here")
+            google_configured = bool(os.getenv("GOOGLE_PLACES_API_KEY") and os.getenv("GOOGLE_PLACES_API_KEY") != "your-google-places-key-here")
+
+            print(f"🤖 OpenAI ChatGPT: {'✅ Connected' if openai_configured else '❌ Not configured'}")
+            print(f"📍 Google Places: {'✅ Connected' if google_configured else '❌ Not configured'}")
+            print(f"📸 Images: {'✅ Google Photos API' if google_configured else '❌ Limited to fallback'}")
+
+            if not openai_configured:
+                print("⚠️  Set OPENAI_API_KEY for AI chat functionality")
+            if not google_configured:
+                print("⚠️  Set GOOGLE_PLACES_API_KEY for location & image features")
+
+            print(f"🔄 Ready to accept requests on port {port}")
+            started = True
+            httpd.serve_forever()
+            break
+
         except OSError as e:
             if e.errno == 98:  # Address already in use
                 print(f"⚠️  Port {port} is busy, trying port {port + 1}")
@@ -398,4 +404,15 @@ if __name__ == "__main__":
                     print(f"❌ Could not find available port after {max_attempts} attempts")
                     exit(1)
             else:
+                print(f"❌ Server error: {e}")
                 raise e
+        except KeyboardInterrupt:
+            print("\n🛑 Server stopped by user")
+            break
+        except Exception as e:
+            print(f"❌ Unexpected error: {e}")
+            break
+
+    if not started:
+        print("❌ Failed to start server")
+        exit(1)
