@@ -458,29 +458,6 @@
         }
       }
 
-      .hero-text-container {
-        margin-bottom: 50px;
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-        min-height: 120px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        animation: heroSlideUp 1s ease-out 0.3s both;
-      }
-
-      .hero-animated-text {
-        font-size: 1.4rem;
-        color: rgba(255, 255, 255, 0.95);
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        font-weight: 400;
-        text-align: center;
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-        line-height: 1.6;
-      }
 
       /* Typewriter Effect */
       .typewriter {
@@ -795,20 +772,15 @@
           background: linear-gradient(135deg, rgba(51, 65, 85, 0.6), rgba(71, 85, 105, 0.4));
           border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 12px;
-          padding: 12px;
+          padding: 18px;
           margin: 8px 0;
           backdrop-filter: blur(15px);
           max-width: 100%;
           text-align: left;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-          transition: all 0.2s ease;
+          transition: all 0.3s ease;
       }
 
-      .itinerary-item:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-          border-color: rgba(6, 182, 212, 0.3);
-      }
 
       .day-header {
           color: #06b6d4;
@@ -849,24 +821,32 @@
       }
 
       .activity-name {
-          font-size: 15px;
-          font-weight: 600;
+          font-size: 20px;
+          font-weight: 700;
           color: white;
-          margin-bottom: 6px;
+          margin-bottom: 8px;
           line-height: 1.3;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          letter-spacing: -0.02em;
       }
 
       .activity-rating {
           display: flex;
           align-items: center;
-          gap: 6px;
-          margin-bottom: 8px;
+          gap: 8px;
+          margin-bottom: 10px;
       }
 
       .stars {
-          color: #fbbf24;
-          font-size: 13px;
+          color: #f59e0b;
+          background: linear-gradient(45deg, #f59e0b, #fbbf24);
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-size: 16px;
           line-height: 1;
+          text-shadow: 0 1px 2px rgba(245, 158, 11, 0.3);
+          filter: drop-shadow(0 1px 1px rgba(245, 158, 11, 0.2));
       }
 
       .rating-text {
@@ -912,7 +892,7 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         margin: 16px 0;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(20px);
         position: relative;
         box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
@@ -920,20 +900,16 @@
         flex-direction: column;
       }
 
-      .place-card:hover {
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2), 0 0 30px rgba(139, 92, 246, 0.1);
-        border-color: rgba(6, 182, 212, 0.3);
-      }
 
       .place-hero {
         position: relative;
-        height: 200px; /* Increased for better image display */
+        height: 240px; /* Increased for better visual impact */
         width: 100%;
         overflow: hidden;
-        background: linear-gradient(135deg, #1e293b, #334155);
+        background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
         flex-shrink: 0;
-        border-radius: 12px 12px 0 0; /* Match card border radius */
+        border-radius: 12px 12px 0 0; /* Rounded corners only on top */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
       .place-hero::after {
@@ -950,9 +926,19 @@
         width: 100%;
         height: 100%;
         object-fit: cover; /* Ensures consistent aspect ratio */
-        transition: transform 0.6s ease;
+        transition: transform 0.3s ease, opacity 0.3s ease;
         filter: brightness(0.8);
         display: block; /* Remove any inline spacing */
+        opacity: 0; /* Start hidden, fade in when loaded */
+        z-index: 2;
+      }
+
+      .place-hero-image.loaded {
+        opacity: 1;
+      }
+
+      .place-hero-image.error {
+        display: none;
       }
 
       .place-hero::before {
@@ -968,20 +954,76 @@
       }
 
       .place-card:hover .place-hero-image {
-        transform: scale(1.1);
+        transform: scale(1.08);
         filter: brightness(1);
+      }
+
+      .place-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25), 0 0 30px rgba(139, 92, 246, 0.15);
       }
 
       /* Specific styling for place-hero within itinerary-item cards */
       .itinerary-item .place-hero {
-        height: 180px; /* Slightly smaller for itinerary cards */
-        margin-bottom: 12px;
-        border-radius: 8px; /* Rounded corners for better integration */
+        height: 220px; /* Increased height for better visual impact */
+        margin-bottom: 16px;
+        border-radius: 12px 12px 0 0; /* Rounded corners only on top */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
       .itinerary-item:hover .place-hero-image {
-        transform: scale(1.05);
+        transform: scale(1.06);
         filter: brightness(0.9);
+      }
+
+      .itinerary-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(6, 182, 212, 0.1);
+      }
+
+      /* Loading skeleton animation */
+      .place-hero-skeleton {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.4) 50%,
+          rgba(255, 255, 255, 0) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        z-index: 1;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      .place-hero-skeleton.hidden {
+        display: none;
+      }
+
+      /* Fallback emoji icon */
+      .place-hero-fallback {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 48px;
+        z-index: 3;
+        display: none;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .place-hero-fallback.show {
+        display: block;
       }
 
       .place-hero-overlay {
@@ -991,7 +1033,7 @@
         width: 100%;
         height: 100%;
         background: transparent;
-        z-index: 2;
+        z-index: 4;
         pointer-events: none;
       }
 
@@ -1426,6 +1468,7 @@
         max-height: 500px;
         overflow-y: auto;
         padding: 30px;
+        margin-top: -3px;
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -2968,10 +3011,6 @@
           "
         />
                 <h1>Your AI Travel<br />Companion</h1>
-        <div class="hero-text-container">
-          <p id="heroText" class="hero-animated-text">
-          </p>
-        </div>
 
                 <div class="hero-chatbot-container">
           <div class="chat-messages" id="chatMessages">
@@ -3877,7 +3916,7 @@
 
                 const responses = {
             'price-drop': "I'll monitor flight prices for you! Setting up alerts now...",
-            'translate': "\"I don't eat meat\" in Japanese is \"私は肉を食べません\" (Watashi wa niku wo tabemasen).",
+            'translate': "\"I don't eat meat\" in Japanese is \"私は肉を食���ません\" (Watashi wa niku wo tabemasen).",
             'local-tips': "Great choice! Japan tips: Bow when greeting, remove shoes indoors, don't tip at restaurants, and always carry cash!",
             'emergency': "Emergency numbers: Police 110, Fire/Ambulance 119. Download Google Translate offline for Japanese. Keep hotel card with you!"
         };
@@ -4251,7 +4290,21 @@
       document.addEventListener('DOMContentLoaded', function() {
         console.log('🚀 Initializing JetFriend interface...');
 
+        // Initialize any existing place hero images on page load
+        const existingPlaceHeros = document.querySelectorAll('.place-hero');
+        existingPlaceHeros.forEach(heroContainer => {
+          const existingImage = heroContainer.querySelector('.place-hero-image');
+          if (existingImage && !heroContainer.querySelector('.place-hero-skeleton')) {
+            // Add skeleton animation while loading
+            addSkeletonAnimation(heroContainer);
 
+            // Add fallback icon
+            addFallbackIcon(heroContainer);
+
+            // Set up image loading handlers
+            setupImageHandlers(existingImage, heroContainer);
+          }
+        });
 
                 // Get all required elements
         const sendButton = document.getElementById('sendButton');
@@ -4320,11 +4373,114 @@
             chatMessages.appendChild(messageGroup);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
+            // Initialize image loading handling for place hero images
+            if (type === 'ai') {
+              initializePlaceHeroImages(messageGroup);
+            }
+
             console.log(`✅ Message added: ${type} - ${message.substring(0, 50)}...`);
             return messageGroup;
           } catch (error) {
             console.error('❌ Error adding message to chat:', error);
             return null;
+          }
+        }
+
+        // Place hero image handling functions
+        function initializePlaceHeroImages(container) {
+          const placeHeroContainers = container.querySelectorAll('.place-hero');
+
+          placeHeroContainers.forEach(heroContainer => {
+            const existingImage = heroContainer.querySelector('.place-hero-image');
+
+            if (existingImage) {
+              // Add skeleton animation while loading
+              addSkeletonAnimation(heroContainer);
+
+              // Add fallback icon
+              addFallbackIcon(heroContainer);
+
+              // Set up image loading handlers
+              setupImageHandlers(existingImage, heroContainer);
+            }
+          });
+        }
+
+        function addSkeletonAnimation(heroContainer) {
+          const skeleton = document.createElement('div');
+          skeleton.className = 'place-hero-skeleton';
+          heroContainer.appendChild(skeleton);
+        }
+
+        function addFallbackIcon(heroContainer) {
+          const fallback = document.createElement('div');
+          fallback.className = 'place-hero-fallback';
+
+          // Determine appropriate emoji based on context
+          const activityName = heroContainer.parentElement?.querySelector('.activity-name')?.textContent || '';
+          const activityText = heroContainer.parentElement?.querySelector('.activity')?.textContent || '';
+
+          let emoji = '🏞️'; // Default landscape
+
+          if (activityName.toLowerCase().includes('restaurant') || activityText.toLowerCase().includes('food') || activityText.toLowerCase().includes('dining')) {
+            emoji = '🍽️';
+          } else if (activityName.toLowerCase().includes('hotel') || activityText.toLowerCase().includes('hotel') || activityText.toLowerCase().includes('accommodation')) {
+            emoji = '🏨';
+          } else if (activityName.toLowerCase().includes('temple') || activityName.toLowerCase().includes('shrine') || activityText.toLowerCase().includes('temple')) {
+            emoji = '⛩️';
+          } else if (activityName.toLowerCase().includes('museum') || activityText.toLowerCase().includes('museum') || activityText.toLowerCase().includes('art')) {
+            emoji = '🏛️';
+          } else if (activityName.toLowerCase().includes('park') || activityText.toLowerCase().includes('park') || activityText.toLowerCase().includes('garden')) {
+            emoji = '🌳';
+          } else if (activityName.toLowerCase().includes('tower') || activityName.toLowerCase().includes('skytree') || activityText.toLowerCase().includes('tower')) {
+            emoji = '🗼';
+          } else if (activityText.toLowerCase().includes('shopping') || activityText.toLowerCase().includes('market')) {
+            emoji = '🛍️';
+          } else if (activityText.toLowerCase().includes('bar') || activityText.toLowerCase().includes('drink')) {
+            emoji = '🍺';
+          }
+
+          fallback.textContent = emoji;
+          heroContainer.appendChild(fallback);
+        }
+
+        function setupImageHandlers(image, heroContainer) {
+          const skeleton = heroContainer.querySelector('.place-hero-skeleton');
+          const fallback = heroContainer.querySelector('.place-hero-fallback');
+
+          // Show skeleton initially
+          if (skeleton) {
+            skeleton.classList.remove('hidden');
+          }
+
+          // Handle successful image load
+          image.addEventListener('load', function() {
+            this.classList.add('loaded');
+            if (skeleton) {
+              skeleton.classList.add('hidden');
+            }
+            if (fallback) {
+              fallback.classList.remove('show');
+            }
+          });
+
+          // Handle image error
+          image.addEventListener('error', function() {
+            this.classList.add('error');
+            if (skeleton) {
+              skeleton.classList.add('hidden');
+            }
+            if (fallback) {
+              fallback.classList.add('show');
+            }
+          });
+
+          // If image is already loaded (cached), trigger load event
+          if (image.complete && image.naturalHeight !== 0) {
+            image.dispatchEvent(new Event('load'));
+          } else if (image.complete) {
+            // Image failed to load
+            image.dispatchEvent(new Event('error'));
           }
         }
 
