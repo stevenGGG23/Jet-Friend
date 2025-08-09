@@ -4318,7 +4318,21 @@
       document.addEventListener('DOMContentLoaded', function() {
         console.log('🚀 Initializing JetFriend interface...');
 
+        // Initialize any existing place hero images on page load
+        const existingPlaceHeros = document.querySelectorAll('.place-hero');
+        existingPlaceHeros.forEach(heroContainer => {
+          const existingImage = heroContainer.querySelector('.place-hero-image');
+          if (existingImage && !heroContainer.querySelector('.place-hero-skeleton')) {
+            // Add skeleton animation while loading
+            addSkeletonAnimation(heroContainer);
 
+            // Add fallback icon
+            addFallbackIcon(heroContainer);
+
+            // Set up image loading handlers
+            setupImageHandlers(existingImage, heroContainer);
+          }
+        });
 
                 // Get all required elements
         const sendButton = document.getElementById('sendButton');
