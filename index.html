@@ -4385,6 +4385,11 @@
             chatMessages.appendChild(messageGroup);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
+            // Initialize image loading handling for place hero images
+            if (type === 'ai') {
+              initializePlaceHeroImages(messageGroup);
+            }
+
             console.log(`✅ Message added: ${type} - ${message.substring(0, 50)}...`);
             return messageGroup;
           } catch (error) {
