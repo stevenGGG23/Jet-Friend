@@ -336,7 +336,7 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
                     location = location_match.group(1).strip() if location_match else None
                     
                     # Search for places
-                    places_data = search_places_google(user_message, location)
+                    places_data = search_places_keyword(user_message, location)
                 
                 # Get AI response with places data
                 ai_response = get_ai_response_openai(user_message, conversation_history, places_data)
