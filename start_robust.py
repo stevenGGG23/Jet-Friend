@@ -33,9 +33,9 @@ def start_server():
         # Set port to 5002
         os.environ['PORT'] = '5002'
         
-        # Import and run server
-        import simple_server_2api
-        print("✅ Server module imported successfully")
+        # Execute the server file directly
+        exec(open('simple_server_2api.py').read())
+        print("✅ Server started successfully")
         
     except Exception as e:
         print(f"❌ Error starting server: {e}")
