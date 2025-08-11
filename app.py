@@ -362,7 +362,9 @@ def get_enhanced_fallback_image(place_name: str, place_types: List[str], locatio
     }
 
     # Determine category and select appropriate image
-    if 'restaurant' in place_types_str or 'food' in place_types_str or 'meal_takeaway' in place_types_str:
+    if 'pizza' in place_name.lower() or 'pizzeria' in place_name.lower():
+        images = fallback_images['pizza']
+    elif 'restaurant' in place_types_str or 'food' in place_types_str or 'meal_takeaway' in place_types_str:
         images = fallback_images['restaurant']
     elif 'bar' in place_types_str or 'night_club' in place_types_str:
         images = fallback_images['bar']
