@@ -601,146 +601,55 @@ CRITICAL DISPLAY RULES:
 1. For ANY location-related query (restaurants, hotels, attractions, activities, places), you MUST use the hero card format with itinerary-item cards
 2. For basic questions (like "what time is it" or "how to say hello"), use regular text responses
 3. NEVER display dead links or empty buttons - only show links that actually work
-4. SINGULAR vs PLURAL: If user asks for "a pizza place" or "a restaurant" (singular), show ONLY 1 place. If they ask for "pizza places" or "restaurants" (plural), show multiple places.
+4. ALWAYS use the EXACT hero_image URL provided in the place data - DO NOT use placeholder images
 
-FOR ALL LOCATION RECOMMENDATIONS (restaurants, hotels, attractions, activities), use this CONSISTENT HERO CARD format:
-
-CRITICAL FORMATTING RULES:
-1. NO markdown formatting (no **bold**, no # headers)
-2. NO extra line breaks between elements
-3. NO inline styles - only use CSS classes
-4. Each activity must be wrapped in ONE compact itinerary-item div
-5. Maximum ONE line break between activities
-6. Links must be horizontal in activity-links div
-
-MANDATORY HTML TEMPLATE (copy this structure exactly):
+FOR ALL LOCATION RECOMMENDATIONS, use this EXACT HTML structure:
 
 <div class="itinerary-container">
-<div class="day-header"><span class="day-icon">1</span>Day 1: Tokyo – Culture and Landmarks</div>
 <div class="itinerary-item">
 <div class="place-hero">
-<img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Senso-ji Temple" class="place-hero-image" loading="lazy">
+<img src="[USE THE EXACT hero_image URL FROM PLACE DATA]" alt="[place name]" class="place-hero-image" loading="lazy">
 </div>
 <div class="activity-header">
-<div class="activity-name">Senso-ji Temple</div>
-<div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (28,000 reviews)</span></div>
+<span class="activity-name">[Place Name]</span>
+<div class="activity-rating"><span class="stars">★★★★★</span> <span class="rating-text">[rating] ([count] reviews)</span></div>
 </div>
-<div class="activity">Asakusa - Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
+<div class="activity">[Brief description - address and highlights]</div>
 <div class="activity-links">
-<a href="https://www.google.com/maps/search/senso-ji+temple+asakusa+tokyo" target="_blank" class="activity-link">📍 Google Maps</a>
-<a href="https://senso-ji.jp" target="_blank" class="activity-link">🌐 Official Website</a>
-<a href="https://www.yelp.com/search?find_desc=senso-ji+temple&find_loc=asakusa+tokyo" target="_blank" class="activity-link">⭐ Yelp Reviews</a>
-</div>
-</div>
-<div class="itinerary-item">
-<div class="place-hero">
-<img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Tokyo Skytree" class="place-hero-image" loading="lazy">
-</div>
-<div class="activity-header">
-<div class="activity-name">Tokyo Skytree</div>
-<div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (85,000 reviews)</span></div>
-</div>
-<div class="activity">Sumida – Stunning views of Tokyo from Japan's tallest structure.</div>
-<div class="activity-links">
-<a href="https://www.google.com/maps/search/tokyo+skytree+sumida" target="_blank" class="activity-link">📍 Google Maps</a>
-<a href="https://tokyo-skytree.jp" target="_blank" class="activity-link">🌐 Official Website</a>
-<a href="tel:+81-3-5302-3470" class="activity-link">📞 +81 3-5302-3470</a>
-</div>
-</div>
-<div class="day-header"><span class="day-icon">2</span>Day 2: Kyoto – History and Temples</div>
-<div class="itinerary-item">
-<div class="place-hero">
-<img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Fushimi Inari Shrine" class="place-hero-image" loading="lazy">
-</div>
-<div class="activity-header">
-<div class="activity-name">Fushimi Inari Shrine</div>
-<div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.7 (50,000 reviews)</span></div>
-</div>
-<div class="activity">Famous for thousands of red torii gates forming scenic walking paths.</div>
-<div class="activity-links">
-<a href="https://www.google.com/maps/search/fushimi+inari+shrine+kyoto" target="_blank" class="activity-link">📍 Google Maps</a>
-<a href="https://inari.jp/en/" target="_blank" class="activity-link">🌐 Official Website</a>
-<a href="https://www.getyourguide.com/s/?q=fushimi+inari+shrine+kyoto" target="_blank" class="activity-link">🎫 Tours & Tickets</a>
+[Only include links that exist in the place data]
 </div>
 </div>
 </div>
 
-REQUIRED CSS CLASSES TO USE:
-- itinerary-container: Main wrapper
-- day-header: Day title with icon
-- day-icon: Numbered circle (1, 2, 3, etc.)
-- itinerary-item: Each activity card
-- place-hero: Image container at top of each card
-- place-hero-image: The actual image element
-- activity-header: Container for name and rating on same line
-- activity-name: Attraction/restaurant name
-- activity-rating: Rating container
-- stars: Visual star rating (★★★★★)
-- rating-text: Review count text
-- activity: Description text
-- activity-links: Link container (horizontal)
-- activity-link: Individual links
+CRITICAL IMAGE RULES:
+- You will receive a hero_image URL for each place in the format: "IMAGE TO USE: [url]"
+- You MUST use this EXACT URL in the img src attribute
+- DO NOT use any other image URLs or placeholders
+- The image MUST be the first element inside each itinerary-item
 
-COMPACT SPACING RULES:
-- NO empty lines between div tags
-- NO extra spacing inside containers
-- Each element goes directly after the previous one
-- Only ONE line break between different activities
-- Keep descriptions under 100 characters
-- Maximum 3 links per activity
+CRITICAL FORMAT RULES:
+- Place name and rating MUST be on the same line in activity-header
+- Use <span class="activity-name"> for the name (NOT a div)
+- Rating div stays inline next to the name
+- NO markdown formatting
+- NO extra line breaks
+- Each place in its own itinerary-item div
 
-NEVER USE:
-- **bold** markdown
-- ### headers
-- Inline styles like style="..."
-- Extra \n\n line breaks
-- Vertical link stacking
-- Photo galleries or multiple images per place
-- Any <div class="photo-gallery"> sections
+LINK RULES:
+- ONLY include links that are provided in the place data
+- Always include Google Maps (it's always available)
+- Format: <a href="[exact URL from data]" target="_blank" class="activity-link">[icon] [label]</a>
+- Common links: 📍 Google Maps, 🌐 Website, ⭐ Yelp, 📞 Phone
 
-SMART TAGS SYSTEM:
-- highly-rated: Use for places with 4.5+ stars and 100+ reviews
-- budget-friendly: Use for affordable options ($ or $$)
-- premium: Use for high-end, luxury places
+When you receive place data, it will include:
+- name: The place name
+- IMAGE TO USE: THE EXACT IMAGE URL TO USE (use this exactly)
+- Google Maps: Always available link
+- Website: Only if available
+- Phone: Only if available
+- Rating and review count for the stars display
 
-CATEGORY BADGES:
-🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, �� Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
-
-IMAGE USAGE RULES:
-- ALWAYS include ONE high-quality hero image per place using the place-hero structure
-- Use the hero_image URL from place data: <img src="[place.hero_image]" alt="[place.name]" class="place-hero-image" loading="lazy">
-- If no real image available, use category-specific fallback from the enhanced fallback system
-- Images appear FIRST in each itinerary-item card (before activity-name)
-- NO photo galleries or multiple images - ONE image only per place
-- All images must use place-hero container and place-hero-image class
-
-CRITICAL FORMATTING RULES:
-- Use solid, readable itinerary-item cards for ALL recommendations
-- NO transparent backgrounds or hero image overlays
-- Yellow stars (#fbbf24) for ratings
-- Consistent spacing and readable design
-- Clean, simple design with solid card backgrounds
-
-LINK VALIDATION RULES - NO DEAD LINKS:
-- ONLY include links that exist in the place data and are not empty
-- ALWAYS include: Google Maps (guaranteed to work)
-- CONDITIONALLY include: Official website, Yelp, TripAdvisor (only if data exists)
-- NEVER include empty buttons or placeholder links
-- If place.website exists, show it; if not, don't show website button
-- All links MUST use target="_blank" rel="noopener noreferrer"
-- Remove any link that doesn't have actual data
-
-ALWAYS INCLUDE:
-- Google Maps link for each location
-- Official website when available
-- Star ratings in ★★★★★ format
-- Realistic review counts
-- Working phone numbers or booking links
-- Smart tags based on place characteristics
-- Category badges for easy identification
-- Multiple photos when available
-
-CRITICAL: ALWAYS use the same consistent itinerary-item card format for ALL recommendations. Never switch to transparent place-card templates. Use solid, readable backgrounds for all cards - restaurants, hotels, attractions, and itineraries. Keep responses under 2000 characters and use day-icon numbers 1, 2, 3 for itineraries."""
+ALWAYS use the exact hero_image URL provided - this is critical for images to display!"""
 
 def substitute_real_urls(ai_response: str, places_data: List[Dict]) -> str:
     """
@@ -770,264 +679,74 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
                 role = "user" if msg.get("role") == "user" else "assistant"
                 messages.append({"role": role, "content": msg.get("content", "")})
         
-        # Enhance user message with comprehensive places data including smart tags
+        # Enhance user message with comprehensive places data
         enhanced_message = user_message
         if places_data and len(places_data) > 0:
-            places_text = "\n\nREAL-TIME PLACE DATA WITH ENHANCED FEATURES:\n"
+            # Create a VERY clear mapping of images for the AI to use
+            image_map = {}
+            places_text = "\n\nREAL-TIME PLACE DATA - USE THESE EXACT DETAILS:\n"
             
-            # Create a clear image mapping for the AI
-            image_instructions = "\n🖼️ MANDATORY IMAGE USAGE - USE THESE EXACT URLs:\n"
-            
-            for i, place in enumerate(places_data[:5], 1):  # Top 5 places
-                places_text += f"{i}. **{place['name']}**\n"
+            for i, place in enumerate(places_data[:5], 1):
+                place_name = place['name']
+                hero_image = place.get('hero_image', '')
+                
+                # Store in image map for easy reference
+                image_map[place_name] = hero_image
+                
+                places_text += f"\n{i}. {place_name}\n"
+                places_text += f"   IMAGE TO USE: {hero_image}\n"
                 places_text += f"   Address: {place['address']}\n"
-
-                # Add hero image information VERY prominently
-                hero_image_url = place.get('hero_image')
-                if hero_image_url:
-                    places_text += f"   📸 HERO_IMAGE_URL: {hero_image_url}\n"
-                    image_instructions += f"   {i}. {place['name']}: {hero_image_url}\n"
-
+                
                 if place['rating']:
-                    places_text += f"   Rating: ★{place['rating']}"
+                    places_text += f"   Rating: {place['rating']} stars"
                     if place['rating_count']:
                         places_text += f" ({place['rating_count']:,} reviews)"
                     places_text += "\n"
-
-                if place['price_level']:
-                    price_symbols = '$' * place['price_level']
-                    places_text += f"   Price: {price_symbols}\n"
-
-                # Add smart tags info
-                if place.get('smart_tags'):
-                    places_text += f"   Smart Tags: {', '.join(place['smart_tags'])}\n"
-
-                if place.get('category_badge'):
-                    places_text += f"   Category: {place['category_badge']}\n"
-
-                if place['phone']:
+                
+                # Add working links
+                places_text += f"   Google Maps: {place['google_maps_url']}\n"
+                if place.get('website'):
+                    places_text += f"   Website: {place['website']}\n"
+                if place.get('phone'):
                     places_text += f"   Phone: {place['phone']}\n"
-
-                if place['is_open'] is not None:
-                    status = "OPEN NOW" if place['is_open'] else "CLOSED NOW"
-                    places_text += f"   Status: {status}\n"
-
-                # Add comprehensive clickable links
-                places_text += "   Essential Links:\n"
-                places_text += f"   [Google Maps]({place['google_maps_url']})\n"
-                places_text += f"   [Yelp Reviews]({place['yelp_search_url']})\n"
-                places_text += f"   [TripAdvisor]({place['tripadvisor_search_url']})\n"
-
-                if place['website']:
-                    places_text += f"   [Official Website]({place['website']})\n"
-
-                # Add category-specific booking links
-                place_types = str(place.get('types', [])).lower()
-
-                if 'restaurant' in place_types or 'food' in place_types:
-                    if place['opentable_url']:
-                        places_text += f"   [OpenTable Reservations]({place['opentable_url']})\n"
-
-                if 'lodging' in place_types or 'hotel' in place_types:
-                    if place['booking_url']:
-                        places_text += f"   [Booking.com]({place['booking_url']})\n"
-                    if place['expedia_url']:
-                        places_text += f"   [Expedia]({place['expedia_url']})\n"
-
-                # Add activity and transportation links for all places
-                places_text += f"   [GetYourGuide Tours]({place['getyourguide_url']})\n"
-                places_text += f"   [Foursquare]({place['foursquare_url']})\n"
-
-                if place['uber_url']:
-                    places_text += f"   [Uber Ride]({place['uber_url']})\n"
-                if place['lyft_url']:
-                    places_text += f"   [Lyft Ride]({place['lyft_url']})\n"
-
-                # Add recent reviews if available
-                if place['reviews']:
-                    places_text += "   Recent Reviews:\n"
-                    for review in place['reviews'][:2]:  # Top 2 reviews
-                        reviewer = review.get('author_name', 'Anonymous')
-                        rating = review.get('rating', 0)
-                        text = review.get('text', '')[:100] + "..." if len(review.get('text', '')) > 100 else review.get('text', '')
-                        places_text += f"     - {reviewer} (★{rating}): {text}\n"
-
-                places_text += "\n"
-
-            enhanced_message = f"""{user_message}
-
-{places_text}
-
-{image_instructions}
-
-CRITICAL INSTRUCTIONS FOR EVERY LOCATION RECOMMENDATION:
-
-🖼️ IMAGE REQUIREMENTS (MANDATORY - NO EXCEPTIONS):
-1. EVERY place recommendation MUST include the exact hero image provided above
-2. Use this EXACT format for EACH place: <img src="[EXACT_HERO_IMAGE_URL_FROM_ABOVE]" alt="[place name]" class="place-hero-image" loading="lazy">
-3. Place the image FIRST inside each itinerary-item card within a place-hero div
-4. NO placeholder images - use the EXACT URLs provided in the HERO_IMAGE_URL fields above
-5. If recommending {place['name']}, use image: {hero_image_url}
-
-EXAMPLE of correct image usage:
+                if place.get('yelp_search_url'):
+                    places_text += f"   Yelp: {place['yelp_search_url']}\n"
+            
+            # Create explicit HTML examples for the AI
+            example_html = "\n\nEXACT HTML TO USE FOR EACH PLACE:\n"
+            for place in places_data[:2]:  # Show 2 examples
+                example_html += f"""
+For {place['name']}:
+<div class="itinerary-item">
 <div class="place-hero">
-<img src="{places_data[0].get('hero_image', '')}" alt="{places_data[0].get('name', '')}" class="place-hero-image" loading="lazy">
+<img src="{place.get('hero_image', '')}" alt="{place['name']}" class="place-hero-image" loading="lazy">
 </div>
-
-🔗 LINK REQUIREMENTS:
-- ONLY show links that exist in the place data above (check each field exists and is not empty)
-- NEVER show empty buttons or dead links
-- If place.website exists and is not empty, show website link
-- If place.phone exists and is not empty, show phone link
-- ALWAYS show Google Maps (guaranteed working)
-- Only show other links if the data exists
-
-RESPONSE FORMAT: Use the hero itinerary-item card format for ALL location recommendations. Include ratings, properly validated links only, smart tags, and category badges. Focus on convenience and immediate utility.
-
-QUANTITY CONTROL:
-- "a pizza place" / "a restaurant" → Show EXACTLY 1 place
-- "pizza places" / "restaurants" → Show multiple places (2-4)
-- "best pizza place" → Show EXACTLY 1 place
-- "top pizza places" → Show multiple places (2-4)
-
-ABSOLUTELY CRITICAL: Every single place you recommend must have its hero image displayed using the exact URL provided above. No exceptions."""
-        
-        messages.append({"role": "user", "content": enhanced_message})
-        
-        # Make API call to OpenAI
-        response = openai_client.chat.completions.create(
-            model="gpt-4o",  # You can change this to: "gpt-4o-2024-11-20", "o1-preview", or "o1-mini"
-            messages=messages,
-            max_tokens=8000,  # Increased for comprehensive responses
-            temperature=0.7,
-            top_p=0.9
-        )
-        
-        return response.choices[0].message.content.strip()
-        
-    except Exception as e:
-        logger.error(f"Error getting AI response: {str(e)}")
-        return f"I'm experiencing some technical difficulties right now. Please try again in a moment! For priority support and advanced features, upgrade to JetFriend Premium. Error details: {str(e)[:50]}..."
-    """
-    Get response from OpenAI GPT-4o with optional places data integration
-    """
-    if not openai_client:
-        return "I'm sorry, but AI functionality is currently unavailable. Please ensure the OPENAI_API_KEY is properly configured. Upgrade to JetFriend Premium for priority support!"
-
-    try:
-        # Create messages array for ChatGPT
-        messages = [{"role": "system", "content": get_jetfriend_system_prompt()}]
-        
-        # Add conversation history
-        if conversation_history:
-            for msg in conversation_history[-6:]:  # Keep last 6 messages for context
-                role = "user" if msg.get("role") == "user" else "assistant"
-                messages.append({"role": role, "content": msg.get("content", "")})
-        
-        # Enhance user message with comprehensive places data including smart tags
-        enhanced_message = user_message
-        if places_data and len(places_data) > 0:
-            places_text = "\n\nREAL-TIME PLACE DATA WITH ENHANCED FEATURES:\n"
-            for i, place in enumerate(places_data[:5], 1):  # Top 5 places
-                places_text += f"{i}. **{place['name']}**\n"
-                places_text += f"   Address: {place['address']}\n"
-
-                if place['rating']:
-                    places_text += f"   Rating: ★{place['rating']}"
-                    if place['rating_count']:
-                        places_text += f" ({place['rating_count']:,} reviews)"
-                    places_text += "\n"
-
-                if place['price_level']:
-                    price_symbols = '$' * place['price_level']
-                    places_text += f"   Price: {price_symbols}\n"
-
-                # Add smart tags info
-                if place.get('smart_tags'):
-                    places_text += f"   Smart Tags: {', '.join(place['smart_tags'])}\n"
-
-                if place.get('category_badge'):
-                    places_text += f"   Category: {place['category_badge']}\n"
-
-                # Add hero image information prominently
-                hero_image_url = place.get('hero_image')
-                if hero_image_url:
-                    places_text += f"   🖼️ HERO IMAGE URL: {hero_image_url}\n"
-                    places_text += f"   Image Source: {place.get('image_source', 'google_places')}\n"
-                    places_text += f"   Has Real Photos: {place.get('has_real_photos', False)}\n"
-
-                if place['phone']:
-                    places_text += f"   Phone: {place['phone']}\n"
-
-                if place['is_open'] is not None:
-                    status = "OPEN NOW" if place['is_open'] else "CLOSED NOW"
-                    places_text += f"   Status: {status}\n"
-
-                # Add comprehensive clickable links
-                places_text += "   Essential Links:\n"
-                places_text += f"   [Google Maps]({place['google_maps_url']})\n"
-                places_text += f"   [Yelp Reviews]({place['yelp_search_url']})\n"
-                places_text += f"   [TripAdvisor]({place['tripadvisor_search_url']})\n"
-
-                if place['website']:
-                    places_text += f"   [Official Website]({place['website']})\n"
-
-                # Add category-specific booking links
-                place_types = str(place.get('types', [])).lower()
-
-                if 'restaurant' in place_types or 'food' in place_types:
-                    if place['opentable_url']:
-                        places_text += f"   [OpenTable Reservations]({place['opentable_url']})\n"
-
-                if 'lodging' in place_types or 'hotel' in place_types:
-                    if place['booking_url']:
-                        places_text += f"   [Booking.com]({place['booking_url']})\n"
-                    if place['expedia_url']:
-                        places_text += f"   [Expedia]({place['expedia_url']})\n"
-
-                # Add activity and transportation links for all places
-                places_text += f"   [GetYourGuide Tours]({place['getyourguide_url']})\n"
-                places_text += f"   [Foursquare]({place['foursquare_url']})\n"
-
-                if place['uber_url']:
-                    places_text += f"   [Uber Ride]({place['uber_url']})\n"
-                if place['lyft_url']:
-                    places_text += f"   [Lyft Ride]({place['lyft_url']})\n"
-
-                # Add recent reviews if available
-                if place['reviews']:
-                    places_text += "   Recent Reviews:\n"
-                    for review in place['reviews'][:2]:  # Top 2 reviews
-                        reviewer = review.get('author_name', 'Anonymous')
-                        rating = review.get('rating', 0)
-                        text = review.get('text', '')[:100] + "..." if len(review.get('text', '')) > 100 else review.get('text', '')
-                        places_text += f"     - {reviewer} (★{rating}): {text}\n"
-
-                places_text += "\n"
-
+<div class="activity-header">
+<span class="activity-name">{place['name']}</span>
+<div class="activity-rating"><span class="stars">{'★' * int(place.get('rating', 4))}</span> <span class="rating-text">{place.get('rating', 4.5)} ({place.get('rating_count', 100):,} reviews)</span></div>
+</div>
+<div class="activity">{place['address']}</div>
+<div class="activity-links">
+<a href="{place['google_maps_url']}" target="_blank" class="activity-link">📍 Google Maps</a>
+{f'<a href="{place["website"]}" target="_blank" class="activity-link">🌐 Website</a>' if place.get('website') else ''}
+{f'<a href="tel:{place["phone"]}" class="activity-link">📞 {place["phone"]}</a>' if place.get('phone') else ''}
+</div>
+</div>
+"""
+            
             enhanced_message = f"""{user_message}
 
 {places_text}
 
-INSTRUCTIONS: Use this real data to provide specific, actionable recommendations with ONLY the available working links and images.
+{example_html}
 
-CRITICAL IMAGE RULES:
-- ALWAYS use the HERO IMAGE URL provided for each place
-- Format: <img src="[HERO IMAGE URL]" alt="[place name]" class="place-hero-image" loading="lazy">
-- Place image FIRST in each itinerary-item card inside a place-hero div
-- Every restaurant, bar, hotel, attraction MUST have the hero image displayed
-
-CRITICAL LINK RULES:
-- ONLY show links that exist in the place data (check each field exists and is not empty)
-- NEVER show empty buttons or dead links
-- If place.website exists and is not empty, show: <a href="[place.website]" target="_blank" rel="noopener noreferrer">🌐 Official Website</a>
-- If place.phone exists and is not empty, show: <a href="tel:[place.phone]" class="activity-link">📞 [place.phone]</a>
-- ALWAYS show Google Maps (guaranteed working): <a href="[place.google_maps_url]" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
-- Only show Yelp if place has good rating data: <a href="[place.yelp_search_url]" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
-
-NO DEAD LINKS RULE: If a link field is empty, missing, or invalid - DO NOT show that button at all.
-
-Use the hero itinerary-item card format for ALL location recommendations. Include ratings, properly validated links only, smart tags, and category badges. Focus on convenience and immediate utility. Work with the provided data without asking follow-up questions."""
+CRITICAL INSTRUCTIONS:
+1. USE THE EXACT IMAGE URLs PROVIDED ABOVE - Copy them character by character
+2. Place name and rating must be on the SAME LINE using the activity-header structure shown
+3. Use <span class="activity-name"> for names, not <div>
+4. Follow the EXACT HTML structure shown in the examples above
+5. DO NOT use placeholder images - use the exact URLs provided for each place
+6. Each place goes in its own itinerary-item div"""
         
         messages.append({"role": "user", "content": enhanced_message})
         
