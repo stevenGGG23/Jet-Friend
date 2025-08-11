@@ -278,7 +278,7 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
             
             try:
                 test_response = get_ai_response_openai("Hello! Can you tell me you're working correctly as JetFriend?")
-                places_test = search_places_google("restaurant", "New York") if google_key and google_key != "your-google-places-key-here" else []
+                places_test = search_places_keyword("restaurant", "New York")
                 
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
