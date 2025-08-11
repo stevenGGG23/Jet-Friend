@@ -87,6 +87,58 @@ def is_basic_question(message: str) -> bool:
     message_lower = message.lower()
     return any(keyword in message_lower for keyword in basic_keywords)
 
+def detect_singular_request(message: str) -> bool:
+    """
+    Detect if user is asking for a single place vs multiple places.
+    Returns True for singular requests like "a restaurant", "the best hotel"
+    Returns False for plural requests like "restaurants", "places to eat", "things to do"
+    """
+    message_lower = message.lower()
+
+    # Strong indicators of singular requests
+    singular_patterns = [
+        r'\ba\s+(?:good|nice|great|best)?\s*(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bthe\s+(?:best|top|most popular)\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bone\s+(?:good|nice|great|restaurant|hotel|cafe|bar|place|spot)',
+        r'\bfind\s+(?:me\s+)?(?:a|one)\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bwhere\s+(?:is|can\s+i\s+find)\s+(?:a|the|one)\s+(?:good|nice|great)?\s*(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\brecommend\s+(?:me\s+)?(?:a|one)\s+(?:good|nice|great)?\s*(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bneed\s+(?:a|one)\s+(?:good|nice|great)?\s*(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\blooking\s+for\s+(?:a|one)\s+(?:good|nice|great)?\s*(?:restaurant|hotel|cafe|bar|place|spot)'
+    ]
+
+    # Strong indicators of plural/multiple requests
+    plural_patterns = [
+        r'\b(?:restaurants|hotels|cafes|bars|places|spots)\b',
+        r'\b(?:some|several|multiple|few)\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\b(?:list|show|give)\s+me\s+(?:some|several|multiple|a\s+few)',
+        r'\bwhat\s+(?:are\s+some|are\s+the\s+best)\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\btop\s+\d+\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bbest\s+(?:restaurant|hotel|cafe|bar|place|spot)s\b',
+        r'\b(?:things\s+to\s+do|activities|attractions|sights)\b',
+        r'\bmulti[\s-]?day\b',
+        r'\bitinerary\b',
+        r'\bday\s+\d+\b',
+        r'\b\d+\s+day\b',
+        r'\bentire\s+day\b',
+        r'\bfull\s+day\b',
+        r'\bweekend\b',
+        r'\btrip\b'
+    ]
+
+    # Check for plural patterns first (stronger indicators)
+    for pattern in plural_patterns:
+        if re.search(pattern, message_lower):
+            return False
+
+    # Check for singular patterns
+    for pattern in singular_patterns:
+        if re.search(pattern, message_lower):
+            return True
+
+    # Default to singular for ambiguous cases
+    return True
+
 def detect_location_query(message: str) -> bool:
     """
     Detect if user query requires real-time location data for ANY travel-related content.
@@ -1140,4 +1192,4 @@ if __name__ == '__main__':
     # Warm up the application
     warm_up()
 
-    app.run(host='0.0.0.0', port=port, debug=debug_mode, threaded=True) 
+    app.run(host='0.0.0.0', port=port, debug=debug_mode, threaded=True)
