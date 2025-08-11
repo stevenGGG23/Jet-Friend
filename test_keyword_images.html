@@ -32,14 +32,24 @@
         .place-info {
             padding: 15px;
         }
+        .place-header-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
         .place-name {
             font-size: 18px;
             font-weight: bold;
-            margin: 0 0 8px 0;
+            margin: 0;
+            flex: 1;
         }
         .place-rating {
             color: #ff6b35;
-            margin: 5px 0;
+            font-size: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .place-description {
             margin: 10px 0;
