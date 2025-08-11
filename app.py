@@ -654,6 +654,7 @@ CRITICAL DISPLAY RULES:
 2. For basic questions (like "what time is it" or "how to say hello"), use regular text responses
 3. NEVER display dead links or empty buttons - only show links that actually work
 4. ALWAYS use the EXACT hero_image URL provided in the place data - DO NOT use placeholder images
+5. IMPORTANT: For singular requests ("a restaurant", "the best hotel"), you'll receive 1 place. For plural/multi-day requests ("restaurants", "things to do", "itinerary"), you'll receive multiple places.
 
 FOR ALL LOCATION RECOMMENDATIONS, use this EXACT HTML structure:
 
