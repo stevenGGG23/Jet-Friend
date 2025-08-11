@@ -4399,7 +4399,12 @@
             messageGroup.appendChild(messageElement);
 
             chatMessages.appendChild(messageGroup);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Only auto-scroll for user messages and first AI message
+            // For AI messages with place cards, let user scroll naturally
+            if (type === 'user' || !message.includes('place-card')) {
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
 
             // Initialize image loading handling for place hero images
             if (type === 'ai') {
@@ -4662,7 +4667,15 @@
                 });
 
                 // Add AI response to chat (place cards are embedded in the response HTML)
-                addMessageToChat(result.data.response, 'ai');
+                const newMessage = addMessageToChat(result.data.response, 'ai');
+
+                // For responses with place cards, scroll to show the start of the new message
+                if (result.data.response.includes('place-card') && newMessage) {
+                  setTimeout(() => {
+                    const messageTop = newMessage.offsetTop;
+                    chatMessages.scrollTop = messageTop - 20; // Small offset from top
+                  }, 100);
+                }
 
                 // Show additional place card info if places were found
                 if (result.data.places_found > 0) {
