@@ -245,15 +245,15 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
             
             # Check API status
             openai_status = bool(os.getenv("OPENAI_API_KEY") and os.getenv("OPENAI_API_KEY") != "your-openai-key-here")
-            google_status = bool(os.getenv("GOOGLE_PLACES_API_KEY") and os.getenv("GOOGLE_PLACES_API_KEY") != "your-google-places-key-here")
-            
+
             response = {
                 'status': 'healthy',
-                'service': 'JetFriend API (2-API Version)',
-                'version': '2.0.0',
+                'service': 'JetFriend API (Keyword Images Version)',
+                'version': '2.1.0',
                 'apis_configured': {
                     'openai': openai_status,
-                    'google_places': google_status
+                    'keyword_images': True,
+                    'available_keywords': len(KEYWORD_IMAGES)
                 }
             }
             self.wfile.write(json.dumps(response).encode())
@@ -289,7 +289,7 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
                     'test_response': test_response,
                     'places_found': len(places_test),
                     'openai_status': 'connected',
-                    'google_places_status': 'connected' if places_test else 'limited'
+                    'keyword_images_status': 'active'
                 }
                 self.wfile.write(json.dumps(response).encode())
                 return
@@ -387,16 +387,13 @@ if __name__ == "__main__":
 
             # Check API configuration
             openai_configured = bool(os.getenv("OPENAI_API_KEY") and os.getenv("OPENAI_API_KEY") != "your-openai-key-here")
-            google_configured = bool(os.getenv("GOOGLE_PLACES_API_KEY") and os.getenv("GOOGLE_PLACES_API_KEY") != "your-google-places-key-here")
 
             print(f"🤖 OpenAI ChatGPT: {'✅ Connected' if openai_configured else '❌ Not configured'}")
-            print(f"📍 Google Places: {'✅ Connected' if google_configured else '❌ Not configured'}")
-            print(f"📸 Images: {'✅ Google Photos API' if google_configured else '❌ Limited to fallback'}")
+            print(f"📍 Keyword Images: ✅ Active with {len(KEYWORD_IMAGES)} predefined categories")
+            print(f"📸 Images: ✅ Predefined keyword-based images")
 
             if not openai_configured:
                 print("⚠️  Set OPENAI_API_KEY for AI chat functionality")
-            if not google_configured:
-                print("⚠️  Set GOOGLE_PLACES_API_KEY for location & image features")
 
             print(f"🔄 Ready to accept requests on port {port}")
             started = True
