@@ -17,7 +17,7 @@ class TestHandler(http.server.SimpleHTTPRequestHandler):
             return super().do_GET()
 
 if __name__ == "__main__":
-    port = 5001
+    port = 5002
     try:
         with socketserver.TCPServer(("", port), TestHandler) as httpd:
             print(f"✅ Test server running on port {port}")
