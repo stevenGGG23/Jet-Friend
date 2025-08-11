@@ -316,6 +316,12 @@ def get_enhanced_fallback_image(place_name: str, place_types: List[str], locatio
             'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ],
+        'pizza': [
+            'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/845808/pexels-photo-845808.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1566837/pexels-photo-1566837.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
         'hotel': [
             'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -394,7 +400,7 @@ def get_category_badge(place_types: List[str]) -> str:
         'cafe': '☕ Café',
         'bar': '🍻 Bar',
         'lodging': '🏨 Hotel',
-        'tourist_attraction': '�� Attraction',
+        'tourist_attraction': '🏭 Attraction',
         'museum': '🏛️ Museum',
         'park': '🌳 Park',
         'shopping_mall': '🛍️ Shopping',
