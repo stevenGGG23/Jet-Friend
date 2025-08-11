@@ -704,7 +704,7 @@ SMART TAGS SYSTEM:
 - premium: Use for high-end, luxury places
 
 CATEGORY BADGES:
-🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
+🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, �� Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
 IMAGE USAGE RULES:
 - ALWAYS include ONE high-quality hero image per place using the place-hero structure
@@ -884,6 +884,12 @@ EXAMPLE of correct image usage:
 
 RESPONSE FORMAT: Use the hero itinerary-item card format for ALL location recommendations. Include ratings, properly validated links only, smart tags, and category badges. Focus on convenience and immediate utility.
 
+QUANTITY CONTROL:
+- "a pizza place" / "a restaurant" → Show EXACTLY 1 place
+- "pizza places" / "restaurants" → Show multiple places (2-4)
+- "best pizza place" → Show EXACTLY 1 place
+- "top pizza places" → Show multiple places (2-4)
+
 ABSOLUTELY CRITICAL: Every single place you recommend must have its hero image displayed using the exact URL provided above. No exceptions."""
         
         messages.append({"role": "user", "content": enhanced_message})
@@ -1015,7 +1021,7 @@ CRITICAL LINK RULES:
 - ONLY show links that exist in the place data (check each field exists and is not empty)
 - NEVER show empty buttons or dead links
 - If place.website exists and is not empty, show: <a href="[place.website]" target="_blank" rel="noopener noreferrer">🌐 Official Website</a>
-- If place.phone exists and is not empty, show: <a href="tel:[place.phone]" class="activity-link">�� [place.phone]</a>
+- If place.phone exists and is not empty, show: <a href="tel:[place.phone]" class="activity-link">📞 [place.phone]</a>
 - ALWAYS show Google Maps (guaranteed working): <a href="[place.google_maps_url]" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
 - Only show Yelp if place has good rating data: <a href="[place.yelp_search_url]" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
 
