@@ -612,8 +612,10 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="place-hero">
 <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Senso-ji Temple" class="place-hero-image" loading="lazy">
 </div>
+<div class="activity-header">
 <div class="activity-name">Senso-ji Temple</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (28,000 reviews)</span></div>
+</div>
 <div class="activity">Asakusa - Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/senso-ji+temple+asakusa+tokyo" target="_blank" class="activity-link">📍 Google Maps</a>
