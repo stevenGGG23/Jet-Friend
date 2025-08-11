@@ -209,14 +209,24 @@ def search_places_keyword(query, location=None):
             # Only return the first match to avoid duplicates
             break
 
-    # If no keyword match found, return a generic restaurant image
+    # If no keyword match found, return a generic place with default image
     if not places:
+        # Use default image or fallback to restaurant image
+        default_image = DEFAULT_PLACE_IMAGE
+        try:
+            # Try to use restaurant image as secondary fallback
+            if 'restaurant' in KEYWORD_IMAGES:
+                default_image = KEYWORD_IMAGES['restaurant']
+        except:
+            # Always use the guaranteed default image if anything fails
+            default_image = DEFAULT_PLACE_IMAGE
+
         place_info = {
-            'name': f"Restaurant" + (f" in {location}" if location else ""),
+            'name': f"Place" + (f" in {location}" if location else ""),
             'address': location if location else 'Location not specified',
             'rating': 4.0,
             'rating_count': 150,
-            'image_url': KEYWORD_IMAGES['restaurant'],
+            'image_url': default_image,
             'google_maps_url': f"https://www.google.com/maps/search/{urllib.parse.quote_plus(query)}+{urllib.parse.quote_plus(location or '')}",
             'website': '',
             'place_id': 'keyword_generic'
