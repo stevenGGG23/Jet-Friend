@@ -371,7 +371,7 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5001))
+    port = int(os.environ.get('PORT', 5002))
 
     class ReusableTCPServer(socketserver.TCPServer):
         allow_reuse_address = True
