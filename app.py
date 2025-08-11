@@ -848,6 +848,10 @@ def chat():
             location_match = re.search(r'(?:in|at|near)\s+([A-Za-z\s]+?)(?:\s|$|[.,!?])', user_message, re.IGNORECASE)
             location = location_match.group(1).strip() if location_match else None
 
+            # Determine how many results to return based on singular vs plural request
+            is_singular = detect_singular_request(user_message)
+            max_results = 1 if is_singular else 6  # 1 for singular, 6 for plural/multi-day
+
             # Search for both regular and underground places
             regular_places = search_places(user_message, location)
             underground_places = search_underground_places(user_message, location)
@@ -863,7 +867,7 @@ def chat():
                     seen_ids.add(place_id)
                     all_places.append(place)
 
-            places_data = all_places[:8]  # Return top 8 mixed results
+            places_data = all_places[:max_results]  # Limit based on request type
         elif is_location_query and not gmaps_client:
             # Add note about API limitation but still provide helpful guidance
             user_message += "\n\nNOTE: Google Places API is not configured, so I can't provide real-time links right now, but I can still give you excellent travel advice and ask follow-up questions to help plan your trip!"
