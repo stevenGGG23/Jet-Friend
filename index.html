@@ -4952,36 +4952,6 @@
         setTimeout(hideLoadingScreen, 3000);
       });
 
-      // Lazy load background images for better performance
-      if ('IntersectionObserver' in window) {
-        try {
-          const observerOptions = {
-            root: null,
-            threshold: 0.1,
-            rootMargin: '50px'
-          };
-
-          const lazyBackgroundObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              try {
-                if (entry.isIntersecting && entry.target) {
-                  const element = entry.target;
-                  const bgImage = element.dataset ? element.dataset.bgImage : null;
-                  if (bgImage && element.style && element.classList) {
-                    element.style.backgroundImage = `url(${bgImage})`;
-                    element.classList.add('bg-loaded');
-                    lazyBackgroundObserver.unobserve(element);
-                  }
-                }
-              } catch (error) {
-                console.warn('Lazy loading error for element:', error);
-              }
-            });
-          }, observerOptions);
-        } catch (error) {
-          console.warn('IntersectionObserver initialization error:', error);
-        }
-      }
 
 
 
