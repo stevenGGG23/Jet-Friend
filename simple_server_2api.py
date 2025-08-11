@@ -63,8 +63,10 @@ When recommending places, always use this format:
     <img src="[image_url]" alt="[place_name]" loading="lazy">
   </div>
   <div class="place-info">
-    <h3 class="place-name">[place_name]</h3>
-    <div class="place-rating">★★★★★ [rating] ([review_count] reviews)</div>
+    <div class="place-header-compact">
+      <h3 class="place-name">[place_name]</h3>
+      <div class="place-rating">★★★★★ [rating] ([review_count] reviews)</div>
+    </div>
     <p class="place-description">[description]</p>
     <div class="place-links">
       <a href="[google_maps_url]" target="_blank">📍 Google Maps</a>
