@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
 import http.server
 import socketserver
-import os
+import json
 
-class Handler(http.server.SimpleHTTPRequestHandler):
+class TestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path == "/":
-            self.path = "/index.html"
-        elif self.path == "/api/health":
+        if self.path == "/api/test":
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
-            self.wfile.write(b'{"status": "healthy", "service": "JetFriend"}')
+            response = {'status': 'ok', 'message': 'Test server working'}
+            self.wfile.write(json.dumps(response).encode())
             return
-        return super().do_GET()
+        else:
+            return super().do_GET()
 
 if __name__ == "__main__":
-    port = 5000
-    class ReusableTCPServer(socketserver.TCPServer):
-        allow_reuse_address = True
-    
-    with ReusableTCPServer(("", port), Handler) as httpd:
-        print(f"Server running on port {port}")
-        httpd.serve_forever()
+    port = 5002
+    try:
+        with socketserver.TCPServer(("", port), TestHandler) as httpd:
+            print(f"✅ Test server running on port {port}")
+            print(f"🌐 Visit: http://localhost:{port}/api/test")
+            httpd.serve_forever()
+    except Exception as e:
+        print(f"❌ Error starting server: {e}")

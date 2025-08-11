@@ -63,8 +63,10 @@ When recommending places, always use this format:
     <img src="[image_url]" alt="[place_name]" loading="lazy">
   </div>
   <div class="place-info">
-    <h3 class="place-name">[place_name]</h3>
-    <div class="place-rating">★★★★★ [rating] ([review_count] reviews)</div>
+    <div class="place-header-compact">
+      <h3 class="place-name">[place_name]</h3>
+      <div class="place-rating">★★★★★ [rating] ([review_count] reviews)</div>
+    </div>
     <p class="place-description">[description]</p>
     <div class="place-links">
       <a href="[google_maps_url]" target="_blank">📍 Google Maps</a>
@@ -136,82 +138,89 @@ When recommending places, always use this format:
     except Exception as e:
         return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {str(e)}"
 
-def search_places_google(query, location=None):
-    """
-    Search for places using Google Places API and get images
-    """
-    api_key = os.getenv("GOOGLE_PLACES_API_KEY")
-    if not api_key or api_key == "your-google-places-key-here":
-        return []
+# Predefined image mapping for food/restaurant keywords
+KEYWORD_IMAGES = {
+    'pizza': 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'cafe': 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'coffee': 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'temple': 'https://images.pexels.com/photos/161409/angkor-wat-temple-siem-reap-cambodia-161409.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'food truck': 'https://images.pexels.com/photos/4253312/pexels-photo-4253312.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'gyro': 'https://images.pexels.com/photos/7625056/pexels-photo-7625056.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'steakhouse': 'https://images.pexels.com/photos/361184/asparagus-steak-veal-steak-veal-361184.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'sushi': 'https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'bistro': 'https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'ice cream': 'https://images.pexels.com/photos/1362534/pexels-photo-1362534.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'bakery': 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'brewery': 'https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'winery': 'https://images.pexels.com/photos/34085/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=600',
+    'tapas': 'https://images.pexels.com/photos/1566837/pexels-photo-1566837.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'bbq': 'https://images.pexels.com/photos/1251208/pexels-photo-1251208.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'noodle shop': 'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'deli': 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'dim sum': 'https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'tacos': 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'bagels': 'https://images.pexels.com/photos/209206/pexels-photo-209206.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'tea house': 'https://images.pexels.com/photos/230477/pexels-photo-230477.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'street market': 'https://images.pexels.com/photos/2819095/pexels-photo-2819095.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'pub': 'https://images.pexels.com/photos/5490778/pexels-photo-5490778.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'ramen': 'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'gelato': 'https://images.pexels.com/photos/1362534/pexels-photo-1362534.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'falafel': 'https://images.pexels.com/photos/6275093/pexels-photo-6275093.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'donut shop': 'https://images.pexels.com/photos/205961/pexels-photo-205961.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'smoothie bar': 'https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'vegan restaurant': 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'seafood shack': 'https://images.pexels.com/photos/725992/pexels-photo-725992.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'dessert café': 'https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'restaurant': 'https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'bar': 'https://images.pexels.com/photos/5490778/pexels-photo-5490778.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'fast food': 'https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=600'
+}
 
-    try:
-        # Build search query
-        search_query = query
-        if location:
-            search_query += f" in {location}"
+def search_places_keyword(query, location=None):
+    """
+    Search for places using predefined keyword images
+    """
+    query_lower = query.lower()
+    places = []
 
-        # URL encode the query
-        encoded_query = urllib.parse.quote_plus(search_query)
-        
-        # Google Places Text Search API
-        url = f"https://maps.googleapis.com/maps/api/place/textsearch/json?query={encoded_query}&key={api_key}"
-        
-        with urllib.request.urlopen(url) as response:
-            if response.status == 200:
-                data = json.loads(response.read().decode())
-                places = []
-                
-                for place in data.get('results', [])[:5]:  # Top 5 results
-                    place_id = place.get('place_id', '')
-                    name = place.get('name', '')
-                    address = place.get('formatted_address', '')
-                    rating = place.get('rating', 0)
-                    rating_count = place.get('user_ratings_total', 0)
-                    
-                    # Get place photo if available
-                    image_url = "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600"  # Default fallback
-                    
-                    if place.get('photos') and len(place['photos']) > 0:
-                        photo_reference = place['photos'][0].get('photo_reference')
-                        if photo_reference:
-                            image_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference={photo_reference}&key={api_key}"
-                    
-                    # Create Google Maps URL
-                    encoded_name = urllib.parse.quote_plus(name)
-                    encoded_address = urllib.parse.quote_plus(address)
-                    google_maps_url = f"https://www.google.com/maps/search/{encoded_name}+{encoded_address}"
-                    
-                    # Get place details for website
-                    website = ""
-                    try:
-                        details_url = f"https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=website&key={api_key}"
-                        with urllib.request.urlopen(details_url) as details_response:
-                            if details_response.status == 200:
-                                details_data = json.loads(details_response.read().decode())
-                                website = details_data.get('result', {}).get('website', '')
-                    except:
-                        pass  # If details request fails, continue without website
-                    
-                    place_info = {
-                        'name': name,
-                        'address': address,
-                        'rating': rating,
-                        'rating_count': rating_count,
-                        'image_url': image_url,
-                        'google_maps_url': google_maps_url,
-                        'website': website,
-                        'place_id': place_id
-                    }
-                    places.append(place_info)
-                
-                return places
-            else:
-                print(f"Google Places API error: {response.status}")
-                return []
-                
-    except Exception as e:
-        print(f"Error searching places: {str(e)}")
-        return []
+    # Look for keyword matches in the query
+    for keyword, image_url in KEYWORD_IMAGES.items():
+        if keyword in query_lower:
+            # Create a mock place entry
+            place_name = f"{keyword.title()} Place"
+            if location:
+                place_name += f" in {location}"
+
+            place_info = {
+                'name': place_name,
+                'address': location if location else 'Location not specified',
+                'rating': 4.5,  # Default good rating
+                'rating_count': 250,  # Default review count
+                'image_url': image_url,
+                'google_maps_url': f"https://www.google.com/maps/search/{urllib.parse.quote_plus(keyword)}+{urllib.parse.quote_plus(location or '')}",
+                'website': '',
+                'place_id': f"keyword_{keyword.replace(' ', '_')}"
+            }
+            places.append(place_info)
+
+            # Only return the first match to avoid duplicates
+            break
+
+    # If no keyword match found, return a generic restaurant image
+    if not places:
+        place_info = {
+            'name': f"Restaurant" + (f" in {location}" if location else ""),
+            'address': location if location else 'Location not specified',
+            'rating': 4.0,
+            'rating_count': 150,
+            'image_url': KEYWORD_IMAGES['restaurant'],
+            'google_maps_url': f"https://www.google.com/maps/search/{urllib.parse.quote_plus(query)}+{urllib.parse.quote_plus(location or '')}",
+            'website': '',
+            'place_id': 'keyword_generic'
+        }
+        places.append(place_info)
+
+    return places
 
 def detect_location_query(message):
     """
@@ -238,15 +247,15 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
             
             # Check API status
             openai_status = bool(os.getenv("OPENAI_API_KEY") and os.getenv("OPENAI_API_KEY") != "your-openai-key-here")
-            google_status = bool(os.getenv("GOOGLE_PLACES_API_KEY") and os.getenv("GOOGLE_PLACES_API_KEY") != "your-google-places-key-here")
-            
+
             response = {
                 'status': 'healthy',
-                'service': 'JetFriend API (2-API Version)',
-                'version': '2.0.0',
+                'service': 'JetFriend API (Keyword Images Version)',
+                'version': '2.1.0',
                 'apis_configured': {
                     'openai': openai_status,
-                    'google_places': google_status
+                    'keyword_images': True,
+                    'available_keywords': len(KEYWORD_IMAGES)
                 }
             }
             self.wfile.write(json.dumps(response).encode())
@@ -271,7 +280,7 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
             
             try:
                 test_response = get_ai_response_openai("Hello! Can you tell me you're working correctly as JetFriend?")
-                places_test = search_places_google("restaurant", "New York") if google_key and google_key != "your-google-places-key-here" else []
+                places_test = search_places_keyword("restaurant", "New York")
                 
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
@@ -282,7 +291,7 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
                     'test_response': test_response,
                     'places_found': len(places_test),
                     'openai_status': 'connected',
-                    'google_places_status': 'connected' if places_test else 'limited'
+                    'keyword_images_status': 'active'
                 }
                 self.wfile.write(json.dumps(response).encode())
                 return
@@ -329,7 +338,7 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
                     location = location_match.group(1).strip() if location_match else None
                     
                     # Search for places
-                    places_data = search_places_google(user_message, location)
+                    places_data = search_places_keyword(user_message, location)
                 
                 # Get AI response with places data
                 ai_response = get_ai_response_openai(user_message, conversation_history, places_data)
@@ -362,7 +371,7 @@ class JetFriendHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5001))
+    port = int(os.environ.get('PORT', 5002))
 
     class ReusableTCPServer(socketserver.TCPServer):
         allow_reuse_address = True
@@ -380,16 +389,13 @@ if __name__ == "__main__":
 
             # Check API configuration
             openai_configured = bool(os.getenv("OPENAI_API_KEY") and os.getenv("OPENAI_API_KEY") != "your-openai-key-here")
-            google_configured = bool(os.getenv("GOOGLE_PLACES_API_KEY") and os.getenv("GOOGLE_PLACES_API_KEY") != "your-google-places-key-here")
 
             print(f"🤖 OpenAI ChatGPT: {'✅ Connected' if openai_configured else '❌ Not configured'}")
-            print(f"📍 Google Places: {'✅ Connected' if google_configured else '❌ Not configured'}")
-            print(f"📸 Images: {'✅ Google Photos API' if google_configured else '❌ Limited to fallback'}")
+            print(f"📍 Keyword Images: ✅ Active with {len(KEYWORD_IMAGES)} predefined categories")
+            print(f"📸 Images: ✅ Predefined keyword-based images")
 
             if not openai_configured:
                 print("⚠️  Set OPENAI_API_KEY for AI chat functionality")
-            if not google_configured:
-                print("⚠️  Set GOOGLE_PLACES_API_KEY for location & image features")
 
             print(f"🔄 Ready to accept requests on port {port}")
             started = True

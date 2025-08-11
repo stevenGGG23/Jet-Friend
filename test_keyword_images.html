@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyword Image System Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .place-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .place-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .place-info {
+            padding: 15px;
+        }
+        .place-header-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+        .place-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            flex: 1;
+        }
+        .place-rating {
+            color: #ff6b35;
+            font-size: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .place-description {
+            margin: 10px 0;
+            color: #666;
+        }
+        .place-links a {
+            margin-right: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🍕 Keyword Image System Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Keywords</h2>
+        <p>Click the buttons below to test different keywords:</p>
+        
+        <button onclick="testKeyword('pizza')">🍕 Pizza</button>
+        <button onclick="testKeyword('sushi')">🍣 Sushi</button>
+        <button onclick="testKeyword('cafe')">☕ Cafe</button>
+        <button onclick="testKeyword('temple')">🏛️ Temple</button>
+        <button onclick="testKeyword('ice cream')">🍦 Ice Cream</button>
+        <button onclick="testKeyword('tacos')">🌮 Tacos</button>
+        <button onclick="testKeyword('bakery')">🥖 Bakery</button>
+        <button onclick="testKeyword('ramen')">🍜 Ramen</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Custom Test</h2>
+        <input type="text" id="customQuery" placeholder="Enter your query (e.g., 'I want pizza in Tokyo')" style="width: 400px; padding: 8px;">
+        <button onclick="testCustomQuery()">Test Custom Query</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        async function testKeyword(keyword) {
+            const query = `I want ${keyword} in New York`;
+            await sendTestQuery(query, keyword);
+        }
+
+        async function testCustomQuery() {
+            const query = document.getElementById('customQuery').value;
+            if (!query) {
+                alert('Please enter a query');
+                return;
+            }
+            await sendTestQuery(query, 'custom');
+        }
+
+        async function sendTestQuery(query, type) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `<p>Testing: "${query}"...</p>`;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: query,
+                        history: []
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultsDiv.innerHTML = `
+                        <div class="test-section">
+                            <h3>Test Result for: "${query}"</h3>
+                            <p><strong>Places Found:</strong> ${data.places_found}</p>
+                            <div class="ai-response">
+                                <h4>AI Response:</h4>
+                                <div>${data.response}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="test-section">
+                            <h3>Error</h3>
+                            <p style="color: red;">${data.error || data.message}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="test-section">
+                        <h3>Error</h3>
+                        <p style="color: red;">Failed to connect: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Test server status on page load
+        window.onload = async function() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                
+                const statusDiv = document.createElement('div');
+                statusDiv.className = 'test-section';
+                statusDiv.innerHTML = `
+                    <h3>Server Status</h3>
+                    <p><strong>Service:</strong> ${data.service}</p>
+                    <p><strong>Version:</strong> ${data.version}</p>
+                    <p><strong>OpenAI:</strong> ${data.apis_configured.openai ? '✅ Connected' : '❌ Not configured'}</p>
+                    <p><strong>Keyword Images:</strong> ${data.apis_configured.keyword_images ? '✅ Active' : '❌ Inactive'}</p>
+                    <p><strong>Available Keywords:</strong> ${data.apis_configured.available_keywords || 0}</p>
+                `;
+                
+                document.body.insertBefore(statusDiv, document.getElementById('results'));
+            } catch (error) {
+                console.error('Failed to check server status:', error);
+            }
+        };
+    </script>
+</body>
+</html>
