@@ -769,7 +769,8 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
             
             # Create explicit HTML examples for the AI
             example_html = "\n\nEXACT HTML TO USE FOR EACH PLACE:\n"
-            for place in places_data[:2]:  # Show 2 examples
+            examples_to_show = min(len(places_data), 2)  # Show up to 2 examples
+            for place in places_data[:examples_to_show]:
                 example_html += f"""
 For {place['name']}:
 <div class="itinerary-item">
