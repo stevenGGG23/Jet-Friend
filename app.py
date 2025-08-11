@@ -87,6 +87,58 @@ def is_basic_question(message: str) -> bool:
     message_lower = message.lower()
     return any(keyword in message_lower for keyword in basic_keywords)
 
+def detect_singular_request(message: str) -> bool:
+    """
+    Detect if user is asking for a single place vs multiple places.
+    Returns True for singular requests like "a restaurant", "the best hotel"
+    Returns False for plural requests like "restaurants", "places to eat", "things to do"
+    """
+    message_lower = message.lower()
+
+    # Strong indicators of singular requests
+    singular_patterns = [
+        r'\ba\s+(?:good|nice|great|best)?\s*(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bthe\s+(?:best|top|most popular)\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bone\s+(?:good|nice|great|restaurant|hotel|cafe|bar|place|spot)',
+        r'\bfind\s+(?:me\s+)?(?:a|one)\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bwhere\s+(?:is|can\s+i\s+find)\s+(?:a|the|one)\s+(?:good|nice|great)?\s*(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\brecommend\s+(?:me\s+)?(?:a|one)\s+(?:good|nice|great)?\s*(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bneed\s+(?:a|one)\s+(?:good|nice|great)?\s*(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\blooking\s+for\s+(?:a|one)\s+(?:good|nice|great)?\s*(?:restaurant|hotel|cafe|bar|place|spot)'
+    ]
+
+    # Strong indicators of plural/multiple requests
+    plural_patterns = [
+        r'\b(?:restaurants|hotels|cafes|bars|places|spots)\b',
+        r'\b(?:some|several|multiple|few)\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\b(?:list|show|give)\s+me\s+(?:some|several|multiple|a\s+few)',
+        r'\bwhat\s+(?:are\s+some|are\s+the\s+best)\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\btop\s+\d+\s+(?:restaurant|hotel|cafe|bar|place|spot)',
+        r'\bbest\s+(?:restaurant|hotel|cafe|bar|place|spot)s\b',
+        r'\b(?:things\s+to\s+do|activities|attractions|sights)\b',
+        r'\bmulti[\s-]?day\b',
+        r'\bitinerary\b',
+        r'\bday\s+\d+\b',
+        r'\b\d+\s+day\b',
+        r'\bentire\s+day\b',
+        r'\bfull\s+day\b',
+        r'\bweekend\b',
+        r'\btrip\b'
+    ]
+
+    # Check for plural patterns first (stronger indicators)
+    for pattern in plural_patterns:
+        if re.search(pattern, message_lower):
+            return False
+
+    # Check for singular patterns
+    for pattern in singular_patterns:
+        if re.search(pattern, message_lower):
+            return True
+
+    # Default to singular for ambiguous cases
+    return True
+
 def detect_location_query(message: str) -> bool:
     """
     Detect if user query requires real-time location data for ANY travel-related content.
@@ -602,6 +654,7 @@ CRITICAL DISPLAY RULES:
 2. For basic questions (like "what time is it" or "how to say hello"), use regular text responses
 3. NEVER display dead links or empty buttons - only show links that actually work
 4. ALWAYS use the EXACT hero_image URL provided in the place data - DO NOT use placeholder images
+5. IMPORTANT: For singular requests ("a restaurant", "the best hotel"), you'll receive 1 place. For plural/multi-day requests ("restaurants", "things to do", "itinerary"), you'll receive multiple places.
 
 FOR ALL LOCATION RECOMMENDATIONS, use this EXACT HTML structure:
 
@@ -684,9 +737,11 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
         if places_data and len(places_data) > 0:
             # Create a VERY clear mapping of images for the AI to use
             image_map = {}
-            places_text = "\n\nREAL-TIME PLACE DATA - USE THESE EXACT DETAILS:\n"
+            is_singular = detect_singular_request(user_message)
+            request_context = "SINGULAR REQUEST" if is_singular else "PLURAL/MULTI-DAY REQUEST"
+            places_text = f"\n\nREAL-TIME PLACE DATA ({request_context} - {len(places_data)} place{'s' if len(places_data) > 1 else ''}) - USE THESE EXACT DETAILS:\n"
             
-            for i, place in enumerate(places_data[:5], 1):
+            for i, place in enumerate(places_data, 1):
                 place_name = place['name']
                 hero_image = place.get('hero_image', '')
                 
@@ -714,7 +769,8 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
             
             # Create explicit HTML examples for the AI
             example_html = "\n\nEXACT HTML TO USE FOR EACH PLACE:\n"
-            for place in places_data[:2]:  # Show 2 examples
+            examples_to_show = min(len(places_data), 2)  # Show up to 2 examples
+            for place in places_data[:examples_to_show]:
                 example_html += f"""
 For {place['name']}:
 <div class="itinerary-item">
@@ -796,6 +852,10 @@ def chat():
             location_match = re.search(r'(?:in|at|near)\s+([A-Za-z\s]+?)(?:\s|$|[.,!?])', user_message, re.IGNORECASE)
             location = location_match.group(1).strip() if location_match else None
 
+            # Determine how many results to return based on singular vs plural request
+            is_singular = detect_singular_request(user_message)
+            max_results = 1 if is_singular else 6  # 1 for singular, 6 for plural/multi-day
+
             # Search for both regular and underground places
             regular_places = search_places(user_message, location)
             underground_places = search_underground_places(user_message, location)
@@ -811,7 +871,7 @@ def chat():
                     seen_ids.add(place_id)
                     all_places.append(place)
 
-            places_data = all_places[:8]  # Return top 8 mixed results
+            places_data = all_places[:max_results]  # Limit based on request type
         elif is_location_query and not gmaps_client:
             # Add note about API limitation but still provide helpful guidance
             user_message += "\n\nNOTE: Google Places API is not configured, so I can't provide real-time links right now, but I can still give you excellent travel advice and ask follow-up questions to help plan your trip!"
@@ -824,7 +884,8 @@ def chat():
             ai_response = substitute_real_urls(ai_response, places_data)
         
         # Log for debugging
-        logger.info(f"Chat request: '{user_message}' - Location detected: {detect_location_query(user_message)} - Places found: {len(places_data)}")
+        request_type = "singular" if detect_singular_request(user_message) else "plural/multi-day"
+        logger.info(f"Chat request: '{user_message}' - Location detected: {detect_location_query(user_message)} - Request type: {request_type} - Places found: {len(places_data)}")
         if places_data:
             logger.info(f"Sample place data: {places_data[0] if places_data else 'None'}")
 
@@ -1140,4 +1201,4 @@ if __name__ == '__main__':
     # Warm up the application
     warm_up()
 
-    app.run(host='0.0.0.0', port=port, debug=debug_mode, threaded=True) 
+    app.run(host='0.0.0.0', port=port, debug=debug_mode, threaded=True)
