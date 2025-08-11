@@ -4984,38 +4984,6 @@
       }
 
 
-      // Preload critical resources
-      window.addEventListener('DOMContentLoaded', () => {
-        try {
-          // Preload all hero section backgrounds
-          if (window.Image) {
-            heroImages.forEach((src, index) => {
-              const heroImg = new Image();
-              heroImg.src = src;
-            });
-
-            // Cache restaurant and travel images for place cards
-            setTimeout(() => {
-              try {
-                const placeImages = [
-                  'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
-                  'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg',
-                  'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg',
-                  'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg'
-                ];
-                placeImages.forEach(src => {
-                  const img = new Image();
-                  img.src = src;
-                });
-              } catch (error) {
-                console.warn('Place image preloading error:', error);
-              }
-            }, 2000);
-          }
-        } catch (error) {
-          console.warn('Resource preloading error:', error);
-        }
-      });
 
       // Optimize animations for low-end devices
       try {
