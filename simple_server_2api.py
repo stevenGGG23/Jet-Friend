@@ -138,12 +138,15 @@ When recommending places, always use this format:
     except Exception as e:
         return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {str(e)}"
 
+# Default fallback image (guaranteed to work)
+DEFAULT_PLACE_IMAGE = 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=600'
+
 # Predefined image mapping for food/restaurant keywords
 KEYWORD_IMAGES = {
     'pizza': 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=600',
     'cafe': 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=600',
     'coffee': 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'temple': 'https://images.pexels.com/photos/161409/angkor-wat-temple-siem-reap-cambodia-161409.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'temple': 'https://images.pexels.com/photos/2007647/pexels-photo-2007647.jpeg?auto=compress&cs=tinysrgb&w=600',
     'food truck': 'https://images.pexels.com/photos/4253312/pexels-photo-4253312.jpeg?auto=compress&cs=tinysrgb&w=600',
     'gyro': 'https://images.pexels.com/photos/7625056/pexels-photo-7625056.jpeg?auto=compress&cs=tinysrgb&w=600',
     'steakhouse': 'https://images.pexels.com/photos/361184/asparagus-steak-veal-steak-veal-361184.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -191,12 +194,15 @@ def search_places_keyword(query, location=None):
             if location:
                 place_name += f" in {location}"
 
+            # Ensure we always have a valid image URL
+            safe_image_url = image_url if image_url else DEFAULT_PLACE_IMAGE
+
             place_info = {
                 'name': place_name,
                 'address': location if location else 'Location not specified',
                 'rating': 4.5,  # Default good rating
                 'rating_count': 250,  # Default review count
-                'image_url': image_url,
+                'image_url': safe_image_url,
                 'google_maps_url': f"https://www.google.com/maps/search/{urllib.parse.quote_plus(keyword)}+{urllib.parse.quote_plus(location or '')}",
                 'website': '',
                 'place_id': f"keyword_{keyword.replace(' ', '_')}"
@@ -206,14 +212,24 @@ def search_places_keyword(query, location=None):
             # Only return the first match to avoid duplicates
             break
 
-    # If no keyword match found, return a generic restaurant image
+    # If no keyword match found, return a generic place with default image
     if not places:
+        # Use default image or fallback to restaurant image
+        default_image = DEFAULT_PLACE_IMAGE
+        try:
+            # Try to use restaurant image as secondary fallback
+            if 'restaurant' in KEYWORD_IMAGES:
+                default_image = KEYWORD_IMAGES['restaurant']
+        except:
+            # Always use the guaranteed default image if anything fails
+            default_image = DEFAULT_PLACE_IMAGE
+
         place_info = {
-            'name': f"Restaurant" + (f" in {location}" if location else ""),
+            'name': f"Place" + (f" in {location}" if location else ""),
             'address': location if location else 'Location not specified',
             'rating': 4.0,
             'rating_count': 150,
-            'image_url': KEYWORD_IMAGES['restaurant'],
+            'image_url': default_image,
             'google_maps_url': f"https://www.google.com/maps/search/{urllib.parse.quote_plus(query)}+{urllib.parse.quote_plus(location or '')}",
             'website': '',
             'place_id': 'keyword_generic'
