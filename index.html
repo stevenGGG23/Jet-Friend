@@ -943,19 +943,9 @@
         display: none;
       }
 
-      /* Fallback image instead of emoji */
-      .place-hero-fallback {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 3;
-        display: none;
-      }
-
+      /* Fallback emoji display */
       .place-hero-fallback.show {
-        display: block;
+        display: block !important;
       }
 
 
@@ -3754,7 +3744,7 @@
               </div>
               <div class="highlight-title">All-in-One Assistant</div>
               <div class="highlight-desc">
-                Flights, hotels, attractions, discounts, packing lists ��� all in
+                Flights, hotels, attractions, discounts, packing lists — all in
                 one place.
               </div>
             </div>
@@ -3990,7 +3980,7 @@
 
                 const responses = {
             'price-drop': "I'll monitor flight prices for you! Setting up alerts now...",
-            'translate': "\"I don't eat meat\" in Japanese is \"私は肉を食���ませ���\" (Watashi wa niku wo tabemasen).",
+            'translate': "\"I don't eat meat\" in Japanese is \"私は肉を食���ません\" (Watashi wa niku wo tabemasen).",
             'local-tips': "Great choice! Japan tips: Bow when greeting, remove shoes indoors, don't tip at restaurants, and always carry cash!",
             'emergency': "Emergency numbers: Police 110, Fire/Ambulance 119. Download Google Translate offline for Japanese. Keep hotel card with you!"
         };
