@@ -880,7 +880,8 @@ def chat():
             ai_response = substitute_real_urls(ai_response, places_data)
         
         # Log for debugging
-        logger.info(f"Chat request: '{user_message}' - Location detected: {detect_location_query(user_message)} - Places found: {len(places_data)}")
+        request_type = "singular" if detect_singular_request(user_message) else "plural/multi-day"
+        logger.info(f"Chat request: '{user_message}' - Location detected: {detect_location_query(user_message)} - Request type: {request_type} - Places found: {len(places_data)}")
         if places_data:
             logger.info(f"Sample place data: {places_data[0] if places_data else 'None'}")
 
