@@ -601,6 +601,7 @@ CRITICAL DISPLAY RULES:
 1. For ANY location-related query (restaurants, hotels, attractions, activities, places), you MUST use the hero card format with itinerary-item cards
 2. For basic questions (like "what time is it" or "how to say hello"), use regular text responses
 3. NEVER display dead links or empty buttons - only show links that actually work
+4. SINGULAR vs PLURAL: If user asks for "a pizza place" or "a restaurant" (singular), show ONLY 1 place. If they ask for "pizza places" or "restaurants" (plural), show multiple places.
 
 FOR ALL LOCATION RECOMMENDATIONS (restaurants, hotels, attractions, activities), use this CONSISTENT HERO CARD format:
 
@@ -1014,7 +1015,7 @@ CRITICAL LINK RULES:
 - ONLY show links that exist in the place data (check each field exists and is not empty)
 - NEVER show empty buttons or dead links
 - If place.website exists and is not empty, show: <a href="[place.website]" target="_blank" rel="noopener noreferrer">🌐 Official Website</a>
-- If place.phone exists and is not empty, show: <a href="tel:[place.phone]" class="activity-link">📞 [place.phone]</a>
+- If place.phone exists and is not empty, show: <a href="tel:[place.phone]" class="activity-link">�� [place.phone]</a>
 - ALWAYS show Google Maps (guaranteed working): <a href="[place.google_maps_url]" target="_blank" rel="noopener noreferrer">📍 Google Maps</a>
 - Only show Yelp if place has good rating data: <a href="[place.yelp_search_url]" target="_blank" rel="noopener noreferrer">⭐ Yelp Reviews</a>
 
