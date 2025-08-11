@@ -138,6 +138,9 @@ When recommending places, always use this format:
     except Exception as e:
         return f"I'm sorry, I'm having trouble connecting right now. Please try again in a moment. Error: {str(e)}"
 
+# Default fallback image (guaranteed to work)
+DEFAULT_PLACE_IMAGE = 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=600'
+
 # Predefined image mapping for food/restaurant keywords
 KEYWORD_IMAGES = {
     'pizza': 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=600',
