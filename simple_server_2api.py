@@ -194,12 +194,15 @@ def search_places_keyword(query, location=None):
             if location:
                 place_name += f" in {location}"
 
+            # Ensure we always have a valid image URL
+            safe_image_url = image_url if image_url else DEFAULT_PLACE_IMAGE
+
             place_info = {
                 'name': place_name,
                 'address': location if location else 'Location not specified',
                 'rating': 4.5,  # Default good rating
                 'rating_count': 250,  # Default review count
-                'image_url': image_url,
+                'image_url': safe_image_url,
                 'google_maps_url': f"https://www.google.com/maps/search/{urllib.parse.quote_plus(keyword)}+{urllib.parse.quote_plus(location or '')}",
                 'website': '',
                 'place_id': f"keyword_{keyword.replace(' ', '_')}"
