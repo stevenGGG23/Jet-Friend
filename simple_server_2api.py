@@ -59,8 +59,8 @@ TRAVEL EXPERTISE:
 
 When recommending places, always use this format:
 <div class="place-card">
-  <div class="place-image">
-    <img src="[image_url]" alt="[place_name]" loading="lazy">
+  <div class="place-hero">
+    <img src="[image_url]" alt="[place_name]" loading="lazy" class="place-hero-image">
   </div>
   <div class="place-info">
     <div class="place-header-compact">
