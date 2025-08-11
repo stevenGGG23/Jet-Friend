@@ -316,6 +316,12 @@ def get_enhanced_fallback_image(place_name: str, place_types: List[str], locatio
             'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ],
+        'pizza': [
+            'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/845808/pexels-photo-845808.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1566837/pexels-photo-1566837.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
         'hotel': [
             'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
             'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -356,7 +362,9 @@ def get_enhanced_fallback_image(place_name: str, place_types: List[str], locatio
     }
 
     # Determine category and select appropriate image
-    if 'restaurant' in place_types_str or 'food' in place_types_str or 'meal_takeaway' in place_types_str:
+    if 'pizza' in place_name.lower() or 'pizzeria' in place_name.lower():
+        images = fallback_images['pizza']
+    elif 'restaurant' in place_types_str or 'food' in place_types_str or 'meal_takeaway' in place_types_str:
         images = fallback_images['restaurant']
     elif 'bar' in place_types_str or 'night_club' in place_types_str:
         images = fallback_images['bar']
@@ -593,6 +601,7 @@ CRITICAL DISPLAY RULES:
 1. For ANY location-related query (restaurants, hotels, attractions, activities, places), you MUST use the hero card format with itinerary-item cards
 2. For basic questions (like "what time is it" or "how to say hello"), use regular text responses
 3. NEVER display dead links or empty buttons - only show links that actually work
+4. SINGULAR vs PLURAL: If user asks for "a pizza place" or "a restaurant" (singular), show ONLY 1 place. If they ask for "pizza places" or "restaurants" (plural), show multiple places.
 
 FOR ALL LOCATION RECOMMENDATIONS (restaurants, hotels, attractions, activities), use this CONSISTENT HERO CARD format:
 
@@ -612,8 +621,10 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="place-hero">
 <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Senso-ji Temple" class="place-hero-image" loading="lazy">
 </div>
+<div class="activity-header">
 <div class="activity-name">Senso-ji Temple</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (28,000 reviews)</span></div>
+</div>
 <div class="activity">Asakusa - Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/senso-ji+temple+asakusa+tokyo" target="_blank" class="activity-link">📍 Google Maps</a>
@@ -625,8 +636,10 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="place-hero">
 <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Tokyo Skytree" class="place-hero-image" loading="lazy">
 </div>
+<div class="activity-header">
 <div class="activity-name">Tokyo Skytree</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.5 (85,000 reviews)</span></div>
+</div>
 <div class="activity">Sumida – Stunning views of Tokyo from Japan's tallest structure.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/tokyo+skytree+sumida" target="_blank" class="activity-link">📍 Google Maps</a>
@@ -639,8 +652,10 @@ MANDATORY HTML TEMPLATE (copy this structure exactly):
 <div class="place-hero">
 <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Fushimi Inari Shrine" class="place-hero-image" loading="lazy">
 </div>
+<div class="activity-header">
 <div class="activity-name">Fushimi Inari Shrine</div>
 <div class="activity-rating"><span class="stars">★★★★★</span><span class="rating-text">4.7 (50,000 reviews)</span></div>
+</div>
 <div class="activity">Famous for thousands of red torii gates forming scenic walking paths.</div>
 <div class="activity-links">
 <a href="https://www.google.com/maps/search/fushimi+inari+shrine+kyoto" target="_blank" class="activity-link">📍 Google Maps</a>
@@ -657,6 +672,7 @@ REQUIRED CSS CLASSES TO USE:
 - itinerary-item: Each activity card
 - place-hero: Image container at top of each card
 - place-hero-image: The actual image element
+- activity-header: Container for name and rating on same line
 - activity-name: Attraction/restaurant name
 - activity-rating: Rating container
 - stars: Visual star rating (★★★★★)
@@ -688,7 +704,7 @@ SMART TAGS SYSTEM:
 - premium: Use for high-end, luxury places
 
 CATEGORY BADGES:
-🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, 🌳 Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
+🍽️ Restaurant, ☕ Café, 🍻 Bar, 🏨 Hotel, 🎯 Attraction, 🏛️ Museum, �� Park, 🛍️ Shopping, 💪 Fitness, 🧘 Spa
 
 IMAGE USAGE RULES:
 - ALWAYS include ONE high-quality hero image per place using the place-hero structure
@@ -867,6 +883,12 @@ EXAMPLE of correct image usage:
 - Only show other links if the data exists
 
 RESPONSE FORMAT: Use the hero itinerary-item card format for ALL location recommendations. Include ratings, properly validated links only, smart tags, and category badges. Focus on convenience and immediate utility.
+
+QUANTITY CONTROL:
+- "a pizza place" / "a restaurant" → Show EXACTLY 1 place
+- "pizza places" / "restaurants" → Show multiple places (2-4)
+- "best pizza place" → Show EXACTLY 1 place
+- "top pizza places" → Show multiple places (2-4)
 
 ABSOLUTELY CRITICAL: Every single place you recommend must have its hero image displayed using the exact URL provided above. No exceptions."""
         
