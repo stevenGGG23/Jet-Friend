@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -4510,30 +4509,74 @@
           const fallback = document.createElement('div');
           fallback.className = 'place-hero-fallback';
 
-          // Determine appropriate emoji based on context
-          const activityName = heroContainer.parentElement?.querySelector('.activity-name')?.textContent || '';
-          const activityText = heroContainer.parentElement?.querySelector('.activity')?.textContent || '';
+          // Get comprehensive text content from multiple possible locations
+          const itineraryItem = heroContainer.closest('.itinerary-item');
+          const placeCard = heroContainer.closest('.place-card');
+          const messageGroup = heroContainer.closest('.message-group');
+
+          // Collect all text content for analysis
+          let allText = '';
+
+          // Try different selectors to get place information
+          if (itineraryItem) {
+            const activityName = itineraryItem.querySelector('.activity-name, .place-name')?.textContent || '';
+            const activity = itineraryItem.querySelector('.activity, .place-description')?.textContent || '';
+            const links = itineraryItem.querySelector('.activity-links')?.textContent || '';
+            allText = `${activityName} ${activity} ${links}`.toLowerCase();
+          } else if (placeCard) {
+            const placeName = placeCard.querySelector('.place-name, .activity-name')?.textContent || '';
+            const placeDesc = placeCard.querySelector('.place-description, .activity')?.textContent || '';
+            const placeAddress = placeCard.querySelector('.place-address')?.textContent || '';
+            allText = `${placeName} ${placeDesc} ${placeAddress}`.toLowerCase();
+          } else if (messageGroup) {
+            // Fallback: get all text from the message
+            allText = messageGroup.textContent?.toLowerCase() || '';
+          }
+
+          console.log('🔍 Analyzing text for emoji:', allText.substring(0, 100));
 
           let emoji = '🏞️'; // Default landscape
 
-          if (activityName.toLowerCase().includes('restaurant') || activityText.toLowerCase().includes('food') || activityText.toLowerCase().includes('dining')) {
+          // Enhanced detection patterns with more keywords
+          if (allText.includes('restaurant') || allText.includes('food') || allText.includes('dining') ||
+              allText.includes('eat') || allText.includes('meal') || allText.includes('cuisine') ||
+              allText.includes('pizza') || allText.includes('sushi') || allText.includes('ramen') ||
+              allText.includes('cafe') || allText.includes('coffee') || allText.includes('bistro')) {
             emoji = '🍽️';
-          } else if (activityName.toLowerCase().includes('hotel') || activityText.toLowerCase().includes('hotel') || activityText.toLowerCase().includes('accommodation')) {
+          } else if (allText.includes('hotel') || allText.includes('accommodation') || allText.includes('lodge') ||
+                     allText.includes('resort') || allText.includes('inn') || allText.includes('hostel') ||
+                     allText.includes('stay') || allText.includes('booking')) {
             emoji = '🏨';
-          } else if (activityName.toLowerCase().includes('temple') || activityName.toLowerCase().includes('shrine') || activityText.toLowerCase().includes('temple')) {
+          } else if (allText.includes('temple') || allText.includes('shrine') || allText.includes('pagoda') ||
+                     allText.includes('monastery') || allText.includes('church') || allText.includes('cathedral')) {
             emoji = '⛩️';
-          } else if (activityName.toLowerCase().includes('museum') || activityText.toLowerCase().includes('museum') || activityText.toLowerCase().includes('art')) {
+          } else if (allText.includes('museum') || allText.includes('gallery') || allText.includes('art') ||
+                     allText.includes('exhibition') || allText.includes('cultural') || allText.includes('history')) {
             emoji = '🏛️';
-          } else if (activityName.toLowerCase().includes('park') || activityText.toLowerCase().includes('park') || activityText.toLowerCase().includes('garden')) {
+          } else if (allText.includes('park') || allText.includes('garden') || allText.includes('nature') ||
+                     allText.includes('forest') || allText.includes('botanical') || allText.includes('zoo')) {
             emoji = '🌳';
-          } else if (activityName.toLowerCase().includes('tower') || activityName.toLowerCase().includes('skytree') || activityText.toLowerCase().includes('tower')) {
+          } else if (allText.includes('tower') || allText.includes('skytree') || allText.includes('observation') ||
+                     allText.includes('observatory') || allText.includes('landmark') || allText.includes('monument')) {
             emoji = '🗼';
-          } else if (activityText.toLowerCase().includes('shopping') || activityText.toLowerCase().includes('market')) {
+          } else if (allText.includes('shopping') || allText.includes('market') || allText.includes('mall') ||
+                     allText.includes('store') || allText.includes('boutique') || allText.includes('shop')) {
             emoji = '🛍️';
-          } else if (activityText.toLowerCase().includes('bar') || activityText.toLowerCase().includes('drink')) {
+          } else if (allText.includes('bar') || allText.includes('drink') || allText.includes('pub') ||
+                     allText.includes('brewery') || allText.includes('cocktail') || allText.includes('nightlife')) {
             emoji = '🍺';
+          } else if (allText.includes('beach') || allText.includes('ocean') || allText.includes('sea') ||
+                     allText.includes('coast') || allText.includes('surf')) {
+            emoji = '🏖️';
+          } else if (allText.includes('mountain') || allText.includes('hike') || allText.includes('trail') ||
+                     allText.includes('peak') || allText.includes('summit')) {
+            emoji = '⛰️';
+          } else if (allText.includes('train') || allText.includes('station') || allText.includes('airport') ||
+                     allText.includes('transport') || allText.includes('metro')) {
+            emoji = '🚂';
           }
 
+          console.log('🎯 Selected emoji:', emoji);
           fallback.textContent = emoji;
           heroContainer.appendChild(fallback);
         }
