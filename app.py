@@ -737,7 +737,9 @@ def get_ai_response(user_message: str, conversation_history: List[Dict] = None, 
         if places_data and len(places_data) > 0:
             # Create a VERY clear mapping of images for the AI to use
             image_map = {}
-            places_text = "\n\nREAL-TIME PLACE DATA - USE THESE EXACT DETAILS:\n"
+            is_singular = detect_singular_request(user_message)
+            request_context = "SINGULAR REQUEST" if is_singular else "PLURAL/MULTI-DAY REQUEST"
+            places_text = f"\n\nREAL-TIME PLACE DATA ({request_context} - {len(places_data)} place{'s' if len(places_data) > 1 else ''}) - USE THESE EXACT DETAILS:\n"
             
             for i, place in enumerate(places_data[:5], 1):
                 place_name = place['name']
@@ -1188,7 +1190,7 @@ if __name__ == '__main__':
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
 
     print(f"🚀 JetFriend API v2.1 starting on port {port}")
-    print(f"🌐 Visit: http://localhost:{port}")
+    print(f"�� Visit: http://localhost:{port}")
     print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
     print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
     print(f"🔍 Data Validation: {'✅ Active' if data_processor else '❌ Not configured'}")
