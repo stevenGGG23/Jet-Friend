@@ -394,7 +394,7 @@ def get_category_badge(place_types: List[str]) -> str:
         'cafe': '☕ Café',
         'bar': '🍻 Bar',
         'lodging': '🏨 Hotel',
-        'tourist_attraction': '🏭 Attraction',
+        'tourist_attraction': '�� Attraction',
         'museum': '🏛️ Museum',
         'park': '🌳 Park',
         'shopping_mall': '🛍️ Shopping',
@@ -663,6 +663,7 @@ REQUIRED CSS CLASSES TO USE:
 - itinerary-item: Each activity card
 - place-hero: Image container at top of each card
 - place-hero-image: The actual image element
+- activity-header: Container for name and rating on same line
 - activity-name: Attraction/restaurant name
 - activity-rating: Rating container
 - stars: Visual star rating (★★★★★)
