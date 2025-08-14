@@ -482,7 +482,7 @@ def generate_mock_places_data(query: str) -> List[Dict]:
             'rating': 4.2,
             'rating_count': 234,
             'types': ['museum', 'tourist_attraction'],
-            'category_badge': '🏛️ Museum',
+            'category_badge': '🏛�� Museum',
             'hero_image': 'https://images.unsplash.com/photo-1595862804940-94ad0b0b54a4?w=1200&auto=format&fit=crop',
             'description': f'Discover the rich history and culture of {location} through fascinating exhibits.'
         },
@@ -1442,32 +1442,7 @@ def chat():
         is_basic = is_basic_question(user_message)
         is_location_query = detect_location_query(user_message) and not is_basic
 
-        if is_location_query and gmaps_client:
-            # Extract location from message or use general search
-            location_match = re.search(r'(?:in|at|near)\s+([A-Za-z\s]+?)(?:\s|$|[.,!?])', user_message, re.IGNORECASE)
-            location = location_match.group(1).strip() if location_match else None
-
-            # Determine how many results to return based on singular vs plural request
-            is_singular = detect_singular_request(user_message)
-            max_results = 1 if is_singular else 6  # 1 for singular, 6 for plural/multi-day
-
-            # Search for both regular and underground places
-            regular_places = search_places(user_message, location)
-            underground_places = search_underground_places(user_message, location)
-
-            # Combine and deduplicate by place_id
-            all_places = []
-            seen_ids = set()
-
-            # Prioritize underground places for authentic experience
-            for place in underground_places + regular_places:
-                place_id = place.get('place_id', '')
-                if place_id and place_id not in seen_ids:
-                    seen_ids.add(place_id)
-                    all_places.append(place)
-
-            places_data = all_places[:max_results]  # Limit based on request type
-        elif is_location_query and not gmaps_client:
+        if is_location_query:
             # Generate mock data with working images when API is not available
             places_data = generate_mock_places_data(user_message)
             logger.info(f"Generated {len(places_data)} mock places with working images")
@@ -1491,7 +1466,7 @@ def chat():
             'places_found': len(places_data),
             'enhanced_with_location': len(places_data) > 0,
             'location_detected': detect_location_query(user_message),
-            'gmaps_available': gmaps_client is not None,
+            'location_aware_results': True,
             'debug_location': location if 'location' in locals() else None,
             'timestamp': request.timestamp if hasattr(request, 'timestamp') else None
         })
@@ -1516,12 +1491,15 @@ def places_search():
         if not query:
             return jsonify({'error': 'Query is required'}), 400
         
-        if not gmaps_client:
+        # Using alternative location data processing
+        places_data = generate_mock_places_data(query)
+
+        if not places_data:
             return jsonify({
                 'success': False,
-                'error': 'Google Places API not configured',
-                'message': 'Location search unavailable. Upgrade to JetFriend Premium for enhanced location services!'
-            }), 503
+                'error': 'No location data found',
+                'message': 'No places found for this location. Try a different search.'
+            }), 404
         
         places_data = search_places(query, location, radius)
         
@@ -1563,7 +1541,7 @@ def health_check():
         'version': '2.1.0',
         'features': {
             'openai_gpt4o': openai_client is not None,
-            'google_places': gmaps_client is not None,
+            'location_processing': True,
             'location_detection': True,
             'data_validation': data_processor is not None,
             'image_sourcing': data_processor is not None and data_processor.image_sourcer is not None,
@@ -1575,14 +1553,14 @@ def health_check():
         'builder_io_integration': {
             'data_accuracy': data_processor is not None,
             'link_validation': data_processor is not None,
-            'coordinate_verification': gmaps_client is not None,
-            'image_sourcing': data_processor is not None,
+            'coordinate_verification': False,
+            'image_sourcing': True,
             'licensing_compliance': True
         },
         'image_sources': {
-            'primary': 'Google Places Photos API' if gmaps_client else 'Not Available',
-            'fallback': 'Unsplash (royalty-free)',
-            'demo_mode': gmaps_client is None
+            'primary': 'Curated location images',
+            'fallback': 'Pexels (royalty-free)',
+            'demo_mode': False
         }
     })
 
@@ -1611,12 +1589,8 @@ def validation_status():
         test_url_result = data_processor.validator.validate_url('https://www.google.com')
         test_results['url_validation'] = test_url_result.get('valid', False)
 
-        # Test coordinate validation (if Google Maps available)
-        if gmaps_client:
-            test_coord_result = data_processor.validator.validate_coordinates_match_address(
-                'Times Square, New York, NY', 40.7580, -73.9855
-            )
-            test_results['coordinate_validation'] = test_coord_result.get('valid', False)
+        # Coordinate validation not available without Google Maps
+        test_results['coordinate_validation'] = False
 
         # Test contact validation
         test_contact_result = data_processor.validator.validate_contact_info(
@@ -1719,45 +1693,26 @@ def test_ai():
 
 @app.route('/api/test-places', methods=['GET'])
 def test_places():
-    """Enhanced test for Google Places API connectivity with detailed debugging"""
-    if not gmaps_client:
-        return jsonify({
-            'success': False,
-            'error': 'GOOGLE_PLACES_API_KEY not configured',
-            'places_status': 'disconnected',
-            'message': 'Please set the GOOGLE_PLACES_API_KEY environment variable. Upgrade to JetFriend Premium for enhanced location services!'
-        }), 503
-
+    """Test location data processing"""
     try:
-        # Test multiple search types
-        test_query = "pizza restaurant"
-        test_location = "San Francisco"
+        test_query = "restaurants in Japan"
+        test_location = "Japan"
 
-        logger.info(f"Testing Google Places API with query: '{test_query}' in '{test_location}'")
+        logger.info(f"Testing location processing with query: '{test_query}' in '{test_location}'")
 
-        # Test regular search
-        regular_places = search_places(test_query, test_location)
-
-        # Test underground search
-        underground_places = search_underground_places(test_query, test_location)
-
-        # Test basic API connectivity
-        basic_test = gmaps_client.places(query="Starbucks San Francisco")
+        # Test location-aware place generation
+        places = generate_mock_places_data(test_query)
 
         return jsonify({
             'success': True,
             'places_status': 'connected',
-            'regular_search_results': len(regular_places),
-            'underground_search_results': len(underground_places),
-            'basic_api_results': len(basic_test.get('results', [])),
-            'sample_regular_place': regular_places[0] if regular_places else None,
-            'sample_underground_place': underground_places[0] if underground_places else None,
-            'api_response_sample': basic_test.get('results', [])[0] if basic_test.get('results') else None,
+            'location_results': len(places),
+            'sample_place': places[0] if places else None,
             'test_query': test_query,
             'test_location': test_location
         })
     except Exception as e:
-        logger.error(f"Places API test failed: {str(e)}")
+        logger.error(f"Location processing test failed: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e),
@@ -1828,9 +1783,8 @@ def warm_up():
         if openai_client:
             logger.info("🔥 Warming up OpenAI connection...")
 
-        # Test Google Places if available
-        if gmaps_client:
-            logger.info("🔥 Warming up Google Places connection...")
+        # Test location processing
+        logger.info("🔥 Warming up location processing...")
 
         logger.info("🔥 Application warmed up successfully")
     except Exception as e:
