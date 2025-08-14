@@ -1284,6 +1284,12 @@ When you receive place data, it will include:
 - name: The place name
 - IMAGE TO USE: THE EXACT IMAGE URL TO USE (use this exactly)
 - Google Maps: Always available link
+- Yelp: Always available search link
+- TripAdvisor: Always available search link
+- Foursquare: Always available search link
+- TimeOut: Always available search link
+- OpenTable: For restaurants only
+- Booking.com: For hotels only
 - Website: Only if available
 - Phone: Only if available
 - Rating and review count for the stars display
