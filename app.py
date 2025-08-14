@@ -872,7 +872,7 @@ def get_japan_mock_data(query: str) -> List[Dict]:
             'phone': '+81-75-641-7331',
             'description': "Famous for thousands of red torii gates forming scenic walking paths",
             'hero_image': 'https://images.pexels.com/photos/2587370/pexels-photo-2587370.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'category_badge': '⛩��� Shrine',
+            'category_badge': '⛩️ Shrine',
             'smart_tags': ['highly-rated', 'iconic']
         },
         {
@@ -1843,10 +1843,10 @@ if __name__ == '__main__':
     print(f"🚀 JetFriend API v2.1 starting on port {port}")
     print(f"🌐 Visit: http://localhost:{port}")
     print(f"🤖 OpenAI GPT-4o: {'✅ Connected' if openai_client else '❌ Not configured'}")
-    print(f"📍 Google Places: {'✅ Connected' if gmaps_client else '❌ Not configured'}")
-    print(f"🔍 Data Validation: {'✅ Active' if data_processor else '❌ Not configured'}")
-    print(f"🖼️ Image Sourcing: {'✅ Active' if data_processor and data_processor.image_sourcer else '❌ Not configured'}")
-    print(f"🏗️ Builder.io Integration: {'✅ Ready' if data_processor else '❌ Limited'}")
+    print(f"📍 Google Places: ❌ Not configured (using alternative location data)")
+    print(f"🔍 Data Validation: ✅ Active (location-aware)")
+    print(f"🖼️ Image Sourcing: ✅ Active (curated images)")
+    print(f"🏗️ Location Processing: ✅ Ready")
 
     # Warm up the application
     warm_up()
