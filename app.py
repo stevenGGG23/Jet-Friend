@@ -287,7 +287,7 @@ def generate_mock_places_data(query: str) -> List[Dict]:
             'rating': 4.2,
             'rating_count': 234,
             'types': ['museum', 'tourist_attraction'],
-            'category_badge': '����️ Museum',
+            'category_badge': '🏛️ Museum',
             'hero_image': 'https://images.unsplash.com/photo-1595862804940-94ad0b0b54a4?w=1200&auto=format&fit=crop',
             'description': f'Discover the rich history and culture of {location} through fascinating exhibits.'
         },
@@ -323,7 +323,7 @@ def generate_mock_places_data(query: str) -> List[Dict]:
             'smart_tags': [],
             'has_real_photos': False,
             'image_source': 'unsplash_demo',
-            'google_maps_url': f"https://www.google.com/maps/search/{place['name'].replace(' ', '+')}+{location.replace(' ', '+')}",
+            'google_maps_url': f"https://www.google.com/maps/search/?api=1&query={place['name'].replace(' ', '+')}+{location.replace(' ', '+')}",
             'google_search_url': f"https://www.google.com/search?q={place['name'].replace(' ', '+')}+{location.replace(' ', '+')}",
             'website': '',
             'phone': '',
