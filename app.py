@@ -312,7 +312,33 @@ def generate_mock_places_data(query: str) -> List[Dict]:
         mock_places = mock_attractions
     else:
         # Mix of different types for general queries
-        mock_places = mock_restaurants + mock_hotels + mock_attractions\n    \n    # Randomly select places and add required fields\n    selected_places = random.sample(mock_places, min(max_results, len(mock_places)))\n    \n    for place in selected_places:\n        place.update({\n            'place_id': f\"mock_{random.randint(1000, 9999)}\",\n            'smart_tags': [],\n            'has_real_photos': False,\n            'image_source': 'unsplash_demo',\n            'google_maps_url': f\"https://www.google.com/maps/search/{place['name'].replace(' ', '+')}+{location.replace(' ', '+')}\",\n            'google_search_url': f\"https://www.google.com/search?q={place['name'].replace(' ', '+')}+{location.replace(' ', '+')}\",\n            'website': '',\n            'phone': '',\n            'price_level': random.randint(1, 4)\n        })\n        \n        # Add smart tags based on rating\n        if place['rating'] >= 4.5:\n            place['smart_tags'].append('highly-rated')\n        if place['price_level'] <= 2:\n            place['smart_tags'].append('budget-friendly')\n        elif place['price_level'] >= 4:\n            place['smart_tags'].append('premium')\n    \n    return selected_places
+        mock_places = mock_restaurants + mock_hotels + mock_attractions
+
+    # Randomly select places and add required fields
+    selected_places = random.sample(mock_places, min(max_results, len(mock_places)))
+
+    for place in selected_places:
+        place.update({
+            'place_id': f"mock_{random.randint(1000, 9999)}",
+            'smart_tags': [],
+            'has_real_photos': False,
+            'image_source': 'unsplash_demo',
+            'google_maps_url': f"https://www.google.com/maps/search/{place['name'].replace(' ', '+')}+{location.replace(' ', '+')}",
+            'google_search_url': f"https://www.google.com/search?q={place['name'].replace(' ', '+')}+{location.replace(' ', '+')}",
+            'website': '',
+            'phone': '',
+            'price_level': random.randint(1, 4)
+        })
+
+        # Add smart tags based on rating
+        if place['rating'] >= 4.5:
+            place['smart_tags'].append('highly-rated')
+        if place['price_level'] <= 2:
+            place['smart_tags'].append('budget-friendly')
+        elif place['price_level'] >= 4:
+            place['smart_tags'].append('premium')
+
+    return selected_places
 
 def search_underground_places(query: str, location: str = None) -> List[Dict]:
     """
