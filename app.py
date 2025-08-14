@@ -1278,7 +1278,7 @@ LINK RULES:
 - ONLY include links that are provided in the place data
 - Always include Google Maps (it's always available)
 - Format: <a href="[exact URL from data]" target="_blank" class="activity-link">[icon] [label]</a>
-- Common links: 📍 Google Maps, 🌐 Website, ⭐ Yelp, ��� Phone
+- Available links: 📍 Google Maps, 🌐 Website, ⭐ Yelp, 🏛️ TripAdvisor, 🍽️ OpenTable, 🏨 Booking.com, 🎯 Foursquare, ⏰ TimeOut, 📞 Phone
 
 When you receive place data, it will include:
 - name: The place name
