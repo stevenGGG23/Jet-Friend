@@ -915,9 +915,10 @@ For {place['name']}:
 </div>
 <div class="activity">{place['address']}</div>
 <div class="activity-links">
-<a href="{place['google_maps_url']}" target="_blank" class="activity-link">📍 Google Maps</a>
-{f'<a href="{place["website"]}" target="_blank" class="activity-link">🌐 Website</a>' if place.get('website') else ''}
-{f'<a href="tel:{place["phone"]}" class="activity-link">📞 {place["phone"]}</a>' if place.get('phone') else ''}
+<a href="{place['google_maps_url']}" target="_blank" rel="noopener noreferrer" class="activity-link">📍 Google Maps</a>
+{f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="activity-link">🌐 Website</a>' if place.get('website') and place['website'].strip() else ''}
+{f'<a href="tel:{place["phone"]}" class="activity-link">📞 {place["phone"]}</a>' if place.get('phone') and place['phone'].strip() else ''}
+{f'<a href="{place["yelp_search_url"]}" target="_blank" rel="noopener noreferrer" class="activity-link">⭐ Yelp</a>' if place.get('yelp_search_url') else ''}
 </div>
 </div>
 """
