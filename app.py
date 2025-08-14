@@ -436,7 +436,7 @@ def generate_mock_places_data(query: str) -> List[Dict]:
             'rating': 4.3,
             'rating_count': 187,
             'types': ['restaurant', 'food', 'pizza'],
-            'category_badge': '🍕 Pizza',
+            'category_badge': '���� Pizza',
             'hero_image': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=1200&auto=format&fit=crop',
             'description': f'Authentic wood-fired pizza with fresh ingredients, a local favorite in {location}.'
         },
@@ -1251,7 +1251,7 @@ FOR ALL LOCATION RECOMMENDATIONS, use this EXACT HTML structure:
 </div>
 <div class="activity-header">
 <span class="activity-name">[Place Name]</span>
-<div class="activity-rating"><span class="stars">★★★★★</span> <span class="rating-text">[rating] ([count] reviews)</span></div>
+<div class="activity-rating-right"><span class="stars">★★★★★</span> <span class="rating-text">[rating] ([count] reviews)</span></div>
 </div>
 <div class="activity">[Brief description - address and highlights]</div>
 <div class="activity-links">
