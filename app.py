@@ -7,9 +7,9 @@ import urllib.parse
 import time
 from dotenv import load_dotenv
 from openai import OpenAI
-import googlemaps
 from typing import Optional, Dict, List
-from data_validation import ComprehensiveDataProcessor, DataValidator, ImageSourcer
+import json
+import random
 
 # Load environment variables from .env file
 load_dotenv()
@@ -23,9 +23,6 @@ CORS(app)  # Enable CORS for all routes
 
 # Initialize APIs
 openai_api_key = os.getenv("OPENAI_API_KEY")
-google_places_api_key = os.getenv("GOOGLE_PLACES_API_KEY")
-google_images_api_key = os.getenv("GOOGLE_IMAGES_API_KEY")
-google_search_engine_id = os.getenv("GOOGLE_SEARCH_ENGINE_ID")
 
 # Initialize OpenAI client
 openai_client = None
@@ -37,28 +34,10 @@ if openai_api_key and openai_api_key != "your-openai-api-key-here":
 else:
     logger.warning("OPENAI_API_KEY not set. AI functionality will be limited.")
 
-# Initialize Google Maps client
-gmaps_client = None
-if google_places_api_key and google_places_api_key != "your-google-places-api-key-here":
-    try:
-        gmaps_client = googlemaps.Client(key=google_places_api_key)
-    except Exception as e:
-        logger.warning(f"Failed to initialize Google Maps client: {str(e)}")
-else:
-    logger.warning("GOOGLE_PLACES_API_KEY not set. Location features will be limited.")
+# Google Places API removed - using alternative location data
 
-# Initialize Comprehensive Data Processor for Builder.io integration
-data_processor = None
-try:
-    data_processor = ComprehensiveDataProcessor(
-        gmaps_client=gmaps_client,
-        google_images_api_key=google_images_api_key,
-        google_search_engine_id=google_search_engine_id
-    )
-    logger.info("✅ Comprehensive Data Processor initialized for Builder.io integration")
-except Exception as e:
-    logger.warning(f"Failed to initialize data processor: {str(e)}")
-    logger.warning("Data validation and image sourcing will use fallback methods")
+# Using alternative data processing without Google Places dependency
+logger.info("✅ Alternative location processing initialized")
 
 def is_basic_question(message: str) -> bool:
     """
