@@ -604,11 +604,219 @@ def get_category_badge(place_types: List[str]) -> str:
 
     return '📍 Place'
 
+def get_japan_mock_data(query: str) -> List[Dict]:
+    """
+    Generate comprehensive Japan-specific mock data when APIs aren't available
+    """
+    # Detect if this is a Japan-related query
+    japan_keywords = ['japan', 'tokyo', 'kyoto', 'osaka', 'hiroshima', 'nara', 'yokohama', 'kobe']
+    query_lower = query.lower()
+    is_japan_query = any(keyword in query_lower for keyword in japan_keywords)
+
+    if not is_japan_query:
+        return []
+
+    # Comprehensive Japan places database
+    japan_places = [
+        # Tokyo
+        {
+            'name': 'Senso-ji Temple',
+            'address': 'Asakusa, Tokyo, Japan',
+            'rating': 4.5,
+            'rating_count': 28000,
+            'price_level': 0,
+            'types': ['tourist_attraction', 'place_of_worship'],
+            'place_id': 'mock_sensoji_temple',
+            'website': 'https://senso-ji.jp',
+            'phone': '+81-3-3842-0181',
+            'description': "Tokyo's oldest temple, vibrant atmosphere, shopping at Nakamise Street",
+            'hero_image': 'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'category_badge': '⛩️ Temple',
+            'smart_tags': ['highly-rated', 'historic']
+        },
+        {
+            'name': 'Tokyo Skytree',
+            'address': 'Sumida, Tokyo, Japan',
+            'rating': 4.5,
+            'rating_count': 85000,
+            'price_level': 2,
+            'types': ['tourist_attraction'],
+            'place_id': 'mock_tokyo_skytree',
+            'website': 'https://tokyo-skytree.jp',
+            'phone': '+81-3-5302-3470',
+            'description': "Stunning views of Tokyo from Japan's tallest structure",
+            'hero_image': 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'category_badge': '🏭 Attraction',
+            'smart_tags': ['highly-rated']
+        },
+        {
+            'name': 'Ramen Yokocho',
+            'address': 'Shibuya, Tokyo, Japan',
+            'rating': 4.3,
+            'rating_count': 15000,
+            'price_level': 1,
+            'types': ['restaurant', 'food'],
+            'place_id': 'mock_ramen_yokocho',
+            'website': 'https://ramenyokocho.com',
+            'phone': '+81-3-3496-8888',
+            'description': "Authentic Tokyo ramen experience with traditional tonkotsu broth",
+            'hero_image': 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'category_badge': '🍜 Ramen',
+            'smart_tags': ['budget-friendly', 'local-favorite']
+        },
+        # Kyoto
+        {
+            'name': 'Fushimi Inari Shrine',
+            'address': 'Fushimi Ward, Kyoto, Japan',
+            'rating': 4.7,
+            'rating_count': 50000,
+            'price_level': 0,
+            'types': ['tourist_attraction', 'place_of_worship'],
+            'place_id': 'mock_fushimi_inari',
+            'website': 'https://inari.jp/en/',
+            'phone': '+81-75-641-7331',
+            'description': "Famous for thousands of red torii gates forming scenic walking paths",
+            'hero_image': 'https://images.pexels.com/photos/2587370/pexels-photo-2587370.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'category_badge': '⛩️ Shrine',
+            'smart_tags': ['highly-rated', 'iconic']
+        },
+        {
+            'name': 'Kinkaku-ji (Golden Pavilion)',
+            'address': 'Kita Ward, Kyoto, Japan',
+            'rating': 4.6,
+            'rating_count': 35000,
+            'price_level': 1,
+            'types': ['tourist_attraction', 'place_of_worship'],
+            'place_id': 'mock_kinkakuji',
+            'website': 'https://www.shokoku-ji.jp/kinkakuji/',
+            'phone': '+81-75-461-0013',
+            'description': "Iconic golden temple set in beautiful gardens",
+            'hero_image': 'https://images.pexels.com/photos/1263986/pexels-photo-1263986.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'category_badge': '🏛️ Temple',
+            'smart_tags': ['highly-rated', 'iconic']
+        },
+        {
+            'name': 'Kaiseki Yoshikawa',
+            'address': 'Higashiyama, Kyoto, Japan',
+            'rating': 4.8,
+            'rating_count': 1200,
+            'price_level': 4,
+            'types': ['restaurant', 'fine_dining'],
+            'place_id': 'mock_kaiseki_yoshikawa',
+            'website': 'https://kikunoi.jp',
+            'phone': '+81-75-561-1818',
+            'description': "Traditional kaiseki dining with seasonal ingredients and artistic presentation",
+            'hero_image': 'https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'category_badge': '🍽️ Fine Dining',
+            'smart_tags': ['premium', 'authentic']
+        },
+        # Osaka
+        {
+            'name': 'Dotonbori District',
+            'address': 'Chuo Ward, Osaka, Japan',
+            'rating': 4.4,
+            'rating_count': 120000,
+            'price_level': 2,
+            'types': ['tourist_attraction', 'entertainment'],
+            'place_id': 'mock_dotonbori',
+            'website': 'https://dotonbori.or.jp',
+            'phone': '+81-6-6211-4542',
+            'description': "Vibrant nightlife, street food, and iconic neon signs",
+            'hero_image': 'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'category_badge': '🌃 District',
+            'smart_tags': ['nightlife', 'food-paradise']
+        },
+        {
+            'name': 'Osaka Castle',
+            'address': 'Chuo Ward, Osaka, Japan',
+            'rating': 4.5,
+            'rating_count': 65000,
+            'price_level': 1,
+            'types': ['tourist_attraction', 'museum'],
+            'place_id': 'mock_osaka_castle',
+            'website': 'https://www.osakacastle.net/',
+            'phone': '+81-6-6941-3044',
+            'description': "Historic castle with panoramic city views and museum",
+            'hero_image': 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'category_badge': '🏰 Castle',
+            'smart_tags': ['highly-rated', 'historic']
+        },
+        {
+            'name': 'Takoyaki Juhachiban',
+            'address': 'Namba, Osaka, Japan',
+            'rating': 4.4,
+            'rating_count': 8500,
+            'price_level': 1,
+            'types': ['restaurant', 'food', 'street_food'],
+            'place_id': 'mock_takoyaki_juhachiban',
+            'website': 'https://takoyaki-juhachiban.com',
+            'phone': '+81-6-6212-7777',
+            'description': "Authentic Osaka-style takoyaki (octopus balls) from a local institution",
+            'hero_image': 'https://images.pexels.com/photos/3201921/pexels-photo-3201921.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'category_badge': '🐙 Takoyaki',
+            'smart_tags': ['budget-friendly', 'local-favorite', 'street-food']
+        }
+    ]
+
+    # Filter based on query
+    matching_places = []
+    query_words = query_lower.split()
+
+    for place in japan_places:
+        place_name_lower = place['name'].lower()
+        place_address_lower = place['address'].lower()
+        place_types_str = ' '.join(place['types']).lower()
+        place_description_lower = place['description'].lower()
+
+        # Check if query matches this place
+        is_match = False
+
+        # Check for specific location mentions
+        if any(word in place_address_lower for word in query_words):
+            is_match = True
+
+        # Check for activity types
+        activity_keywords = {
+            'restaurant': ['restaurant', 'food', 'eat', 'dining', 'ramen', 'sushi', 'takoyaki'],
+            'temple': ['temple', 'shrine', 'worship', 'spiritual', 'traditional'],
+            'attraction': ['attraction', 'sightseeing', 'visit', 'see', 'tower', 'castle'],
+            'trip': ['trip', 'itinerary', 'day', 'travel', 'visit']
+        }
+
+        for category, keywords in activity_keywords.items():
+            if any(keyword in query_lower for keyword in keywords):
+                if category == 'restaurant' and 'restaurant' in place_types_str:
+                    is_match = True
+                elif category == 'temple' and 'place_of_worship' in place_types_str:
+                    is_match = True
+                elif category == 'attraction' and 'tourist_attraction' in place_types_str:
+                    is_match = True
+                elif category == 'trip':  # For general trip queries, include all
+                    is_match = True
+
+        if is_match:
+            matching_places.append(place)
+
+    # If no specific matches but it's a Japan query, return top attractions
+    if not matching_places and is_japan_query:
+        matching_places = japan_places[:6]  # Return top 6 places
+
+    return matching_places[:8]  # Limit to 8 results
+
 def search_places(query: str, location: str = None, radius: int = 5000) -> List[Dict]:
     """
     Enhanced search for places using Google Places API with detailed information
     """
     if not gmaps_client:
+        # Use Japan mock data if APIs aren't available
+        japan_data = get_japan_mock_data(query)
+        if japan_data:
+            # Process mock data to add proper links
+            processed_places = []
+            for place in japan_data:
+                enhanced_place = process_mock_place_data(place)
+                processed_places.append(enhanced_place)
+            return processed_places
         return []
 
     try:
