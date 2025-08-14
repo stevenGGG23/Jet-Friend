@@ -1081,6 +1081,19 @@ def places_search():
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint with API status"""
+    # Test sample image URLs
+    sample_image_test = None
+    try:
+        sample_url = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&auto=format&fit=crop'
+        import urllib.request
+        import urllib.error
+        urllib.request.urlopen(sample_url, timeout=5)
+        sample_image_test = True
+        logger.info("✅ Sample image URL test passed")
+    except Exception as e:
+        sample_image_test = False
+        logger.warning(f"⚠️ Sample image URL test failed: {str(e)}")
+
     return jsonify({
         'status': 'healthy',
         'service': 'JetFriend API',
@@ -1092,7 +1105,9 @@ def health_check():
             'data_validation': data_processor is not None,
             'image_sourcing': data_processor is not None and data_processor.image_sourcer is not None,
             'comprehensive_validation': data_processor is not None,
-            'premium_features': False
+            'premium_features': False,
+            'mock_data_generation': True,
+            'image_urls_working': sample_image_test
         },
         'builder_io_integration': {
             'data_accuracy': data_processor is not None,
@@ -1100,6 +1115,11 @@ def health_check():
             'coordinate_verification': gmaps_client is not None,
             'image_sourcing': data_processor is not None,
             'licensing_compliance': True
+        },
+        'image_sources': {
+            'primary': 'Google Places Photos API' if gmaps_client else 'Not Available',
+            'fallback': 'Unsplash (royalty-free)',
+            'demo_mode': gmaps_client is None
         }
     })
 
