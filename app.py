@@ -872,7 +872,7 @@ def get_japan_mock_data(query: str) -> List[Dict]:
             'phone': '+81-75-641-7331',
             'description': "Famous for thousands of red torii gates forming scenic walking paths",
             'hero_image': 'https://images.pexels.com/photos/2587370/pexels-photo-2587370.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'category_badge': '⛩️ Shrine',
+            'category_badge': '⛩��� Shrine',
             'smart_tags': ['highly-rated', 'iconic']
         },
         {
@@ -1294,7 +1294,9 @@ When you receive place data, it will include:
 - Phone: Only if available
 - Rating and review count for the stars display
 
-ALWAYS use the exact hero_image URL provided - this is critical for images to display!"""
+ALWAYS use the exact hero_image URL provided - this is critical for images to display!
+
+IMPORTANT: Do NOT add any footer tags like "Enhanced with X real places" or similar enhancement notifications at the end of your response. Just provide the location cards and any helpful travel advice without meta-commentary about the data source."""
 
 def substitute_real_urls(ai_response: str, places_data: List[Dict]) -> str:
     """
