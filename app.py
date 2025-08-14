@@ -436,7 +436,7 @@ def generate_mock_places_data(query: str) -> List[Dict]:
             'rating': 4.3,
             'rating_count': 187,
             'types': ['restaurant', 'food', 'pizza'],
-            'category_badge': '���� Pizza',
+            'category_badge': '🍕 Pizza',
             'hero_image': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=1200&auto=format&fit=crop',
             'description': f'Authentic wood-fired pizza with fresh ingredients, a local favorite in {location}.'
         },
@@ -1267,9 +1267,9 @@ CRITICAL IMAGE RULES:
 - The image MUST be the first element inside each itinerary-item
 
 CRITICAL FORMAT RULES:
-- Place name and rating MUST be on the same line in activity-header
+- Place name and rating MUST be in the same activity-header div but rating positioned to the right
 - Use <span class="activity-name"> for the name (NOT a div)
-- Rating div stays inline next to the name
+- Use <div class="activity-rating-right"> for rating to position it on the right side
 - NO markdown formatting
 - NO extra line breaks
 - Each place in its own itinerary-item div
