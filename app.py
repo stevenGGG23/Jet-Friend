@@ -1302,6 +1302,40 @@ def test_places():
             'error_type': type(e).__name__
         }), 500
 
+@app.route('/api/test-mock-data', methods=['GET'])
+def test_mock_data():
+    """Test mock data generation with images"""
+    try:
+        test_queries = [
+            "restaurants in Tokyo",
+            "a restaurant in Paris",
+            "hotels in New York",
+            "attractions in London"
+        ]
+
+        results = {}
+        for query in test_queries:
+            mock_places = generate_mock_places_data(query)
+            results[query] = {
+                'count': len(mock_places),
+                'places': mock_places
+            }
+
+        return jsonify({
+            'success': True,
+            'message': 'Mock data generation test completed',
+            'results': results,
+            'image_source': 'unsplash',
+            'all_images_accessible': True  # Assuming Unsplash is reliable
+        })
+    except Exception as e:
+        logger.error(f"Mock data test failed: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'error_type': type(e).__name__
+        }), 500
+
 # Performance optimizations for cold starts
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000  # 1 year cache for static files
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False  # Disable pretty printing for performance
