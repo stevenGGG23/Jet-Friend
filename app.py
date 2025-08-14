@@ -187,20 +187,236 @@ def detect_location_query(message: str) -> bool:
     message_lower = message.lower()
     return any(keyword in message_lower for keyword in location_keywords)
 
+def get_location_specific_places(query: str, location: str = None) -> List[Dict]:
+    """
+    Get location-specific place recommendations using curated data
+    Ensures places are actually in the specified location (e.g., Japan)
+    """
+    import random
+
+    # Curated location-specific data
+    location_data = {
+        'japan': {
+            'tokyo': [
+                {'name': 'Tsukiji Outer Market', 'type': 'market', 'area': 'Tsukiji', 'rating': 4.6},
+                {'name': 'Senso-ji Temple', 'type': 'temple', 'area': 'Asakusa', 'rating': 4.5},
+                {'name': 'Shibuya Crossing', 'type': 'landmark', 'area': 'Shibuya', 'rating': 4.4},
+                {'name': 'Meiji Shrine', 'type': 'shrine', 'area': 'Harajuku', 'rating': 4.5},
+                {'name': 'Tokyo Skytree', 'type': 'tower', 'area': 'Sumida', 'rating': 4.3},
+                {'name': 'Ginza District', 'type': 'shopping', 'area': 'Ginza', 'rating': 4.4},
+                {'name': 'Akihabara Electric Town', 'type': 'electronics', 'area': 'Akihabara', 'rating': 4.3},
+                {'name': 'Ueno Park', 'type': 'park', 'area': 'Ueno', 'rating': 4.4},
+                {'name': 'Roppongi Hills', 'type': 'complex', 'area': 'Roppongi', 'rating': 4.2},
+                {'name': 'Harajuku Takeshita Street', 'type': 'shopping', 'area': 'Harajuku', 'rating': 4.3}
+            ],
+            'osaka': [
+                {'name': 'Osaka Castle', 'type': 'castle', 'area': 'Chuo-ku', 'rating': 4.4},
+                {'name': 'Dotonbori', 'type': 'entertainment', 'area': 'Namba', 'rating': 4.5},
+                {'name': 'Kuromon Ichiba Market', 'type': 'market', 'area': 'Nipponbashi', 'rating': 4.3},
+                {'name': 'Sumiyoshi Taisha', 'type': 'shrine', 'area': 'Sumiyoshi', 'rating': 4.4},
+                {'name': 'Shinsaibashi', 'type': 'shopping', 'area': 'Chuo-ku', 'rating': 4.3}
+            ],
+            'kyoto': [
+                {'name': 'Fushimi Inari Shrine', 'type': 'shrine', 'area': 'Fushimi', 'rating': 4.6},
+                {'name': 'Kinkaku-ji (Golden Pavilion)', 'type': 'temple', 'area': 'Kita-ku', 'rating': 4.5},
+                {'name': 'Arashiyama Bamboo Grove', 'type': 'nature', 'area': 'Arashiyama', 'rating': 4.4},
+                {'name': 'Gion District', 'type': 'historic', 'area': 'Higashiyama', 'rating': 4.5},
+                {'name': 'Kiyomizu-dera Temple', 'type': 'temple', 'area': 'Higashiyama', 'rating': 4.5}
+            ],
+            'restaurants': [
+                {'name': 'Sukiyabashi Jiro', 'type': 'sushi', 'area': 'Ginza, Tokyo', 'rating': 4.8},
+                {'name': 'Narisawa', 'type': 'innovative', 'area': 'Minato, Tokyo', 'rating': 4.7},
+                {'name': 'Kani Doraku Honten', 'type': 'crab', 'area': 'Dotonbori, Osaka', 'rating': 4.5},
+                {'name': 'Ganko Sushi', 'type': 'sushi', 'area': 'Multiple locations', 'rating': 4.4},
+                {'name': 'Ippudo Ramen', 'type': 'ramen', 'area': 'Multiple locations', 'rating': 4.3},
+                {'name': 'Kikunoi', 'type': 'kaiseki', 'area': 'Higashiyama, Kyoto', 'rating': 4.6},
+                {'name': 'Mizuno', 'type': 'okonomiyaki', 'area': 'Osaka', 'rating': 4.5}
+            ],
+            'hotels': [
+                {'name': 'The Ritz-Carlton Tokyo', 'type': 'luxury', 'area': 'Roppongi, Tokyo', 'rating': 4.7},
+                {'name': 'Park Hyatt Tokyo', 'type': 'luxury', 'area': 'Shinjuku, Tokyo', 'rating': 4.6},
+                {'name': 'Aman Tokyo', 'type': 'luxury', 'area': 'Otemachi, Tokyo', 'rating': 4.8},
+                {'name': 'Conrad Osaka', 'type': 'luxury', 'area': 'Nakanoshima, Osaka', 'rating': 4.5},
+                {'name': 'Four Seasons Hotel Kyoto', 'type': 'luxury', 'area': 'Higashiyama, Kyoto', 'rating': 4.6}
+            ]
+        }
+    }
+
+    if not location:
+        return []
+
+    # Detect location from query
+    location_lower = location.lower()
+    query_lower = query.lower()
+
+    places = []
+
+    if 'japan' in location_lower or 'japanese' in query_lower:
+        # Get Japan-specific data
+        japan_data = location_data.get('japan', {})
+
+        # Filter based on query type
+        if any(word in query_lower for word in ['restaurant', 'food', 'eat', 'dining', 'sushi', 'ramen']):
+            places.extend(japan_data.get('restaurants', []))
+        elif any(word in query_lower for word in ['hotel', 'stay', 'accommodation', 'lodging']):
+            places.extend(japan_data.get('hotels', []))
+        elif 'tokyo' in location_lower or 'tokyo' in query_lower:
+            places.extend(japan_data.get('tokyo', []))
+        elif 'osaka' in location_lower or 'osaka' in query_lower:
+            places.extend(japan_data.get('osaka', []))
+        elif 'kyoto' in location_lower or 'kyoto' in query_lower:
+            places.extend(japan_data.get('kyoto', []))
+        else:
+            # General Japan places - mix from all cities
+            all_japan_places = []
+            for city_places in [japan_data.get('tokyo', []), japan_data.get('osaka', []), japan_data.get('kyoto', [])]:
+                all_japan_places.extend(city_places)
+            places.extend(all_japan_places)
+
+    # Shuffle and return subset to avoid repetition
+    if places:
+        random.shuffle(places)
+
+    return places[:8]  # Return up to 8 places
+
+def get_enhanced_place_image(place_name: str, place_type: str, location: str = None) -> str:
+    """
+    Get high-quality images for places based on location and type
+    """
+    # High-quality stock images for different place types
+    image_library = {
+        'temple': [
+            'https://images.pexels.com/photos/2666598/pexels-photo-2666598.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1829980/pexels-photo-1829980.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'shrine': [
+            'https://images.pexels.com/photos/2187605/pexels-photo-2187605.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2070033/pexels-photo-2070033.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'market': [
+            'https://images.pexels.com/photos/1766678/pexels-photo-1766678.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2291367/pexels-photo-2291367.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'castle': [
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1440476/pexels-photo-1440476.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'sushi': [
+            'https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/248444/pexels-photo-248444.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'ramen': [
+            'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1907228/pexels-photo-1907228.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'hotel': [
+            'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'restaurant': [
+            'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3201921/pexels-photo-3201921.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'default': [
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ]
+    }
+
+    # Get appropriate images for place type
+    images = image_library.get(place_type, image_library['default'])
+
+    # Use place name hash to consistently select same image
+    import hashlib
+    place_hash = hashlib.md5((place_name or 'default').encode()).hexdigest()
+    image_index = int(place_hash[:2], 16) % len(images)
+
+    return images[image_index]
+
 def generate_mock_places_data(query: str) -> List[Dict]:
     """
-    Generate realistic mock place data with working images for demo purposes
-    when Google Places API is not available
+    Generate realistic mock place data with location awareness
     """
     import random
 
     # Extract location from query if possible
     location_match = re.search(r'(?:in|at|near)\s+([A-Za-z\s]+?)(?:\s|$|[.,!?])', query, re.IGNORECASE)
-    location = location_match.group(1).strip() if location_match else "your area"
+    location = location_match.group(1).strip() if location_match else None
 
     # Determine request type
     is_singular = detect_singular_request(query)
     max_results = 1 if is_singular else 6
+
+    # Try to get location-specific places first
+    if location:
+        location_places = get_location_specific_places(query, location)
+        if location_places:
+            places = []
+            for i, place_data in enumerate(location_places[:max_results]):
+                place_name = place_data.get('name')
+                place_type = place_data.get('type', 'attraction')
+                place_area = place_data.get('area', location)
+                place_rating = place_data.get('rating', 4.0 + random.random() * 0.8)
+
+                # Generate appropriate address based on location
+                if location and 'japan' in location.lower():
+                    address = f"{place_area}, Japan"
+                else:
+                    address = place_area
+
+                # Get high-quality image for the place
+                hero_image = get_enhanced_place_image(place_name, place_type, location)
+
+                # Generate category badge
+                category_badges = {
+                    'temple': '🏯 Temple',
+                    'shrine': '⛩️ Shrine',
+                    'castle': '🏰 Castle',
+                    'market': '🏪 Market',
+                    'restaurant': '🍽️ Restaurant',
+                    'sushi': '🍣 Sushi Bar',
+                    'ramen': '🍜 Ramen Shop',
+                    'hotel': '🏨 Hotel',
+                    'shopping': '🛍️ Shopping',
+                    'park': '🌳 Park',
+                    'landmark': '🗺️ Landmark',
+                    'entertainment': '🎭 Entertainment',
+                    'tower': '🗼 Tower',
+                    'electronics': '📱 Electronics',
+                    'complex': '🏢 Complex'
+                }
+                category_badge = category_badges.get(place_type, '📍 Place')
+
+                # Properly encode all URL parameters
+                encoded_name = urllib.parse.quote_plus(place_name)
+                encoded_area = urllib.parse.quote_plus(place_area)
+
+                place_info = {
+                    'name': place_name,
+                    'address': address,
+                    'rating': round(place_rating, 1),
+                    'rating_count': random.randint(100, 2500),
+                    'types': [place_type],
+                    'category_badge': category_badge,
+                    'hero_image': hero_image,
+                    'description': f"Experience {place_name} in {address}",
+
+                    # Working URLs
+                    'google_maps_url': f"https://www.google.com/maps/search/{encoded_name}+{encoded_area}",
+                    'google_search_url': f"https://www.google.com/search?q={encoded_name}+{encoded_area}",
+                    'yelp_search_url': f"https://www.yelp.com/search?find_desc={encoded_name}&find_loc={encoded_area}",
+                    'tripadvisor_search_url': f"https://www.tripadvisor.com/Search?q={encoded_name}+{encoded_area}",
+                    'foursquare_url': f"https://foursquare.com/explore?mode=url&near={encoded_area}&q={encoded_name}",
+                    'timeout_url': f"https://www.timeout.com/search?query={encoded_name}",
+
+                    # Type-specific links
+                    'opentable_url': f"https://www.opentable.com/s/?text={encoded_name}&location={encoded_area}" if place_type in ['restaurant', 'sushi', 'ramen'] else '',
+                    'booking_url': f"https://www.booking.com/searchresults.html?ss={encoded_name}+{encoded_area}" if place_type == 'hotel' else ''
+                }
+                places.append(place_info)
+
+            return places
 
     # Mock places database with real working images
     mock_restaurants = [
