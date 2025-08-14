@@ -360,56 +360,56 @@ def get_enhanced_fallback_image(place_name: str, place_types: List[str], locatio
     """
     place_types_str = str(place_types).lower()
 
-    # High-quality category-specific fallback images from Pexels (royalty-free)
+    # High-quality category-specific fallback images from Unsplash (royalty-free, more reliable)
     fallback_images = {
         'restaurant': [
-            'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/3201921/pexels-photo-3201921.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1559329007-40df8c9578d9?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&auto=format&fit=crop'
         ],
         'pizza': [
-            'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/845808/pexels-photo-845808.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1566837/pexels-photo-1566837.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1585238342024-78d387f4a707?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=1200&auto=format&fit=crop'
         ],
         'hotel': [
-            'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1001965/pexels-photo-1001965.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1200&auto=format&fit=crop'
         ],
         'bar': [
-            'https://images.pexels.com/photos/941864/pexels-photo-941864.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/274192/pexels-photo-274192.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2795026/pexels-photo-2795026.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.unsplash.com/photo-1546171753-97d7676e4602?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200&auto=format&fit=crop'
         ],
         'cafe': [
-            'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1833399/pexels-photo-1833399.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1307698/pexels-photo-1307698.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=1200&auto=format&fit=crop'
         ],
         'attraction': [
-            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1f?w=1200&auto=format&fit=crop'
         ],
         'museum': [
-            'https://images.pexels.com/photos/1263986/pexels-photo-1263986.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/587816/pexels-photo-587816.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2372978/pexels-photo-2372978.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.unsplash.com/photo-1595862804940-94ad0b0b54a4?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=1200&auto=format&fit=crop'
         ],
         'park': [
-            'https://images.pexels.com/photos/1680172/pexels-photo-1680172.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/305821/pexels-photo-305821.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1463917/pexels-photo-1463917.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=1200&auto=format&fit=crop'
         ],
         'shopping': [
-            'https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=1200&auto=format&fit=crop'
         ]
     }
 
@@ -873,8 +873,9 @@ def chat():
 
             places_data = all_places[:max_results]  # Limit based on request type
         elif is_location_query and not gmaps_client:
-            # Add note about API limitation but still provide helpful guidance
-            user_message += "\n\nNOTE: Google Places API is not configured, so I can't provide real-time links right now, but I can still give you excellent travel advice and ask follow-up questions to help plan your trip!"
+            # Generate mock data with working images when API is not available
+            places_data = generate_mock_places_data(user_message)
+            logger.info(f"Generated {len(places_data)} mock places with working images")
         
         # Get AI response with enhanced data
         ai_response = get_ai_response(user_message, conversation_history, places_data)
