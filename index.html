@@ -4419,7 +4419,7 @@
                 // For plain text AI messages, preserve line breaks and format lists
                 const formattedMessage = message
                   .replace(/\n/g, '<br>')
-                  .replace(/•\s/g, '<br>• ')
+                  .replace(/��\s/g, '<br>• ')
                   .replace(/(\d+\.\s)/g, '<br>$1')
                   .replace(/^<br>/, ''); // Remove leading break
                 paragraph.innerHTML = formattedMessage;
@@ -4574,6 +4574,7 @@
 
           // Handle successful image load
           image.addEventListener('load', function() {
+            console.log('✅ Image loaded successfully:', this.src);
             this.classList.add('loaded');
             if (skeleton) {
               skeleton.classList.add('hidden');
@@ -4585,12 +4586,14 @@
 
           // Handle image error
           image.addEventListener('error', function() {
+            console.log('❌ Image failed to load:', this.src);
             this.classList.add('error');
             if (skeleton) {
               skeleton.classList.add('hidden');
             }
             if (fallback) {
               fallback.classList.add('show');
+              console.log('🔄 Showing emoji fallback for failed image');
             }
           });
 
