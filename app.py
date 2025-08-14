@@ -803,6 +803,57 @@ def get_japan_mock_data(query: str) -> List[Dict]:
 
     return matching_places[:8]  # Limit to 8 results
 
+def process_mock_place_data(place: Dict) -> Dict:
+    """
+    Process mock place data to add all necessary links and formatting
+    """
+    place_name = place['name']
+    place_address = place['address']
+
+    # Properly encode all URL parameters
+    encoded_name = urllib.parse.quote_plus(place_name)
+    encoded_address = urllib.parse.quote_plus(place_address)
+    encoded_location = urllib.parse.quote_plus(place_address.split(',')[-1].strip())  # Get country/city
+
+    # Create the complete place info with all links
+    enhanced_place = place.copy()
+
+    # Add all the standard links
+    enhanced_place.update({
+        'opening_hours': [],
+        'is_open': None,
+        'photos': [],
+        'reviews': [],
+        'geometry': {},
+        'has_real_photos': False,
+        'image_source': 'stock_image',
+
+        # Working URLs with proper encoding
+        'google_maps_url': f"https://www.google.com/maps/search/{encoded_name}+{encoded_location}",
+        'google_search_url': f"https://www.google.com/search?q={encoded_name}+{encoded_location}",
+        'yelp_search_url': f"https://www.yelp.com/search?find_desc={encoded_name}&find_loc={encoded_location}",
+        'tripadvisor_search_url': f"https://www.tripadvisor.com/Search?q={encoded_name}+{encoded_location}",
+        'foursquare_url': f"https://foursquare.com/explore?mode=url&near={encoded_location}&q={encoded_name}",
+        'timeout_url': f"https://www.timeout.com/search?query={encoded_name}",
+
+        # Restaurant-specific links
+        'opentable_url': f"https://www.opentable.com/s/?text={encoded_name}&location={encoded_location}" if 'restaurant' in str(place.get('types', [])).lower() else '',
+
+        # Hotel-specific links
+        'booking_url': f"https://www.booking.com/searchresults.html?ss={encoded_name}+{encoded_location}" if 'lodging' in str(place.get('types', [])).lower() else '',
+        'expedia_url': f"https://www.expedia.com/Hotel-Search?destination={encoded_location}" if 'lodging' in str(place.get('types', [])).lower() else '',
+
+        # Activity/tour links
+        'getyourguide_url': f"https://www.getyourguide.com/s/?q={encoded_name}+{encoded_location}",
+        'viator_url': f"https://www.viator.com/searchResults/all?text={encoded_name}+{encoded_location}",
+
+        # Transportation links
+        'uber_url': f"https://m.uber.com/ul/?pickup=my_location&dropoff[formatted_address]={encoded_address}",
+        'lyft_url': f"https://lyft.com/ride?destination[address]={encoded_address}"
+    })
+
+    return enhanced_place
+
 def search_places(query: str, location: str = None, radius: int = 5000) -> List[Dict]:
     """
     Enhanced search for places using Google Places API with detailed information
@@ -1032,7 +1083,7 @@ LINK RULES:
 - ONLY include links that are provided in the place data
 - Always include Google Maps (it's always available)
 - Format: <a href="[exact URL from data]" target="_blank" class="activity-link">[icon] [label]</a>
-- Common links: 📍 Google Maps, 🌐 Website, ⭐ Yelp, 📞 Phone
+- Common links: 📍 Google Maps, 🌐 Website, ⭐ Yelp, ��� Phone
 
 When you receive place data, it will include:
 - name: The place name
