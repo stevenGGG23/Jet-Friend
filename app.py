@@ -323,7 +323,7 @@ def generate_mock_places_data(query: str) -> List[Dict]:
             'smart_tags': [],
             'has_real_photos': False,
             'image_source': 'unsplash_demo',
-            'google_maps_url': f"https://www.google.com/maps/search/{place['name'].replace(' ', '+')}+{location.replace(' ', '+')}",
+            'google_maps_url': f"https://www.google.com/maps/search/?api=1&query={place['name'].replace(' ', '+')}+{location.replace(' ', '+')}",
             'google_search_url': f"https://www.google.com/search?q={place['name'].replace(' ', '+')}+{location.replace(' ', '+')}",
             'website': '',
             'phone': '',
@@ -714,8 +714,8 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
                 'image_source': 'google_places' if photos_data else 'stock_image',
                 'description': f"Experience {place_name} - {category_badge.split(' ', 1)[1] if ' ' in category_badge else 'great location'} in {location_for_search}",
 
-                # Updated working URLs with proper encoding
-                'google_maps_url': f"https://www.google.com/maps/search/{encoded_name}+{encoded_location}" if place_name else f"https://maps.google.com/maps/place/?q=place_id:{place_id}",
+                # Updated working URLs with proper encoding - using the most reliable Google Maps format
+                'google_maps_url': f"https://www.google.com/maps/search/?api=1&query={encoded_name}+{encoded_location}" if place_name else f"https://www.google.com/maps/place/?q=place_id:{place_id}",
                 'google_search_url': f"https://www.google.com/search?q={encoded_name}+{encoded_location}",
                 'yelp_search_url': f"https://www.yelp.com/search?find_desc={encoded_name}&find_loc={encoded_location}",
                 'tripadvisor_search_url': f"https://www.tripadvisor.com/Search?q={encoded_name}+{encoded_location}",
@@ -915,9 +915,10 @@ For {place['name']}:
 </div>
 <div class="activity">{place['address']}</div>
 <div class="activity-links">
-<a href="{place['google_maps_url']}" target="_blank" class="activity-link">📍 Google Maps</a>
-{f'<a href="{place["website"]}" target="_blank" class="activity-link">🌐 Website</a>' if place.get('website') else ''}
-{f'<a href="tel:{place["phone"]}" class="activity-link">📞 {place["phone"]}</a>' if place.get('phone') else ''}
+<a href="{place['google_maps_url']}" target="_blank" rel="noopener noreferrer" class="activity-link">📍 Google Maps</a>
+{f'<a href="{place["website"]}" target="_blank" rel="noopener noreferrer" class="activity-link">🌐 Website</a>' if place.get('website') and place['website'].strip() else ''}
+{f'<a href="tel:{place["phone"]}" class="activity-link">📞 {place["phone"]}</a>' if place.get('phone') and place['phone'].strip() else ''}
+{f'<a href="{place["yelp_search_url"]}" target="_blank" rel="noopener noreferrer" class="activity-link">⭐ Yelp</a>' if place.get('yelp_search_url') else ''}
 </div>
 </div>
 """
