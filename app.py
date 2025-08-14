@@ -482,7 +482,7 @@ def generate_mock_places_data(query: str) -> List[Dict]:
             'rating': 4.2,
             'rating_count': 234,
             'types': ['museum', 'tourist_attraction'],
-            'category_badge': '🏛�� Museum',
+            'category_badge': '🏛️ Museum',
             'hero_image': 'https://images.unsplash.com/photo-1595862804940-94ad0b0b54a4?w=1200&auto=format&fit=crop',
             'description': f'Discover the rich history and culture of {location} through fascinating exhibits.'
         },
@@ -535,42 +535,7 @@ def generate_mock_places_data(query: str) -> List[Dict]:
 
     return selected_places
 
-def search_underground_places(query: str, location: str = None) -> List[Dict]:
-    """
-    Search for underground, authentic, and local favorite places
-    """
-    if not gmaps_client:
-        return []
-
-    try:
-        underground_queries = [
-            f"{query} hidden gem {location or ''}",
-            f"{query} local favorite {location or ''}",
-            f"{query} authentic {location or ''}",
-            f"{query} underground {location or ''}",
-            f"best {query} locals {location or ''}",
-            f"{query} hole in the wall {location or ''}"
-        ]
-
-        all_places = []
-        seen_place_ids = set()
-
-        for search_query in underground_queries:
-            try:
-                places_result = gmaps_client.places(query=search_query.strip())
-                for place in places_result.get('results', [])[:3]:  # Top 3 from each query
-                    place_id = place.get('place_id', '')
-                    if place_id and place_id not in seen_place_ids:
-                        seen_place_ids.add(place_id)
-                        all_places.append(place)
-            except Exception as e:
-                logger.warning(f"Underground search failed for '{search_query}': {str(e)}")
-                continue
-
-        return all_places[:6]  # Return top 6 unique underground places
-    except Exception as e:
-        logger.error(f"Error in underground search: {str(e)}")
-        return []
+# Removed old Google Places underground search - using location-aware data instead
 
 def generate_smart_tags(place_data: Dict) -> List[str]:
     """
