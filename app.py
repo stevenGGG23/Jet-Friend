@@ -765,8 +765,10 @@ def generate_query_specific_places(query: str, location: str, max_results: int) 
         ]
     }
 
-    # Determine query type based on keywords
+    # Determine query type based on keywords - Enhanced
     detected_category = 'restaurant'  # default
+
+    # Food categories
     if 'pizza' in query_lower:
         detected_category = 'pizza'
     elif 'burger' in query_lower:
@@ -781,8 +783,58 @@ def generate_query_specific_places(query: str, location: str, max_results: int) 
         detected_category = 'mexican'
     elif 'italian' in query_lower or 'pasta' in query_lower:
         detected_category = 'italian'
+    elif 'thai' in query_lower:
+        detected_category = 'thai'
+    elif 'indian' in query_lower or 'curry' in query_lower:
+        detected_category = 'indian'
+    elif 'french' in query_lower or 'bistro' in query_lower:
+        detected_category = 'french'
+    elif 'steak' in query_lower:
+        detected_category = 'steakhouse'
+    elif 'seafood' in query_lower or 'fish' in query_lower:
+        detected_category = 'seafood'
+    elif 'bakery' in query_lower or 'bread' in query_lower:
+        detected_category = 'bakery'
+    elif 'ice cream' in query_lower or 'gelato' in query_lower:
+        detected_category = 'ice cream'
+    elif 'brunch' in query_lower or 'breakfast' in query_lower:
+        detected_category = 'brunch'
+    elif 'bar' in query_lower or 'pub' in query_lower:
+        detected_category = 'bar'
+    elif 'brewery' in query_lower or 'beer' in query_lower:
+        detected_category = 'brewery'
+
+    # Lodging categories
     elif 'hotel' in query_lower or 'stay' in query_lower:
         detected_category = 'hotel'
+    elif 'resort' in query_lower:
+        detected_category = 'resort'
+    elif 'hostel' in query_lower:
+        detected_category = 'hostel'
+    elif 'spa' in query_lower:
+        detected_category = 'spa'
+
+    # Attraction categories
+    elif 'museum' in query_lower:
+        detected_category = 'museum'
+    elif 'park' in query_lower:
+        detected_category = 'park'
+    elif 'beach' in query_lower:
+        detected_category = 'beach'
+    elif 'zoo' in query_lower:
+        detected_category = 'zoo'
+    elif 'aquarium' in query_lower:
+        detected_category = 'aquarium'
+    elif 'theater' in query_lower or 'theatre' in query_lower:
+        detected_category = 'theater'
+
+    # Shopping categories
+    elif 'market' in query_lower:
+        detected_category = 'market'
+    elif 'mall' in query_lower or 'shopping' in query_lower:
+        detected_category = 'shopping'
+    elif 'bookstore' in query_lower or 'books' in query_lower:
+        detected_category = 'bookstore'
 
     # Get templates for detected category
     templates = place_templates.get(detected_category, place_templates['restaurant'])
