@@ -976,9 +976,9 @@ def process_mock_place_data(place: Dict) -> Dict:
 
 def search_places(query: str, location: str = None, radius: int = 5000) -> List[Dict]:
     """
-    Enhanced search for places using Google Places API with detailed information
+    Location-aware place search using curated data
     """
-    if not gmaps_client:
+    # Use location-aware data generation instead of Google Places API
         # Use Japan mock data if APIs aren't available
         japan_data = get_japan_mock_data(query)
         if japan_data:
