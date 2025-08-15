@@ -284,47 +284,417 @@ def get_enhanced_place_image(place_name: str, place_type: str, location: str = N
     """
     # High-quality stock images for different place types
     image_library = {
-        'temple': [
-            'https://images.pexels.com/photos/2666598/pexels-photo-2666598.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1829980/pexels-photo-1829980.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        # Food & Restaurants - Expanded
+        'pizza': [
+            'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/905847/pexels-photo-905847.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/708587/pexels-photo-708587.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/845808/pexels-photo-845808.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ],
-        'shrine': [
-            'https://images.pexels.com/photos/2187605/pexels-photo-2187605.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2070033/pexels-photo-2070033.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        'burger': [
+            'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3219483/pexels-photo-3219483.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1556909/pexels-photo-1556909.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/580612/pexels-photo-580612.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ],
-        'market': [
-            'https://images.pexels.com/photos/1766678/pexels-photo-1766678.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2291367/pexels-photo-2291367.jpeg?auto=compress&cs=tinysrgb&w=1200'
-        ],
-        'castle': [
-            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1440476/pexels-photo-1440476.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        'coffee': [
+            'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1560472/pexels-photo-1560472.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1307698/pexels-photo-1307698.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/683039/pexels-photo-683039.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1475938/pexels-photo-1475938.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2062336/pexels-photo-2062336.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ],
         'sushi': [
             'https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/248444/pexels-photo-248444.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.pexels.com/photos/248444/pexels-photo-248444.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1028599/pexels-photo-1028599.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/361184/pexels-photo-361184.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2098085/pexels-photo-2098085.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ],
         'ramen': [
             'https://images.pexels.com/photos/884600/pexels-photo-884600.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/1907228/pexels-photo-1907228.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.pexels.com/photos/1907228/pexels-photo-1907228.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/6249273/pexels-photo-6249273.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/4518655/pexels-photo-4518655.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ],
-        'hotel': [
-            'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        'chinese': [
+            'https://images.pexels.com/photos/5409751/pexels-photo-5409751.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1907228/pexels-photo-1907228.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/4518612/pexels-photo-4518612.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'italian': [
+            'https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/4518661/pexels-photo-4518661.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1340502/pexels-photo-1340502.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'mexican': [
+            'https://images.pexels.com/photos/4958792/pexels-photo-4958792.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/4958793/pexels-photo-4958793.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2673353/pexels-photo-2673353.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3926124/pexels-photo-3926124.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'thai': [
+            'https://images.pexels.com/photos/2741458/pexels-photo-2741458.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/6985049/pexels-photo-6985049.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/6542690/pexels-photo-6542690.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'indian': [
+            'https://images.pexels.com/photos/2474661/pexels-photo-2474661.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'french': [
+            'https://images.pexels.com/photos/2741458/pexels-photo-2741458.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'steakhouse': [
+            'https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3535383/pexels-photo-3535383.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2313686/pexels-photo-2313686.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'seafood': [
+            'https://images.pexels.com/photos/566345/pexels-photo-566345.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/248444/pexels-photo-248444.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'bakery': [
+            'https://images.pexels.com/photos/1055272/pexels-photo-1055272.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/236834/pexels-photo-236834.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3992206/pexels-photo-3992206.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'ice cream': [
+            'https://images.pexels.com/photos/1352270/pexels-photo-1352270.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1362534/pexels-photo-1362534.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'brunch': [
+            'https://images.pexels.com/photos/140831/pexels-photo-140831.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'fast food': [
+            'https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/580612/pexels-photo-580612.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ],
         'restaurant': [
             'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/3201921/pexels-photo-3201921.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.pexels.com/photos/3201921/pexels-photo-3201921.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2253643/pexels-photo-2253643.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2351274/pexels-photo-2351274.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1307698/pexels-photo-1307698.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ],
+        'bar': [
+            'https://images.pexels.com/photos/274192/pexels-photo-274192.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2467558/pexels-photo-2467558.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/113734/pexels-photo-113734.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'cafe': [
+            'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1560472/pexels-photo-1560472.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/683039/pexels-photo-683039.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1307698/pexels-photo-1307698.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'brewery': [
+            'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/159291/beer-machine-alcohol-brewery-159291.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+
+        # Lodging - Expanded
+        'hotel': [
+            'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1134176/pexels-photo-1134176.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2611688/pexels-photo-2611688.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'resort': [
+            'https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'hostel': [
+            'https://images.pexels.com/photos/271897/pexels-photo-271897.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'spa': [
+            'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/6663/luxury-spa-hotel-resort.jpg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3760263/pexels-photo-3760263.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+
+        # Attractions & Culture - Expanded
+        'temple': [
+            'https://images.pexels.com/photos/2666598/pexels-photo-2666598.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1829980/pexels-photo-1829980.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2187605/pexels-photo-2187605.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1666021/pexels-photo-1666021.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'shrine': [
+            'https://images.pexels.com/photos/2187605/pexels-photo-2187605.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2070033/pexels-photo-2070033.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'museum': [
+            'https://images.pexels.com/photos/2916450/pexels-photo-2916450.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1878735/pexels-photo-1878735.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2041396/pexels-photo-2041396.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'art gallery': [
+            'https://images.pexels.com/photos/2041396/pexels-photo-2041396.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1827054/pexels-photo-1827054.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'castle': [
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1440476/pexels-photo-1440476.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/460740/pexels-photo-460740.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2411689/pexels-photo-2411689.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'park': [
+            'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3255761/pexels-photo-3255761.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2166711/pexels-photo-2166711.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'beach': [
+            'https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/338515/pexels-photo-338515.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1266831/pexels-photo-1266831.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'zoo': [
+            'https://images.pexels.com/photos/792381/pexels-photo-792381.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/45853/grey-crowned-crane-bird-crane-animal-45853.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/792381/pexels-photo-792381.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'aquarium': [
+            'https://images.pexels.com/photos/64219/dolphin-marine-mammals-water-sea-64219.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2317904/pexels-photo-2317904.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1108701/pexels-photo-1108701.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'theater': [
+            'https://images.pexels.com/photos/2169434/pexels-photo-2169434.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1687845/pexels-photo-1687845.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+
+        # Shopping & Markets - Expanded
+        'market': [
+            'https://images.pexels.com/photos/1766678/pexels-photo-1766678.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2291367/pexels-photo-2291367.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2255935/pexels-photo-2255935.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1907638/pexels-photo-1907638.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'shopping mall': [
+            'https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'shopping': [
+            'https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1766678/pexels-photo-1766678.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'bookstore': [
+            'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/256541/pexels-photo-256541.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+
+        # Landmarks & Architecture - Expanded
+        'landmark': [
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/460740/pexels-photo-460740.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2411689/pexels-photo-2411689.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'tower': [
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/3604925/pexels-photo-3604925.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'bridge': [
+            'https://images.pexels.com/photos/460740/pexels-photo-460740.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1519088/pexels-photo-1519088.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2411689/pexels-photo-2411689.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'cathedral': [
+            'https://images.pexels.com/photos/2666598/pexels-photo-2666598.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/273230/pexels-photo-273230.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1666021/pexels-photo-1666021.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'entertainment': [
+            'https://images.pexels.com/photos/2169434/pexels-photo-2169434.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1687845/pexels-photo-1687845.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'electronics': [
+            'https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'complex': [
+            'https://images.pexels.com/photos/2467558/pexels-photo-2467558.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1687845/pexels-photo-1687845.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+
+        # Transportation & Services
+        'airport': [
+            'https://images.pexels.com/photos/912050/pexels-photo-912050.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1309644/pexels-photo-1309644.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/723240/pexels-photo-723240.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'train station': [
+            'https://images.pexels.com/photos/162389/lost-places-keller-cellar-basement-162389.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1252500/pexels-photo-1252500.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1770809/pexels-photo-1770809.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'gym': [
+            'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1552252/pexels-photo-1552252.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1229356/pexels-photo-1229356.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+        'library': [
+            'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/256541/pexels-photo-256541.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ],
+
+        # Default fallback with variety
         'default': [
             'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
-            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200'
+            'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/460740/pexels-photo-460740.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1200'
         ]
     }
     
+    # Enhanced place type detection based on place name and context
+    detected_type = place_type.lower()
+
+    # Check place name for specific food types and locations
+    place_name_lower = (place_name or '').lower()
+    location_lower = (location or '').lower()
+
+    # Food & Restaurant Types
+    if 'pizza' in place_name_lower:
+        detected_type = 'pizza'
+    elif 'burger' in place_name_lower or 'mcdonald' in place_name_lower or 'burger king' in place_name_lower:
+        detected_type = 'burger'
+    elif 'starbucks' in place_name_lower or 'coffee' in place_name_lower or 'cafe' in place_name_lower:
+        detected_type = 'coffee'
+    elif 'sushi' in place_name_lower:
+        detected_type = 'sushi'
+    elif 'ramen' in place_name_lower or 'noodle' in place_name_lower:
+        detected_type = 'ramen'
+    elif 'chinese' in place_name_lower or 'panda' in place_name_lower:
+        detected_type = 'chinese'
+    elif 'italian' in place_name_lower or 'pasta' in place_name_lower or 'pizzeria' in place_name_lower:
+        detected_type = 'italian'
+    elif 'mexican' in place_name_lower or 'taco' in place_name_lower or 'chipotle' in place_name_lower:
+        detected_type = 'mexican'
+    elif 'thai' in place_name_lower or 'pad thai' in place_name_lower:
+        detected_type = 'thai'
+    elif 'indian' in place_name_lower or 'curry' in place_name_lower:
+        detected_type = 'indian'
+    elif 'french' in place_name_lower or 'bistro' in place_name_lower:
+        detected_type = 'french'
+    elif 'steakhouse' in place_name_lower or 'steak' in place_name_lower:
+        detected_type = 'steakhouse'
+    elif 'seafood' in place_name_lower or 'fish' in place_name_lower:
+        detected_type = 'seafood'
+    elif 'bakery' in place_name_lower or 'bread' in place_name_lower:
+        detected_type = 'bakery'
+    elif 'ice cream' in place_name_lower or 'gelato' in place_name_lower:
+        detected_type = 'ice cream'
+    elif 'brunch' in place_name_lower or 'breakfast' in place_name_lower:
+        detected_type = 'brunch'
+    elif 'fast food' in place_name_lower or 'drive thru' in place_name_lower:
+        detected_type = 'fast food'
+    elif 'bar' in place_name_lower or 'pub' in place_name_lower:
+        detected_type = 'bar'
+    elif 'brewery' in place_name_lower or 'beer' in place_name_lower:
+        detected_type = 'brewery'
+
+    # Lodging Types
+    elif 'hotel' in place_name_lower:
+        detected_type = 'hotel'
+    elif 'resort' in place_name_lower:
+        detected_type = 'resort'
+    elif 'hostel' in place_name_lower:
+        detected_type = 'hostel'
+    elif 'spa' in place_name_lower:
+        detected_type = 'spa'
+
+    # Attractions & Culture
+    elif 'museum' in place_name_lower:
+        detected_type = 'museum'
+    elif 'gallery' in place_name_lower:
+        detected_type = 'art gallery'
+    elif 'temple' in place_name_lower:
+        detected_type = 'temple'
+    elif 'shrine' in place_name_lower:
+        detected_type = 'shrine'
+    elif 'castle' in place_name_lower:
+        detected_type = 'castle'
+    elif 'cathedral' in place_name_lower or 'church' in place_name_lower:
+        detected_type = 'cathedral'
+    elif 'park' in place_name_lower:
+        detected_type = 'park'
+    elif 'beach' in place_name_lower:
+        detected_type = 'beach'
+    elif 'zoo' in place_name_lower:
+        detected_type = 'zoo'
+    elif 'aquarium' in place_name_lower:
+        detected_type = 'aquarium'
+    elif 'theater' in place_name_lower or 'theatre' in place_name_lower:
+        detected_type = 'theater'
+
+    # Shopping & Markets
+    elif 'market' in place_name_lower:
+        detected_type = 'market'
+    elif 'mall' in place_name_lower:
+        detected_type = 'shopping mall'
+    elif 'bookstore' in place_name_lower or 'books' in place_name_lower:
+        detected_type = 'bookstore'
+    elif 'shopping' in place_name_lower:
+        detected_type = 'shopping'
+
+    # Services & Transportation
+    elif 'airport' in place_name_lower:
+        detected_type = 'airport'
+    elif 'station' in place_name_lower or 'train' in place_name_lower:
+        detected_type = 'train station'
+    elif 'gym' in place_name_lower or 'fitness' in place_name_lower:
+        detected_type = 'gym'
+    elif 'library' in place_name_lower:
+        detected_type = 'library'
+
+    # Landmarks & Architecture
+    elif 'tower' in place_name_lower:
+        detected_type = 'tower'
+    elif 'bridge' in place_name_lower:
+        detected_type = 'bridge'
+
     # Get appropriate images for place type
-    images = image_library.get(place_type, image_library['default'])
+    images = image_library.get(detected_type, image_library['default'])
     
     # Use place name hash to consistently select same image
     import hashlib
@@ -332,6 +702,278 @@ def get_enhanced_place_image(place_name: str, place_type: str, location: str = N
     image_index = int(place_hash[:2], 16) % len(images)
     
     return images[image_index]
+
+def generate_query_specific_places(query: str, location: str, max_results: int) -> List[Dict]:
+    """
+    Generate places based on the specific query content (pizza, coffee, etc.)
+    """
+    import random
+
+    query_lower = query.lower()
+
+    # Define place templates based on query type
+    place_templates = {
+        'pizza': [
+            {'name': 'Tony\'s Pizza Palace', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'Slice Heaven', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'Mario\'s Authentic Pizza', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'The Pizza Corner', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'Pepperoni Palace', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'Wood Fired Pizza Co.', 'type': 'pizza', 'badge': '🍕 Pizza'}
+        ],
+        'burger': [
+            {'name': 'The Burger Joint', 'type': 'burger', 'badge': '🍔 Burger'},
+            {'name': 'Gourmet Burgers & More', 'type': 'burger', 'badge': '🍔 Burger'},
+            {'name': 'Classic American Diner', 'type': 'burger', 'badge': '🍔 Burger'},
+            {'name': 'Five Guys Style Burgers', 'type': 'burger', 'badge': '🍔 Burger'}
+        ],
+        'coffee': [
+            {'name': 'The Daily Grind', 'type': 'coffee', 'badge': '☕ Coffee Shop'},
+            {'name': 'Bean There Coffee', 'type': 'coffee', 'badge': '☕ Coffee Shop'},
+            {'name': 'Morning Brew Cafe', 'type': 'coffee', 'badge': '☕ Coffee Shop'},
+            {'name': 'Roasted & Co.', 'type': 'coffee', 'badge': '☕ Coffee Shop'}
+        ],
+        'sushi': [
+            {'name': 'Sakura Sushi Bar', 'type': 'sushi', 'badge': '🍣 Sushi Bar'},
+            {'name': 'Tokyo Fresh Sushi', 'type': 'sushi', 'badge': '🍣 Sushi Bar'},
+            {'name': 'The Sushi Spot', 'type': 'sushi', 'badge': '🍣 Sushi Bar'}
+        ],
+        'chinese': [
+            {'name': 'Golden Dragon', 'type': 'chinese', 'badge': '🥢 Chinese'},
+            {'name': 'Lucky Garden Chinese', 'type': 'chinese', 'badge': '🥢 Chinese'},
+            {'name': 'Panda Palace', 'type': 'chinese', 'badge': '🥢 Chinese'}
+        ],
+        'mexican': [
+            {'name': 'Casa Miguel', 'type': 'mexican', 'badge': '🌮 Mexican'},
+            {'name': 'El Sombrero', 'type': 'mexican', 'badge': '🌮 Mexican'},
+            {'name': 'Taco Paradise', 'type': 'mexican', 'badge': '🌮 Mexican'}
+        ],
+        'italian': [
+            {'name': 'Mama\'s Italian Kitchen', 'type': 'italian', 'badge': '🍝 Italian'},
+            {'name': 'Bella Vista Restaurant', 'type': 'italian', 'badge': '🍝 Italian'},
+            {'name': 'La Trattoria', 'type': 'italian', 'badge': '🍝 Italian'}
+        ],
+        'thai': [
+            {'name': 'Thai Spice Garden', 'type': 'thai', 'badge': '🌶️ Thai'},
+            {'name': 'Bangkok Kitchen', 'type': 'thai', 'badge': '🌶️ Thai'},
+            {'name': 'Pad Thai Palace', 'type': 'thai', 'badge': '🌶️ Thai'}
+        ],
+        'indian': [
+            {'name': 'Curry House', 'type': 'indian', 'badge': '🍛 Indian'},
+            {'name': 'Tandoor Palace', 'type': 'indian', 'badge': '🍛 Indian'},
+            {'name': 'Mumbai Spice', 'type': 'indian', 'badge': '🍛 Indian'}
+        ],
+        'french': [
+            {'name': 'Le Petit Bistro', 'type': 'french', 'badge': '🇫🇷 French'},
+            {'name': 'Café de Paris', 'type': 'french', 'badge': '🇫🇷 French'},
+            {'name': 'The French Table', 'type': 'french', 'badge': '🇫🇷 French'}
+        ],
+        'steakhouse': [
+            {'name': 'Prime Cut Steakhouse', 'type': 'steakhouse', 'badge': '🥩 Steakhouse'},
+            {'name': 'The Grill House', 'type': 'steakhouse', 'badge': '🥩 Steakhouse'},
+            {'name': 'Black Angus Grill', 'type': 'steakhouse', 'badge': '🥩 Steakhouse'}
+        ],
+        'seafood': [
+            {'name': 'Ocean\'s Catch', 'type': 'seafood', 'badge': '🦞 Seafood'},
+            {'name': 'The Fish Market', 'type': 'seafood', 'badge': '🦞 Seafood'},
+            {'name': 'Seaside Grill', 'type': 'seafood', 'badge': '🦞 Seafood'}
+        ],
+        'bakery': [
+            {'name': 'Fresh Bread Bakery', 'type': 'bakery', 'badge': '🥖 Bakery'},
+            {'name': 'The Corner Bakehouse', 'type': 'bakery', 'badge': '🥖 Bakery'},
+            {'name': 'Artisan Breads', 'type': 'bakery', 'badge': '�� Bakery'}
+        ],
+        'ice cream': [
+            {'name': 'Sweet Treats Creamery', 'type': 'ice cream', 'badge': '🍦 Ice Cream'},
+            {'name': 'Scoop & Smile', 'type': 'ice cream', 'badge': '🍦 Ice Cream'},
+            {'name': 'Gelato Dreams', 'type': 'ice cream', 'badge': '🍦 Ice Cream'}
+        ],
+        'brunch': [
+            {'name': 'Sunday Brunch Cafe', 'type': 'brunch', 'badge': '🥐 Brunch'},
+            {'name': 'The Pancake House', 'type': 'brunch', 'badge': '🥐 Brunch'},
+            {'name': 'Morning Glory Diner', 'type': 'brunch', 'badge': '🥐 Brunch'}
+        ],
+        'bar': [
+            {'name': 'The Local Pub', 'type': 'bar', 'badge': '🍻 Bar'},
+            {'name': 'Cocktail Lounge', 'type': 'bar', 'badge': '🍻 Bar'},
+            {'name': 'Sports Bar & Grill', 'type': 'bar', 'badge': '🍻 Bar'}
+        ],
+        'brewery': [
+            {'name': 'Craft Beer Co.', 'type': 'brewery', 'badge': '🍺 Brewery'},
+            {'name': 'Hoppy Trails Brewery', 'type': 'brewery', 'badge': '🍺 Brewery'},
+            {'name': 'Local Brew House', 'type': 'brewery', 'badge': '🍺 Brewery'}
+        ],
+        'hotel': [
+            {'name': 'Grand Plaza Hotel', 'type': 'hotel', 'badge': '🏨 Hotel'},
+            {'name': 'Comfort Inn & Suites', 'type': 'hotel', 'badge': '🏨 Hotel'},
+            {'name': 'Luxury Resort & Spa', 'type': 'hotel', 'badge': '🏨 Hotel'}
+        ],
+        'resort': [
+            {'name': 'Paradise Resort', 'type': 'resort', 'badge': '🏖️ Resort'},
+            {'name': 'Tropical Getaway', 'type': 'resort', 'badge': '🏖️ Resort'},
+            {'name': 'Oceanview Resort', 'type': 'resort', 'badge': '🏖️ Resort'}
+        ],
+        'hostel': [
+            {'name': 'Backpacker\'s Lodge', 'type': 'hostel', 'badge': '🎒 Hostel'},
+            {'name': 'Budget Stay Hostel', 'type': 'hostel', 'badge': '🎒 Hostel'},
+            {'name': 'City Center Hostel', 'type': 'hostel', 'badge': '🎒 Hostel'}
+        ],
+        'spa': [
+            {'name': 'Zen Wellness Spa', 'type': 'spa', 'badge': '🧘 Spa'},
+            {'name': 'Relaxation Resort Spa', 'type': 'spa', 'badge': '🧘 Spa'},
+            {'name': 'Healing Waters Spa', 'type': 'spa', 'badge': '🧘 Spa'}
+        ],
+        'museum': [
+            {'name': 'City Art Museum', 'type': 'museum', 'badge': '🎨 Museum'},
+            {'name': 'History & Culture Center', 'type': 'museum', 'badge': '🎨 Museum'},
+            {'name': 'Natural Science Museum', 'type': 'museum', 'badge': '🎨 Museum'}
+        ],
+        'park': [
+            {'name': 'Central Park', 'type': 'park', 'badge': '🌳 Park'},
+            {'name': 'Riverside Gardens', 'type': 'park', 'badge': '🌳 Park'},
+            {'name': 'Memorial Park', 'type': 'park', 'badge': '🌳 Park'}
+        ],
+        'beach': [
+            {'name': 'Sunset Beach', 'type': 'beach', 'badge': '🏖️ Beach'},
+            {'name': 'Crystal Cove', 'type': 'beach', 'badge': '🏖️ Beach'},
+            {'name': 'Sandy Shores', 'type': 'beach', 'badge': '🏖️ Beach'}
+        ],
+        'zoo': [
+            {'name': 'City Zoo & Safari', 'type': 'zoo', 'badge': '🦁 Zoo'},
+            {'name': 'Wildlife Preserve', 'type': 'zoo', 'badge': '🦁 Zoo'},
+            {'name': 'Adventure Zoo', 'type': 'zoo', 'badge': '🦁 Zoo'}
+        ],
+        'aquarium': [
+            {'name': 'Ocean Life Aquarium', 'type': 'aquarium', 'badge': '🐠 Aquarium'},
+            {'name': 'Marine Discovery Center', 'type': 'aquarium', 'badge': '🐠 Aquarium'},
+            {'name': 'Underwater World', 'type': 'aquarium', 'badge': '🐠 Aquarium'}
+        ],
+        'theater': [
+            {'name': 'Grand Theater', 'type': 'theater', 'badge': '🎭 Theater'},
+            {'name': 'Performing Arts Center', 'type': 'theater', 'badge': '🎭 Theater'},
+            {'name': 'Downtown Playhouse', 'type': 'theater', 'badge': '🎭 Theater'}
+        ],
+        'market': [
+            {'name': 'Farmers Market', 'type': 'market', 'badge': '🛒 Market'},
+            {'name': 'Fresh Food Market', 'type': 'market', 'badge': '🛒 Market'},
+            {'name': 'Local Artisan Market', 'type': 'market', 'badge': '🛒 Market'}
+        ],
+        'shopping': [
+            {'name': 'Downtown Shopping Center', 'type': 'shopping', 'badge': '🛍️ Shopping'},
+            {'name': 'Fashion District Mall', 'type': 'shopping', 'badge': '🛍️ Shopping'},
+            {'name': 'Outlet Village', 'type': 'shopping', 'badge': '🛍️ Shopping'}
+        ],
+        'bookstore': [
+            {'name': 'Chapter & Verse Books', 'type': 'bookstore', 'badge': '📚 Bookstore'},
+            {'name': 'The Reading Nook', 'type': 'bookstore', 'badge': '📚 Bookstore'},
+            {'name': 'Independent Books', 'type': 'bookstore', 'badge': '📚 Bookstore'}
+        ],
+        'restaurant': [
+            {'name': 'The Local Bistro', 'type': 'restaurant', 'badge': '🍽️ Restaurant'},
+            {'name': 'Fine Dining at Main', 'type': 'restaurant', 'badge': '🍽️ Restaurant'},
+            {'name': 'Family Style Restaurant', 'type': 'restaurant', 'badge': '🍽️ Restaurant'}
+        ]
+    }
+
+    # Determine query type based on keywords - Enhanced
+    detected_category = 'restaurant'  # default
+
+    # Food categories
+    if 'pizza' in query_lower:
+        detected_category = 'pizza'
+    elif 'burger' in query_lower:
+        detected_category = 'burger'
+    elif 'coffee' in query_lower or 'cafe' in query_lower:
+        detected_category = 'coffee'
+    elif 'sushi' in query_lower:
+        detected_category = 'sushi'
+    elif 'chinese' in query_lower:
+        detected_category = 'chinese'
+    elif 'mexican' in query_lower or 'taco' in query_lower:
+        detected_category = 'mexican'
+    elif 'italian' in query_lower or 'pasta' in query_lower:
+        detected_category = 'italian'
+    elif 'thai' in query_lower:
+        detected_category = 'thai'
+    elif 'indian' in query_lower or 'curry' in query_lower:
+        detected_category = 'indian'
+    elif 'french' in query_lower or 'bistro' in query_lower:
+        detected_category = 'french'
+    elif 'steak' in query_lower:
+        detected_category = 'steakhouse'
+    elif 'seafood' in query_lower or 'fish' in query_lower:
+        detected_category = 'seafood'
+    elif 'bakery' in query_lower or 'bread' in query_lower:
+        detected_category = 'bakery'
+    elif 'ice cream' in query_lower or 'gelato' in query_lower:
+        detected_category = 'ice cream'
+    elif 'brunch' in query_lower or 'breakfast' in query_lower:
+        detected_category = 'brunch'
+    elif 'bar' in query_lower or 'pub' in query_lower:
+        detected_category = 'bar'
+    elif 'brewery' in query_lower or 'beer' in query_lower:
+        detected_category = 'brewery'
+
+    # Lodging categories
+    elif 'hotel' in query_lower or 'stay' in query_lower:
+        detected_category = 'hotel'
+    elif 'resort' in query_lower:
+        detected_category = 'resort'
+    elif 'hostel' in query_lower:
+        detected_category = 'hostel'
+    elif 'spa' in query_lower:
+        detected_category = 'spa'
+
+    # Attraction categories
+    elif 'museum' in query_lower:
+        detected_category = 'museum'
+    elif 'park' in query_lower:
+        detected_category = 'park'
+    elif 'beach' in query_lower:
+        detected_category = 'beach'
+    elif 'zoo' in query_lower:
+        detected_category = 'zoo'
+    elif 'aquarium' in query_lower:
+        detected_category = 'aquarium'
+    elif 'theater' in query_lower or 'theatre' in query_lower:
+        detected_category = 'theater'
+
+    # Shopping categories
+    elif 'market' in query_lower:
+        detected_category = 'market'
+    elif 'mall' in query_lower or 'shopping' in query_lower:
+        detected_category = 'shopping'
+    elif 'bookstore' in query_lower or 'books' in query_lower:
+        detected_category = 'bookstore'
+
+    # Get templates for detected category
+    templates = place_templates.get(detected_category, place_templates['restaurant'])
+
+    # Generate places
+    places = []
+    for i in range(min(max_results, len(templates))):
+        template = templates[i]
+
+        # Generate realistic data
+        rating = round(3.5 + random.random() * 1.5, 1)  # 3.5-5.0
+        rating_count = random.randint(50, 800)
+
+        place = {
+            'name': template['name'],
+            'address': f'{random.randint(100, 999)} {random.choice(["Main St", "Oak Ave", "Pine Rd", "Elm St", "Broadway"])}, {location or "your area"}',
+            'rating': rating,
+            'rating_count': rating_count,
+            'types': [template['type']],
+            'category_badge': template['badge'],
+            'description': f'Popular {template["type"]} spot in {location or "the area"}'
+        }
+
+        # Generate image using enhanced function
+        place['hero_image'] = get_enhanced_place_image(place['name'], template['type'], location)
+
+        places.append(place)
+
+    return places
 
 def generate_mock_places_data(query: str) -> List[Dict]:
     """
@@ -417,19 +1059,8 @@ def generate_mock_places_data(query: str) -> List[Dict]:
             
             return places
 
-    # Fallback to generic places if no location-specific data
-    mock_places = [
-        {
-            'name': 'The Local Bistro',
-            'address': f'123 Main Street, {location or "your area"}',
-            'rating': 4.5,
-            'rating_count': 324,
-            'types': ['restaurant', 'food'],
-            'category_badge': '🍽️ Restaurant',
-            'hero_image': 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&auto=format&fit=crop',
-            'description': f'A cozy neighborhood restaurant serving fresh, locally-sourced cuisine.'
-        }
-    ]
+    # Fallback to query-specific places based on what user is looking for
+    mock_places = generate_query_specific_places(query, location, max_results)
 
     # Add required fields to mock places
     for place in mock_places:
