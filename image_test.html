@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Test</title>
+    <style>
+        .test-image {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            margin: 10px;
+            border: 2px solid #ccc;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h2>Testing Pexels Images</h2>
+    
+    <div id="results"></div>
+    
+    <script>
+        const imageUrls = [
+            'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=1200',
+            'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1200'
+        ];
+        
+        const results = document.getElementById('results');
+        
+        imageUrls.forEach((url, index) => {
+            const container = document.createElement('div');
+            container.innerHTML = `<p>Image ${index + 1}: ${url}</p>`;
+            
+            const img = document.createElement('img');
+            img.src = url;
+            img.className = 'test-image';
+            
+            img.onload = function() {
+                const status = document.createElement('p');
+                status.className = 'success';
+                status.textContent = '✅ Loaded successfully';
+                container.appendChild(status);
+            };
+            
+            img.onerror = function() {
+                const status = document.createElement('p');
+                status.className = 'error';
+                status.textContent = '��� Failed to load';
+                container.appendChild(status);
+            };
+            
+            container.appendChild(img);
+            results.appendChild(container);
+        });
+    </script>
+</body>
+</html>
