@@ -435,6 +435,116 @@ def get_enhanced_place_image(place_name: str, place_type: str, location: str = N
     
     return images[image_index]
 
+def generate_query_specific_places(query: str, location: str, max_results: int) -> List[Dict]:
+    """
+    Generate places based on the specific query content (pizza, coffee, etc.)
+    """
+    import random
+
+    query_lower = query.lower()
+
+    # Define place templates based on query type
+    place_templates = {
+        'pizza': [
+            {'name': 'Tony\'s Pizza Palace', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'Slice Heaven', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'Mario\'s Authentic Pizza', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'The Pizza Corner', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'Pepperoni Palace', 'type': 'pizza', 'badge': '🍕 Pizza'},
+            {'name': 'Wood Fired Pizza Co.', 'type': 'pizza', 'badge': '🍕 Pizza'}
+        ],
+        'burger': [
+            {'name': 'The Burger Joint', 'type': 'burger', 'badge': '🍔 Burger'},
+            {'name': 'Gourmet Burgers & More', 'type': 'burger', 'badge': '🍔 Burger'},
+            {'name': 'Classic American Diner', 'type': 'burger', 'badge': '🍔 Burger'},
+            {'name': 'Five Guys Style Burgers', 'type': 'burger', 'badge': '🍔 Burger'}
+        ],
+        'coffee': [
+            {'name': 'The Daily Grind', 'type': 'coffee', 'badge': '☕ Coffee Shop'},
+            {'name': 'Bean There Coffee', 'type': 'coffee', 'badge': '☕ Coffee Shop'},
+            {'name': 'Morning Brew Cafe', 'type': 'coffee', 'badge': '☕ Coffee Shop'},
+            {'name': 'Roasted & Co.', 'type': 'coffee', 'badge': '☕ Coffee Shop'}
+        ],
+        'sushi': [
+            {'name': 'Sakura Sushi Bar', 'type': 'sushi', 'badge': '🍣 Sushi Bar'},
+            {'name': 'Tokyo Fresh Sushi', 'type': 'sushi', 'badge': '🍣 Sushi Bar'},
+            {'name': 'The Sushi Spot', 'type': 'sushi', 'badge': '🍣 Sushi Bar'}
+        ],
+        'chinese': [
+            {'name': 'Golden Dragon', 'type': 'chinese', 'badge': '🥢 Chinese'},
+            {'name': 'Lucky Garden Chinese', 'type': 'chinese', 'badge': '🥢 Chinese'},
+            {'name': 'Panda Palace', 'type': 'chinese', 'badge': '🥢 Chinese'}
+        ],
+        'mexican': [
+            {'name': 'Casa Miguel', 'type': 'mexican', 'badge': '🌮 Mexican'},
+            {'name': 'El Sombrero', 'type': 'mexican', 'badge': '🌮 Mexican'},
+            {'name': 'Taco Paradise', 'type': 'mexican', 'badge': '🌮 Mexican'}
+        ],
+        'italian': [
+            {'name': 'Mama\'s Italian Kitchen', 'type': 'italian', 'badge': '🍝 Italian'},
+            {'name': 'Bella Vista Restaurant', 'type': 'italian', 'badge': '🍝 Italian'},
+            {'name': 'La Trattoria', 'type': 'italian', 'badge': '🍝 Italian'}
+        ],
+        'hotel': [
+            {'name': 'Grand Plaza Hotel', 'type': 'hotel', 'badge': '🏨 Hotel'},
+            {'name': 'Comfort Inn & Suites', 'type': 'hotel', 'badge': '🏨 Hotel'},
+            {'name': 'Luxury Resort & Spa', 'type': 'hotel', 'badge': '🏨 Hotel'}
+        ],
+        'restaurant': [
+            {'name': 'The Local Bistro', 'type': 'restaurant', 'badge': '🍽️ Restaurant'},
+            {'name': 'Fine Dining at Main', 'type': 'restaurant', 'badge': '🍽️ Restaurant'},
+            {'name': 'Family Style Restaurant', 'type': 'restaurant', 'badge': '🍽️ Restaurant'}
+        ]
+    }
+
+    # Determine query type based on keywords
+    detected_category = 'restaurant'  # default
+    if 'pizza' in query_lower:
+        detected_category = 'pizza'
+    elif 'burger' in query_lower:
+        detected_category = 'burger'
+    elif 'coffee' in query_lower or 'cafe' in query_lower:
+        detected_category = 'coffee'
+    elif 'sushi' in query_lower:
+        detected_category = 'sushi'
+    elif 'chinese' in query_lower:
+        detected_category = 'chinese'
+    elif 'mexican' in query_lower or 'taco' in query_lower:
+        detected_category = 'mexican'
+    elif 'italian' in query_lower or 'pasta' in query_lower:
+        detected_category = 'italian'
+    elif 'hotel' in query_lower or 'stay' in query_lower:
+        detected_category = 'hotel'
+
+    # Get templates for detected category
+    templates = place_templates.get(detected_category, place_templates['restaurant'])
+
+    # Generate places
+    places = []
+    for i in range(min(max_results, len(templates))):
+        template = templates[i]
+
+        # Generate realistic data
+        rating = round(3.5 + random.random() * 1.5, 1)  # 3.5-5.0
+        rating_count = random.randint(50, 800)
+
+        place = {
+            'name': template['name'],
+            'address': f'{random.randint(100, 999)} {random.choice(["Main St", "Oak Ave", "Pine Rd", "Elm St", "Broadway"])}, {location or "your area"}',
+            'rating': rating,
+            'rating_count': rating_count,
+            'types': [template['type']],
+            'category_badge': template['badge'],
+            'description': f'Popular {template["type"]} spot in {location or "the area"}'
+        }
+
+        # Generate image using enhanced function
+        place['hero_image'] = get_enhanced_place_image(place['name'], template['type'], location)
+
+        places.append(place)
+
+    return places
+
 def generate_mock_places_data(query: str) -> List[Dict]:
     """
     Generate realistic mock place data with location awareness
@@ -485,7 +595,7 @@ def generate_mock_places_data(query: str) -> List[Dict]:
                     'entertainment': '🎭 Entertainment',
                     'tower': '🗼 Tower',
                     'electronics': '📱 Electronics',
-                    'complex': '🏢 Complex'
+                    'complex': '��� Complex'
                 }
                 category_badge = category_badges.get(place_type, '📍 Place')
                 
