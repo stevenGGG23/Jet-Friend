@@ -753,10 +753,120 @@ def generate_query_specific_places(query: str, location: str, max_results: int) 
             {'name': 'Bella Vista Restaurant', 'type': 'italian', 'badge': '🍝 Italian'},
             {'name': 'La Trattoria', 'type': 'italian', 'badge': '🍝 Italian'}
         ],
+        'thai': [
+            {'name': 'Thai Spice Garden', 'type': 'thai', 'badge': '🌶️ Thai'},
+            {'name': 'Bangkok Kitchen', 'type': 'thai', 'badge': '🌶️ Thai'},
+            {'name': 'Pad Thai Palace', 'type': 'thai', 'badge': '🌶️ Thai'}
+        ],
+        'indian': [
+            {'name': 'Curry House', 'type': 'indian', 'badge': '🍛 Indian'},
+            {'name': 'Tandoor Palace', 'type': 'indian', 'badge': '🍛 Indian'},
+            {'name': 'Mumbai Spice', 'type': 'indian', 'badge': '🍛 Indian'}
+        ],
+        'french': [
+            {'name': 'Le Petit Bistro', 'type': 'french', 'badge': '🇫🇷 French'},
+            {'name': 'Café de Paris', 'type': 'french', 'badge': '🇫🇷 French'},
+            {'name': 'The French Table', 'type': 'french', 'badge': '🇫🇷 French'}
+        ],
+        'steakhouse': [
+            {'name': 'Prime Cut Steakhouse', 'type': 'steakhouse', 'badge': '🥩 Steakhouse'},
+            {'name': 'The Grill House', 'type': 'steakhouse', 'badge': '🥩 Steakhouse'},
+            {'name': 'Black Angus Grill', 'type': 'steakhouse', 'badge': '🥩 Steakhouse'}
+        ],
+        'seafood': [
+            {'name': 'Ocean\'s Catch', 'type': 'seafood', 'badge': '🦞 Seafood'},
+            {'name': 'The Fish Market', 'type': 'seafood', 'badge': '🦞 Seafood'},
+            {'name': 'Seaside Grill', 'type': 'seafood', 'badge': '🦞 Seafood'}
+        ],
+        'bakery': [
+            {'name': 'Fresh Bread Bakery', 'type': 'bakery', 'badge': '🥖 Bakery'},
+            {'name': 'The Corner Bakehouse', 'type': 'bakery', 'badge': '🥖 Bakery'},
+            {'name': 'Artisan Breads', 'type': 'bakery', 'badge': '�� Bakery'}
+        ],
+        'ice cream': [
+            {'name': 'Sweet Treats Creamery', 'type': 'ice cream', 'badge': '🍦 Ice Cream'},
+            {'name': 'Scoop & Smile', 'type': 'ice cream', 'badge': '🍦 Ice Cream'},
+            {'name': 'Gelato Dreams', 'type': 'ice cream', 'badge': '🍦 Ice Cream'}
+        ],
+        'brunch': [
+            {'name': 'Sunday Brunch Cafe', 'type': 'brunch', 'badge': '🥐 Brunch'},
+            {'name': 'The Pancake House', 'type': 'brunch', 'badge': '🥐 Brunch'},
+            {'name': 'Morning Glory Diner', 'type': 'brunch', 'badge': '🥐 Brunch'}
+        ],
+        'bar': [
+            {'name': 'The Local Pub', 'type': 'bar', 'badge': '🍻 Bar'},
+            {'name': 'Cocktail Lounge', 'type': 'bar', 'badge': '🍻 Bar'},
+            {'name': 'Sports Bar & Grill', 'type': 'bar', 'badge': '🍻 Bar'}
+        ],
+        'brewery': [
+            {'name': 'Craft Beer Co.', 'type': 'brewery', 'badge': '🍺 Brewery'},
+            {'name': 'Hoppy Trails Brewery', 'type': 'brewery', 'badge': '🍺 Brewery'},
+            {'name': 'Local Brew House', 'type': 'brewery', 'badge': '🍺 Brewery'}
+        ],
         'hotel': [
             {'name': 'Grand Plaza Hotel', 'type': 'hotel', 'badge': '🏨 Hotel'},
             {'name': 'Comfort Inn & Suites', 'type': 'hotel', 'badge': '🏨 Hotel'},
             {'name': 'Luxury Resort & Spa', 'type': 'hotel', 'badge': '🏨 Hotel'}
+        ],
+        'resort': [
+            {'name': 'Paradise Resort', 'type': 'resort', 'badge': '🏖️ Resort'},
+            {'name': 'Tropical Getaway', 'type': 'resort', 'badge': '🏖️ Resort'},
+            {'name': 'Oceanview Resort', 'type': 'resort', 'badge': '🏖️ Resort'}
+        ],
+        'hostel': [
+            {'name': 'Backpacker\'s Lodge', 'type': 'hostel', 'badge': '🎒 Hostel'},
+            {'name': 'Budget Stay Hostel', 'type': 'hostel', 'badge': '🎒 Hostel'},
+            {'name': 'City Center Hostel', 'type': 'hostel', 'badge': '🎒 Hostel'}
+        ],
+        'spa': [
+            {'name': 'Zen Wellness Spa', 'type': 'spa', 'badge': '🧘 Spa'},
+            {'name': 'Relaxation Resort Spa', 'type': 'spa', 'badge': '🧘 Spa'},
+            {'name': 'Healing Waters Spa', 'type': 'spa', 'badge': '🧘 Spa'}
+        ],
+        'museum': [
+            {'name': 'City Art Museum', 'type': 'museum', 'badge': '🎨 Museum'},
+            {'name': 'History & Culture Center', 'type': 'museum', 'badge': '🎨 Museum'},
+            {'name': 'Natural Science Museum', 'type': 'museum', 'badge': '🎨 Museum'}
+        ],
+        'park': [
+            {'name': 'Central Park', 'type': 'park', 'badge': '🌳 Park'},
+            {'name': 'Riverside Gardens', 'type': 'park', 'badge': '🌳 Park'},
+            {'name': 'Memorial Park', 'type': 'park', 'badge': '🌳 Park'}
+        ],
+        'beach': [
+            {'name': 'Sunset Beach', 'type': 'beach', 'badge': '🏖️ Beach'},
+            {'name': 'Crystal Cove', 'type': 'beach', 'badge': '🏖️ Beach'},
+            {'name': 'Sandy Shores', 'type': 'beach', 'badge': '🏖️ Beach'}
+        ],
+        'zoo': [
+            {'name': 'City Zoo & Safari', 'type': 'zoo', 'badge': '🦁 Zoo'},
+            {'name': 'Wildlife Preserve', 'type': 'zoo', 'badge': '🦁 Zoo'},
+            {'name': 'Adventure Zoo', 'type': 'zoo', 'badge': '🦁 Zoo'}
+        ],
+        'aquarium': [
+            {'name': 'Ocean Life Aquarium', 'type': 'aquarium', 'badge': '🐠 Aquarium'},
+            {'name': 'Marine Discovery Center', 'type': 'aquarium', 'badge': '🐠 Aquarium'},
+            {'name': 'Underwater World', 'type': 'aquarium', 'badge': '🐠 Aquarium'}
+        ],
+        'theater': [
+            {'name': 'Grand Theater', 'type': 'theater', 'badge': '🎭 Theater'},
+            {'name': 'Performing Arts Center', 'type': 'theater', 'badge': '🎭 Theater'},
+            {'name': 'Downtown Playhouse', 'type': 'theater', 'badge': '🎭 Theater'}
+        ],
+        'market': [
+            {'name': 'Farmers Market', 'type': 'market', 'badge': '🛒 Market'},
+            {'name': 'Fresh Food Market', 'type': 'market', 'badge': '🛒 Market'},
+            {'name': 'Local Artisan Market', 'type': 'market', 'badge': '🛒 Market'}
+        ],
+        'shopping': [
+            {'name': 'Downtown Shopping Center', 'type': 'shopping', 'badge': '🛍️ Shopping'},
+            {'name': 'Fashion District Mall', 'type': 'shopping', 'badge': '🛍️ Shopping'},
+            {'name': 'Outlet Village', 'type': 'shopping', 'badge': '🛍️ Shopping'}
+        ],
+        'bookstore': [
+            {'name': 'Chapter & Verse Books', 'type': 'bookstore', 'badge': '📚 Bookstore'},
+            {'name': 'The Reading Nook', 'type': 'bookstore', 'badge': '📚 Bookstore'},
+            {'name': 'Independent Books', 'type': 'bookstore', 'badge': '📚 Bookstore'}
         ],
         'restaurant': [
             {'name': 'The Local Bistro', 'type': 'restaurant', 'badge': '🍽️ Restaurant'},
