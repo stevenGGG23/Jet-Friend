@@ -589,8 +589,11 @@ def get_enhanced_place_image(place_name: str, place_type: str, location: str = N
     # Enhanced place type detection based on place name and context
     detected_type = place_type.lower()
 
-    # Check place name for specific food types
+    # Check place name for specific food types and locations
     place_name_lower = (place_name or '').lower()
+    location_lower = (location or '').lower()
+
+    # Food & Restaurant Types
     if 'pizza' in place_name_lower:
         detected_type = 'pizza'
     elif 'burger' in place_name_lower or 'mcdonald' in place_name_lower or 'burger king' in place_name_lower:
@@ -603,16 +606,92 @@ def get_enhanced_place_image(place_name: str, place_type: str, location: str = N
         detected_type = 'ramen'
     elif 'chinese' in place_name_lower or 'panda' in place_name_lower:
         detected_type = 'chinese'
-    elif 'italian' in place_name_lower or 'pasta' in place_name_lower:
+    elif 'italian' in place_name_lower or 'pasta' in place_name_lower or 'pizzeria' in place_name_lower:
         detected_type = 'italian'
     elif 'mexican' in place_name_lower or 'taco' in place_name_lower or 'chipotle' in place_name_lower:
         detected_type = 'mexican'
+    elif 'thai' in place_name_lower or 'pad thai' in place_name_lower:
+        detected_type = 'thai'
+    elif 'indian' in place_name_lower or 'curry' in place_name_lower:
+        detected_type = 'indian'
+    elif 'french' in place_name_lower or 'bistro' in place_name_lower:
+        detected_type = 'french'
+    elif 'steakhouse' in place_name_lower or 'steak' in place_name_lower:
+        detected_type = 'steakhouse'
+    elif 'seafood' in place_name_lower or 'fish' in place_name_lower:
+        detected_type = 'seafood'
+    elif 'bakery' in place_name_lower or 'bread' in place_name_lower:
+        detected_type = 'bakery'
+    elif 'ice cream' in place_name_lower or 'gelato' in place_name_lower:
+        detected_type = 'ice cream'
+    elif 'brunch' in place_name_lower or 'breakfast' in place_name_lower:
+        detected_type = 'brunch'
+    elif 'fast food' in place_name_lower or 'drive thru' in place_name_lower:
+        detected_type = 'fast food'
     elif 'bar' in place_name_lower or 'pub' in place_name_lower:
         detected_type = 'bar'
+    elif 'brewery' in place_name_lower or 'beer' in place_name_lower:
+        detected_type = 'brewery'
+
+    # Lodging Types
+    elif 'hotel' in place_name_lower:
+        detected_type = 'hotel'
+    elif 'resort' in place_name_lower:
+        detected_type = 'resort'
+    elif 'hostel' in place_name_lower:
+        detected_type = 'hostel'
+    elif 'spa' in place_name_lower:
+        detected_type = 'spa'
+
+    # Attractions & Culture
     elif 'museum' in place_name_lower:
         detected_type = 'museum'
+    elif 'gallery' in place_name_lower:
+        detected_type = 'art gallery'
+    elif 'temple' in place_name_lower:
+        detected_type = 'temple'
+    elif 'shrine' in place_name_lower:
+        detected_type = 'shrine'
+    elif 'castle' in place_name_lower:
+        detected_type = 'castle'
+    elif 'cathedral' in place_name_lower or 'church' in place_name_lower:
+        detected_type = 'cathedral'
     elif 'park' in place_name_lower:
         detected_type = 'park'
+    elif 'beach' in place_name_lower:
+        detected_type = 'beach'
+    elif 'zoo' in place_name_lower:
+        detected_type = 'zoo'
+    elif 'aquarium' in place_name_lower:
+        detected_type = 'aquarium'
+    elif 'theater' in place_name_lower or 'theatre' in place_name_lower:
+        detected_type = 'theater'
+
+    # Shopping & Markets
+    elif 'market' in place_name_lower:
+        detected_type = 'market'
+    elif 'mall' in place_name_lower:
+        detected_type = 'shopping mall'
+    elif 'bookstore' in place_name_lower or 'books' in place_name_lower:
+        detected_type = 'bookstore'
+    elif 'shopping' in place_name_lower:
+        detected_type = 'shopping'
+
+    # Services & Transportation
+    elif 'airport' in place_name_lower:
+        detected_type = 'airport'
+    elif 'station' in place_name_lower or 'train' in place_name_lower:
+        detected_type = 'train station'
+    elif 'gym' in place_name_lower or 'fitness' in place_name_lower:
+        detected_type = 'gym'
+    elif 'library' in place_name_lower:
+        detected_type = 'library'
+
+    # Landmarks & Architecture
+    elif 'tower' in place_name_lower:
+        detected_type = 'tower'
+    elif 'bridge' in place_name_lower:
+        detected_type = 'bridge'
 
     # Get appropriate images for place type
     images = image_library.get(detected_type, image_library['default'])
