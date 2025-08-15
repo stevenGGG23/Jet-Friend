@@ -980,7 +980,6 @@ def search_places(query: str, location: str = None, radius: int = 5000) -> List[
     """
     # Use location-aware data generation instead of Google Places API
     return generate_mock_places_data(query)
-        if japan_data:
             # Process mock data to add proper links
             processed_places = []
             for place in japan_data:
