@@ -519,19 +519,8 @@ def generate_mock_places_data(query: str) -> List[Dict]:
             
             return places
 
-    # Fallback to generic places if no location-specific data
-    mock_places = [
-        {
-            'name': 'The Local Bistro',
-            'address': f'123 Main Street, {location or "your area"}',
-            'rating': 4.5,
-            'rating_count': 324,
-            'types': ['restaurant', 'food'],
-            'category_badge': '🍽️ Restaurant',
-            'hero_image': 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&auto=format&fit=crop',
-            'description': f'A cozy neighborhood restaurant serving fresh, locally-sourced cuisine.'
-        }
-    ]
+    # Fallback to query-specific places based on what user is looking for
+    mock_places = generate_query_specific_places(query, location, max_results)
 
     # Add required fields to mock places
     for place in mock_places:
