@@ -2,29 +2,29 @@
 
 JetFriend is an advanced travel planning application that combines the power of OpenAI's GPT-4o with real-time location data from Google Places API to provide personalized, detailed travel recommendations.
 
-## ✨ Features
+## Features
 
-### 🤖 AI-Powered Travel Assistant
+### AI-Powered Travel Assistant
 - **GPT-4o Integration**: Advanced conversational AI with specialized travel expertise
 - **JetFriend Personality**: Enthusiastic, knowledgeable travel expert persona
 - **Itinerary Planning**: Day-by-day travel plans with specific recommendations
 - **Budget Tips**: Money-saving strategies and discount recommendations
 - **Clickable Links**: Direct links to Google Maps and travel resources
 
-### 📍 Real-Time Location Intelligence
+### Real-Time Location Intelligence
 - **Google Places Integration**: Live restaurant, hotel, and attraction data
 - **Smart Query Detection**: Automatically identifies when location data is needed
 - **Local Recommendations**: Real places with ratings, addresses, and map links
 - **Context-Aware Responses**: AI incorporates real venue data into recommendations
 
-### 🚀 Enhanced API Endpoints
+### Enhanced API Endpoints
 - `/api/chat` - Enhanced chat with automatic location data integration
 - `/api/places` - Direct location search endpoint
 - `/api/health` - System status with API connectivity checks
 - `/api/test-ai` - OpenAI GPT-4o connectivity testing
 - `/api/test-places` - Google Places API connectivity testing
 
-## 🛠️ Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 - Python 3.11+
@@ -118,7 +118,7 @@ Content-Type: application/json
 }
 ```
 
-## 🧠 JetFriend AI Personality
+## JetFriend AI Personality
 
 JetFriend is designed as an expert travel companion with:
 
@@ -129,12 +129,12 @@ JetFriend is designed as an expert travel companion with:
 - **Itinerary Style**: Structures responses with clear day-by-day plans
 - **Link-Rich**: Provides clickable links to maps, venues, and resources
 
-## 🎯 Smart Features
+## Smart Features
 
 ### Automatic Location Detection
 JetFriend automatically detects when your query needs real-time location data:
 
-✅ **Triggers location search:**
+ **Triggers location search:**
 - "Best restaurants in Tokyo"
 - "Hotels near Times Square"
 - "Coffee shops around me"
@@ -151,20 +151,20 @@ When location data is found, JetFriend:
 For unavailable features, JetFriend naturally mentions upgrading to premium:
 - "Upgrade to JetFriend Premium for real-time availability and exclusive deals!"
 
-## 🚦 System Status
+## System Status
 
 Check API connectivity:
 - **Health**: `GET /api/health`
 - **OpenAI Status**: `GET /api/test-ai`
 - **Google Places Status**: `GET /api/test-places`
 
-## 🔐 Security Notes
+## Security Notes
 
 - API keys are never logged or exposed in responses
 - Environment variables are used for all sensitive configuration
 - Placeholder keys are safely handled without causing crashes
 
-## 📝 Development
+## Development
 
 ### Local Development
 1. Install dependencies: `pip install -r requirements.txt`
@@ -184,10 +184,10 @@ curl http://localhost:5000/api/test-ai
 curl http://localhost:5000/api/test-places
 ```
 
-## 📄 License
+## License
 
 MIT License - Created by Steven Gobran, Steven Alfy, Anton Salib
 
 ---
 
-**Ready to explore the world with your AI travel companion!** 🌍✈️
+**Ready to explore the world with your AI travel companion!**
