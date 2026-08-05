@@ -1,4 +1,4 @@
-# JetFriend v2.0 - Your Intelligent AI Travel Companion
+# JetFriend v2.0 - Your Intelligent AI Travel Companion https://jet-friend.onrender.com/
 
 JetFriend is an advanced travel planning application that combines the power of OpenAI's GPT-4o with real-time location data from Google Places API to provide personalized, detailed travel recommendations.
 
