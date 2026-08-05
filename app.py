@@ -5,6 +5,7 @@ import re
 import logging
 import urllib.parse
 import time
+from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
 from typing import Optional, Dict, List
@@ -18,7 +19,8 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__, static_folder='.')
+BASE_DIR = Path(__file__).resolve().parent
+app = Flask(__name__, static_folder=str(BASE_DIR), template_folder=str(BASE_DIR))
 CORS(app)  # Enable CORS for all routes
 
 # Initialize APIs
@@ -1235,13 +1237,13 @@ CRITICAL INSTRUCTIONS:
 
 @app.route('/')
 def serve_index():
-    """Serve the main HTML file"""
-    return send_from_directory('.', 'index.html')
+    """Serve the main HTML file from the project root."""
+    return send_from_directory(str(BASE_DIR), 'index.html')
 
 @app.route('/<path:filename>')
 def serve_static(filename):
-    """Serve static files"""
-    return send_from_directory('.', filename)
+    """Serve static files from the project root."""
+    return send_from_directory(str(BASE_DIR), filename)
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
